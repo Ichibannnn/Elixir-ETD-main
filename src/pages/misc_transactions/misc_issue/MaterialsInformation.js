@@ -855,11 +855,11 @@ export const RawMatsInfoModal = ({
           {/* <ModalCloseButton onClick={onClose} /> */}
           <ModalBody mb={5}>
             <Flex w="95%" justifyContent="space-between">
-              <VStack alignItems="start" w="40%" mx={5}>
+              <VStack alignItems="start" w="full" mx={5}>
                 {/* Item Code */}
                 <HStack w="full">
                   <Text
-                    minW="50%"
+                    minW="25%"
                     w="auto"
                     bgColor="primary"
                     color="white"
