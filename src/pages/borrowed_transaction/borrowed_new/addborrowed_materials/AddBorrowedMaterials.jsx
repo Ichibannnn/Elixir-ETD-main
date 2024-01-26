@@ -152,7 +152,6 @@ const AddBorrowedMaterials = ({
         p={5}
         spacing={10}
         height={borrowedData?.length === 0 ? "90vh" : "auto"}
-        // className="boxShadow"
       >
         {borrowedNav === 1 ? (
           <>
@@ -201,13 +200,13 @@ const AddBorrowedMaterials = ({
                   setTotalQuantity={setTotalQuantity}
                   customerData={customerData}
                   setCustomerData={setCustomerData}
-                  details={details}
                   selectorId={selectorId}
                   setSelectorId={setSelectorId}
                   borrowedData={borrowedData}
                   fetchActiveBorrowed={fetchActiveBorrowed}
                   fetchRawMats={fetchRawMats}
                   customerRef={customerRef}
+                  details={details}
                   setDetails={setDetails}
                   setRawMatsInfo={setRawMatsInfo}
                   //warehouse Id

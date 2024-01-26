@@ -36,6 +36,7 @@ const currentUser = decodeUser();
 
 const schema = yup.object().shape({
   formData: yup.object().shape({
+    customers: yup.object(),
     companyId: yup.object().required().typeError("Company Name is required"),
     departmentId: yup
       .object()
@@ -146,6 +147,7 @@ export const MaterialsInformation = ({
     mode: "onChange",
     defaultValues: {
       formData: {
+        customers: "",
         companyId: "",
         departmentId: "",
         locationId: "",
@@ -169,15 +171,14 @@ export const MaterialsInformation = ({
     } else {
       setDetails("");
     }
-
-    console.log(details);
   };
 
   const customerHandler = (data) => {
+    // console.log("Data: ", data);
     if (data) {
-      const newData = JSON.parse(data);
-      const customerCode = newData.customerCode;
-      const customerName = newData.customerName;
+      // const newData = JSON.parse(data);
+      const customerCode = data.value.customerCode;
+      const customerName = data.value.customerName;
       setRawMatsInfo({
         itemCode: rawMatsInfo.itemCode,
         itemDescription: rawMatsInfo.itemDescription,
@@ -213,6 +214,9 @@ export const MaterialsInformation = ({
       reset();
     }
   }, [customerData]);
+
+  console.log("Form Data: ", watch("formData.customers"));
+  // console.log("Customer Data: ", customerData);
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
@@ -251,7 +255,7 @@ export const MaterialsInformation = ({
               >
                 Customer Code:{" "}
               </Text>
-              {customers.length > 0 ? (
+              {/* {customers.length > 0 ? (
                 <Select
                   fontSize="sm"
                   placeholder="Select Customer Code"
@@ -272,7 +276,30 @@ export const MaterialsInformation = ({
                 </Select>
               ) : (
                 <Spinner />
-              )}
+              )} */}
+              <Controller
+                control={control}
+                name="formData.customers"
+                render={({ field }) => (
+                  <AutoComplete
+                    className="react-select-layout"
+                    ref={field.ref}
+                    value={field.value}
+                    size="sm"
+                    placeholder="Select customer"
+                    onChange={(e) => {
+                      field.onChange(e);
+                      customerHandler(e);
+                    }}
+                    options={customers?.map((item) => {
+                      return {
+                        label: `${item.customerCode} - ${item.customerName}`,
+                        value: item,
+                      };
+                    })}
+                  />
+                )}
+              />
             </HStack>
 
             {/* Customer Name */}
@@ -620,6 +647,7 @@ export const RawMatsInfoModal = ({
 
   const schema = yup.object().shape({
     formData: yup.object().shape({
+      rawMats: yup.object(),
       accountId: yup.object().required().typeError("Account Name is required"),
       empId: yup.object().nullable(),
       fullName: yup.string(),
@@ -682,6 +710,7 @@ export const RawMatsInfoModal = ({
     mode: "onChange",
     defaultValues: {
       formData: {
+        rawMats: "",
         accountId: "",
         empId: "",
         fullName: "",
@@ -725,12 +754,14 @@ export const RawMatsInfoModal = ({
   }, [idNumber]);
 
   const itemCodeHandler = (data) => {
+    console.log("Data: ", data);
+
     if (data) {
-      const newData = JSON.parse(data);
-      const itemCode = newData.itemCode;
-      const itemDescription = newData.itemDescription;
-      const uom = newData.uom;
-      setReserve(newData.remainingStocks);
+      // const newData = JSON.parse(data);
+      const itemCode = data.value.itemCode;
+      const itemDescription = data.value.itemDescription;
+      const uom = data.value.uom;
+      setReserve(data.value.remainingStocks);
       setRawMatsInfo({
         itemCode: itemCode,
         itemDescription: itemDescription,
@@ -797,6 +828,19 @@ export const RawMatsInfoModal = ({
 
   // console.log(!watch("formData"));
 
+  const closeHandler = () => {
+    setRawMatsInfo({
+      itemCode: "",
+      itemDescription: "",
+      customerName: rawMatsInfo.customerName,
+      uom: "",
+      warehouseId: "",
+      quantity: "",
+      // unitCost: rawMatsInfo.unitCost,
+    });
+    onClose();
+  };
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={() => {}} isCentered size="6xl">
@@ -808,14 +852,14 @@ export const RawMatsInfoModal = ({
               <Text fontSize="xs">Miscellaneous Issue</Text>
             </VStack>
           </ModalHeader>
-          <ModalCloseButton onClick={onClose} />
+          {/* <ModalCloseButton onClick={onClose} /> */}
           <ModalBody mb={5}>
-            <Flex justifyContent="space-between">
-              <VStack alignItems="start" w="full" mx={5}>
+            <Flex w="95%" justifyContent="space-between">
+              <VStack alignItems="start" w="40%" mx={5}>
                 {/* Item Code */}
                 <HStack w="full">
                   <Text
-                    minW="25%"
+                    minW="50%"
                     w="auto"
                     bgColor="primary"
                     color="white"
@@ -826,8 +870,7 @@ export const RawMatsInfoModal = ({
                   >
                     Item Code:{" "}
                   </Text>
-
-                  {rawMats.length > 0 ? (
+                  {/* {rawMats.length > 0 ? (
                     <Select
                       fontSize="sm"
                       onChange={(e) => itemCodeHandler(e.target.value)}
@@ -846,7 +889,30 @@ export const RawMatsInfoModal = ({
                     </Select>
                   ) : (
                     <Spinner />
-                  )}
+                  )} */}
+                  <Controller
+                    control={control}
+                    name="formData.rawMats"
+                    render={({ field }) => (
+                      <AutoComplete
+                        className="react-select-layout"
+                        ref={field.ref}
+                        value={field.value}
+                        size="sm"
+                        placeholder="Select item code"
+                        onChange={(e) => {
+                          field.onChange(e);
+                          itemCodeHandler(e);
+                        }}
+                        options={rawMats?.map((item) => {
+                          return {
+                            label: `${item.itemCode}`,
+                            value: item,
+                          };
+                        })}
+                      />
+                    )}
+                  />
                 </HStack>
 
                 {/* Barcode No */}
@@ -1316,7 +1382,7 @@ export const RawMatsInfoModal = ({
               >
                 Add
               </Button>
-              <Button color="black" variant="outline" onClick={onClose}>
+              <Button color="black" variant="outline" onClick={closeHandler}>
                 Cancel
               </Button>
             </ButtonGroup>

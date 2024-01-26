@@ -40,6 +40,7 @@ const currentUser = decodeUser();
 
 const schema = yup.object().shape({
   formData: yup.object().shape({
+    suppliers: yup.object(),
     companyId: yup.object().required().typeError("Company Name is required"),
     departmentId: yup
       .object()
@@ -149,6 +150,7 @@ export const MaterialsInformation = ({
     mode: "onChange",
     defaultValues: {
       formData: {
+        suppliers: "",
         companyId: "",
         departmentId: "",
         locationId: "",
@@ -175,37 +177,42 @@ export const MaterialsInformation = ({
   };
 
   const supplierHandler = (data) => {
+    // console.log("Data: ", data);
+    // console.log("Supplier Name: ", data.value.supplierName);
     if (data) {
-      const newData = JSON.parse(data);
-      const supplierCode = newData.supplierCode;
-      const supplierName = newData.supplierName;
+      // const newData = JSON.stringify(data);
+      // const supplierCode = newData.supplierCode;
+      // const supplierName = newData.supplierName;
+      setSupplierData({
+        supplierCode: data.value.supplierCode,
+        supplierName: data.value.supplierName,
+      });
       setRawMatsInfo({
         itemCode: rawMatsInfo.itemCode,
         itemDescription: rawMatsInfo.itemDescription,
-        supplierName: supplierName,
+        supplierName: data.value.supplierName,
         uom: rawMatsInfo.uom,
         quantity: rawMatsInfo.quantity,
         unitPrice: rawMatsInfo.unitPrice,
-      });
-      setSupplierData({
-        supplierCode: supplierCode,
-        supplierName: supplierName,
       });
     } else {
-      setRawMatsInfo({
-        itemCode: rawMatsInfo.itemCode,
-        itemDescription: rawMatsInfo.itemDescription,
-        supplierName: "",
-        uom: rawMatsInfo.uom,
-        quantity: rawMatsInfo.quantity,
-        unitPrice: rawMatsInfo.unitPrice,
-      });
       setSupplierData({
         supplierCode: "",
         supplierName: "",
       });
+      setRawMatsInfo({
+        itemCode: rawMatsInfo.itemCode,
+        itemDescription: rawMatsInfo.itemDescription,
+        supplierName: "",
+        uom: rawMatsInfo.uom,
+        quantity: rawMatsInfo.quantity,
+        unitPrice: rawMatsInfo.unitPrice,
+      });
     }
   };
+
+  // console.log("Raw Mats Info:", rawMatsInfo);
+  // console.log("Supplier Data: ", supplierData);
 
   useEffect(() => {
     if (supplierData.supplierName === "") {
@@ -213,7 +220,7 @@ export const MaterialsInformation = ({
     }
   }, [supplierData]);
 
-  // console.log(watch("formData"));
+  // console.log(watch("formData"))
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
@@ -252,7 +259,7 @@ export const MaterialsInformation = ({
               >
                 Supplier Code:{" "}
               </Text>
-              {suppliers.length > 0 ? (
+              {/* {suppliers.length > 0 ? (
                 <Select
                   fontSize="sm"
                   placeholder="Select Supplier"
@@ -262,7 +269,6 @@ export const MaterialsInformation = ({
                   border="1px"
                   borderColor="gray.400"
                   borderRadius="none"
-                  // bgColor="#fff8dc"
                 >
                   {suppliers?.map((item, i) => (
                     <option
@@ -273,7 +279,31 @@ export const MaterialsInformation = ({
                 </Select>
               ) : (
                 <Spinner />
-              )}
+              )} */}
+
+              <Controller
+                control={control}
+                name="formData.suppliers"
+                render={({ field }) => (
+                  <AutoComplete
+                    className="react-select-layout"
+                    ref={field.ref}
+                    value={field.value}
+                    size="sm"
+                    placeholder="Select Supplier"
+                    onChange={(e) => {
+                      field.onChange(e);
+                      supplierHandler(e);
+                    }}
+                    options={suppliers?.map((item) => {
+                      return {
+                        label: `${item.supplierCode} - ${item.supplierName}`,
+                        value: item,
+                      };
+                    })}
+                  />
+                )}
+              />
             </HStack>
 
             {/* Supplier Name */}
@@ -608,6 +638,7 @@ export const RawMatsInfoModal = ({
 
   const schema = yup.object().shape({
     formData: yup.object().shape({
+      materials: yup.object(),
       accountId: yup.object().required().typeError("Account Name is required"),
       empId: yup.object().nullable(),
       fullName: yup.string(),
@@ -670,6 +701,7 @@ export const RawMatsInfoModal = ({
     mode: "onChange",
     defaultValues: {
       formData: {
+        materials: "",
         accountId: "",
         empId: "",
         fullName: "",
@@ -713,11 +745,13 @@ export const RawMatsInfoModal = ({
   }, [idNumber]);
 
   const itemCodeHandler = (data) => {
+    console.log("Data: ", data);
+
     if (data) {
-      const newData = JSON.parse(data);
-      const itemCode = newData.itemCode;
-      const itemDescription = newData.itemDescription;
-      const uom = newData.uom;
+      // const newData = JSON.parse(data);
+      const itemCode = data.value.itemCode;
+      const itemDescription = data.value.itemDescription;
+      const uom = data.value.uom;
       setRawMatsInfo({
         itemCode: itemCode,
         itemDescription: itemDescription,
@@ -741,8 +775,20 @@ export const RawMatsInfoModal = ({
   const newDate = new Date();
   const minDate = moment(newDate).format("yyyy-MM-DD");
 
-  console.log("Raw Mats :", rawMatsInfo);
-  console.log("Account title :", watch("formData"));
+  // console.log("Raw Mats :", rawMatsInfo);
+  // console.log("Account title :", watch("formData"));
+
+  const closeHandler = () => {
+    setRawMatsInfo({
+      itemCode: "",
+      itemDescription: "",
+      supplierName: rawMatsInfo.supplierName,
+      uom: "",
+      quantity: "",
+      unitPrice: "",
+    });
+    onClose();
+  };
 
   return (
     <>
@@ -773,7 +819,7 @@ export const RawMatsInfoModal = ({
                   >
                     Item Code:{" "}
                   </Text>
-                  {materials.length > 0 ? (
+                  {/* {materials.length > 0 ? (
                     <Select
                       fontSize="sm"
                       onChange={(e) => itemCodeHandler(e.target.value)}
@@ -792,7 +838,30 @@ export const RawMatsInfoModal = ({
                     </Select>
                   ) : (
                     <Spinner />
-                  )}
+                  )} */}
+                  <Controller
+                    control={control}
+                    name="formData.materials"
+                    render={({ field }) => (
+                      <AutoComplete
+                        className="react-select-layout"
+                        ref={field.ref}
+                        value={field.value}
+                        size="sm"
+                        placeholder="Select Item Code"
+                        onChange={(e) => {
+                          field.onChange(e);
+                          itemCodeHandler(e);
+                        }}
+                        options={materials?.map((item) => {
+                          return {
+                            label: `${item.itemCode}`,
+                            value: item,
+                          };
+                        })}
+                      />
+                    )}
+                  />
                 </HStack>
 
                 {/* Item Description */}
@@ -1150,7 +1219,7 @@ export const RawMatsInfoModal = ({
               >
                 Add
               </Button>
-              <Button color="black" variant="outline" onClick={onClose}>
+              <Button color="black" variant="outline" onClick={closeHandler}>
                 Cancel
               </Button>
             </ButtonGroup>

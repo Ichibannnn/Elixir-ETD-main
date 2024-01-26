@@ -273,6 +273,7 @@ const MoveOrder = ({ notification, fetchNotification }) => {
               preparedQty={preparedQty}
               setHighlighterId={setHighlighterId}
               setItemCode={setItemCode}
+              fetchBarcodeDetails={fetchBarcodeDetails}
             />
           )
         )}

@@ -234,6 +234,7 @@ const MiscIssuePage = ({
                   isLoading={isLoading}
                   totalQuantity={totalQuantity}
                   setTotalQuantity={setTotalQuantity}
+                  customers={customers}
                   customerData={customerData}
                   setCustomerData={setCustomerData}
                   details={details}

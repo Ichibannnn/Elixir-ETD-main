@@ -64,10 +64,6 @@ export const AddConfirmation = ({
   coaData,
   setCoaData,
 }) => {
-  // console.log(unitCost);
-
-  // console.log(chargingAccountTitle);
-
   const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
@@ -321,6 +317,7 @@ export const SaveConfirmation = ({
   fetchRawMats,
   coaData,
   setCoaData,
+  customers,
 }) => {
   const toast = useToast();
   const [company, setCompany] = useState([]);
@@ -442,12 +439,24 @@ export const SaveConfirmation = ({
         empId: "",
         fullName: "",
         addedBy: currentUser.fullName,
+        customerData: {
+          customerCode: "",
+        },
       },
     },
   });
 
-  const saveSubmitHandler = (data) => {
+  // const defaultValues = { customers: [] };
+
+  // const resetHandler = () => {
+  //   reset(defaultValues);
+  // };
+
+  const saveSubmitHandler = () => {
     // console.log(coaData);
+
+    console.log("Customers: ", customerData);
+    console.log("COA DATA: ", coaData);
 
     if (totalQuantity > 0) {
       setIsLoading(true);
@@ -496,20 +505,20 @@ export const SaveConfirmation = ({
                       toast
                     );
                     onClose();
-                    console.log("done");
                     fetchRawMats();
-                    setTotalQuantity("");
-                    setTransactionDate("");
-                    customerRef.current.value = "";
                     setCustomerData({
+                      customerCode: "",
                       customerName: "",
                     });
+                    setTotalQuantity("");
+                    setTransactionDate("");
+                    // customerRef.current.value = "";
                     remarksRef.current.value = "";
                     setDetails("");
                     setRawMatsInfo({
                       itemCode: "",
                       itemDescription: "",
-                      supplier: "",
+                      customerName: "",
                       uom: "",
                       quantity: "",
                     });

@@ -23,6 +23,10 @@ import moment from "moment";
 import { AddConfirmation } from "./ActionModal";
 import { RiAddFill } from "react-icons/ri";
 import { NumericFormat } from "react-number-format";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Controller, useForm } from "react-hook-form";
+import { Select as AutoComplete } from "chakra-react-select";
 
 export const BorrowedInformation = ({
   rawMatsInfo,
@@ -62,6 +66,8 @@ export const BorrowedInformation = ({
       setDetails("");
     }
   };
+
+  // console.log("Details: ", details);
 
   const customerHandler = (data) => {
     if (data) {
@@ -349,6 +355,12 @@ export const RawMatsInfoModal = ({
   const [reserve, setReserve] = useState("");
   const [barcode, setBarcode] = useState("");
 
+  const schema = yup.object().shape({
+    formData: yup.object().shape({
+      rawMats: yup.object(),
+    }),
+  });
+
   const { isOpen: isAdd, onClose: closeAdd, onOpen: openAdd } = useDisclosure();
   const openAddConfirmation = () => {
     openAdd();
@@ -374,18 +386,20 @@ export const RawMatsInfoModal = ({
     }
   }, [barcodeNo]);
 
-  console.log("Available: ", availableStock);
-  console.log("Unit Cost: ", unitCost);
-  console.log("Warehouse ID: ", warehouseId);
-  console.log("Raw Materials: ", rawMatsInfo);
+  // console.log("Available: ", availableStock);
+  // console.log("Unit Cost: ", unitCost);
+  // console.log("Warehouse ID: ", warehouseId);
+  // console.log("Raw Materials: ", rawMatsInfo);
 
   const itemCodeHandler = (data) => {
+    console.log("Data: ", data);
+
     if (data) {
-      const newData = JSON.parse(data);
-      const itemCode = newData.itemCode;
-      const itemDescription = newData.itemDescription;
-      const uom = newData.uom;
-      setReserve(newData.remainingStocks);
+      // const newData = JSON.parse(data);
+      const itemCode = data.value.itemCode;
+      const itemDescription = data.value.itemDescription;
+      const uom = data.value.uom;
+      setReserve(data.value.remainingStocks);
       setRawMatsInfo({
         itemCode: itemCode,
         itemDescription: itemDescription,
@@ -439,6 +453,24 @@ export const RawMatsInfoModal = ({
     }
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    setValue,
+    reset,
+    watch,
+    control,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+    defaultValues: {
+      formData: {
+        rawMats: "",
+      },
+    },
+  });
+
   const closeHandler = () => {
     setRawMatsInfo({
       itemCode: "",
@@ -460,14 +492,12 @@ export const RawMatsInfoModal = ({
   const minDate = moment(newDate).format("yyyy-MM-DD");
 
   const firstBarcodeNo = barcodeNo && barcodeNo.length > 0 ? barcodeNo[0] : "";
-
   // console.log(barcodeNo);
-
   const [disabled, setDisabled] = useState(true);
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={() => {}} isCentered size="5xl">
+      <Modal isOpen={isOpen} onClose={() => {}} isCentered size="6xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader mb={4}>
@@ -479,22 +509,22 @@ export const RawMatsInfoModal = ({
           {/* <ModalCloseButton onClick={onClose} /> */}
           <ModalBody mb={5}>
             <Flex w="95%" justifyContent="space-between">
-              <VStack alignItems="start" w="40%" mx={5}>
+              <VStack alignItems="start" w="full" mx={5}>
                 {/* Item Code */}
                 <HStack w="full">
                   <Text
-                    minW="50%"
+                    minW="25%"
                     w="auto"
-                    bgColor="secondary"
+                    bgColor="primary"
                     color="white"
                     pl={2}
-                    pr={7}
+                    pr={10}
                     py={2.5}
                     fontSize="xs"
                   >
                     Item Code:{" "}
                   </Text>
-                  {rawMats.length > 0 ? (
+                  {/* {rawMats.length > 0 ? (
                     <Select
                       fontSize="xs"
                       onChange={(e) => itemCodeHandler(e.target.value)}
@@ -510,15 +540,38 @@ export const RawMatsInfoModal = ({
                     </Select>
                   ) : (
                     <Spinner />
-                  )}
+                  )} */}
+                  <Controller
+                    control={control}
+                    name="formData.rawMats"
+                    render={({ field }) => (
+                      <AutoComplete
+                        className="react-select-layout"
+                        ref={field.ref}
+                        value={field.value}
+                        size="sm"
+                        placeholder="Select item code"
+                        onChange={(e) => {
+                          field.onChange(e);
+                          itemCodeHandler(e);
+                        }}
+                        options={rawMats?.map((item) => {
+                          return {
+                            label: `${item.itemCode}`,
+                            value: item,
+                          };
+                        })}
+                      />
+                    )}
+                  />
                 </HStack>
 
                 {/* Barcode No */}
                 <HStack w="full">
                   <Text
-                    minW="50%"
+                    minW="25%"
                     w="auto"
-                    bgColor="secondary"
+                    bgColor="primary"
                     color="white"
                     pl={2}
                     pr={7}
@@ -528,11 +581,13 @@ export const RawMatsInfoModal = ({
                     Barcode Number:{" "}
                   </Text>
                   <Select
-                    fontSize="xs"
+                    fontSize="sm"
                     onChange={(e) => barcodeNoHandler(e.target.value)}
                     w="full"
-                    placeholder=" "
-                    bgColor="#fff8dc"
+                    placeholder=""
+                    border="1px"
+                    borderColor="gray.400"
+                    borderRadius="none"
                     value={barcode}
                   >
                     {barcodeNo?.map((item, i) => (
@@ -546,12 +601,12 @@ export const RawMatsInfoModal = ({
                 {/* Quantity */}
                 <HStack w="full">
                   <Text
-                    minW="50%"
+                    minW="25%"
                     w="auto"
-                    bgColor="secondary"
+                    bgColor="primary"
                     color="white"
                     pl={2}
-                    pr={7}
+                    pr={10}
                     py={2.5}
                     fontSize="xs"
                   >
@@ -559,7 +614,7 @@ export const RawMatsInfoModal = ({
                   </Text>
                   <NumericFormat
                     customInput={Input}
-                    fontSize="xs"
+                    fontSize="sm"
                     onValueChange={(e) =>
                       setRawMatsInfo({
                         itemCode: rawMatsInfo.itemCode,
@@ -577,7 +632,10 @@ export const RawMatsInfoModal = ({
                     onPaste={(e) => e.preventDefault()}
                     min="1"
                     w="full"
-                    bgColor="#fff8dc"
+                    placeholder="Enter Quantity"
+                    border="1px"
+                    borderColor="gray.400"
+                    borderRadius="none"
                     thousandSeparator=","
                   />
                   {/* <Input
@@ -605,13 +663,13 @@ export const RawMatsInfoModal = ({
                 </HStack>
               </VStack>
 
-              <VStack alignItems="start" w="40%" mx={5}>
+              <VStack alignItems="start" w="full" mx={5}>
                 {/* Item Description */}
                 <HStack w="full">
                   <Text
-                    minW="50%"
+                    minW="30%"
                     w="auto"
-                    bgColor="secondary"
+                    bgColor="primary"
                     color="white"
                     pl={2}
                     pr={10}
@@ -621,13 +679,14 @@ export const RawMatsInfoModal = ({
                     Item Description:{" "}
                   </Text>
                   <Text
-                    textAlign="center"
-                    fontSize="xs"
-                    w="full"
+                    fontSize="sm"
+                    textAlign="left"
                     bgColor="gray.200"
+                    w="full"
                     border="1px"
                     borderColor="gray.200"
                     py={1.5}
+                    px={4}
                   >
                     {rawMatsInfo.itemDescription
                       ? rawMatsInfo.itemDescription
@@ -638,25 +697,26 @@ export const RawMatsInfoModal = ({
                 {/* UOM */}
                 <HStack w="full">
                   <Text
-                    minW="50%"
+                    minW="30%"
                     w="auto"
-                    bgColor="secondary"
+                    bgColor="primary"
                     color="white"
                     pl={2}
-                    pr={7}
+                    pr={10}
                     py={2.5}
                     fontSize="xs"
                   >
                     UOM:{" "}
                   </Text>
                   <Text
-                    textAlign="center"
-                    fontSize="xs"
-                    w="full"
+                    fontSize="sm"
+                    textAlign="left"
                     bgColor="gray.200"
+                    w="full"
                     border="1px"
                     borderColor="gray.200"
                     py={1.5}
+                    px={4}
                   >
                     {rawMatsInfo.uom ? rawMatsInfo.uom : "Select an item code"}
                   </Text>
@@ -665,12 +725,12 @@ export const RawMatsInfoModal = ({
                 {/* Reserve */}
                 <HStack w="full">
                   <Text
-                    minW="50%"
+                    minW="30%"
                     w="auto"
-                    bgColor="secondary"
+                    bgColor="primary"
                     color="white"
                     pl={2}
-                    pr={7}
+                    pr={10}
                     py={2.5}
                     fontSize="xs"
                   >
@@ -690,13 +750,14 @@ export const RawMatsInfoModal = ({
                     </Text>
                   ) : (
                     <Text
-                      textAlign="center"
-                      fontSize="xs"
-                      w="full"
+                      fontSize="sm"
+                      textAlign="left"
                       bgColor="gray.200"
+                      w="full"
                       border="1px"
                       borderColor="gray.200"
                       py={1.5}
+                      px={4}
                     >
                       {reserve
                         ? reserve.toLocaleString(undefined, {
@@ -711,12 +772,12 @@ export const RawMatsInfoModal = ({
                 {/* SOH */}
                 <HStack w="full">
                   <Text
-                    minW="50%"
+                    minW="30%"
                     w="auto"
-                    bgColor="secondary"
+                    bgColor="primary"
                     color="white"
                     pl={2}
-                    pr={7}
+                    pr={10}
                     py={2.5}
                     fontSize="xs"
                   >
@@ -724,25 +785,27 @@ export const RawMatsInfoModal = ({
                   </Text>
                   {barcodeNo.length === 0 ? (
                     <Text
-                      textAlign="center"
-                      fontSize="xs"
-                      w="full"
+                      fontSize="sm"
+                      textAlign="left"
                       bgColor="gray.200"
+                      w="full"
                       border="1px"
                       borderColor="gray.200"
                       py={1.5}
+                      px={4}
                     >
                       No Stock on Hand
                     </Text>
                   ) : (
                     <Text
-                      textAlign="center"
-                      fontSize="xs"
+                      textAlign="left"
+                      fontSize="sm"
                       w="full"
                       bgColor="gray.200"
                       border="1px"
                       borderColor="gray.200"
                       py={1.5}
+                      px={4}
                     >
                       {availableStock
                         ? availableStock.toLocaleString(undefined, {
@@ -757,12 +820,12 @@ export const RawMatsInfoModal = ({
                 {/* Unit Cost */}
                 <HStack w="full">
                   <Text
-                    minW="50%"
+                    minW="30%"
                     w="auto"
-                    bgColor="secondary"
+                    bgColor="primary"
                     color="white"
                     pl={2}
-                    pr={7}
+                    pr={10}
                     py={2.5}
                     fontSize="xs"
                   >
@@ -770,25 +833,27 @@ export const RawMatsInfoModal = ({
                   </Text>
                   {barcodeNo.length === 0 ? (
                     <Text
-                      textAlign="center"
-                      fontSize="xs"
+                      fontSize="sm"
+                      textAlign="left"
                       w="full"
                       bgColor="gray.200"
                       border="1px"
                       borderColor="gray.200"
                       py={1.5}
+                      px={4}
                     >
                       Select a barcode number
                     </Text>
                   ) : (
                     <Text
-                      textAlign="center"
-                      fontSize="xs"
+                      textAlign="left"
+                      fontSize="sm"
                       w="full"
                       bgColor="gray.200"
                       border="1px"
                       borderColor="gray.200"
                       py={1.5}
+                      px={4}
                     >
                       {unitCost
                         ? unitCost.toLocaleString(undefined, {
@@ -811,7 +876,7 @@ export const RawMatsInfoModal = ({
                 onClick={openAddConfirmation}
                 isDisabled={
                   !rawMatsInfo.itemCode ||
-                  !rawMatsInfo.customerName ||
+                  // !rawMatsInfo.customerName ||
                   !rawMatsInfo.uom ||
                   !rawMatsInfo.warehouseId ||
                   !rawMatsInfo.quantity ||

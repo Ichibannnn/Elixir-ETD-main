@@ -83,7 +83,7 @@ export const AddConfirmation = ({
             itemCode: "",
             itemDescription: "",
             customerName: rawMatsInfo.customerName,
-            // customer: rawMatsInfo.customerName,
+            customer: rawMatsInfo.customerName,
             uom: "",
             warehouseId: "",
             quantity: "",
@@ -262,7 +262,6 @@ export const SaveConfirmation = ({
   isOpen,
   onClose,
   totalQuantity,
-  details,
   customerData,
   setCustomerData,
   setTotalQuantity,
@@ -272,6 +271,7 @@ export const SaveConfirmation = ({
   isLoading,
   setIsLoading,
   customerRef,
+  details,
   setDetails,
   setRawMatsInfo,
   setHideButton,
@@ -452,17 +452,14 @@ export const SaveConfirmation = ({
                     );
                     onClose();
                     fetchRawMats();
+
                     setTotalQuantity("");
-                    customerRef.current.value = "";
                     setTransactionDate("");
                     setDetails("");
-                    // setCustomerData({
-                    //   customerName: "",
-                    // });
                     setRawMatsInfo({
                       itemCode: "",
                       itemDescription: "",
-                      supplier: "",
+                      customerName: "",
                       uom: "",
                       quantity: "",
                     });

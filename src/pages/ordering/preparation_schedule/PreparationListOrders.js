@@ -192,9 +192,11 @@ export const PreparationListOrders = ({
       let totalQuantity = checkItemsData.map((q) =>
         parseFloat(q.quantityOrder)
       );
+
       let sum = totalQuantity.reduce((a, b) => a + b);
+      console.log("sum: ", sum);
       checkItemsData?.map((item) => {
-        if (item.stockOnHand < sum) {
+        if (item.reserve < sum) {
           setDisableIfStock(true);
         } else {
           setDisableIfStock(false);
@@ -413,7 +415,7 @@ export const PreparationListOrders = ({
                     })}
                   </Td>
                   <Td fontSize="xs">
-                    {item.stockOnHand.toLocaleString(undefined, {
+                    {item.actualReserve.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                       minimumFractionDigits: 2,
                     })}

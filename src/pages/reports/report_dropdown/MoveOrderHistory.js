@@ -103,7 +103,14 @@ export const MoveOrderHistory = ({
             Quantity: item.quantity,
             "Unit Cost": item.unitCost,
             "Line Amount": item.lineAmount,
+            "Asset Tag": item.assetTag === null ? "-" : item.assetTag,
             "CIP #": item.cip_No === null ? "-" : item.cip_No,
+            "Order Date": item.orderDate
+              ? moment(item.orderDate).format("yyyy-MM-DD")
+              : "",
+            "Date Needed": item.dateNeeded
+              ? moment(item.dateNeeded).format("yyyy-MM-DD")
+              : "",
             "Company Code": item.companyCode,
             "Company Name": item.companyCode,
             "Department Code": item.departmentCode,
@@ -174,9 +181,17 @@ export const MoveOrderHistory = ({
                     <Th color="white" fontSize="10px" fontWeight="semibold">
                       Line Amount
                     </Th>
-
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Asset Tag
+                    </Th>
                     <Th color="white" fontSize="10px" fontWeight="semibold">
                       CIP No.
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Order Date
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Date Needed
                     </Th>
 
                     {/* <Th color="white" fontSize="10px" fontWeight="semibold">
@@ -262,11 +277,22 @@ export const MoveOrderHistory = ({
                           maximumFractionDigits: 2,
                         })}
                       </Td>
-
+                      <Td fontSize="xs">
+                        {item.assetTag === null ? "-" : item.assetTag}
+                      </Td>
                       <Td fontSize="xs">
                         {item.cip_No === null ? "-" : item.cip_No}
                       </Td>
-
+                      <Td fontSize="xs">
+                        {item.orderDate
+                          ? moment(item.orderDate).format("yyyy-MM-DD")
+                          : "-"}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.dateNeeded
+                          ? moment(item.dateNeeded).format("yyyy-MM-DD")
+                          : "-"}
+                      </Td>
                       {/* <Td fontSize="xs">{item.batchNo}</Td> */}
                     </>
                   ) : (

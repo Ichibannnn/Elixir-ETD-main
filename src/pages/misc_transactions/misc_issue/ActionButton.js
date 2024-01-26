@@ -33,6 +33,7 @@ export const ActionButton = ({
   fetchRawMats,
   coaData,
   setCoaData,
+  customers,
 }) => {
   const [hideButton, setHideButton] = useState(false);
 
@@ -123,6 +124,7 @@ export const ActionButton = ({
           onClose={closeSave}
           totalQuantity={totalQuantity}
           setTotalQuantity={setTotalQuantity}
+          customers={customers}
           customerData={customerData}
           setCustomerData={setCustomerData}
           miscData={miscData}

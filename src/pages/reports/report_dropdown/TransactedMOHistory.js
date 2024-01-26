@@ -104,7 +104,14 @@ export const TransactedMOHistory = ({
             Quantity: item.quantity,
             "Unit Cost": item.unitCost,
             "Line Amount": item.lineAmount,
+            "Asset Tag": item.assetTag === null ? "-" : item.assetTag,
             "CIP #": item.cip_No === null ? "-" : item.cip_No,
+            "Order Date": item.orderDate
+              ? moment(item.orderDate).format("yyyy-MM-DD")
+              : "",
+            "Date Needed": item.dateNeeded
+              ? moment(item.dateNeeded).format("yyyy-MM-DD")
+              : "",
             Status: item.transactedDate ? "Transacted" : "For Transaction",
             "Company Code": item.companyCode,
             "Company Name": item.companyCode,
@@ -183,7 +190,16 @@ export const TransactedMOHistory = ({
                       LIne Amount
                     </Th>
                     <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Asset Tag
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
                       CIP No.
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Order Date
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Date Needed
                     </Th>
                   </>
                 ) : (
@@ -257,7 +273,20 @@ export const TransactedMOHistory = ({
                         })}
                       </Td>
                       <Td fontSize="xs">
+                        {item.assetTag === null ? "-" : item.assetTag}
+                      </Td>
+                      <Td fontSize="xs">
                         {item.cip_No === null ? "-" : item.cip_No}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.orderDate
+                          ? moment(item.orderDate).format("yyyy-MM-DD")
+                          : "-"}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.dateNeeded
+                          ? moment(item.dateNeeded).format("yyyy-MM-DD")
+                          : "-"}
                       </Td>
                       {/* <Td fontSize="xs">
                         {item.transactedDate ? "Transacted" : "For Transaction"}

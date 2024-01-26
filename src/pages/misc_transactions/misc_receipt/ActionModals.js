@@ -370,8 +370,8 @@ export const SaveConfirmation = ({
                   toast
                 );
                 setListDataTempo([]);
-                console.log(listDataTempo);
-                supplierRef.current.value = "";
+                // console.log(listDataTempo);
+                // supplierRef.current.value = "";
                 remarksRef.current.value = "";
                 setTransactionDate("");
                 setDetails("");

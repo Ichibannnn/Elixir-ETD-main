@@ -664,6 +664,7 @@ export const AddQuantityConfirmation = ({
   setWarehouseId,
   quantity,
   quantityRef,
+  fetchBarcodeDetails,
 }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);

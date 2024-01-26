@@ -341,7 +341,7 @@ export const PrintModal = ({
             <PageScroll minHeight="150px" maxHeight="300px">
               <VStack spacing={20} w="93%" ml={3} ref={componentRef}>
                 {/* Survey Form v2 */}
-                <Flex
+                {/* <Flex
                   w="full"
                   mb="480px"
                   p={5}
@@ -517,7 +517,7 @@ export const PrintModal = ({
                       ETD-ESW-FRM-23-003 [APR. 1, 2023]
                     </Text>
                   </Flex>
-                </Flex>
+                </Flex> */}
 
                 {/* Survey Form v1 -------------------------------------------------------------------------------------- */}
                 {/* <Flex

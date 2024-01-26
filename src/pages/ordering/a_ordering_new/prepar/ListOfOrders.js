@@ -78,7 +78,7 @@ export const ListOfOrders = ({
 
       // Check if any order has a negative value for "Reserve"
       const hasNegativeReserve = response.data.some(
-        (order) => order.stockOnHand < 0
+        (order) => order.reserve < 0
       );
       setDisableScheduleButton(hasNegativeReserve);
     } catch (error) {
@@ -214,7 +214,7 @@ export const ListOfOrders = ({
                     <Td fontSize="xs">-</Td>
                   )}
                   <Td fontSize="xs">
-                    {order.stockOnHand.toLocaleString(undefined, {
+                    {order.actualReserve.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}

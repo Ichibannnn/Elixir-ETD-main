@@ -56,17 +56,26 @@ export const ActualItemQuantity = ({
   preparedQty,
   nearlyExpireBarcode,
   setItemCode,
+  fetchBarcodeDetails,
 }) => {
   const [availableBarcode, setAvailableBarcode] = useState([]);
+  const [quantity, setQuantity] = useState("");
+  const [inputValidate, setInputValidate] = useState(true);
+  const [isQuantityZero, setIsQuantityZero] = useState(false);
+
+  const barcodeRef = useRef(null);
+  const quantityRef = useRef();
+  const toast = useToast();
 
   const fetchAvailableBarcodePerItemCode = () => {
     fetchAvailableBarcodePerItemCodeApi(itemCode).then((res) => {
       setAvailableBarcode(res);
-      setWarehouseId(res?.[0]?.id);
-      console.log(res);
+
+      const barcodeNumber = res?.filter((items) => items.actualGood > 0);
+      setWarehouseId(barcodeNumber?.[0]?.id);
+      console.log("Response: ", res);
     });
   };
-  // console.log(availableBarcode);
 
   useEffect(() => {
     if (itemCode) {
@@ -87,42 +96,21 @@ export const ActualItemQuantity = ({
     }
   };
 
-  const barcodeRef = useRef(null);
-
-  const [quantity, setQuantity] = useState("");
-  // const [validation, setValidation] = useState(false);
-  // const [actualQuantity, setActualQuantity] = useState("")
-
   useEffect(() => {
     setQuantity("");
   }, [qtyOrdered]);
 
-  // useEffect(() => {
-  //   // console.log(itemCode);
-  //   fetchAvailableBarcodePerItemCode();
-  //   if (itemCode) {
-  //     const data = availableBarcode[0];
-  //     setWarehouseId(data?.id);
-  //   }
-  // }, [itemCode]);
-
   useEffect(() => {
     if (barcodeData?.orders && qtyOrdered) {
-      if (barcodeData?.orders.remaining < qtyOrdered) {
+      const stocks = Number(qtyOrdered) - Number(preparedQty);
+      // console.log("Stocks: ", stocks);
+      if (barcodeData?.orders.remaining < stocks) {
         setQuantity(barcodeData?.orders.remaining);
       } else {
-        setQuantity(qtyOrdered);
+        setQuantity(stocks);
       }
     }
   }, [qtyOrdered, barcodeData]);
-
-  const [inputValidate, setInputValidate] = useState(true);
-  const [isQuantityZero, setIsQuantityZero] = useState(false);
-
-  // FOR AUTOFILL ACTUAL QUANTITY
-  const quantityRef = useRef();
-
-  const toast = useToast();
 
   const {
     isOpen: isQuantity,
@@ -138,9 +126,7 @@ export const ActualItemQuantity = ({
     } else {
       setInputValidate(false);
     }
-
     setIsQuantityZero(Number(quantity) === 0);
-
     return () => {
       setInputValidate(true);
       setInputValidate(true);
@@ -339,6 +325,7 @@ export const ActualItemQuantity = ({
           warehouseId={warehouseId}
           quantity={quantity}
           quantityRef={quantityRef}
+          fetchBarcodeDetails={fetchBarcodeDetails}
         />
       }
 
@@ -365,7 +352,7 @@ const AvailableBarcodeModal = ({
   // setValidation,
 }) => {
   const selectId = (data) => {
-    console.log("Warehouse ID: ", data);
+    // console.log("Warehouse ID: ", data);
     if (data) {
       setWarehouseId(data);
       onClose();
