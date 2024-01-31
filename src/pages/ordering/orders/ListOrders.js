@@ -139,7 +139,7 @@ export const ListOrders = ({
         };
       });
       if (result.isConfirmed) {
-        // console.log("Submit Array: ", submitBody);
+        console.log("Submit Array: ", submitBody);
         try {
           setIsLoading(true);
           const res = request
@@ -214,8 +214,8 @@ export const ListOrders = ({
             </Badge>
             <Input
               onChange={(date) => setFromDate(date.target.value)}
-              defaultValue={fromDate}
-              min={startDate}
+              // defaultValue={fromDate}
+              // min={startDate}
               // size="sm"
               type="date"
               fontSize="11px"

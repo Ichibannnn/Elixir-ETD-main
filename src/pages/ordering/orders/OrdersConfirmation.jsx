@@ -220,6 +220,46 @@ const OrdersConfirmation = ({
     };
   });
 
+  const accountCodeEmpty = errorData?.accountCodeEmpty?.map((list) => {
+    return {
+      trasactId: list?.trasactId,
+      department: list?.department,
+      customercode: list?.customercode,
+      customerName: list?.customerName,
+      customerType: list?.customerType,
+      orderNo: list?.orderNo,
+      orderDate: moment(list?.orderDate).format("yyyy-MM-DD"),
+      dateNeeded: moment(list?.dateNeeded).format("yyyy-MM-DD"),
+      itemCode: list?.itemCode,
+      itemdDescription: list?.itemdDescription,
+      uom: list?.uom,
+      quantityOrdered: list?.quantityOrdered,
+      category: list?.category,
+      accountCode: list?.accountCode,
+      accountTitles: list?.accountTitles,
+    };
+  });
+
+  const accountTitleEmpty = errorData?.accountTitleEmpty?.map((list) => {
+    return {
+      trasactId: list?.trasactId,
+      department: list?.department,
+      customercode: list?.customercode,
+      customerName: list?.customerName,
+      customerType: list?.customerType,
+      orderNo: list?.orderNo,
+      orderDate: moment(list?.orderDate).format("yyyy-MM-DD"),
+      dateNeeded: moment(list?.dateNeeded).format("yyyy-MM-DD"),
+      itemCode: list?.itemCode,
+      itemdDescription: list?.itemdDescription,
+      uom: list?.uom,
+      quantityOrdered: list?.quantityOrdered,
+      category: list?.category,
+      accountCode: list?.accountCode,
+      accountTitles: list?.accountTitles,
+    };
+  });
+
   // const quantityInValid = errorData?.quantityInValid?.map((list) => {
   //   return {
   //     trasactId: list?.trasactId,
@@ -411,9 +451,6 @@ const OrdersConfirmation = ({
                                 Date Needed
                               </Th>
                               <Th color="white" fontSize="9px">
-                                Department
-                              </Th>
-                              <Th color="white" fontSize="9px">
                                 Customer Code
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -457,9 +494,6 @@ const OrdersConfirmation = ({
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {moment(d?.dateNeeded).format("yyyy-MM-DD")}
-                                </Td>
-                                <Td color="gray.600" fontSize="11px">
-                                  {d?.department}
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.customercode}
@@ -574,9 +608,6 @@ const OrdersConfirmation = ({
                                 Date Needed
                               </Th>
                               <Th color="white" fontSize="9px">
-                                Department
-                              </Th>
-                              <Th color="white" fontSize="9px">
                                 Customer Code
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -620,9 +651,6 @@ const OrdersConfirmation = ({
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {moment(d?.dateNeeded).format("yyyy-MM-DD")}
-                                </Td>
-                                <Td color="gray.600" fontSize="11px">
-                                  {d?.department}
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.customercode}
@@ -817,9 +845,6 @@ const OrdersConfirmation = ({
                                 Date Needed
                               </Th>
                               <Th color="white" fontSize="9px">
-                                Department
-                              </Th>
-                              <Th color="white" fontSize="9px">
                                 Customer Name
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -854,9 +879,6 @@ const OrdersConfirmation = ({
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {moment(d?.dateNeeded).format("yyyy-MM-DD")}
-                                </Td>
-                                <Td color="gray.600" fontSize="11px">
-                                  {d?.department}
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.customerName}
@@ -941,9 +963,6 @@ const OrdersConfirmation = ({
                                 Date Needed
                               </Th>
                               <Th color="white" fontSize="9px">
-                                Department
-                              </Th>
-                              <Th color="white" fontSize="9px">
                                 Customer Code
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -981,9 +1000,6 @@ const OrdersConfirmation = ({
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {moment(d?.dateNeeded).format("yyyy-MM-DD")}
-                                </Td>
-                                <Td color="gray.600" fontSize="11px">
-                                  {d?.department}
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.customercode}
@@ -1204,9 +1220,6 @@ const OrdersConfirmation = ({
                               <Th color="white" fontSize="9px">
                                 Customer Type
                               </Th>
-                              <Th color="white" fontSize="9px">
-                                Department
-                              </Th>
                             </Tr>
                           </Thead>
 
@@ -1227,9 +1240,6 @@ const OrdersConfirmation = ({
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.customerType}
-                                </Td>
-                                <Td color="gray.600" fontSize="11px">
-                                  {d?.department}
                                 </Td>
                               </Tr>
                             ))}
@@ -1296,9 +1306,6 @@ const OrdersConfirmation = ({
                                 Date Needed
                               </Th>
                               <Th color="white" fontSize="9px">
-                                Department
-                              </Th>
-                              <Th color="white" fontSize="9px">
                                 Customer Code
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -1338,9 +1345,6 @@ const OrdersConfirmation = ({
                                   {moment(d?.dateNeeded).format("yyyy-MM-DD")}
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
-                                  {d?.department}
-                                </Td>
-                                <Td color="gray.600" fontSize="11px">
                                   {d?.customercode}
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
@@ -1371,6 +1375,206 @@ const OrdersConfirmation = ({
                             <RiFileList3Fill fontSize="200px" />
                             <Text color="white">
                               There are no duplicated lists on this file
+                            </Text>
+                          </VStack>
+                        </Flex>
+                      )}
+                    </PageScrollImport>
+                  </AccordionPanel>
+                </AccordionItem>
+              ) : (
+                ""
+              )}
+
+              {/* ACCOUNT CODE EMPTY */}
+              {accountCodeEmpty?.length > 0 ? (
+                <AccordionItem bgColor="gray.200">
+                  <Flex>
+                    <AccordionButton color="white" fontWeight="semibold">
+                      <Box
+                        flex="1"
+                        textAlign="left"
+                        color="black"
+                        fontSize="13px"
+                        fontWeight="semibold"
+                      >
+                        Check Empty Account Title Code{" "}
+                        <Badge color="red">{accountCodeEmpty?.length}</Badge>
+                      </Box>
+                      <AccordionIcon color="secondary" />
+                    </AccordionButton>
+                  </Flex>
+
+                  <AccordionPanel pb={4}>
+                    <PageScrollImport maxHeight="470px">
+                      {accountCodeEmpty ? (
+                        <Table variant="striped" size="sm">
+                          <Thead
+                            bgColor="gray.600"
+                            position="sticky"
+                            top={0}
+                            zIndex={1}
+                          >
+                            <Tr>
+                              <Th color="white" fontSize="9px">
+                                Line
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                MIR ID
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                Customer Code
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                Customer Name
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                Customer Type
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                Account Title Code
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                Account Title
+                              </Th>
+                            </Tr>
+                          </Thead>
+
+                          <Tbody>
+                            {accountCodeEmpty?.map((d, i) => (
+                              <Tr key={i}>
+                                <Td color="gray.600" fontSize="11px">
+                                  {i + 1}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.trasactId}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.customercode}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.customerName}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.customerType}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.accountCode}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.accountTitles}
+                                </Td>
+                              </Tr>
+                            ))}
+                          </Tbody>
+                        </Table>
+                      ) : (
+                        <Flex justifyContent="center" mt="30px">
+                          <VStack>
+                            <RiFileList3Fill fontSize="200px" />
+                            <Text color="white">
+                              There are no duplicated Accunt Title Code lists on
+                              this file
+                            </Text>
+                          </VStack>
+                        </Flex>
+                      )}
+                    </PageScrollImport>
+                  </AccordionPanel>
+                </AccordionItem>
+              ) : (
+                ""
+              )}
+
+              {/* ACCOUNT CODE EMPTY */}
+              {accountTitleEmpty?.length > 0 ? (
+                <AccordionItem bgColor="gray.200">
+                  <Flex>
+                    <AccordionButton color="white" fontWeight="semibold">
+                      <Box
+                        flex="1"
+                        textAlign="left"
+                        color="black"
+                        fontSize="13px"
+                        fontWeight="semibold"
+                      >
+                        Check Empty Account Title Name{" "}
+                        <Badge color="red">{accountTitleEmpty?.length}</Badge>
+                      </Box>
+                      <AccordionIcon color="secondary" />
+                    </AccordionButton>
+                  </Flex>
+
+                  <AccordionPanel pb={4}>
+                    <PageScrollImport maxHeight="470px">
+                      {accountTitleEmpty ? (
+                        <Table variant="striped" size="sm">
+                          <Thead
+                            bgColor="gray.600"
+                            position="sticky"
+                            top={0}
+                            zIndex={1}
+                          >
+                            <Tr>
+                              <Th color="white" fontSize="9px">
+                                Line
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                MIR ID
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                Customer Code
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                Customer Name
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                Customer Type
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                Account Title Code
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                Account Title
+                              </Th>
+                            </Tr>
+                          </Thead>
+
+                          <Tbody>
+                            {accountTitleEmpty?.map((d, i) => (
+                              <Tr key={i}>
+                                <Td color="gray.600" fontSize="11px">
+                                  {i + 1}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.trasactId}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.customercode}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.customerName}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.customerType}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.accountCode}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.accountTitles}
+                                </Td>
+                              </Tr>
+                            ))}
+                          </Tbody>
+                        </Table>
+                      ) : (
+                        <Flex justifyContent="center" mt="30px">
+                          <VStack>
+                            <RiFileList3Fill fontSize="200px" />
+                            <Text color="white">
+                              There are no duplicated Accunt Title Name lists on
+                              this file
                             </Text>
                           </VStack>
                         </Flex>

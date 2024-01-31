@@ -211,16 +211,11 @@ export const MaterialsInformation = ({
     }
   };
 
-  // console.log("Raw Mats Info:", rawMatsInfo);
-  // console.log("Supplier Data: ", supplierData);
-
   useEffect(() => {
     if (supplierData.supplierName === "") {
       reset();
     }
   }, [supplierData]);
-
-  // console.log(watch("formData"))
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">

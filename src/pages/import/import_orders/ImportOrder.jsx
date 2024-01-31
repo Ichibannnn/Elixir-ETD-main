@@ -272,9 +272,9 @@ const ImportOrder = ({ fetchNotification }) => {
                   <Th h="40px" color="white" fontSize="10px">
                     Date Needed
                   </Th>
-                  <Th h="40px" color="white" fontSize="10px">
+                  {/* <Th h="40px" color="white" fontSize="10px">
                     Department
-                  </Th>
+                  </Th> */}
                   <Th h="40px" color="white" fontSize="10px">
                     Customer Code
                   </Th>
@@ -340,7 +340,7 @@ const ImportOrder = ({ fetchNotification }) => {
                         </Text>
                       )}
                     </Td>
-                    <Td fontSize="xs">
+                    {/* <Td fontSize="xs">
                       {ed.department ? (
                         ed.department
                       ) : (
@@ -349,7 +349,7 @@ const ImportOrder = ({ fetchNotification }) => {
                           Import Order is uploaded.
                         </Text>
                       )}
-                    </Td>
+                    </Td> */}
                     <Td fontSize="xs">
                       {!isNaN(ed.customercode)
                         ? ed.customercode.toLocaleString(undefined, {

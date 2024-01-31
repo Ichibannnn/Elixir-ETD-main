@@ -224,7 +224,7 @@ const EditAddRejectionModal = ({
                   autoComplete="off"
                   min="1"
                   isInvalid={errors.qty}
-                  fontSize="11px"
+                  fontSize="13px"
                   size="sm"
                   bgColor="#ffffe0"
                   placeholder="Quantity"
@@ -240,7 +240,7 @@ const EditAddRejectionModal = ({
                     onChange={(e) => remarksHandler(e.target.value)}
                     isInvalid={errors.rms}
                     placeholder="Select Reason"
-                    fontSize="11px"
+                    fontSize="13px"
                     size="sm"
                     border="1px"
                     borderColor="gray.400"

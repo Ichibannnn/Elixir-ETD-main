@@ -16,20 +16,21 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Controller } from "react-hook-form";
+
 // import request from '../../../services/ApiClient'
 import moment from "moment";
 import { ToastComponent } from "../../../components/Toast";
-import PageScrollEditReceiving from "../../../components/PageScrollEditReceiving";
 import { decodeUser } from "../../../services/decode-user";
 import EditAddRejectionModal from "./EditAddRejectionModal";
 import { ReceivingContext } from "../../../components/context/ReceivingContext";
 import EditModalSave from "./EditModalSave";
 import request from "../../../services/ApiClient";
-import DatePicker from "react-date-picker";
 import PageScroll from "../../../utils/PageScroll";
 import { NumericFormat } from "react-number-format";
+import { Select as AutoComplete } from "chakra-react-select";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const currentUser = decodeUser();
 
@@ -37,6 +38,12 @@ const fetchLotCategoryApi = async () => {
   const res = await request.get("Lot/GetAllActiveLotNames");
   return res.data;
 };
+
+const schema = yup.object().shape({
+  formData: yup.object().shape({
+    lotCategories: yup.object(),
+  }),
+});
 
 export const EditModal = ({
   editData,
@@ -56,7 +63,6 @@ export const EditModal = ({
   const [actualDelivered, setActualDelivered] = useState(null);
   const [siNumber, setSINumber] = useState(null);
 
-  const [receiveDate, setReceiveDate] = useState(null);
   const [lotSection, setLotSection] = useState(null);
   const [expectedDelivery, setExpectedDelivery] = useState(null);
   const toast = useToast();
@@ -64,8 +70,6 @@ export const EditModal = ({
   const [quantity, setQuantity] = useState(undefined);
 
   const [sumQuantity, setSumQuantity] = useState(0);
-  // const [receivingId, setReceivingId] = useState(null);
-
   const [submitDataThree, setSubmitDataThree] = useState([]);
   const [submitDataTwo, setSubmitDataTwo] = useState([]);
   const [lotCategories, setLotCategories] = useState([]);
@@ -85,9 +89,10 @@ export const EditModal = ({
 
   const {
     register,
+    control,
     // formState: { errors, isValid },
   } = useForm({
-    resolver: yupResolver(),
+    resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
       submitData: {
@@ -96,6 +101,9 @@ export const EditModal = ({
         actual_delivered: "",
         si_number: "",
         addedBy: currentUser.fullName,
+      },
+      formData: {
+        lotCategories: "",
       },
       displayData: {
         id: editData.id,
@@ -107,7 +115,6 @@ export const EditModal = ({
         itemDescription: editData.itemDescription,
         supplier: editData.supplier,
         uom: editData.uom,
-        // actualDelivered: editData.actualDelivered.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 }),
         quantityOrdered: editData.quantityOrdered.toLocaleString(undefined, {
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
@@ -118,24 +125,17 @@ export const EditModal = ({
         }),
         unitPrice: editData.unitPrice.toLocaleString(undefined, {
           maximumFractionDigits: 2,
-          // minimumFractionDigits: 2,
         }),
         checkingDate: moment().format("MM/DD/YYYY"),
         actualRemaining: editData.actualRemaining.toLocaleString(undefined, {
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         }),
-        // actualDelivered: editData.actualDelivered,
       },
     },
   });
 
-  // const submitHandler = () => {
-
-  // }
-
   const expectedDeliveryRef = useRef();
-
   const expectedDeliveryProvider = (data) => {
     if (data < 1) {
       setExpectedDelivery("");
@@ -146,8 +146,8 @@ export const EditModal = ({
   };
 
   const lotSectionProvider = (data) => {
-    console.log(data);
-    setLotSection(data);
+    console.log("Controller: ", data.value.sectionName);
+    setLotSection(data.value.sectionName);
   };
 
   const actualDeliveredRef = useRef();
@@ -188,8 +188,6 @@ export const EditModal = ({
     // console.log(siNumber);
   };
 
-  // const unitCost = setUnitPrice(editData.unitPrice)
-
   const unitPriceRef = useRef();
   const unitPriceProvider = (data) => {
     if (data < 1) {
@@ -199,8 +197,6 @@ export const EditModal = ({
       setUnitPrice(data);
     }
   };
-
-  console.log("Unit Price: ", unitPrice);
 
   let submitDataOne = {
     poSummaryId: editData.id,
@@ -219,30 +215,11 @@ export const EditModal = ({
     lotSection: lotSection,
   };
 
-  // let submitUnitPriceNull = {
-  //   poSummaryId: editData.id,
-  //   poNumber: editData.poNumber,
-  //   itemCode: editData.itemCode,
-  //   itemDescription: editData.itemDescription,
-  //   expectedDelivery: Number(expectedDelivery),
-  //   actualDelivered: Number(actualDelivered),
-  //   uom: editData.uom,
-  //   supplier: editData.supplier,
-  //   actualDelivered: Number(actualDelivered),
-  //   unitPrice: Number(unitPrice),
-  //   siNumber: siNumber,
-  //   totalReject: sumQuantity,
-  //   addedBy: currentUser.fullName,
-  //   lotSection: lotSection,
-  // };
-
   useEffect(() => {
     setActualGood(editData.actualDelivered - sumQuantity);
   }, [sumQuantity]);
 
-  useEffect(() => {
-    // console.log("Receiving Date State:", receivingDate);
-  }, [receivingDate]);
+  useEffect(() => {}, [receivingDate]);
 
   const receivingDateProvider = (event) => {
     const data = event.target.value;
@@ -256,7 +233,12 @@ export const EditModal = ({
     }
   };
 
-  // console.log("Unit Price: ", editData.unitPrice);
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: "#ffffe0",
+    }),
+  };
 
   return (
     <ReceivingContext.Provider
@@ -296,7 +278,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -308,7 +290,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -323,7 +305,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -335,7 +317,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -358,7 +340,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -370,7 +352,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -385,7 +367,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -397,7 +379,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -412,7 +394,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -422,7 +404,7 @@ export const EditModal = ({
                       Unit Cost
                       <Input
                         {...register("displayData.unitPrice")}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         placeholder="Unit Cost"
                         bgColor="#ffffe0"
@@ -450,7 +432,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -463,7 +445,7 @@ export const EditModal = ({
                         disabled={true}
                         readOnly={true}
                         _disabled={{ color: "black" }}
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         bg="gray.300"
                       />
@@ -484,7 +466,7 @@ export const EditModal = ({
                         onPaste={(e) => e.preventDefault()}
                         autoComplete="off"
                         min="1"
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         placeholder="Please provide quantity of expected delivery  (Required)"
                         bgColor="#ffffe0"
@@ -507,7 +489,7 @@ export const EditModal = ({
                         onPaste={(e) => e.preventDefault()}
                         autoComplete="off"
                         min="1"
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         placeholder="Please enter quantity (Required)"
                         bgColor="#ffffe0"
@@ -521,7 +503,7 @@ export const EditModal = ({
                     <FormLabel w="50%" fontSize="12px">
                       SI Number
                       <Input
-                        fontSize="11px"
+                        fontSize="13px"
                         size="sm"
                         placeholder="SI Number (Optional)"
                         // bgColor="white"
@@ -538,7 +520,7 @@ export const EditModal = ({
                         size="sm"
                         border="1px"
                         borderColor="gray.400"
-                        fontSize="11px"
+                        fontSize="13px"
                         bgColor="#ffffe0"
                         onChange={receivingDateProvider}
                         min={moment(
@@ -551,10 +533,10 @@ export const EditModal = ({
 
                     <FormLabel w="50%" fontSize="12px">
                       LOT Section
-                      {lotCategories.length > 0 ? (
+                      {/* {lotCategories.length > 0 ? (
                         <Select
                           size="sm"
-                          fontSize="11px"
+                          fontSize="13px"
                           onChange={(e) => lotSectionProvider(e.target.value)}
                           disabled={!receivingDate}
                           placeholder="Select a lot section"
@@ -563,8 +545,6 @@ export const EditModal = ({
                               ? "Please provide a Receiving Date first"
                               : "Select a lot section"
                           }
-                          // isInvalid={errors.rms}
-                          // placeholder="Please provide a Receiving Date first"
                           bgColor="#ffffe0"
                         >
                           {lotCategories?.map((lot) => (
@@ -575,7 +555,34 @@ export const EditModal = ({
                         </Select>
                       ) : (
                         "Loading"
-                      )}
+                      )} */}
+                      <Controller
+                        control={control}
+                        name="formData.lotCategories"
+                        render={({ field }) => (
+                          <AutoComplete
+                            // className="react-select-layout"
+                            className="chakra-react-select"
+                            classNamePrefix="chakra-react-select"
+                            variant="filled"
+                            ref={field.ref}
+                            value={field.value}
+                            isDisabled={!receivingDate}
+                            size="sm"
+                            placeholder="Select Lot Section"
+                            onChange={(e) => {
+                              field.onChange(e);
+                              lotSectionProvider(e);
+                            }}
+                            options={lotCategories?.map((item) => {
+                              return {
+                                label: `${item.sectionName}`,
+                                value: item,
+                              };
+                            })}
+                          />
+                        )}
+                      />
                     </FormLabel>
                   </Flex>
                 </Stack>
