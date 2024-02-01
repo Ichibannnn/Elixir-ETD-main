@@ -28,29 +28,36 @@ import {
 } from "@ajna/pagination";
 import moment from "moment";
 
-const fetchWarehouseReceivingHistoryApi = async (
-  pageNumber,
-  pageSize,
-  dateFrom,
-  dateTo
-) => {
-  const dayaDate = new Date();
-  const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
-  const res = await request.get(
-    `Reports/WareHouseReceivingReports?PageNumber=${pageNumber}&PageSize=${pageSize}&DateFrom=${dateFrom}&DateTo=${dateTo}`
-  );
-  return res.data;
-};
-
 export const WarehouseReceivingHistory = ({
   dateFrom,
   dateTo,
   sample,
   setSheetData,
+  search,
 }) => {
   const [warehouseData, setWarehouseData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
+
+  const fetchWarehouseReceivingHistoryApi = async (
+    pageNumber,
+    pageSize,
+    dateFrom,
+    dateTo,
+    search
+  ) => {
+    const dayaDate = new Date();
+    const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
+    const res = await request.get(
+      `Reports/WareHouseReceivingReports?PageNumber=${pageNumber}&PageSize=${pageSize}&DateFrom=${dateFrom}&DateTo=${dateTo}`,
+      {
+        params: {
+          search: search,
+        },
+      }
+    );
+    return res.data;
+  };
 
   //PAGINATION
   const outerLimit = 2;
@@ -86,10 +93,10 @@ export const WarehouseReceivingHistory = ({
       pageSize,
       dateFrom,
       dateTo,
-      sample
+      search
     ).then((res) => {
       setWarehouseData(res);
-      console.log(warehouseData);
+      // console.log(warehouseData);
       setSheetData(
         res?.inventory?.map((item, i) => {
           return {
@@ -118,14 +125,20 @@ export const WarehouseReceivingHistory = ({
     return () => {
       setWarehouseData([]);
     };
-  }, [currentPage, pageSize, dateFrom, dateTo, sample]);
+  }, [currentPage, pageSize, dateFrom, dateTo, search]);
 
   return (
     <Flex w="full" flexDirection="column">
       <Flex className="boxShadow">
         <PageScroll minHeight="720px" maxHeight="740px">
           <Table size="md" variant="striped">
-            <Thead bgColor="primary" h="40px">
+            <Thead
+              bgColor="primary"
+              h="40px"
+              position="sticky"
+              top={0}
+              zIndex="1"
+            >
               <Tr>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
                   ID
@@ -285,7 +298,7 @@ export const WarehouseReceivingHistory = ({
           Total Records: {warehouseData?.inventory?.length}
         </Text>
         <Button
-          size="xs"
+          size="md"
           colorScheme="blue"
           onClick={() => setButtonChanger(!buttonChanger)}
         >

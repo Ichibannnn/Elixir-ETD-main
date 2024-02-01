@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import * as XLSX from "xlsx";
 import {
@@ -7,8 +7,11 @@ import {
   Flex,
   HStack,
   Input,
+  InputGroup,
+  InputLeftElement,
   Select,
   Skeleton,
+  Text,
 } from "@chakra-ui/react";
 import { WarehouseReceivingHistory } from "./report_dropdown/WarehouseReceivingHistory";
 import { MoveOrderHistory } from "./report_dropdown/MoveOrderHistory";
@@ -19,6 +22,10 @@ import { CancelledOrders } from "./report_dropdown/CancelledOrders";
 import { InventoryMovement } from "./report_dropdown/InventoryMovement";
 import { BorrowedMatsHistory } from "./report_dropdown/BorrowedMatsHistory";
 import { ReturnedQuantityTransaction } from "./report_dropdown/ReturnedQuantityTransaction";
+import { FiSearch } from "react-icons/fi";
+import PageScroll from "../../utils/PageScroll";
+import { FaFileExport } from "react-icons/fa";
+import { BiExport } from "react-icons/bi";
 
 const Reports = () => {
   const [dateFrom, setDateFrom] = useState(
@@ -26,11 +33,9 @@ const Reports = () => {
   );
   const [dateTo, setDateTo] = useState(moment(new Date()).format("yyyy-MM-DD"));
 
-  console.log(dateFrom);
-  console.log(dateTo);
-
   const [sample, setSample] = useState("");
   const [sheetData, setSheetData] = useState([]);
+  const [search, setSearch] = useState("");
 
   const navigationHandler = (data) => {
     if (data) {
@@ -54,15 +59,25 @@ const Reports = () => {
 
   const minimumDateForInventoryMovement = "2022-01-01";
 
+  // SEARCH
+  const searchHandler = (inputValue) => {
+    setSearch(inputValue);
+  };
+
   return (
     <>
-      <Flex w="full" p={5} bg="form">
+      <Flex w="full" p={3} bg="form">
         <Flex w="full" justifyContent="start" flexDirection="column">
           <Flex w="full" justifyContent="space-between">
+            <HStack>
+              <Text fontSize="2xl" color="black" fontWeight="semibold">
+                Report Details
+              </Text>
+            </HStack>
             {/* Dropdown value  */}
-            <Flex justifyContent="start" flexDirection="column">
-              <Flex>
-                <Badge>Report Name</Badge>
+            <Flex justifyContent="space-around" flexDirection="row" gap={2}>
+              <Flex alignItems="center">
+                <Badge>Report Name:</Badge>
               </Flex>
               <HStack>
                 <Select
@@ -81,55 +96,91 @@ const Reports = () => {
                   <option value={7}>Returned Materials History</option>
                   <option value={8}>Unserved Orders History</option>
                 </Select>
-                <Button
-                  onClick={handleExport}
-                  isDisabled={sheetData?.length === 0 || !sample}
-                  size="xs"
-                >
-                  Export
-                </Button>
               </HStack>
             </Flex>
-
-            {/* Viewing Condition  */}
-            <Flex justifyContent="start">
-              {sample < 9 ? (
-                <Flex justifyContent="start" flexDirection="row">
-                  <Flex flexDirection="column" ml={1}>
-                    <Flex>
-                      <Badge>Date from</Badge>
-                    </Flex>
-                    <Input
-                      fontSize="xs"
-                      bgColor="#fff8dc"
-                      type="date"
-                      value={dateFrom}
-                      onChange={(e) => setDateFrom(e.target.value)}
-                    />
-                  </Flex>
-                  <Flex flexDirection="column" ml={1}>
-                    <Flex>
-                      <Badge>Date to</Badge>
-                    </Flex>
-                    <Input
-                      fontSize="xs"
-                      bgColor="#fff8dc"
-                      type="date"
-                      value={dateTo}
-                      onChange={(e) => setDateTo(e.target.value)}
-                    />
-                  </Flex>
-                </Flex>
-              ) : (
-                ""
-              )}
+            <Flex justifyContent="center" alignItems="end">
+              <Button
+                onClick={handleExport}
+                isDisabled={sheetData?.length === 0 || !sample}
+                size="sm"
+                leftIcon={<BiExport fontSize="20px" />}
+                bg="none"
+              >
+                <Text fontSize="xs">Export</Text>
+              </Button>
             </Flex>
           </Flex>
 
           {/* Rendering Reports Components  */}
-          <Flex w="full" mt={5} justifyContent="center">
+          <Flex
+            w="full"
+            mt={2}
+            justifyContent="center"
+            flexDirection="column"
+            className="boxShadow"
+            borderRadius="xl"
+            p={4}
+            bg="form"
+            gap={2}
+            maxHeight="1000px"
+          >
+            <Flex justifyContent="space-between" gap={2}>
+              <Flex flexDirection="column" w="full">
+                <Flex justifyContent="start">
+                  <Badge>Search:</Badge>
+                </Flex>
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<FiSearch bg="black" fontSize="18px" />}
+                  />
+                  <Input
+                    fontSize="xs"
+                    isDisabled={!sample}
+                    borderColor="gray.400"
+                    onChange={(e) => searchHandler(e.target.value)}
+                  />
+                </InputGroup>
+              </Flex>
+
+              {/* Viewing Condition  */}
+              <Flex justifyContent="start">
+                {sample < 8 ? (
+                  <Flex justifyContent="start" flexDirection="row">
+                    <Flex flexDirection="column" ml={1}>
+                      <Flex>
+                        <Badge>Date from:</Badge>
+                      </Flex>
+                      <Input
+                        fontSize="xs"
+                        bgColor="#fff8dc"
+                        type="date"
+                        value={dateFrom}
+                        onChange={(e) => setDateFrom(e.target.value)}
+                      />
+                    </Flex>
+                    <Flex flexDirection="column" ml={1}>
+                      <Flex>
+                        <Badge>Date to:</Badge>
+                      </Flex>
+                      <Input
+                        fontSize="xs"
+                        bgColor="#fff8dc"
+                        type="date"
+                        value={dateTo}
+                        onChange={(e) => setDateTo(e.target.value)}
+                      />
+                    </Flex>
+                  </Flex>
+                ) : (
+                  ""
+                )}
+              </Flex>
+            </Flex>
+
             {sample === 1 ? (
               <WarehouseReceivingHistory
+                search={search}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 sample={sample}
@@ -137,6 +188,7 @@ const Reports = () => {
               />
             ) : sample === 2 ? (
               <MoveOrderHistory
+                search={search}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 sample={sample}
@@ -144,6 +196,7 @@ const Reports = () => {
               />
             ) : sample === 3 ? (
               <TransactedMOHistory
+                search={search}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 sample={sample}

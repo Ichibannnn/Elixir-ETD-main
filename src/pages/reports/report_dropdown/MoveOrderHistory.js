@@ -27,29 +27,36 @@ import {
   PaginationPageGroup,
 } from "@ajna/pagination";
 
-const fetchMoveOrderHistoryApi = async (
-  pageNumber,
-  pageSize,
-  dateFrom,
-  dateTo
-) => {
-  const dayaDate = new Date();
-  const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
-  const res = await request.get(
-    `Reports/MoveOrderHistory?PageNumber=${pageNumber}&PageSize=${pageSize}&DateFrom=${dateFrom}&DateTo=${dateTo}`
-  );
-  return res.data;
-};
-
 export const MoveOrderHistory = ({
   dateFrom,
   dateTo,
   sample,
   setSheetData,
+  search,
 }) => {
   const [moData, setMoData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
+
+  const fetchMoveOrderHistoryApi = async (
+    pageNumber,
+    pageSize,
+    dateFrom,
+    dateTo,
+    search
+  ) => {
+    const dayaDate = new Date();
+    const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
+    const res = await request.get(
+      `Reports/MoveOrderHistory?PageNumber=${pageNumber}&PageSize=${pageSize}&DateFrom=${dateFrom}&DateTo=${dateTo}`,
+      {
+        params: {
+          search: search,
+        },
+      }
+    );
+    return res.data;
+  };
 
   //PAGINATION
   const outerLimit = 2;
@@ -85,7 +92,7 @@ export const MoveOrderHistory = ({
       pageSize,
       dateFrom,
       dateTo,
-      sample
+      search
     ).then((res) => {
       setMoData(res);
       setSheetData(
@@ -137,7 +144,7 @@ export const MoveOrderHistory = ({
     return () => {
       setMoData([]);
     };
-  }, [currentPage, pageSize, dateFrom, dateTo, sample]);
+  }, [currentPage, pageSize, dateFrom, dateTo, search]);
 
   return (
     <Flex w="full" flexDirection="column">
