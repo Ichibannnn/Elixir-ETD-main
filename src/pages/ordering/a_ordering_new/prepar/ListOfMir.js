@@ -130,6 +130,12 @@ export const ListOfMir = ({
     }
   };
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   // console.log(notification);
 
   return (

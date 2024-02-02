@@ -181,6 +181,12 @@ const ReturnedApproval = ({ fetchNotification }) => {
     }
   };
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <Flex
       justifyContent="center"

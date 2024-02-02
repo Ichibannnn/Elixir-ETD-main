@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Badge,
   Button,
@@ -34,6 +34,7 @@ import { FaShippingFast } from "react-icons/fa";
 export const RejectMo = ({
   setCurrentPage,
   setPageSize,
+  search,
   setSearch,
   pagesCount,
   currentPage,
@@ -90,6 +91,12 @@ export const RejectMo = ({
   const handleStatusChange = (newStatus) => {
     setStatus(newStatus);
   };
+
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
 
   return (
     <Flex w="full" flexDirection="column" p={5} bg="form">

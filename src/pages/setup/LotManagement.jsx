@@ -183,6 +183,12 @@ const LotManagement = () => {
   //FOR DRAWER (Drawer / Drawer Tagging)
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <Flex
       color="fontColor"

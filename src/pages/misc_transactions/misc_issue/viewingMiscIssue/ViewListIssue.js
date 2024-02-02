@@ -126,6 +126,12 @@ export const ViewListIssue = () => {
     // console.log(status);
   };
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
       <Flex justifyContent="space-between">
@@ -138,7 +144,7 @@ export const ViewListIssue = () => {
             onChange={(e) => searchHandler(e.target.value)}
             type="text"
             fontSize="xs"
-            placeholder="Search: ID"
+            placeholder="Search"
             focusBorderColor="accent"
           />
         </InputGroup>

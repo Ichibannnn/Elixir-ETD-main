@@ -212,6 +212,12 @@ const WarehouseReceiving = () => {
       : (a, b) => -descendingComparator(a, b);
   }
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <WarehouseContext.Provider value={{ receivingId }}>
       <Flex

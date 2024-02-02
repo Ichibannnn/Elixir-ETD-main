@@ -196,7 +196,11 @@ const UserAccount = () => {
     // onOpenEdit();
   };
 
-  // console.log(status);
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
 
   return (
     <Flex

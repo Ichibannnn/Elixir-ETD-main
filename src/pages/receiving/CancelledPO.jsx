@@ -141,6 +141,12 @@ const CancelledPO = () => {
     openReturnModal();
   };
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <Flex
       color="fontColor"

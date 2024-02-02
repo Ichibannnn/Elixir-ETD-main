@@ -79,6 +79,7 @@ function ApprovedMoPage() {
     <ApproveMoveOrder
       setCurrentPage={setCurrentPage}
       setPageSize={setPageSize}
+      search={search}
       setSearch={setSearch}
       pagesCount={pagesCount}
       currentPage={currentPage}

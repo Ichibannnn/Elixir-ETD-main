@@ -36,6 +36,7 @@ export const ListViewReceipt = ({
   setCurrentPage,
   setPageSize,
   setStatus,
+  search,
   setSearch,
   pagesCount,
   currentPage,
@@ -82,6 +83,12 @@ export const ListViewReceipt = ({
     }
   };
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
       <Flex justifyContent="space-between">
@@ -94,7 +101,7 @@ export const ListViewReceipt = ({
             fontSize="xs"
             onChange={(e) => searchHandler(e.target.value)}
             type="text"
-            placeholder="Search: ID"
+            placeholder="Search"
             focusBorderColor="accent"
           />
         </InputGroup>

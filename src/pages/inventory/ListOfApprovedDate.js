@@ -64,6 +64,7 @@ export const ListofApprovedDate = ({
   orderListData,
   status,
   setStatus,
+  search,
   setSearch,
   pages,
   setPageSize,
@@ -160,6 +161,12 @@ export const ListofApprovedDate = ({
     setItemCode("");
     setButtonChanger("");
   };
+
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
 
   return (
     <Flex w="full" flexDirection="column">

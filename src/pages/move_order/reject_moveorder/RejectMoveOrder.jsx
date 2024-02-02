@@ -54,6 +54,7 @@ const RejectMoveOrder = () => {
     <RejectMo
       setCurrentPage={setCurrentPage}
       setPageSize={setPageSize}
+      search={search}
       setSearch={setSearch}
       pagesCount={pagesCount}
       currentPage={currentPage}

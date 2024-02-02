@@ -273,6 +273,7 @@ const MiscReceiptPage = () => {
               setCurrentPage={setCurrentPage}
               setPageSize={setPageSize}
               setStatus={setStatus}
+              search={search}
               setSearch={setSearch}
               pagesCount={pagesCount}
               currentPage={currentPage}

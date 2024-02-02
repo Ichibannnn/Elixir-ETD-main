@@ -210,6 +210,12 @@ export const ApprovedBorrowedMaterials = ({
     return () => {};
   }, [storedId]);
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <Flex
       justifyContent="center"

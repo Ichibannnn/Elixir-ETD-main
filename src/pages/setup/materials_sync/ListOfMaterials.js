@@ -202,6 +202,12 @@ export const ListOfMaterials = ({
     openEdit();
   };
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <Flex
       color="fontColor"

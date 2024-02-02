@@ -171,6 +171,12 @@ export const ListOfSuppliers = ({
     }
   }, [elixirSuppliers]);
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <Flex
       color="fontColor"

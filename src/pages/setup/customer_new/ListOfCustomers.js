@@ -40,6 +40,7 @@ export const ListOfCustomers = ({
   fetchingData,
   elixirCustomers,
   fetchElixirCustomers,
+  search,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
@@ -199,6 +200,12 @@ export const ListOfCustomers = ({
       });
     }
   }, [elixirCustomers]);
+
+  // useEffect(() => {
+  //   if (search) {
+  //     setCurrentPage(1);
+  //   }
+  // }, [search]);
 
   return (
     <Flex

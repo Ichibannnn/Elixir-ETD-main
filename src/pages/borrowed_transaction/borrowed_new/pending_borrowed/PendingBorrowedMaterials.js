@@ -162,6 +162,12 @@ export const PendingBorrowedMaterials = () => {
   // console.log(issueBorrowData);
   // console.log(statusBody);
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <Flex
       justifyContent="center"

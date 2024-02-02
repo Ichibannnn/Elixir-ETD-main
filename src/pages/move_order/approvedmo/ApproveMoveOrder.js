@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Badge,
   Box,
@@ -43,6 +43,7 @@ import { FcOk } from "react-icons/fc";
 export const ApproveMoveOrder = ({
   setCurrentPage,
   setPageSize,
+  search,
   setSearch,
   pagesCount,
   currentPage,
@@ -169,6 +170,12 @@ export const ApproveMoveOrder = ({
   const handleStatusChange = (newStatus) => {
     setStatus(newStatus);
   };
+
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
 
   return (
     <Flex w="full" flexDirection="column" p={5} bg="form">
