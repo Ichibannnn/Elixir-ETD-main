@@ -27,26 +27,38 @@ import {
   PaginationPageGroup,
 } from "@ajna/pagination";
 
-const fetchCancelledOrdersApi = async (
-  pageNumber,
-  pageSize,
+export const CancelledOrders = ({
   dateFrom,
-  dateTo
-) => {
-  const toAdd = new Date(dateTo);
-  const plus1 = toAdd?.setDate(toAdd?.getDate() + 1);
-  const formmattedDateFrom = moment(dateFrom).format("DD/MM/yyyy");
-  const formmattedDateTo = moment(plus1).format("yyyy-MM-DD");
-  const res = await request.get(
-    `Reports/CancelledOrderedReports?PageNumber=${pageNumber}&PageSize=${pageSize}&dateFrom=${dateFrom}&dateTo=${formmattedDateTo}`
-  );
-  return res.data;
-};
-
-export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData }) => {
+  dateTo,
+  sample,
+  setSheetData,
+  search,
+}) => {
   const [buttonChanger, setButtonChanger] = useState(true);
   const [cancelledData, setCancelledData] = useState([]);
   const [pageTotal, setPageTotal] = useState(undefined);
+
+  const fetchCancelledOrdersApi = async (
+    pageNumber,
+    pageSize,
+    dateFrom,
+    dateTo,
+    search
+  ) => {
+    const toAdd = new Date(dateTo);
+    const plus1 = toAdd?.setDate(toAdd?.getDate() + 1);
+    const formmattedDateFrom = moment(dateFrom).format("DD/MM/yyyy");
+    const formmattedDateTo = moment(plus1).format("yyyy-MM-DD");
+    const res = await request.get(
+      `Reports/CancelledOrderedReports?PageNumber=${pageNumber}&PageSize=${pageSize}&dateFrom=${dateFrom}&dateTo=${formmattedDateTo}`,
+      {
+        params: {
+          search: search,
+        },
+      }
+    );
+    return res.data;
+  };
 
   //PAGINATION
   const outerLimit = 2;
@@ -64,7 +76,7 @@ export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData }) => {
       outer: outerLimit,
       inner: innerLimit,
     },
-    initialState: { currentPage: 1, pageSize: 5000 },
+    initialState: { currentPage: 1, pageSize: 5 },
   });
 
   const handlePageChange = (nextPage) => {
@@ -82,7 +94,7 @@ export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData }) => {
       pageSize,
       dateFrom,
       dateTo,
-      sample
+      search
     ).then((res) => {
       setCancelledData(res);
       setSheetData(
@@ -119,7 +131,7 @@ export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData }) => {
     return () => {
       setCancelledData([]);
     };
-  }, [dateFrom, dateTo, sample]);
+  }, [currentPage, dateFrom, dateTo, search]);
 
   return (
     <Flex w="full" flexDirection="column">

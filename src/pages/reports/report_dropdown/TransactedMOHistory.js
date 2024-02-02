@@ -75,7 +75,7 @@ export const TransactedMOHistory = ({
       outer: outerLimit,
       inner: innerLimit,
     },
-    initialState: { currentPage: 1, pageSize: 5000 },
+    initialState: { currentPage: 1, pageSize: 5 },
   });
 
   const handlePageChange = (nextPage) => {
@@ -146,6 +146,12 @@ export const TransactedMOHistory = ({
       setMoData([]);
     };
   }, [currentPage, pageSize, dateFrom, dateTo, search]);
+
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
 
   return (
     <Flex w="full" flexDirection="column">

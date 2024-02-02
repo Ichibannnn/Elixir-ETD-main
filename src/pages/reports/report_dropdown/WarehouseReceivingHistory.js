@@ -127,6 +127,12 @@ export const WarehouseReceivingHistory = ({
     };
   }, [currentPage, pageSize, dateFrom, dateTo, search]);
 
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   return (
     <Flex w="full" flexDirection="column">
       <Flex className="boxShadow">

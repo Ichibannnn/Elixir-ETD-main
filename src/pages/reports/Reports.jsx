@@ -204,6 +204,7 @@ const Reports = () => {
               />
             ) : sample === 4 ? (
               <MiscReceiptHistory
+                search={search}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 sample={sample}
@@ -211,6 +212,7 @@ const Reports = () => {
               />
             ) : sample === 5 ? (
               <MiscIssueHistory
+                search={search}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 sample={sample}
@@ -218,6 +220,7 @@ const Reports = () => {
               />
             ) : sample === 6 ? (
               <BorrowedMatsHistory
+                search={search}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 sample={sample}
@@ -225,6 +228,7 @@ const Reports = () => {
               />
             ) : sample === 7 ? (
               <ReturnedQuantityTransaction
+                search={search}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 sample={sample}
@@ -232,6 +236,7 @@ const Reports = () => {
               />
             ) : sample === 8 ? (
               <CancelledOrders
+                search={search}
                 dateFrom={dateFrom}
                 dateTo={dateTo}
                 sample={sample}

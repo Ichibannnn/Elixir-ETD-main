@@ -28,29 +28,36 @@ import {
 } from "@ajna/pagination";
 import moment from "moment";
 
-const fetchMiscellaneousIssueHistoryApi = async (
-  pageNumber,
-  pageSize,
-  dateFrom,
-  dateTo
-) => {
-  const dayaDate = new Date();
-  const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
-  const res = await request.get(
-    `Reports/MiscellaneousIssueReport?PageNumber=${pageNumber}&PageSize=${pageSize}&DateFrom=${dateFrom}&DateTo=${dateTo}`
-  );
-  return res.data;
-};
-
 export const MiscIssueHistory = ({
   dateFrom,
   dateTo,
   sample,
   setSheetData,
+  search,
 }) => {
   const [miscIssueData, setMiscIssueData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
+
+  const fetchMiscellaneousIssueHistoryApi = async (
+    pageNumber,
+    pageSize,
+    dateFrom,
+    dateTo,
+    search
+  ) => {
+    const dayaDate = new Date();
+    const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
+    const res = await request.get(
+      `Reports/MiscellaneousIssueReport?PageNumber=${pageNumber}&PageSize=${pageSize}&DateFrom=${dateFrom}&DateTo=${dateTo}`,
+      {
+        params: {
+          search: search,
+        },
+      }
+    );
+    return res.data;
+  };
 
   //PAGINATION
   const outerLimit = 2;
@@ -68,7 +75,7 @@ export const MiscIssueHistory = ({
       outer: outerLimit,
       inner: innerLimit,
     },
-    initialState: { currentPage: 1, pageSize: 5000 },
+    initialState: { currentPage: 1, pageSize: 5 },
   });
 
   const handlePageChange = (nextPage) => {
@@ -86,7 +93,7 @@ export const MiscIssueHistory = ({
       pageSize,
       dateFrom,
       dateTo,
-      sample
+      search
     ).then((res) => {
       setMiscIssueData(res);
       setSheetData(
@@ -117,7 +124,13 @@ export const MiscIssueHistory = ({
     return () => {
       setMiscIssueData([]);
     };
-  }, [currentPage, pageSize, dateFrom, dateTo, sample]);
+  }, [currentPage, pageSize, dateFrom, dateTo, search]);
+
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
 
   return (
     <Flex w="full" flexDirection="column">
