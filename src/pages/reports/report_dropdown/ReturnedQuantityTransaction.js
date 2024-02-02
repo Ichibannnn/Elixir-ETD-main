@@ -146,7 +146,13 @@ export const ReturnedQuantityTransaction = ({
       <Flex className="boxShadow">
         <PageScroll minHeight="720px" maxHeight="740px">
           <Table size="md" variant="striped">
-            <Thead bgColor="primary" h="40px">
+            <Thead
+              bgColor="primary"
+              h="40px"
+              position="sticky"
+              top={0}
+              zIndex="1"
+            >
               <Tr>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
                   Borrowed ID
