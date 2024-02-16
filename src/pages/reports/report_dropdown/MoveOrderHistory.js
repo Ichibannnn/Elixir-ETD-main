@@ -100,6 +100,8 @@ export const MoveOrderHistory = ({
           return {
             "Line Number": i + 1,
             "MIR ID": item.mirId,
+            Requestor: item.requestor,
+            Approver: item.approver,
             "Customer Code": item.customerCode,
             "Customer Name": item.customerName,
             "Customer Type": item.customerType,
@@ -112,12 +114,18 @@ export const MoveOrderHistory = ({
             "Line Amount": item.lineAmount,
             "Asset Tag": item.assetTag === null ? "-" : item.assetTag,
             "CIP #": item.cip_No === null ? "-" : item.cip_No,
+            "Helpdesk #": item.helpdeskNo === 0 ? "-" : item.helpdeskNo,
+            Remarks: item.itemRemarks === null ? "-" : item.itemRemarks,
+            Rush: item.rush === null ? "-" : item.rush,
             "Order Date": item.orderDate
               ? moment(item.orderDate).format("yyyy-MM-DD")
-              : "",
+              : "-",
             "Date Needed": item.dateNeeded
               ? moment(item.dateNeeded).format("yyyy-MM-DD")
-              : "",
+              : "-",
+            "Date Approved": item.dateApproved
+              ? moment(item.dateApproved).format("yyyy-MM-DD")
+              : "-",
             "Company Code": item.companyCode,
             "Company Name": item.companyCode,
             "Department Code": item.departmentCode,

@@ -187,15 +187,10 @@ const SidebarList = ({
                   bgColor={focusedAccordion === i ? "blue.600" : "transparent"}
                 />
                 <Box flex="1" pl={2}>
-                  <Text
-                    fontWeight="semibold"
-                    textAlign="start"
-                    // color={focusedAccordion === i ? "blue.300" : "white"}
-                  >
+                  <Text fontWeight="semibold" textAlign="start">
                     {sidebarMenu.mainMenu}
                   </Text>
                 </Box>
-
                 <AccordionIcon color="white" />
               </AccordionButton>
               {/* </Link> */}

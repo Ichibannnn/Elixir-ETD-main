@@ -52,11 +52,7 @@ export const EditModal = ({
   orderList,
 }) => {
   const schema = yup.object().shape({
-    formData: yup.object().shape({
-      // accountId: yup.object().required("Account Name is required"),
-      // empId: yup.object().nullable(),
-      // fullName: yup.string().nullable(),
-    }),
+    formData: yup.object().shape({}),
   });
 
   const {
@@ -94,22 +90,6 @@ export const EditModal = ({
   useEffect(() => {
     fetchEmployees();
   }, []);
-
-  // FETCH Account API FISTO
-  // const fetchAccountApi = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       "http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0",
-  //       {
-  //         headers: {
-  //           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-  //         },
-  //       }
-  //     );
-  //     setAccount(res.data.result.account_titles);
-  //     // console.log(res.data.result.companies);
-  //   } catch (error) {}
-  // };
 
   // FETCH Account API
   const fetchAccountApi = async () => {
@@ -158,22 +138,7 @@ export const EditModal = ({
     },
   });
 
-  console.log("Error: ", errors);
-
-  // console.log(
-  //   "Account: ",
-  //   account
-  //     ?.find((items) => items.id === editData.mirId)
-  //     ?.orders?.find((items) => items.id === editData.orderNo)?.account_title
-  // );
-
-  // ARRAY FOR ACCOUNT TITLE
-  //   const accountTitleArray = account?.map?((itemOrders) => itemOrders?.orders?.map((itemAccount) => {
-  // return {
-  //   code: itemAccount?.code,
-  //   name: itemAccount?.name
-  // }
-  //   }))
+  // console.log("Error: ", errors);
 
   const triggerPointHandler = (event) => {
     const selectAccountTitle = account?.find((item) => {
@@ -182,8 +147,6 @@ export const EditModal = ({
 
     if (!selectedAccount?.name?.match(/Advances to Employees/gi)) {
       setIdNumber("");
-      // setValue("formData.empId", "");
-      // setValue("formData.fullName", "");
     }
     setSelectedAccount(selectAccountTitle?.name);
   };
@@ -283,7 +246,6 @@ export const EditModal = ({
   };
 
   // console.log("edit data: ", editData);
-
   // console.log("account title: ", watch("formData"));
   // console.log("isLoading: ", isLoading);
 
@@ -571,7 +533,6 @@ export const EditModal = ({
                     !quantitySubmit ||
                     isLoading ||
                     quantitySubmit > editData.standardQuantity
-                    // !watch("formData.accountId")
                   }
                   colorScheme="blue"
                   type="submit"
@@ -601,6 +562,7 @@ export const EditModal = ({
           fetchOrderList={fetchOrderList}
           quantitySubmit={quantitySubmit}
           chargingInfo={watch("formData")}
+          editData={editData}
         />
       )}
     </>
@@ -615,6 +577,7 @@ export const EditRemarksModalConfirmation = ({
   fetchOrderList,
   quantitySubmit,
   chargingInfo,
+  editData,
 }) => {
   const [editRemarks, setEditRemarks] = useState("");
   const [reasons, setReasons] = useState([]);
@@ -650,7 +613,8 @@ export const EditRemarksModalConfirmation = ({
   };
 
   const editHandler = () => {
-    console.log("Charging Info: ", chargingInfo);
+    // console.log("Charging Info: ", chargingInfo);
+    console.log("EditData: ", editData);
     setIsLoading(true);
     try {
       const res = request
@@ -658,8 +622,8 @@ export const EditRemarksModalConfirmation = ({
           id: remarksId,
           remarks: editRemarks,
           quantityOrdered: quantitySubmit,
-          accountCode: chargingInfo?.accountId?.value?.code,
-          accountTitles: chargingInfo?.accountId?.value?.name,
+          accountCode: editData.accountCode,
+          accountTitles: editData.accountTitles,
           empId: chargingInfo?.empId?.value?.full_id_number,
           fullName: chargingInfo?.empId?.value?.full_name,
         })

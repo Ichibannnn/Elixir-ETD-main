@@ -153,8 +153,8 @@ export const MrpTable = ({
           <Button
             onClick={printMRPHandler}
             ml={3}
-            bgColor="secondary"
-            _hover={{ bgColor: "accent" }}
+            bgColor="primary"
+            _hover={{ bgColor: "btnColor" }}
             leftIcon={<AiOutlinePrinter color="white" fontSize="20px" />}
             fontSize="xs"
             color="white"
@@ -388,19 +388,20 @@ export const MrpTable = ({
           >
             <PaginationContainer>
               <PaginationPrevious
-                bg="secondary"
+                bg="primary"
                 color="white"
                 p={1}
-                _hover={{ bg: "accent", color: "white" }}
+                _hover={{ bg: "btnColor", color: "white" }}
               >
                 {"<<"}
               </PaginationPrevious>
               <PaginationPageGroup ml={1} mr={1}>
                 {pages.map((page) => (
                   <PaginationPage
-                    _hover={{ bg: "accent", color: "white" }}
+                    _hover={{ bg: "btnColor", color: "white" }}
+                    _focus={{ bg: "btnColor", color: "white" }}
                     p={3}
-                    bg="secondary"
+                    bg="primary"
                     color="white"
                     key={`pagination_page_${page}`}
                     page={page}
@@ -409,10 +410,10 @@ export const MrpTable = ({
               </PaginationPageGroup>
               <HStack>
                 <PaginationNext
-                  bg="secondary"
+                  bg="primary"
                   color="white"
                   p={1}
-                  _hover={{ bg: "accent", color: "white" }}
+                  _hover={{ bg: "btnColor", color: "white" }}
                 >
                   {">>"}
                 </PaginationNext>

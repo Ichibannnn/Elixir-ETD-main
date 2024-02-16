@@ -145,7 +145,7 @@ const Reports = () => {
 
               {/* Viewing Condition  */}
               <Flex justifyContent="start">
-                {sample < 8 ? (
+                {sample < 9 ? (
                   <Flex justifyContent="start" flexDirection="row">
                     <Flex flexDirection="column" ml={1}>
                       <Flex>

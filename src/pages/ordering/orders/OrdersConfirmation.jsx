@@ -47,17 +47,9 @@ const OrdersConfirmation = ({
   setIsLoading,
   fetchNotification,
 }) => {
-  //console.log("Open Orders Confimation ");
-
   const toast = useToast();
 
-  // const {
-  //   isOpen: isFiltered,
-  //   onClose: closeFiltered,
-  //   onOpen: openFiltered,
-  // } = useDisclosure();
-
-  console.log("Error Data: ", errorData);
+  // console.log("Error Data: ", errorData);
 
   const duplicateList = errorData?.duplicateList?.map((list) => {
     return {
@@ -76,7 +68,6 @@ const OrdersConfirmation = ({
       quantityOrdered: list?.quantityOrdered,
     };
   });
-  // console.log(duplicateList);
 
   const filteredOrders = errorData?.availableImport?.map((list) => {
     return {
@@ -106,7 +97,10 @@ const OrdersConfirmation = ({
       accountTitles: list?.accountTitles,
       empId: list?.empId,
       fullName: list?.fullName,
-      assetTag: list?.assetTag,
+      requestor: list?.requestor,
+      approver: list?.approver,
+      helpdeskNo: list?.helpdeskNo,
+      helpdeskNo: list?.helpdeskNo,
     };
   });
 
@@ -260,23 +254,6 @@ const OrdersConfirmation = ({
     };
   });
 
-  // const quantityInValid = errorData?.quantityInValid?.map((list) => {
-  //   return {
-  //     trasactId: list?.trasactId,
-  //     department: list?.department,
-  //     customerCode: list?.customerCode,
-  //     customerName: list?.customerName,
-  //     orderNo: list?.orderNo,
-  //     orderDate: moment(list?.orderDate).format("yyyy-MM-DD"),
-  //     dateNeeded: moment(list?.dateNeeded).format("yyyy-MM-DD"),
-  //     itemCode: list?.itemCode,
-  //     itemdDescription: list?.itemdDescription,
-  //     uom: list?.uom,
-  //     quantityOrdered: list?.quantityOrdered,
-  //     category: list?.category,
-  //   };
-  // });
-
   const resultArray = filteredOrders?.map((list) => {
     return {
       trasactId: list?.trasactId,
@@ -307,10 +284,14 @@ const OrdersConfirmation = ({
       empId: list?.empId,
       fullName: list?.fullName,
       assetTag: list?.assetTag,
+      requestor: list?.requestor,
+      approver: list?.approver,
+      helpdeskNo: list?.helpdeskNo,
+      dateApproved: list?.dateApproved,
     };
   });
 
-  console.log(resultArray);
+  console.log("Error Result Array: ", resultArray);
 
   const validationAvailableToSync = () => {
     Swal.fire({
@@ -330,60 +311,64 @@ const OrdersConfirmation = ({
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        // console.log("Result Array: ", resultArray);
-        try {
-          setIsLoading(true);
-          const res = request
-            .post(
-              `Ordering/AddNewOrders`,
-              resultArray.map((submit) => {
-                return {
-                  trasactId: submit?.trasactId,
-                  cip_No: submit?.cip_No,
-                  department: submit?.department,
-                  customercode: submit?.customercode,
-                  customerName: submit?.customerName,
-                  customerType: submit?.customerType,
-                  orderNo: submit?.orderNo,
-                  orderDate: moment(submit?.orderDate).format("yyyy-MM-DD"),
-                  dateNeeded: moment(submit?.dateNeeded).format("yyyy-MM-DD"),
-                  itemCode: submit?.itemCode,
-                  itemdDescription: submit?.itemdDescription,
-                  uom: submit?.uom,
-                  quantityOrdered: submit?.quantityOrdered,
-                  category: submit?.category,
-                  companyCode: submit?.companyCode,
-                  companyName: submit?.companyName,
-                  departmentCode: submit?.departmentCode,
-                  departmentName: submit?.departmentName,
-                  locationCode: submit?.locationCode,
-                  locationName: submit?.locationName,
-                  rush: submit?.rush,
-                  itemRemarks: submit?.itemRemarks,
-                  accountCode: submit?.accountCode,
-                  accountTitles: submit?.accountTitles,
-                  empId: submit?.empId,
-                  fullName: submit?.fullName,
-                  assetTag: submit?.assetTag,
-                };
-              })
-            )
-            .then((res) => {
-              ToastComponent("Success", "Orders Synced!", "success", toast);
-              // fetchNotification();
-              onClose();
-              setIsLoading(false);
-            })
-            .catch((err) => {
-              console.log("Error: ", err);
-              setIsLoading(false);
-              setErrorData(err.response.data);
-              if (err.response.data) {
-                onClose();
-                // onOpen();
-              }
-            });
-        } catch (error) {}
+        console.log("Result Array: ", resultArray);
+        // try {
+        //   setIsLoading(true);
+        //   const res = request
+        //     .post(
+        //       `Ordering/AddNewOrders`,
+        //       resultArray.map((submit) => {
+        //         return {
+        //           trasactId: submit?.trasactId,
+        //           cip_No: submit?.cip_No,
+        //           department: submit?.department,
+        //           customercode: submit?.customercode,
+        //           customerName: submit?.customerName,
+        //           customerType: submit?.customerType,
+        //           orderNo: submit?.orderNo,
+        //           orderDate: moment(submit?.orderDate).format("yyyy-MM-DD"),
+        //           dateNeeded: moment(submit?.dateNeeded).format("yyyy-MM-DD"),
+        //           itemCode: submit?.itemCode,
+        //           itemdDescription: submit?.itemdDescription,
+        //           uom: submit?.uom,
+        //           quantityOrdered: submit?.quantityOrdered,
+        //           category: submit?.category,
+        //           companyCode: submit?.companyCode,
+        //           companyName: submit?.companyName,
+        //           departmentCode: submit?.departmentCode,
+        //           departmentName: submit?.departmentName,
+        //           locationCode: submit?.locationCode,
+        //           locationName: submit?.locationName,
+        //           rush: submit?.rush,
+        //           itemRemarks: submit?.itemRemarks,
+        //           accountCode: submit?.accountCode,
+        //           accountTitles: submit?.accountTitles,
+        //           empId: submit?.empId,
+        //           fullName: submit?.fullName,
+        //           assetTag: submit?.assetTag,
+        //           requestor: submit?.requestor,
+        //           approver: submit?.approver,
+        //           helpdeskNo: submit?.helpdeskNo,
+        //           dateApproved: submit?.dateApproved,
+        //         };
+        //       })
+        //     )
+        //     .then((res) => {
+        //       ToastComponent("Success", "Orders Synced!", "success", toast);
+        //       // fetchNotification();
+        //       onClose();
+        //       setIsLoading(false);
+        //     })
+        //     .catch((err) => {
+        //       console.log("Error: ", err);
+        //       setIsLoading(false);
+        //       setErrorData(err.response.data);
+        //       if (err.response.data) {
+        //         onClose();
+        //         // onOpen();
+        //       }
+        //     });
+        // } catch (error) {}
       }
     });
   };

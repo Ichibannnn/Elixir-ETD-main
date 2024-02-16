@@ -101,6 +101,8 @@ export const TransactedMOHistory = ({
           return {
             "Line Number": i + 1,
             "MIR ID": item.mirId,
+            Requestor: item.requestor,
+            Approver: item.approver,
             "Customer Code": item.customerCode,
             "Customer Name": item.customerName,
             "Customer Type": item.customerType,
@@ -113,12 +115,18 @@ export const TransactedMOHistory = ({
             "Line Amount": item.lineAmount,
             "Asset Tag": item.assetTag === null ? "-" : item.assetTag,
             "CIP #": item.cip_No === null ? "-" : item.cip_No,
+            "Helpdesk #": item.helpDesk === 0 ? "-" : item.helpDesk,
+            Remarks: item.itemRemarks === null ? "-" : item.itemRemarks,
+            Rush: item.rush === null ? "-" : item.rush,
             "Order Date": item.orderDate
               ? moment(item.orderDate).format("yyyy-MM-DD")
               : "",
             "Date Needed": item.dateNeeded
               ? moment(item.dateNeeded).format("yyyy-MM-DD")
               : "",
+            "Date Approved": item.dateApproved
+              ? moment(item.dateApproved).format("yyyy-MM-DD")
+              : "-",
             Status: item.transactedDate ? "Transacted" : "For Transaction",
             "Company Code": item.companyCode,
             "Company Name": item.companyCode,
@@ -128,6 +136,10 @@ export const TransactedMOHistory = ({
             "Location Name": item.locationName,
             "Account Title Code": item.accountCode,
             "Account Title": item.accountTitles,
+            "Move Order Date": item.moveOrderDate
+              ? moment(item.moveOrderDate).format("yyyy-MM-DD")
+              : "",
+            "Move Order By": item.moveOrderBy,
             "Transacted Date": item.transactedDate
               ? moment(item.transactedDate).format("yyyy-MM-DD")
               : "",

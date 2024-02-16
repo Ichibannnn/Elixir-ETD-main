@@ -101,11 +101,14 @@ export const CancelledOrders = ({
         res?.inventory?.map((item, i) => {
           return {
             "Line Number": i + 1,
+            "MIR ID": item.mirId,
             "Order ID": item.orderId,
             "Date Ordered": item.dateOrdered,
             "Date Needed": item.dateNeeded,
             "Customer Code": item.customerCode,
             "Customer Name": item.customerName,
+            "Charging Department": `${item.departmentCode} - ${item.department}`,
+            "Charging Location": `${item.locationCode} - ${item.locationName}`,
             "Item Code": item.itemCode,
             "Item Description": item.itemDescription,
             "Quantity Unserved": item.quantityOrdered.toLocaleString(
@@ -153,6 +156,9 @@ export const CancelledOrders = ({
             >
               <Tr>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
+                  MIR ID
+                </Th>
+                <Th color="white" fontSize="10px" fontWeight="semibold">
                   Order ID
                 </Th>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
@@ -166,6 +172,12 @@ export const CancelledOrders = ({
                 </Th>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
                   Customer Name
+                </Th>
+                <Th color="white" fontSize="10px" fontWeight="semibold">
+                  Charging Department
+                </Th>
+                <Th color="white" fontSize="10px" fontWeight="semibold">
+                  Charging Location
                 </Th>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
                   Item Code
@@ -190,11 +202,18 @@ export const CancelledOrders = ({
             <Tbody>
               {cancelledData?.inventory?.map((item, i) => (
                 <Tr key={i}>
+                  <Td fontSize="xs">{item.mirId}</Td>
                   <Td fontSize="xs">{item.orderId}</Td>
                   <Td fontSize="xs">{item.dateOrdered}</Td>
                   <Td fontSize="xs">{item.dateNeeded}</Td>
                   <Td fontSize="xs">{item.customerCode}</Td>
                   <Td fontSize="xs">{item.customerName}</Td>
+                  <Td fontSize="xs">
+                    {item.departmentCode} - {item.department}
+                  </Td>
+                  <Td fontSize="xs">
+                    {item.locationCode} - {item.locationName}
+                  </Td>
                   <Td fontSize="xs">{item.itemCode}</Td>
                   <Td fontSize="xs">{item.itemDescription}</Td>
                   <Td fontSize="xs">

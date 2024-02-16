@@ -22,7 +22,6 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
-import PageScrollImport from "../../../components/PageScrollImport";
 import { FiSearch } from "react-icons/fi";
 import PageScroll from "../../../utils/PageScroll";
 import { ToastComponent } from "../../../components/Toast";
@@ -30,8 +29,6 @@ import Swal from "sweetalert2";
 import request from "../../../services/ApiClient";
 import moment from "moment";
 import OrdersConfirmation from "./OrdersConfirmation";
-import DatePicker from "react-date-picker";
-import { FaExclamationTriangle } from "react-icons/fa";
 
 export const ListOrders = ({
   genusOrders,
@@ -48,13 +45,15 @@ export const ListOrders = ({
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // console.log(genusOrders);
+  // console.log("Genus Orders:", genusOrders);
 
   // ARRAY FOR THE LIST DATA
   const resultArray = genusOrders?.result?.map((item) =>
     item.orders?.map((itemsub) => {
       return {
         trasactId: itemsub?.transaction_id,
+        requestor: item?.requestor_name,
+        approver: item?.approver_name,
         cip_No: item?.cip_no,
         orderNo: itemsub?.id,
         orderDate: item?.date_ordered,
@@ -79,9 +78,12 @@ export const ListOrders = ({
         accountCode: itemsub?.account_title_code,
         accountTitles: itemsub?.account_title_name,
         assetTag: itemsub?.plate_no,
+        helpdeskNo: item?.helpdesk_no,
+        dateApproved: item?.date_approved,
       };
     })
   );
+
   // console.log("Result Array: ", resultArray);
 
   const dateVar = new Date();
@@ -94,8 +96,8 @@ export const ListOrders = ({
       text: "Are you sure you want to sync these orders?",
       icon: "info",
       color: "white",
-      background: "#1B1C1D",
       showCancelButton: true,
+      background: "#1B1C1D",
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#CBD1D8",
       confirmButtonText: "Yes",
@@ -112,6 +114,8 @@ export const ListOrders = ({
       const submitBody = resultArray.flat().map((submit) => {
         return {
           trasactId: submit?.trasactId,
+          requestor: submit?.requestor,
+          approver: submit?.approver,
           cip_No: submit?.cip_No,
           orderNo: submit?.orderNo,
           orderDate: moment(submit?.orderDate).format("yyyy-MM-DD"),
@@ -136,6 +140,8 @@ export const ListOrders = ({
           accountCode: submit?.accountCode,
           accountTitles: submit?.accountTitles,
           assetTag: submit?.assetTag,
+          helpdeskNo: Number(submit?.helpdeskNo),
+          dateApproved: moment(submit?.dateApproved).format("yyyy-MM-DD"),
         };
       });
       if (result.isConfirmed) {
@@ -214,8 +220,8 @@ export const ListOrders = ({
             </Badge>
             <Input
               onChange={(date) => setFromDate(date.target.value)}
-              // defaultValue={fromDate}
-              // min={startDate}
+              defaultValue={fromDate}
+              min={startDate}
               // size="sm"
               type="date"
               fontSize="11px"

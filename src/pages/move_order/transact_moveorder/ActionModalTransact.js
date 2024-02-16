@@ -20,21 +20,12 @@ import {
   Thead,
   Tr,
   ModalOverlay,
-  FormLabel,
-  Stack,
 } from "@chakra-ui/react";
 import PageScroll from "../../../utils/PageScroll";
-import { BsQuestionDiamondFill } from "react-icons/bs";
 import request from "../../../services/ApiClient";
 import { decodeUser } from "../../../services/decode-user";
-import moment from "moment";
-import { useReactToPrint } from "react-to-print";
-import Barcode from "react-barcode";
-import DatePicker from "react-datepicker";
 import { ToastComponent } from "../../../components/Toast";
 import axios from "axios";
-
-const currentUser = decodeUser();
 
 export const ViewModal = ({
   isOpen,
@@ -45,17 +36,14 @@ export const ViewModal = ({
   const TableHead = [
     "Line",
     "Order Date",
-    // "Farm Code", "Farm",
     "Item Code",
     "Item Description",
-    // "Category",
     "UOM",
     "Quantity",
     "Unit Cost",
     "Total Cost",
     "Item Remarks",
     "Asset Tag",
-    // "Expiration Date",
   ];
 
   console.log("Orders: ", moveOrderViewTable);
@@ -71,9 +59,6 @@ export const ViewModal = ({
                 View Transact Move Order
               </Text>
             </Flex>
-            {/* <Text textAlign="center" fontSize="15px">
-              View Transact Move Order
-            </Text> */}
           </ModalHeader>
           <ModalCloseButton color="white" onClick={onClose} />
           <ModalBody mb={5}>
@@ -112,115 +97,8 @@ export const ViewModal = ({
               <VStack alignItems="start" spacing={-1}></VStack>
             </Flex>
 
-            {/* <Flex w="full" flexDirection="column" className="bosmhadow">
-              <VStack w="full" spacing={0} mb={6}>
-                <Text
-                  w="full"
-                  textAlign="center"
-                  bgColor="primary"
-                  color="white"
-                  fontSize="sm"
-                >
-                  Transact Move Order
-                </Text>
-                <Text
-                  w="full"
-                  textAlign="center"
-                  bgColor="secondary"
-                  color="white"
-                  fontSize="xs"
-                >
-                  Move Order Information
-                </Text>
-                <VStack w="99%" mb={6}>
-                  <Stack w="full" mt={2}>
-                    <Flex justifyContent="space-between">
-                      <FormLabel fontSize="xs" w="40%">
-                        MIR ID:
-                        <Text
-                          textAlign="center"
-                          w="full"
-                          fontSize="xs"
-                          bgColor="gray.200"
-                          border="1px"
-                          py={1}
-                        >
-                          {moveOrderInformation.orderNo
-                            ? moveOrderInformation.orderNo
-                            : "Please select a list"}
-                        </Text>
-                      </FormLabel>
-
-                      <FormLabel fontSize="xs" w="40%">
-                        Delivery Status:
-                        <Text
-                          textAlign="center"
-                          w="full"
-                          fontSize="xs"
-                          bgColor="gray.200"
-                          border="1px"
-                          py={1}
-                        >
-                          {moveOrderInformation.deliveryStatus
-                            ? moveOrderInformation.deliveryStatus
-                            : "Please select a list"}
-                        </Text>
-                      </FormLabel>
-                    </Flex>
-                  </Stack>
-                  <Stack w="full" mt={2}>
-                    <Flex justifyContent="space-between">
-                      <FormLabel fontSize="xs" w="40%">
-                        Customer Code:
-                        <Text
-                          textAlign="center"
-                          w="full"
-                          fontSize="xs"
-                          bgColor="gray.200"
-                          border="1px"
-                          py={1}
-                        >
-                          {moveOrderInformation.customerName
-                            ? moveOrderInformation.customerName
-                            : "Please select a list"}
-                        </Text>
-                      </FormLabel>
-
-                      <FormLabel fontSize="xs" w="40%">
-                        Customer Name:
-                        <Text
-                          textAlign="center"
-                          w="full"
-                          fontSize="xs"
-                          bgColor="gray.200"
-                          border="1px"
-                          py={1}
-                        >
-                          {moveOrderInformation.customerCode
-                            ? moveOrderInformation.customerCode
-                            : "Please select a list"}
-                        </Text>
-                      </FormLabel>
-                    </Flex>
-                  </Stack>
-                </VStack>
-              </VStack>
-            </Flex> */}
-
             <Flex w="full" flexDirection="column">
               <VStack spacing={0}>
-                {/* <Text
-                  pb={2}
-                  textAlign="center"
-                  fontSize="sm"
-                  color="white"
-                  bgColor="primary"
-                  w="full"
-                  mb={-1.5}
-                  mt={2}
-                >
-                  List of Move Orders
-                </Text> */}
                 <PageScroll minHeight="350px" maxHeight="400px">
                   <Table mt={2} size="sm" variant="simple" bg="gray.200">
                     <Thead bgColor="secondary">
@@ -239,7 +117,6 @@ export const ViewModal = ({
                           <Td fontSize="sm">{list.orderDate}</Td>
                           <Td fontSize="sm">{list.itemCode}</Td>
                           <Td fontSize="sm">{list.itemDescription}</Td>
-                          {/* <Td fontSize="sm">{list.category}</Td> */}
                           <Td fontSize="sm">{list.uom}</Td>
                           <Td fontSize="sm">{list.quantity}</Td>
                           <Td fontSize="sm">
@@ -305,8 +182,8 @@ export const TransactConfirmation = ({
       };
     });
 
-    console.log("Submit Data: ", checkedItems);
-    console.log("Orders: ", moveOrderViewTable);
+    // console.log("Submit Data: ", checkedItems);
+    // console.log("Orders: ", moveOrderViewTable);
 
     const genusStatus = checkedItems?.map((item) => {
       return {
@@ -319,7 +196,7 @@ export const TransactConfirmation = ({
       };
     });
 
-    console.log("genusStatus: ", genusStatus);
+    // console.log("genusStatus: ", genusStatus);
 
     setIsLoading(true);
     try {
