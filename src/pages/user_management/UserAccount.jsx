@@ -491,14 +491,8 @@ const schema = yup.object().shape({
   formData: yup.object().shape({
     id: yup.string(),
     fullName: yup.string().required("Fullname is required"),
-    userName: yup
-      .string()
-      .required("Username is required")
-      .min(5, "Username must be at least 5 characters"),
-    password: yup
-      .string()
-      .required("Password is required")
-      .min(5, "Password must be at least 5 characters"),
+    userName: yup.string().required("Username is required"),
+    password: yup.string().required("Password is required"),
     userRoleId: yup.string().required("User Role is required"),
     department: yup.string().required("Department is required"),
   }),

@@ -23,9 +23,6 @@ import {
 import { PendingBorrowedMaterials } from "../../borrowed_new/pending_borrowed/PendingBorrowedMaterials";
 import { ApprovedBorrowedMaterials } from "../../borrowed_new/approved_borrowed/ApprovedBorrowedMaterials";
 import RejectBorrowed from "../../borrowed_new/reject_borrowed_customer/RejectBorrowed";
-import CustomerNew from "../../../setup/customer_new/CustomerNew";
-import CustomerReturnMaterials from "../../borrowed_new/approved_borrowed/customer_returnmaterials/CustomerReturnMaterials";
-import { ListOfMaterials } from "../../borrowed_new/approved_borrowed/ListOfMaterials";
 
 const ViewRequest = ({
   notificationWithParams,

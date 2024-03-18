@@ -135,7 +135,7 @@ const ImportPO = () => {
             console.log(resultArray);
 
             const hasZeroUnitCost = resultArray.some(
-              (eData) => eData.unitPrice < 1
+              (eData) => eData.unitPrice <= 0
             );
 
             if (hasZeroUnitCost) {
