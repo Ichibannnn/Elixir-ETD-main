@@ -38,17 +38,11 @@ export const MoveOrderHistory = ({
   const [buttonChanger, setButtonChanger] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
 
-  const fetchMoveOrderHistoryApi = async (
-    pageNumber,
-    pageSize,
-    dateFrom,
-    dateTo,
-    search
-  ) => {
+  const fetchMoveOrderHistoryApi = async (dateFrom, dateTo, search) => {
     const dayaDate = new Date();
     const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
     const res = await request.get(
-      `Reports/MoveOrderHistory?PageNumber=${pageNumber}&PageSize=${pageSize}&DateFrom=${dateFrom}&DateTo=${dateTo}`,
+      `Reports/MoveOrderHistory?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`,
       {
         params: {
           search: search,
@@ -58,43 +52,8 @@ export const MoveOrderHistory = ({
     return res.data;
   };
 
-  //PAGINATION
-  const outerLimit = 2;
-  const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
-    total: pageTotal,
-    limits: {
-      outer: outerLimit,
-      inner: innerLimit,
-    },
-    initialState: { currentPage: 1, pageSize: 5 },
-  });
-
-  const handlePageChange = (nextPage) => {
-    setCurrentPage(nextPage);
-  };
-
-  const handlePageSizeChange = (e) => {
-    const pageSize = Number(e.target.value);
-    setPageSize(pageSize);
-    setCurrentPage(1);
-  };
-
   const fetchMoveOrderHistory = () => {
-    fetchMoveOrderHistoryApi(
-      currentPage,
-      pageSize,
-      dateFrom,
-      dateTo,
-      search
-    ).then((res) => {
+    fetchMoveOrderHistoryApi(dateFrom, dateTo, search).then((res) => {
       setMoData(res);
       setSheetData(
         res?.inventory?.map((item, i) => {
@@ -128,7 +87,7 @@ export const MoveOrderHistory = ({
               ? moment(item.dateApproved).format("yyyy-MM-DD")
               : "-",
             "Company Code": item.companyCode,
-            "Company Name": item.companyCode,
+            "Company Name": item.companyName,
             "Department Code": item.departmentCode,
             "Department Name": item.departmentName,
             "Location Code": item.locationCode,
@@ -143,7 +102,6 @@ export const MoveOrderHistory = ({
           };
         })
       );
-      setPageTotal(res.totalCount);
     });
   };
 
@@ -153,13 +111,7 @@ export const MoveOrderHistory = ({
     return () => {
       setMoData([]);
     };
-  }, [currentPage, pageSize, dateFrom, dateTo, search]);
-
-  useEffect(() => {
-    if (search) {
-      setCurrentPage(1);
-    }
-  }, [search]);
+  }, [dateFrom, dateTo, search]);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -363,7 +315,7 @@ export const MoveOrderHistory = ({
       </Flex>
 
       <Flex justifyContent="space-between" mt={2}>
-        <Stack>
+        {/* <Stack>
           <Pagination
             pagesCount={pagesCount}
             currentPage={currentPage}
@@ -414,7 +366,7 @@ export const MoveOrderHistory = ({
               </HStack>
             </PaginationContainer>
           </Pagination>
-        </Stack>
+        </Stack> */}
 
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {moData?.inventory?.length}

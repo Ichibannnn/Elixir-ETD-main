@@ -37,19 +37,12 @@ export const MiscReceiptHistory = ({
 }) => {
   const [miscReceiptData, setMiscReceiptData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
-  const [pageTotal, setPageTotal] = useState(undefined);
 
-  const fetchMiscellaenouseReceiptApi = async (
-    pageNumber,
-    pageSize,
-    dateFrom,
-    dateTo,
-    search
-  ) => {
+  const fetchMiscellaenouseReceiptApi = async (dateFrom, dateTo, search) => {
     const dayaDate = new Date();
     const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
     const res = await request.get(
-      `Reports/MiscellaneousReceiptReport?PageNumber=${pageNumber}&PageSize=${pageSize}&DateFrom=${dateFrom}&DateTo=${dateTo}`,
+      `Reports/MiscellaneousReceiptReport?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`,
       {
         params: {
           search: search,
@@ -59,43 +52,8 @@ export const MiscReceiptHistory = ({
     return res.data;
   };
 
-  //PAGINATION
-  const outerLimit = 2;
-  const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
-    total: pageTotal,
-    limits: {
-      outer: outerLimit,
-      inner: innerLimit,
-    },
-    initialState: { currentPage: 1, pageSize: 5 },
-  });
-
-  const handlePageChange = (nextPage) => {
-    setCurrentPage(nextPage);
-  };
-
-  const handlePageSizeChange = (e) => {
-    const pageSize = Number(e.target.value);
-    setPageSize(pageSize);
-    setCurrentPage(1);
-  };
-
   const fetchMiscellaenouseReceipt = () => {
-    fetchMiscellaenouseReceiptApi(
-      currentPage,
-      pageSize,
-      dateFrom,
-      dateTo,
-      search
-    ).then((res) => {
+    fetchMiscellaenouseReceiptApi(dateFrom, dateTo, search).then((res) => {
       setMiscReceiptData(res);
       setSheetData(
         res?.inventory?.map((item, i) => {
@@ -115,7 +73,6 @@ export const MiscReceiptHistory = ({
           };
         })
       );
-      setPageTotal(res.totalCount);
     });
   };
 
@@ -125,13 +82,7 @@ export const MiscReceiptHistory = ({
     return () => {
       setMiscReceiptData([]);
     };
-  }, [currentPage, pageSize, dateFrom, dateTo, search]);
-
-  useEffect(() => {
-    if (search) {
-      setCurrentPage(1);
-    }
-  }, [search]);
+  }, [dateFrom, dateTo, search]);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -256,7 +207,7 @@ export const MiscReceiptHistory = ({
       </Flex>
 
       <Flex justifyContent="space-between" mt={2}>
-        <Stack>
+        {/* <Stack>
           <Pagination
             pagesCount={pagesCount}
             currentPage={currentPage}
@@ -307,7 +258,7 @@ export const MiscReceiptHistory = ({
               </HStack>
             </PaginationContainer>
           </Pagination>
-        </Stack>
+        </Stack> */}
 
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {miscReceiptData?.inventory?.length}

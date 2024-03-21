@@ -453,7 +453,7 @@ export const CancelModalConfirmation = ({
         <ModalFooter>
           <Button
             onClick={() => cancelHandler()}
-            disabled={!cancelRemarks}
+            isDisabled={!cancelRemarks}
             isLoading={isLoading}
             colorScheme="blue"
             mr={3}

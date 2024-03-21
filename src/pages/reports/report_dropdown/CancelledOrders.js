@@ -36,7 +36,6 @@ export const CancelledOrders = ({
 }) => {
   const [buttonChanger, setButtonChanger] = useState(true);
   const [cancelledData, setCancelledData] = useState([]);
-  const [pageTotal, setPageTotal] = useState(undefined);
 
   const fetchCancelledOrdersApi = async (
     pageNumber,
@@ -48,7 +47,7 @@ export const CancelledOrders = ({
     const dayaDate = new Date();
     const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
     const res = await request.get(
-      `Reports/CancelledOrderedReports?PageNumber=${pageNumber}&PageSize=${pageSize}&dateFrom=${dateFrom}&dateTo=${dateTo}`,
+      `Reports/CancelledOrderedReports?PageNumber=1&PageSize=1000000&dateFrom=${dateFrom}&dateTo=${dateTo}`,
       {
         params: {
           search: search,
@@ -58,43 +57,8 @@ export const CancelledOrders = ({
     return res.data;
   };
 
-  //PAGINATION
-  const outerLimit = 2;
-  const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
-    total: pageTotal,
-    limits: {
-      outer: outerLimit,
-      inner: innerLimit,
-    },
-    initialState: { currentPage: 1, pageSize: 5 },
-  });
-
-  const handlePageChange = (nextPage) => {
-    setCurrentPage(nextPage);
-  };
-
-  const handlePageSizeChange = (e) => {
-    const pageSize = Number(e.target.value);
-    setPageSize(pageSize);
-    setCurrentPage(1);
-  };
-
   const fetchCancelledOrders = () => {
-    fetchCancelledOrdersApi(
-      currentPage,
-      pageSize,
-      dateFrom,
-      dateTo,
-      search
-    ).then((res) => {
+    fetchCancelledOrdersApi(dateFrom, dateTo, search).then((res) => {
       setCancelledData(res);
       setSheetData(
         res?.inventory?.map((item, i) => {
@@ -123,7 +87,6 @@ export const CancelledOrders = ({
           };
         })
       );
-      setPageTotal(res.totalCount);
     });
   };
 
@@ -133,13 +96,7 @@ export const CancelledOrders = ({
     return () => {
       setCancelledData([]);
     };
-  }, [currentPage, pageSize, dateFrom, dateTo, search]);
-
-  useEffect(() => {
-    if (search) {
-      setCurrentPage(1);
-    }
-  }, [search]);
+  }, [dateFrom, dateTo, search]);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -243,7 +200,7 @@ export const CancelledOrders = ({
       </Flex>
 
       <Flex justifyContent="space-between" mt={2}>
-        <Stack>
+        {/* <Stack>
           <Pagination
             pagesCount={pagesCount}
             currentPage={currentPage}
@@ -294,7 +251,7 @@ export const CancelledOrders = ({
               </HStack>
             </PaginationContainer>
           </Pagination>
-        </Stack>
+        </Stack> */}
 
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {cancelledData?.inventory?.length}

@@ -37,11 +37,8 @@ export const MiscIssueHistory = ({
 }) => {
   const [miscIssueData, setMiscIssueData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
-  const [pageTotal, setPageTotal] = useState(undefined);
 
   const fetchMiscellaneousIssueHistoryApi = async (
-    pageNumber,
-    pageSize,
     dateFrom,
     dateTo,
     search
@@ -49,7 +46,7 @@ export const MiscIssueHistory = ({
     const dayaDate = new Date();
     const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
     const res = await request.get(
-      `Reports/MiscellaneousIssueReport?PageNumber=${pageNumber}&PageSize=${pageSize}&DateFrom=${dateFrom}&DateTo=${dateTo}`,
+      `Reports/MiscellaneousIssueReport?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`,
       {
         params: {
           search: search,
@@ -59,43 +56,8 @@ export const MiscIssueHistory = ({
     return res.data;
   };
 
-  //PAGINATION
-  const outerLimit = 2;
-  const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
-    total: pageTotal,
-    limits: {
-      outer: outerLimit,
-      inner: innerLimit,
-    },
-    initialState: { currentPage: 1, pageSize: 5 },
-  });
-
-  const handlePageChange = (nextPage) => {
-    setCurrentPage(nextPage);
-  };
-
-  const handlePageSizeChange = (e) => {
-    const pageSize = Number(e.target.value);
-    setPageSize(pageSize);
-    setCurrentPage(1);
-  };
-
   const fetchMiscellaneousIssueHistory = () => {
-    fetchMiscellaneousIssueHistoryApi(
-      currentPage,
-      pageSize,
-      dateFrom,
-      dateTo,
-      search
-    ).then((res) => {
+    fetchMiscellaneousIssueHistoryApi(dateFrom, dateTo, search).then((res) => {
       setMiscIssueData(res);
       setSheetData(
         res?.inventory?.map((item, i) => {
@@ -115,7 +77,6 @@ export const MiscIssueHistory = ({
           };
         })
       );
-      setPageTotal(res.totalCount);
     });
   };
 
@@ -125,13 +86,7 @@ export const MiscIssueHistory = ({
     return () => {
       setMiscIssueData([]);
     };
-  }, [currentPage, pageSize, dateFrom, dateTo, search]);
-
-  useEffect(() => {
-    if (search) {
-      setCurrentPage(1);
-    }
-  }, [search]);
+  }, [dateFrom, dateTo, search]);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -251,7 +206,7 @@ export const MiscIssueHistory = ({
       </Flex>
 
       <Flex justifyContent="space-between" mt={2}>
-        <Stack>
+        {/* <Stack>
           <Pagination
             pagesCount={pagesCount}
             currentPage={currentPage}
@@ -302,7 +257,7 @@ export const MiscIssueHistory = ({
               </HStack>
             </PaginationContainer>
           </Pagination>
-        </Stack>
+        </Stack> */}
 
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {miscIssueData?.inventory?.length}

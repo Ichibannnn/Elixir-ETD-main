@@ -40,8 +40,6 @@ export const WarehouseReceivingHistory = ({
   const [pageTotal, setPageTotal] = useState(undefined);
 
   const fetchWarehouseReceivingHistoryApi = async (
-    pageNumber,
-    pageSize,
     dateFrom,
     dateTo,
     search
@@ -49,7 +47,7 @@ export const WarehouseReceivingHistory = ({
     const dayaDate = new Date();
     const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
     const res = await request.get(
-      `Reports/WareHouseReceivingReports?PageNumber=${pageNumber}&PageSize=${pageSize}&DateFrom=${dateFrom}&DateTo=${dateTo}`,
+      `Reports/WareHouseReceivingReports?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`,
       {
         params: {
           search: search,
@@ -59,43 +57,8 @@ export const WarehouseReceivingHistory = ({
     return res.data;
   };
 
-  //PAGINATION
-  const outerLimit = 2;
-  const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
-    total: pageTotal,
-    limits: {
-      outer: outerLimit,
-      inner: innerLimit,
-    },
-    initialState: { currentPage: 1, pageSize: 5 },
-  });
-
-  const handlePageChange = (nextPage) => {
-    setCurrentPage(nextPage);
-  };
-
-  const handlePageSizeChange = (e) => {
-    const pageSize = Number(e.target.value);
-    setPageSize(pageSize);
-    setCurrentPage(1);
-  };
-
   const fetchWarehouseReceivingHistory = () => {
-    fetchWarehouseReceivingHistoryApi(
-      currentPage,
-      pageSize,
-      dateFrom,
-      dateTo,
-      search
-    ).then((res) => {
+    fetchWarehouseReceivingHistoryApi(dateFrom, dateTo, search).then((res) => {
       setWarehouseData(res);
       // console.log(warehouseData);
       setSheetData(
@@ -116,7 +79,6 @@ export const WarehouseReceivingHistory = ({
           };
         })
       );
-      setPageTotal(res.totalCount);
     });
   };
 
@@ -126,13 +88,7 @@ export const WarehouseReceivingHistory = ({
     return () => {
       setWarehouseData([]);
     };
-  }, [currentPage, pageSize, dateFrom, dateTo, search]);
-
-  useEffect(() => {
-    if (search) {
-      setCurrentPage(1);
-    }
-  }, [search]);
+  }, [dateFrom, dateTo, search]);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -248,7 +204,7 @@ export const WarehouseReceivingHistory = ({
       </Flex>
 
       <Flex justifyContent="space-between" mt={2}>
-        <Stack>
+        {/* <Stack>
           <Pagination
             pagesCount={pagesCount}
             currentPage={currentPage}
@@ -299,7 +255,7 @@ export const WarehouseReceivingHistory = ({
               </HStack>
             </PaginationContainer>
           </Pagination>
-        </Stack>
+        </Stack> */}
 
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {warehouseData?.inventory?.length}

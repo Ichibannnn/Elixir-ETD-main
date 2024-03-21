@@ -816,7 +816,7 @@ export const CancelModalConfirmation = ({
           </Button>
           <Button
             onClick={() => cancelHandler()}
-            disabled={!cancelRemarks}
+            isDisabled={!cancelRemarks}
             isLoading={isLoading}
             colorScheme="blue"
             _hover={{ bgColor: "accent" }}
