@@ -85,6 +85,7 @@ export const TransactedMOHistory = ({
   const handlePageSizeChange = (e) => {
     const pageSize = Number(e.target.value);
     setPageSize(pageSize);
+    setCurrentPage(1);
   };
 
   const fetchTransactedMoveOrderHistory = () => {

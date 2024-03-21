@@ -45,12 +45,10 @@ export const CancelledOrders = ({
     dateTo,
     search
   ) => {
-    const toAdd = new Date(dateTo);
-    const plus1 = toAdd?.setDate(toAdd?.getDate() + 1);
-    const formmattedDateFrom = moment(dateFrom).format("DD/MM/yyyy");
-    const formmattedDateTo = moment(plus1).format("yyyy-MM-DD");
+    const dayaDate = new Date();
+    const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
     const res = await request.get(
-      `Reports/CancelledOrderedReports?PageNumber=${pageNumber}&PageSize=${pageSize}&dateFrom=${dateFrom}&dateTo=${formmattedDateTo}`,
+      `Reports/CancelledOrderedReports?PageNumber=${pageNumber}&PageSize=${pageSize}&dateFrom=${dateFrom}&dateTo=${dateTo}`,
       {
         params: {
           search: search,
@@ -86,6 +84,7 @@ export const CancelledOrders = ({
   const handlePageSizeChange = (e) => {
     const pageSize = Number(e.target.value);
     setPageSize(pageSize);
+    setCurrentPage(1);
   };
 
   const fetchCancelledOrders = () => {
@@ -134,7 +133,7 @@ export const CancelledOrders = ({
     return () => {
       setCancelledData([]);
     };
-  }, [currentPage, dateFrom, dateTo, search]);
+  }, [currentPage, pageSize, dateFrom, dateTo, search]);
 
   useEffect(() => {
     if (search) {
