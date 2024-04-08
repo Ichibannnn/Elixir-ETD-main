@@ -27,6 +27,8 @@ export const ActionButton = ({
   transactionDate,
   setTransactionDate,
   fetchRawMats,
+  employeeData,
+  setEmployeeData,
 }) => {
   const [hideButton, setHideButton] = useState(false);
 
@@ -101,6 +103,8 @@ export const ActionButton = ({
           transactionDate={transactionDate}
           setTransactionDate={setTransactionDate}
           fetchRawMats={fetchRawMats}
+          employeeData={employeeData}
+          setEmployeeData={setEmployeeData}
         />
       )}
 

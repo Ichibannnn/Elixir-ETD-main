@@ -27,6 +27,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { Select as AutoComplete } from "chakra-react-select";
+import axios from "axios";
+import { decodeUser } from "../../services/decode-user";
+
+const schema = yup.object().shape({
+  formData: yup.object().shape({
+    empId: yup.object().required().label("Employee ID"),
+    fullName: yup.string().required().label("Fullname"),
+  }),
+});
 
 export const BorrowedInformation = ({
   rawMatsInfo,
@@ -52,12 +61,70 @@ export const BorrowedInformation = ({
   setUnitCost,
   fetchRawMats,
   itemCode,
+  employeeData,
+  setEmployeeData,
 }) => {
+  const [employees, setEmployees] = useState([]);
+  const [idNumber, setIdNumber] = useState();
+  const [info, setInfo] = useState();
+  const [disableFullName, setDisableFullName] = useState(true);
+
+  const currentUser = decodeUser();
+
   const {
     isOpen: isModal,
     onClose: closeModal,
     onOpen: openModal,
   } = useDisclosure();
+
+  const fetchEmployees = async () => {
+    try {
+      const res = await axios.get("http://rdfsedar.com/api/data/employees", {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_SEDAR_TOKEN,
+        },
+      });
+      setEmployees(res.data.data);
+    } catch (error) {}
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    setValue,
+    reset,
+    watch,
+    control,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+    defaultValues: {
+      formData: {
+        empId: "",
+        fullName: "",
+        addedBy: currentUser.fullName,
+      },
+    },
+  });
+
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  useEffect(() => {
+    setInfo(
+      employees
+        .filter((item) => {
+          return item?.general_info?.full_id_number_full_name
+            .toLowerCase()
+            .includes(idNumber);
+        })
+        .splice(0, 50)
+    );
+
+    return () => {};
+  }, [idNumber]);
 
   const detailHandler = (data) => {
     if (data) {
@@ -66,8 +133,6 @@ export const BorrowedInformation = ({
       setDetails("");
     }
   };
-
-  // console.log("Details: ", details);
 
   const customerHandler = (data) => {
     if (data) {
@@ -107,7 +172,28 @@ export const BorrowedInformation = ({
   const newDate = moment();
   const maxDate = newDate.add(14, "days");
 
-  // console.log(rawMatsInfo.customerName);
+  if (employees.length <= 0) {
+    return (
+      <Flex
+        width="full"
+        height="full"
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        gap={1}
+      >
+        <Spinner
+          thickness="4px"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+        <Text>Loading....</Text>
+      </Flex>
+    );
+  }
+
+  // console.log("Employee Data: ", employeeData);
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
@@ -161,57 +247,8 @@ export const BorrowedInformation = ({
                   ? customerData.customerCode
                   : "Select a customer"}
               </Text>
-              {/* {customers.length > 0 ? (
-                <Select
-                  fontSize="xs"
-                  onChange={(e) => customerHandler(e.target.value)}
-                  ref={customerRef}
-                  w="full"
-                  placeholder=" "
-                  bgColor="#fff8dc"
-                >
-                  {customers?.map((item, i) => (
-                    <option
-                      key={i}
-                      value={JSON.stringify(item)}
-                    >{`${item.customerCode} - ${item.customerName}`}</option>
-                  ))}
-                </Select>
-              ) : (
-                <Spinner />
-              )} */}
             </HStack>
 
-            {/* Details */}
-            <HStack w="full">
-              <Text
-                minW="50%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                pr={5}
-                py={2.5}
-                fontSize="xs"
-              >
-                Details:{" "}
-              </Text>
-              <Input
-                fontSize="sm"
-                onChange={(e) => detailHandler(e.target.value)}
-                value={details}
-                // placeholder="Enter Details"
-                // minW="93%"
-                w="full"
-                // bgColor="#fff8dc"
-                border="1px"
-                borderRadius="none"
-                borderColor="gray.400"
-              />
-            </HStack>
-          </VStack>
-
-          <VStack alignItems="start" w="40%" mx={5}>
             {/* Customer Name */}
             <HStack w="full">
               <Text
@@ -241,6 +278,34 @@ export const BorrowedInformation = ({
               </Text>
             </HStack>
 
+            {/* Details */}
+            <HStack w="full">
+              <Text
+                minW="50%"
+                w="auto"
+                bgColor="primary"
+                color="white"
+                pl={2}
+                pr={5}
+                py={2.5}
+                fontSize="xs"
+              >
+                Details:{" "}
+              </Text>
+              <Input
+                fontSize="sm"
+                onChange={(e) => detailHandler(e.target.value)}
+                value={details}
+                w="full"
+                // bgColor="#fff8dc"
+                border="1px"
+                borderRadius="none"
+                borderColor="gray.400"
+              />
+            </HStack>
+          </VStack>
+
+          <VStack alignItems="start" w="40%" mx={5}>
             {/* Transaction Date */}
             <HStack w="full">
               <Text
@@ -271,6 +336,85 @@ export const BorrowedInformation = ({
                 borderColor="gray.400"
               />
             </HStack>
+
+            {/* Employee ID*/}
+            <HStack w="full">
+              <Text
+                minW="50%"
+                w="auto"
+                bgColor="primary"
+                color="white"
+                pl={2}
+                py={2.5}
+                fontSize="xs"
+              >
+                Employee ID:{" "}
+              </Text>
+              <Box w="full">
+                <Controller
+                  control={control}
+                  name="formData.empId"
+                  render={({ field }) => (
+                    <AutoComplete
+                      className="react-select-layout"
+                      size="sm"
+                      ref={field.ref}
+                      value={field.value}
+                      placeholder="Enter Employee ID"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        setValue("formData.fullName", e.value.full_name);
+                      }}
+                      options={employees?.map((item) => {
+                        return {
+                          label: item.general_info?.full_id_number,
+                          value: {
+                            full_id_number: item.general_info?.full_id_number,
+                            full_name: item.general_info?.full_name,
+                          },
+                        };
+                      })}
+                    />
+                  )}
+                />
+                <Text color="red" fontSize="xs">
+                  {errors.formData?.empId?.message}
+                </Text>
+              </Box>
+            </HStack>
+
+            {/* Fullname */}
+            <HStack w="full">
+              <Text
+                minW="50%"
+                w="auto"
+                bgColor="primary"
+                color="white"
+                pl={2}
+                py={2.5}
+                fontSize="xs"
+              >
+                Fullname:{" "}
+              </Text>
+              <Box w="full">
+                <Input
+                  fontSize="sm"
+                  {...register("formData.fullName")}
+                  disabled={disableFullName}
+                  readOnly={disableFullName}
+                  _disabled={{ color: "black" }}
+                  bgColor={disableFullName && "gray.200"}
+                  autoFocus
+                  autoComplete="off"
+                  border="1px"
+                  borderColor="gray.200"
+                  borderRadius="none"
+                />
+                <Text color="red" fontSize="xs">
+                  {errors.formData?.fullName?.message}
+                </Text>
+              </Box>
+            </HStack>
           </VStack>
         </Flex>
 
@@ -280,6 +424,8 @@ export const BorrowedInformation = ({
             isDisabled={
               // !rawMatsInfo.customerName ||
               !details ||
+              !watch("formData.empId") ||
+              !watch("formData.fullName") ||
               // !remarks ||
               !transactionDate
             }
@@ -320,6 +466,9 @@ export const BorrowedInformation = ({
           fetchActiveBorrowed={fetchActiveBorrowed}
           fetchRawMats={fetchRawMats}
           itemCode={itemCode}
+          employeeFormData={watch("formData")}
+          employeeData={employeeData}
+          setEmployeeData={setEmployeeData}
         />
       )}
     </Flex>
@@ -350,6 +499,9 @@ export const RawMatsInfoModal = ({
   setUnitCost,
   fetchRawMats,
   itemCode,
+  employeeFormData,
+  employeeData,
+  setEmployeeData,
 }) => {
   const [availableStock, setAvailableStock] = useState("");
   const [reserve, setReserve] = useState("");
@@ -367,11 +519,9 @@ export const RawMatsInfoModal = ({
   };
 
   useEffect(() => {
-    // console.log(barcodeNo);
     if (barcodeNo?.length) {
       const barcodeData = barcodeNo[0];
       setBarcode(JSON.stringify(barcodeData));
-      // console.log("Barcode No: ", barcodeData);
       setAvailableStock(barcodeData.remainingStocks);
       setUnitCost(barcodeData.unitCost);
       setWarehouseId(barcodeData.warehouseId);
@@ -392,8 +542,6 @@ export const RawMatsInfoModal = ({
   // console.log("Raw Materials: ", rawMatsInfo);
 
   const itemCodeHandler = (data) => {
-    console.log("Data: ", data);
-
     if (data) {
       // const newData = JSON.parse(data);
       const itemCode = data.value.itemCode;
@@ -491,10 +639,6 @@ export const RawMatsInfoModal = ({
   const newDate = new Date();
   const minDate = moment(newDate).format("yyyy-MM-DD");
 
-  const firstBarcodeNo = barcodeNo && barcodeNo.length > 0 ? barcodeNo[0] : "";
-  // console.log(barcodeNo);
-  const [disabled, setDisabled] = useState(true);
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={() => {}} isCentered size="6xl">
@@ -506,7 +650,6 @@ export const RawMatsInfoModal = ({
               <Text fontSize="xs">Borrowed Materials</Text>
             </VStack>
           </ModalHeader>
-          {/* <ModalCloseButton onClick={onClose} /> */}
           <ModalBody mb={5}>
             <Flex w="95%" justifyContent="space-between">
               <VStack alignItems="start" w="full" mx={5}>
@@ -524,23 +667,7 @@ export const RawMatsInfoModal = ({
                   >
                     Item Code:{" "}
                   </Text>
-                  {/* {rawMats.length > 0 ? (
-                    <Select
-                      fontSize="xs"
-                      onChange={(e) => itemCodeHandler(e.target.value)}
-                      w="full"
-                      placeholder=" "
-                      bgColor="#fff8dc"
-                    >
-                      {rawMats?.map((item, i) => (
-                        <option key={i} value={JSON.stringify(item)}>
-                          {item.itemCode}
-                        </option>
-                      ))}
-                    </Select>
-                  ) : (
-                    <Spinner />
-                  )} */}
+
                   <Controller
                     control={control}
                     name="formData.rawMats"
@@ -557,7 +684,7 @@ export const RawMatsInfoModal = ({
                         }}
                         options={rawMats?.map((item) => {
                           return {
-                            label: `${item.itemCode}`,
+                            label: `${item.itemCode} - ${item.itemDescription}`,
                             value: item,
                           };
                         })}
@@ -638,28 +765,6 @@ export const RawMatsInfoModal = ({
                     borderRadius="none"
                     thousandSeparator=","
                   />
-                  {/* <Input
-                    fontSize="xs"
-                    onChange={(e) =>
-                      setRawMatsInfo({
-                        itemCode: rawMatsInfo.itemCode,
-                        itemDescription: rawMatsInfo.itemDescription,
-                        customerName: rawMatsInfo.customerName,
-                        uom: rawMatsInfo.uom,
-                        warehouseId: rawMatsInfo.warehouseId,
-                        quantity: Number(e.target.value),
-                      })
-                    }
-                    type="number"
-                    onWheel={(e) => e.target.blur()}
-                    onKeyDown={(e) =>
-                      ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
-                    onPaste={(e) => e.preventDefault()}
-                    min="1"
-                    w="full"
-                    bgColor="#fff8dc"
-                  /> */}
                 </HStack>
               </VStack>
 
@@ -872,6 +977,7 @@ export const RawMatsInfoModal = ({
               <Button variant="outline" onClick={closeHandler}>
                 Cancel
               </Button>
+
               <Button
                 onClick={openAddConfirmation}
                 isDisabled={
@@ -916,6 +1022,9 @@ export const RawMatsInfoModal = ({
           setUnitCost={setUnitCost}
           fetchActiveBorrowed={fetchActiveBorrowed}
           fetchRawMats={fetchRawMats}
+          employeeFormData={employeeFormData}
+          employeeData={employeeData}
+          setEmployeeData={setEmployeeData}
         />
       )}
     </>

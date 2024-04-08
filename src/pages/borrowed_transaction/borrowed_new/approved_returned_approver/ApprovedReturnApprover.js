@@ -18,6 +18,10 @@ import {
   Tr,
   useDisclosure,
   useToast,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
 import {
@@ -37,10 +41,13 @@ import {
   ApproveModal,
   ApproveReturnedModal,
   CancelModalApproval,
+  PrintModal,
   ViewModal,
   ViewModalApproval,
 } from "./ActionModal";
 import { GrView } from "react-icons/gr";
+import { SlPrinter } from "react-icons/sl";
+import { AiOutlineMore } from "react-icons/ai";
 
 const fetchBorrowedApprovalApi = async (
   pageNumber,
@@ -71,6 +78,12 @@ export const ApprovedReturnApprover = () => {
     isOpen: isView,
     onClose: closeView,
     onOpen: openView,
+  } = useDisclosure();
+
+  const {
+    isOpen: isPrint,
+    onClose: closePrint,
+    onOpen: openPrint,
   } = useDisclosure();
 
   const {
@@ -143,6 +156,21 @@ export const ApprovedReturnApprover = () => {
     }
   };
 
+  const printHandler = (id, status) => {
+    if (id) {
+      setStatusBody({
+        id: id,
+        status: status,
+      });
+      openPrint();
+    } else {
+      setStatusBody({
+        id: "",
+        status: "",
+      });
+    }
+  };
+
   useEffect(() => {
     if (search) {
       setCurrentPage(1);
@@ -211,7 +239,7 @@ export const ApprovedReturnApprover = () => {
                           Status
                         </Th> */}
                 <Th h="40px" color="white" fontSize="10px" textAlign="center">
-                  View
+                  Action
                 </Th>
               </Tr>
             </Thead>
@@ -234,13 +262,44 @@ export const ApprovedReturnApprover = () => {
                   <Td fontSize="xs">{borrow.preparedBy}</Td>
                   <Td fontSize="xs">
                     <HStack spacing={3} justifyContent="center">
-                      <Button
+                      <Flex pl={2}>
+                        <Box>
+                          <Menu>
+                            <MenuButton
+                              alignItems="center"
+                              justifyContent="center"
+                              bg="none"
+                            >
+                              <AiOutlineMore fontSize="20px" />
+                            </MenuButton>
+                            <MenuList>
+                              <MenuItem
+                                icon={<GrView fontSize="17px" />}
+                                onClick={() => viewHandler(borrow.id)}
+                              >
+                                <Text fontSize="15px">View</Text>
+                              </MenuItem>
+                              <MenuItem
+                                icon={<SlPrinter fontSize="17px" />}
+                                onClick={() =>
+                                  printHandler(borrow.id, borrow.isActive)
+                                }
+                              >
+                                <Text fontSize="15px" _hover={{ color: "red" }}>
+                                  Print
+                                </Text>
+                              </MenuItem>
+                            </MenuList>
+                          </Menu>
+                        </Box>
+                      </Flex>
+                      {/* <Button
                         onClick={() => viewHandler(borrow.id)}
                         bg="none"
                         size="xs"
                       >
                         <GrView fontSize="17px" />
-                      </Button>
+                      </Button> */}
                     </HStack>
                   </Td>
                 </Tr>
@@ -307,6 +366,17 @@ export const ApprovedReturnApprover = () => {
         <ViewModal
           isOpen={isView}
           onClose={closeView}
+          statusBody={statusBody}
+          fetchBorrowed={fetchBorrowed}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+        />
+      )}
+
+      {isPrint && (
+        <PrintModal
+          isOpen={isPrint}
+          onClose={closePrint}
           statusBody={statusBody}
           fetchBorrowed={fetchBorrowed}
           isLoading={isLoading}

@@ -42,14 +42,6 @@ export const ViewModal = ({
   fetchBorrowed,
   setIsLoading,
 }) => {
-  const {
-    isOpen: isEdit,
-    onOpen: openEdit,
-    onClose: closeEdit,
-  } = useDisclosure();
-
-  const { isOpen: isCoa, onOpen: openCoa, onClose: closeCoa } = useDisclosure();
-
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
   const [coaId, setCoaId] = useState("");
   const [editData, setEditData] = useState({
@@ -60,6 +52,14 @@ export const ViewModal = ({
     consume: "",
     borrowedQuantity: "",
   });
+
+  const {
+    isOpen: isEdit,
+    onOpen: openEdit,
+    onClose: closeEdit,
+  } = useDisclosure();
+
+  const { isOpen: isCoa, onOpen: openCoa, onClose: closeCoa } = useDisclosure();
 
   const toast = useToast();
 
@@ -599,7 +599,6 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
   const fetchCOAList = () => {
     fetchCOAListApi(id).then((res) => {
       setCoaList(res);
-      // console.log(res);
     });
   };
 
@@ -636,60 +635,11 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
                     <Th h="40px" color="white" fontSize="10px">
                       Charging of Accounts
                     </Th>
-                    {/* <Th h="20px" color="white" fontSize="10px">
-                      Item Code
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Item Description
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Uom
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Consumed Qty
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Company Code
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Company Name
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Department Code
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Department Name
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Location Code
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Location Name
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Account Code
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Account Title
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Employee Id
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Full Name
-                    </Th> */}
-                    {/* <Th h="20px" color="white" fontSize="10px">
-                Action
-              </Th> */}
                   </Tr>
                 </Thead>
                 <Tbody>
                   {coaList?.map((item, i) => (
                     <Tr key={i}>
-                      {/* <Td fontSize="xs">{item.id}</Td> */}
-                      {/* <Td fontSize="xs" color="gray.700" fontWeight="semibold">
-                        {item.id}
-                      </Td> */}
                       <Td>
                         <Flex flexDirection="column" gap="10px">
                           <Flex flexDirection="column" justifyContent="left">

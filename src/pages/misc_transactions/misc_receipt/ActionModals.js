@@ -308,21 +308,6 @@ export const SaveConfirmation = ({
       departmentName: listDataTempo[0]?.chargingDepartmentName,
       locationCode: listDataTempo[0]?.chargingLocationCode,
       locationName: listDataTempo[0]?.chargingLocationName,
-      // companyCode: company?.find((x) => x.id === data.formData.companyId)?.code,
-      // companyName: company?.find((x) => x.id === data.formData.companyId)?.name,
-      // departmentCode: department?.find(
-      //   (x) => x.id === data.formData.departmentId
-      // )?.code,
-      // departmentName: department?.find(
-      //   (x) => x.id === data.formData.departmentId
-      // )?.name,
-      // locationCode: location?.find((x) => x.id === data.formData.locationId)
-      //   ?.code,
-      // locationName: location?.find((x) => x.id === data.formData.locationId)
-      //   ?.name,
-      // accountCode: account?.find((x) => x.id === data.formData.accountId)?.code,
-      // accountTitles: account?.find((x) => x.id === data.formData.accountId)
-      //   ?.name,
       addedBy: currentUser.fullName,
     };
 
@@ -591,7 +576,6 @@ export const SaveConfirmation = ({
             <Text>Confirmation</Text>
           </Flex>
         </ModalHeader>
-        {/* <ModalCloseButton color="black" onClick={onClose} /> */}
 
         <ModalBody mb={5}>
           <Text textAlign="center" fontSize="sm">

@@ -595,24 +595,7 @@ export const SaveConfirmation = ({
     //               control={control}
     //               name="formData.companyId"
     //               render={({ field }) => (
-    //                 // <Select
-    //                 //   {...field}
-    //                 //   value={field.value || ""}
-    //                 //   placeholder="Select Company"
-    //                 //   fontSize="sm"
-    //                 //   onChange={(e) => {
-    //                 //     field.onChange(e);
-    //                 //     setValue("formData.departmentId", "");
-    //                 //     setValue("formData.locationId", "");
-    //                 //     fetchDepartmentApi(e.target.value);
-    //                 //   }}
-    //                 // >
-    //                 //   {company?.map((item) => (
-    //                 //     <option key={item.id} value={item.id}>
-    //                 //       {item.code} - {item.name}
-    //                 //     </option>
-    //                 //   ))}
-    //                 // </Select>
+
     //                 <AutoComplete
     //                   ref={field.ref}
     //                   value={field.value}
@@ -644,23 +627,7 @@ export const SaveConfirmation = ({
     //               control={control}
     //               name="formData.departmentId"
     //               render={({ field }) => (
-    //                 // <Select
-    //                 //   {...field}
-    //                 //   value={field.value || ""}
-    //                 //   placeholder="Select Department"
-    //                 //   fontSize="sm"
-    //                 //   onChange={(e) => {
-    //                 //     field.onChange(e);
-    //                 //     setValue("formData.locationId", "");
-    //                 //     fetchLocationApi(e.target.value);
-    //                 //   }}
-    //                 // >
-    //                 //   {department?.map((dept) => (
-    //                 //     <option key={dept.id} value={dept.id}>
-    //                 //       {dept.code} - {dept.name}
-    //                 //     </option>
-    //                 //   ))}
-    //                 // </Select>
+
     //                 <AutoComplete
     //                   size="sm"
     //                   ref={field.ref}
@@ -692,18 +659,7 @@ export const SaveConfirmation = ({
     //               control={control}
     //               name="formData.locationId"
     //               render={({ field }) => (
-    //                 // <Select
-    //                 //   {...field}
-    //                 //   value={field.value || ""}
-    //                 //   placeholder="Select Location"
-    //                 //   fontSize="sm"
-    //                 // >
-    //                 //   {location?.map((item) => (
-    //                 //     <option key={item.id} value={item.id}>
-    //                 //       {item.code} - {item.name}
-    //                 //     </option>
-    //                 //   ))}
-    //                 // </Select>
+
     //                 <AutoComplete
     //                   size="sm"
     //                   ref={field.ref}
@@ -732,20 +688,6 @@ export const SaveConfirmation = ({
     //               control={control}
     //               name="formData.accountId"
     //               render={({ field }) => (
-    //                 // <Select
-    //                 //   {...field}
-    //                 //   value={field.value || ""}
-    //                 //   placeholder="Select Account"
-    //                 //   fontSize="sm"
-    //                 //   bgColor="#fff8dc"
-    //                 //   isSearchable
-    //                 // >
-    //                 //   {account?.map((item) => (
-    //                 //     <option key={item.id} value={item.id}>
-    //                 //       {item.code} - {item.name}
-    //                 //     </option>
-    //                 //   ))}
-    //                 // </Select>
     //                 <AutoComplete
     //                   size="sm"
     //                   ref={field.ref}
@@ -862,7 +804,6 @@ export const SaveConfirmation = ({
             <Text>Confirmation</Text>
           </Flex>
         </ModalHeader>
-        {/* <ModalCloseButton onClick={closeHandler} /> */}
 
         <ModalBody mb={5}>
           <Text textAlign="center" fontSize="sm">

@@ -6,10 +6,6 @@ import { ListOfBorrowed } from "../../ListOfBorrowed";
 import { ActionButton } from "../../ActionButton";
 import { decodeUser } from "../../../../services/decode-user";
 
-// const fetchCustomersApi = async () => {
-//   const res = await request.get(`Customer/GetAllActiveCustomers`);
-//   return res.data;
-// };
 const fetchRawMatsApi = async () => {
   const res = await request.get(
     `Borrowed/GetAvailableStocksForBorrowedIssueNoParameters`
@@ -55,6 +51,8 @@ const AddBorrowedMaterials = ({
   const [transactionDate, setTransactionDate] = useState("");
   const [unitCost, setUnitCost] = useState("");
 
+  const [employeeData, setEmployeeData] = useState([]);
+
   const [customerData, setCustomerData] = useState({
     customerCode: currentUser?.deparment,
     customerName: currentUser?.fullName,
@@ -69,23 +67,6 @@ const AddBorrowedMaterials = ({
   });
 
   const itemCode = rawMatsInfo.itemCode;
-
-  // console.log("Current User: ", currentUser);
-
-  //Customer Fetching
-  // const fetchCustomers = () => {
-  //   fetchCustomersApi().then((res) => {
-  //     setCustomers(res);
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   fetchCustomers();
-
-  //   return () => {
-  //     setCustomers([]);
-  //   };
-  // }, []);
 
   //Raw Mats Fetching
   const fetchRawMats = () => {
@@ -129,23 +110,7 @@ const AddBorrowedMaterials = ({
 
   return (
     <Flex px={5} pt={5} pb={0} w="full" flexDirection="column" bg="form">
-      <Flex w="full" justifyContent="space-between">
-        {/* <HStack spacing={0}>
-          <Button
-            bgColor={borrowedNav === 1 ? "primary" : ""}
-            color={borrowedNav === 1 ? "white" : ""}
-            _hover={{ bgColor: "primary", color: "white" }}
-            border="1px"
-            borderColor="gray.300"
-            size="sm"
-            fontSize="xs"
-            onClick={() => setBorrowedNav(1)}
-            borderRadius="none"
-          >
-            Add Borrow Materials
-          </Button>
-        </HStack> */}
-      </Flex>
+      <Flex w="full" justifyContent="space-between"></Flex>
 
       <VStack
         w="full"
@@ -156,6 +121,8 @@ const AddBorrowedMaterials = ({
         {borrowedNav === 1 ? (
           <>
             <BorrowedInformation
+              employeeData={employeeData}
+              setEmployeeData={setEmployeeData}
               rawMatsInfo={rawMatsInfo}
               setRawMatsInfo={setRawMatsInfo}
               details={details}
@@ -217,6 +184,8 @@ const AddBorrowedMaterials = ({
                   remarksRef={remarksRef}
                   transactionDate={transactionDate}
                   setTransactionDate={setTransactionDate}
+                  employeeData={employeeData}
+                  setEmployeeData={setEmployeeData}
                 />
               </>
             ) : (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -16,17 +16,16 @@ import {
   Th,
   Thead,
   Tr,
-  useToast,
   VStack,
   HStack,
   ModalOverlay,
-  useDisclosure,
-  Select,
+  Image,
 } from "@chakra-ui/react";
 import request from "../../../../services/ApiClient";
 import PageScroll from "../../../../utils/PageScroll";
 import moment from "moment";
 import Swal from "sweetalert2";
+import { useReactToPrint } from "react-to-print";
 
 export const ViewModal = ({
   isOpen,
@@ -36,7 +35,11 @@ export const ViewModal = ({
   setIsLoading,
 }) => {
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
-  const toast = useToast();
+
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   console.log(statusBody);
 
@@ -63,37 +66,27 @@ export const ViewModal = ({
     <Modal isOpen={isOpen} onClose={() => {}} size="5xl" isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader bg="primary">
-          <Flex justifyContent="left">
-            <Text fontSize="xs" color="white">
-              Material Details
+        <ModalHeader mb={5} fontSize="md"></ModalHeader>
+
+        <ModalCloseButton color="black" onClick={onClose} />
+
+        <ModalBody mb={10} ref={componentRef}>
+          {/* Display Borrowed */}
+          <Flex spacing={0} justifyContent="start" flexDirection="column">
+            <Image src="/images/RDF Logo.png" w="13%" ml={3} />
+            <Text fontSize="8px" ml={2}>
+              Purok 6, Brgy. Lara, City of San Fernando, Pampanga, Philippines
             </Text>
           </Flex>
-        </ModalHeader>
-        <ModalCloseButton color="white" onClick={onClose} />
-        <ModalBody mb={5}>
-          <Flex justifyContent="space-between">
-            <VStack alignItems="start" spacing={1} mt={4}>
-              <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
-                  Transaction ID:
-                </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
-              </HStack>
 
-              <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
-                  Borrowed Date:
-                </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.transactionDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
-              </HStack>
+          <Flex justifyContent="center" my={1}>
+            <Text fontSize="xs" fontWeight="semibold">
+              Borrowed Details
+            </Text>
+          </Flex>
+
+          <Flex justifyContent="space-between">
+            <VStack alignItems="start" spacing={-1}>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
@@ -116,7 +109,28 @@ export const ViewModal = ({
               </HStack>
             </VStack>
 
-            <VStack alignItems="start" spacing={-1}></VStack>
+            <VStack alignItems="start" spacing={-1}>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Transaction ID:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.borrowedPKey}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Borrowed Date:
+                </Text>
+                <Text fontSize="xs">
+                  {" "}
+                  {moment(borrowedDetailsData[0]?.transactionDate).format(
+                    "MM/DD/yyyy"
+                  )}
+                </Text>
+              </HStack>
+            </VStack>
           </Flex>
 
           <VStack justifyContent="center" mt={4}>
@@ -179,6 +193,9 @@ export const ViewModal = ({
         </ModalBody>
         <ModalFooter>
           <ButtonGroup size="sm">
+            <Button colorScheme="blue" onClick={handlePrint}>
+              Print
+            </Button>
             <Button colorScheme="gray" onClick={onClose}>
               Close
             </Button>

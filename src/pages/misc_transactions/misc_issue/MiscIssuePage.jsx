@@ -178,12 +178,7 @@ const MiscIssuePage = ({
         </HStack>
       </Flex>
 
-      <VStack
-        w="full"
-        p={5}
-        height={miscData?.length === 0 ? "87vh" : "auto"}
-        // className="boxShadow"
-      >
+      <VStack w="full" p={5} height={miscData?.length === 0 ? "87vh" : "auto"}>
         {navigation === 1 ? (
           <>
             <MaterialsInformation

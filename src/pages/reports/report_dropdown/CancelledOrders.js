@@ -37,15 +37,10 @@ export const CancelledOrders = ({
   const [buttonChanger, setButtonChanger] = useState(true);
   const [cancelledData, setCancelledData] = useState([]);
 
-  const fetchCancelledOrdersApi = async (
-    pageNumber,
-    pageSize,
-    dateFrom,
-    dateTo,
-    search
-  ) => {
-    const dayaDate = new Date();
-    const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
+  console.log("Date From: ", dateFrom);
+  console.log("Date To: ", dateTo);
+
+  const fetchCancelledOrdersApi = async (dateFrom, dateTo, search) => {
     const res = await request.get(
       `Reports/CancelledOrderedReports?PageNumber=1&PageSize=1000000&dateFrom=${dateFrom}&dateTo=${dateTo}`,
       {

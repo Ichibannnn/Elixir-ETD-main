@@ -190,6 +190,7 @@ export const ViewModal = ({
                   )}
                 </Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
@@ -198,12 +199,14 @@ export const ViewModal = ({
                   {borrowedDetailsData[0]?.customerCode}
                 </Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer Name:
                 </Text>
                 <Text fontSize="xs">{borrowedDetailsData[0]?.customer}</Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Details:
@@ -211,9 +214,24 @@ export const ViewModal = ({
                 <Text fontSize="xs">{borrowedDetailsData[0]?.details}</Text>
               </HStack>
             </VStack>
-            <VStack alignItems="start" spacing={-1}></VStack>
-            <VStack alignItems="start" spacing={-1}></VStack>
+
+            <VStack alignItems="start" spacing={1} mt={4}>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee ID:
+                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.empId}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Fullname:
+                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.fullName}</Text>
+              </HStack>
+            </VStack>
           </Flex>
+
           <VStack justifyContent="center" mt={2}>
             <PageScroll minHeight="320px" maxHeight="321px">
               <Table size="sm" variant="striped">

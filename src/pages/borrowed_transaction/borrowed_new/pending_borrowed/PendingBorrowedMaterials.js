@@ -223,12 +223,7 @@ export const PendingBorrowedMaterials = () => {
                 <Th h="20px" color="white" fontSize="10px">
                   Requested Date
                 </Th>
-                {/* <Th h="40px" color="white" fontSize="10px">
-                  Transacted By
-                </Th> */}
-                {/* <Th h="20px" color="white" fontSize="10px">
-                  Status
-                </Th> */}
+
                 <Th h="20px" color="white" fontSize="10px" textAlign="center">
                   Action
                 </Th>

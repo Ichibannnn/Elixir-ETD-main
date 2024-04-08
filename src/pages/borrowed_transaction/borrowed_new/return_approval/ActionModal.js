@@ -41,9 +41,10 @@ export const ViewModalApproval = ({
   setIsLoading,
 }) => {
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
+  const [coaId, setCoaId] = useState("");
   const toast = useToast();
 
-  console.log(statusBody);
+  const { isOpen: isCoa, onOpen: openCoa, onClose: closeCoa } = useDisclosure();
 
   const idparams = statusBody?.id;
   const fetchBorrowedDetailsApi = async (idparams) => {
@@ -58,7 +59,15 @@ export const ViewModalApproval = ({
       setBorrowedDetailsData(res);
     });
   };
-  //   console.log(borrowedDetailsData);
+
+  const coaIdHandler = (data) => {
+    if (data) {
+      setCoaId(data);
+      openCoa();
+    } else {
+      setCoaId("");
+    }
+  };
 
   useEffect(() => {
     fetchBorrowedDetails();
@@ -130,41 +139,7 @@ export const ViewModalApproval = ({
               </HStack>
             </VStack>
 
-            <VStack alignItems="start" spacing={1}>
-              {/* <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
-                  Total Borrowed Qty:
-                </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedQuantity.toLocaleString(
-                    undefined,
-                    {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }
-                  )}
-                </Text>
-              </HStack> */}
-
-              {/* <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
-                  Location:
-                </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.locationCode} -{" "}
-                  {borrowedDetailsData[0]?.locationName}
-                </Text>
-              </HStack>
-              <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
-                  Account Title:
-                </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.accountCode} -{" "}
-                  {borrowedDetailsData[0]?.accountTitles}
-                </Text>
-              </HStack> */}
-            </VStack>
+            <VStack alignItems="start" spacing={1}></VStack>
           </Flex>
 
           <VStack justifyContent="center" mt={4}>
@@ -186,6 +161,9 @@ export const ViewModalApproval = ({
                     </Th>
                     <Th color="white" fontSize="xs">
                       Consumed Qty
+                    </Th>
+                    <Th color="white" fontSize="xs">
+                      View
                     </Th>
                   </Tr>
                 </Thead>
@@ -209,6 +187,24 @@ export const ViewModalApproval = ({
                           maximumFractionDigits: 2,
                           minimumFractionDigits: 2,
                         })}
+                      </Td>
+                      <Td>
+                        {borrowdetails.consume === 0 ? (
+                          <Button isDisabled size="xs" bg="none">
+                            <GrView
+                              fontSize="18px"
+                              onClick={() => coaIdHandler(borrowdetails.id)}
+                            />
+                          </Button>
+                        ) : (
+                          <Button
+                            size="xs"
+                            bg="none"
+                            onClick={() => coaIdHandler(borrowdetails.id)}
+                          >
+                            <GrView fontSize="18px" />
+                          </Button>
+                        )}
                       </Td>
                     </Tr>
                   ))}
@@ -239,14 +235,7 @@ export const ViewModalApproval = ({
         </ModalFooter>
       </ModalContent>
 
-      {/* {isEdit && (
-        <EditModal
-          isOpen={isEdit}
-          onClose={closeEdit}
-          editData={editData}
-          fetchBorrowedDetails={fetchBorrowedDetails}
-        />
-      )} */}
+      {isCoa && <ViewCOA isOpen={isCoa} onClose={closeCoa} coaId={coaId} />}
     </Modal>
   );
 };
@@ -471,5 +460,171 @@ export const ApproveReturnedModal = ({
         </ModalContent>
       </Modal>
     </>
+  );
+};
+
+export const ViewCOA = ({ isOpen, onClose, coaId }) => {
+  const [coaList, setCoaList] = useState([]);
+
+  //RETURN REQUEST
+  const id = coaId;
+  const fetchCOAListApi = async (id) => {
+    const res = await request.get(`Borrowed/ViewConsumeForReturn?`, {
+      params: {
+        id: id,
+      },
+    });
+    return res.data;
+  };
+
+  const fetchCOAList = () => {
+    fetchCOAListApi(id).then((res) => {
+      setCoaList(res);
+    });
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchCOAList();
+    }
+    return () => {
+      setCoaList([]);
+    };
+  }, [id]);
+
+  return (
+    <Modal isOpen={isOpen} onClose={() => {}} size="6xl" isCentered>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader bg="primary">
+          <Flex justifyContent="left">
+            <Text fontSize="xs" color="white">
+              List of Consumed Materials
+            </Text>
+          </Flex>
+        </ModalHeader>
+        <ModalCloseButton color="white" onClick={onClose} />
+        <ModalBody mb={5} fontSize="xs">
+          <Flex flexDirection="column" w="full" mt={4}>
+            <PageScroll minHeight="430px" maxHeight="450px">
+              <Table size="sm" variant="striped">
+                <Thead bgColor="primary" position="sticky" top={0} zIndex={1}>
+                  <Tr>
+                    <Th h="40px" color="white" fontSize="10px">
+                      Item Information
+                    </Th>
+                    <Th h="40px" color="white" fontSize="10px">
+                      Charging of Accounts
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {coaList?.map((item, i) => (
+                    <Tr key={i}>
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <Flex flexDirection="column" justifyContent="left">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Item:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.itemCode} - {item.itemDescription}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                UOM:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.uom}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Consumed Quantity:
+                              </Text>
+                              <Text color="blue.400" fontWeight="bold">
+                                {item.consume.toLocaleString(undefined, {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                })}
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Flex>
+                      </Td>
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <Flex flexDirection="column" justifyContent="left">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Company:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.companyCode} - {item.companyName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Department:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.departmentCode} - {item.departmentName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Location:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.locationCode} - {item.locationName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Account Title:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.accountCode} - {item.accountTitles}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Employee:
+                              </Text>
+                              {item.empId && item.fullName ? (
+                                <Text color="gray.700" fontWeight="bold">
+                                  {item.empId} -{item.fullName}
+                                </Text>
+                              ) : (
+                                <Text>-</Text>
+                              )}
+                            </HStack>
+                          </Flex>
+                        </Flex>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </PageScroll>
+          </Flex>
+        </ModalBody>
+        <ModalFooter>
+          <ButtonGroup size="sm">
+            <Button colorScheme="gray" onClick={onClose}>
+              Close
+            </Button>
+          </ButtonGroup>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };

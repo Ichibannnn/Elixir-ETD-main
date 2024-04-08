@@ -56,10 +56,15 @@ export const AddConfirmation = ({
   setRemarks,
   remarksRef,
   fetchRawMats,
+  employeeFormData,
+  employeeData,
+  setEmployeeData,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
+
+  console.log("Employee FormData: ", employeeFormData);
 
   const submitHandler = () => {
     setIsLoading(true);
@@ -74,7 +79,12 @@ export const AddConfirmation = ({
         details: details,
         transactionDate: transactionDate,
         preparedBy: currentUser.fullName,
+
+        // EMPLOYEE DATA
+        empId: employeeFormData?.empId?.value?.full_id_number,
+        fullName: employeeFormData?.empId?.value?.full_name,
       };
+      setEmployeeData((current) => [...current, addSubmit]);
       const res = request
         .post(`Borrowed/AddNewBorrowedIssueDetails`, addSubmit)
         .then((res) => {
@@ -100,9 +110,6 @@ export const AddConfirmation = ({
         });
     } catch (error) {}
   };
-
-  // console.log(rawMatsInfo)
-  // console.log(customerData)
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
@@ -281,6 +288,8 @@ export const SaveConfirmation = ({
   setTransactionDate,
   transactionDate,
   fetchRawMats,
+  employeeData,
+  setEmployeeData,
 }) => {
   const toast = useToast();
 
@@ -384,8 +393,10 @@ export const SaveConfirmation = ({
     },
   });
 
-  const saveSubmitHandler = (data) => {
-    console.log(data);
+  const saveSubmitHandler = () => {
+    console.log("Employee Data: ", employeeData[0]?.empId);
+    console.log("Fullname Data: ", employeeData[0]?.fullName);
+
     if (totalQuantity > 0) {
       setIsLoading(true);
       try {
@@ -398,30 +409,8 @@ export const SaveConfirmation = ({
             remarks: remarks,
             details: details,
             transactionDate: transactionDate,
-            // companyCode: company?.find(
-            //   (x) => x.id === data.formData.companyId
-            // )?.code,
-            // companyName: company?.find(
-            //   (x) => x.id === data.formData.companyId
-            // )?.name,
-            // departmentCode: department?.find(
-            //   (x) => x.id === data.formData.departmentId
-            // )?.code,
-            // departmentName: department?.find(
-            //   (x) => x.id === data.formData.departmentId
-            // )?.name,
-            // locationCode: location?.find(
-            //   (x) => x.id === data.formData.locationId
-            // )?.code,
-            // locationName: location?.find(
-            //   (x) => x.id === data.formData.locationId
-            // )?.name,
-            // accountCode: account?.find(
-            //   (x) => x.id === data.formData.accountId
-            // )?.code,
-            // accountTitles: account?.find(
-            //   (x) => x.id === data.formData.accountId
-            // )?.name,
+            empId: employeeData[0]?.empId,
+            fullName: employeeData[0]?.fullName,
             addedBy: currentUser.fullName,
           })
           .then((res) => {
@@ -436,6 +425,8 @@ export const SaveConfirmation = ({
                   id: item.id,
                   customerCode: customerData.customerCode,
                   customerName: customerData.customerName,
+                  empId: employeeData.empId,
+                  fullName: employeeData.fullName,
                   //   isTransact: true
                 };
               });
@@ -452,7 +443,7 @@ export const SaveConfirmation = ({
                     );
                     onClose();
                     fetchRawMats();
-
+                    setEmployeeData([]);
                     setTotalQuantity("");
                     setTransactionDate("");
                     setDetails("");
@@ -483,127 +474,6 @@ export const SaveConfirmation = ({
       } catch (error) {}
       setIsLoading(false);
     }
-
-    // SWEET ALERT CONFIRMATION
-    // Swal.fire({
-    //   title: "Confirmation!",
-    //   text: "Are you sure you want to save this information?",
-    //   icon: "info",
-    //   color: "black",
-    //   background: "white",
-    //   showCancelButton: true,
-    //   confirmButtonColor: "#3085d6",
-    //   cancelButtonColor: "#CBD1D8",
-    //   confirmButtonText: "Yes",
-    //   heightAuto: false,
-    //   width: "40em",
-    //   customClass: {
-    //     container: "my-swal",
-    //   },
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     if (totalQuantity > 0) {
-    //       setIsLoading(true);
-    //       try {
-    //         const res = request
-    //           .post(`Borrowed/AddNewBorrowedIssues`, {
-    //             customerCode: customerData.customerCode,
-    //             customerName: customerData.customerName,
-    //             totalQuantity: totalQuantity,
-    //             preparedBy: currentUser.fullName,
-    //             remarks: remarks,
-    //             details: details,
-    //             transactionDate: transactionDate,
-    //             // companyCode: company?.find(
-    //             //   (x) => x.id === data.formData.companyId
-    //             // )?.code,
-    //             // companyName: company?.find(
-    //             //   (x) => x.id === data.formData.companyId
-    //             // )?.name,
-    //             // departmentCode: department?.find(
-    //             //   (x) => x.id === data.formData.departmentId
-    //             // )?.code,
-    //             // departmentName: department?.find(
-    //             //   (x) => x.id === data.formData.departmentId
-    //             // )?.name,
-    //             // locationCode: location?.find(
-    //             //   (x) => x.id === data.formData.locationId
-    //             // )?.code,
-    //             // locationName: location?.find(
-    //             //   (x) => x.id === data.formData.locationId
-    //             // )?.name,
-    //             // accountCode: account?.find(
-    //             //   (x) => x.id === data.formData.accountId
-    //             // )?.code,
-    //             // accountTitles: account?.find(
-    //             //   (x) => x.id === data.formData.accountId
-    //             // )?.name,
-    //             addedBy: currentUser.fullName,
-    //           })
-    //           .then((res) => {
-    //             const borrowedPKey = res.data.id;
-
-    //             //SECOND Update IF MAY ID
-    //             if (borrowedPKey) {
-    //               // console.log(borrowedPKey)
-    //               const arrayofId = borrowedData?.map((item) => {
-    //                 return {
-    //                   borrowedPKey: borrowedPKey,
-    //                   id: item.id,
-    //                   customerCode: customerData.customerCode,
-    //                   customerName: customerData.customerName,
-    //                   //   isTransact: true
-    //                 };
-    //               });
-    //               try {
-    //                 const res = request
-    //                   .put(`Borrowed/UpdateBorrowedIssuePKey`, arrayofId)
-    //                   .then((res) => {
-    //                     fetchActiveBorrowed();
-    //                     ToastComponent(
-    //                       "Success",
-    //                       "Information saved",
-    //                       "success",
-    //                       toast
-    //                     );
-    //                     onClose();
-    //                     setTotalQuantity("");
-    //                     customerRef.current.value = "";
-    //                     remarksRef.current.value = "";
-    //                     setTransactionDate("");
-    //                     setDetails("");
-    //                     setCustomerData({
-    //                       customerName: "",
-    //                     });
-    //                     setRawMatsInfo({
-    //                       itemCode: "",
-    //                       itemDescription: "",
-    //                       supplier: "",
-    //                       uom: "",
-    //                       quantity: "",
-    //                     });
-    //                     setIsLoading(false);
-    //                     setHideButton(false);
-    //                   });
-    //               } catch (error) {
-    //                 console.log(error);
-    //               }
-    //             }
-    //           })
-    //           .catch((err) => {
-    //             ToastComponent(
-    //               "Error",
-    //               "Information was not saved",
-    //               "error",
-    //               toast
-    //             );
-    //             setIsLoading(false);
-    //           });
-    //       } catch (error) {}
-    //       setIsLoading(false);
-    //     }
-    //   }
-    // });
   };
 
   const closeHandler = () => {
