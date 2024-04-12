@@ -85,14 +85,6 @@ export const ViewModal = ({
             <VStack alignItems="start" spacing={1} mt={4}>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
-                  Transaction ID:
-                </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
-              </HStack>
-              <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
                   Customer:
                 </Text>
                 <Text fontSize="xs">
@@ -132,6 +124,39 @@ export const ViewModal = ({
                   {moment(borrowedDetailsData[0]?.returnedDate).format(
                     "MM/DD/yyyy"
                   )}
+                </Text>
+              </HStack>
+            </VStack>
+
+            <VStack alignItems="start" spacing={1} mt={4}>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Transaction ID:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.borrowedPKey}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee Id:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.empId
+                    ? borrowedDetailsData[0]?.empId
+                    : "-"}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee Name:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.fullName
+                    ? borrowedDetailsData[0]?.fullName
+                    : "-"}
                 </Text>
               </HStack>
             </VStack>
@@ -305,7 +330,6 @@ export const PrintModal = ({
 
           <Flex justifyContent="space-between">
             <VStack alignItems="start" spacing={1} mt={4}>
-              <HStack></HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
@@ -314,28 +338,19 @@ export const PrintModal = ({
                   {borrowedDetailsData[0]?.customerCode}
                 </Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer Name:
                 </Text>
                 <Text fontSize="xs">{borrowedDetailsData[0]?.customer}</Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Details:
                 </Text>
                 <Text fontSize="xs">{borrowedDetailsData[0]?.details}</Text>
-              </HStack>
-            </VStack>
-
-            <VStack alignItems="start" spacing={1} mt={4}>
-              <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
-                  Transaction ID:
-                </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
               </HStack>
 
               <HStack>
@@ -359,6 +374,39 @@ export const PrintModal = ({
                   {moment(borrowedDetailsData[0]?.preparedDate).format(
                     "MM/DD/yyyy"
                   )}
+                </Text>
+              </HStack>
+            </VStack>
+
+            <VStack alignItems="start" spacing={1} mt={4}>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Transaction ID:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.borrowedPKey}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee ID:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.empId
+                    ? borrowedDetailsData[0]?.empId
+                    : "-"}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee Name:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.fullName
+                    ? borrowedDetailsData[0]?.fullName
+                    : "-"}
                 </Text>
               </HStack>
             </VStack>
@@ -509,6 +557,9 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
                       Item Information
                     </Th>
                     <Th h="40px" color="white" fontSize="10px">
+                      Service Report #
+                    </Th>
+                    <Th h="40px" color="white" fontSize="10px">
                       Charging of Accounts
                     </Th>
                   </Tr>
@@ -516,6 +567,7 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
                 <Tbody>
                   {coaList?.map((item, i) => (
                     <Tr key={i}>
+                      {/* Item Information */}
                       <Td>
                         <Flex flexDirection="column" gap="10px">
                           <Flex flexDirection="column" justifyContent="left">
@@ -551,6 +603,21 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
                           </Flex>
                         </Flex>
                       </Td>
+
+                      {/* Service Report # */}
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <Flex flexDirection="column" justifyContent="center">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.reportNumber}
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Flex>
+                      </Td>
+
+                      {/* Charging of Accounts */}
                       <Td>
                         <Flex flexDirection="column" gap="10px">
                           <Flex flexDirection="column" justifyContent="left">

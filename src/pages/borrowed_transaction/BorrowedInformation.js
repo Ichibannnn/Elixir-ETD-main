@@ -126,6 +126,18 @@ export const BorrowedInformation = ({
     return () => {};
   }, [idNumber]);
 
+  useEffect(() => {
+    if (details === "") {
+      reset();
+    }
+  }, [details]);
+
+  const handlerSample = () => {
+    reset();
+  };
+
+  console.log("Employee Data: ", employeeData);
+
   const detailHandler = (data) => {
     if (data) {
       setDetails(data);
@@ -204,13 +216,13 @@ export const BorrowedInformation = ({
           </Text>
         </Flex>
       </Box>
+
       <VStack w="full" spacing={6}>
         <Text
           bgColor="secondary"
           w="full"
           color="white"
           textAlign="center"
-          // fontWeight="semibold"
           fontSize="sm"
           p={2}
         >
@@ -394,7 +406,7 @@ export const BorrowedInformation = ({
                 py={2.5}
                 fontSize="xs"
               >
-                Fullname:{" "}
+                Employee Name:{" "}
               </Text>
               <Box w="full">
                 <Input

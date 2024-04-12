@@ -95,17 +95,31 @@ export const ViewModal = ({
                   {borrowedDetailsData[0]?.customerCode}
                 </Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer Name:
                 </Text>
                 <Text fontSize="xs">{borrowedDetailsData[0]?.customer}</Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Details:
                 </Text>
                 <Text fontSize="xs">{borrowedDetailsData[0]?.details}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Borrowed Date:
+                </Text>
+                <Text fontSize="xs">
+                  {" "}
+                  {moment(borrowedDetailsData[0]?.transactionDate).format(
+                    "MM/DD/yyyy"
+                  )}
+                </Text>
               </HStack>
             </VStack>
 
@@ -121,13 +135,23 @@ export const ViewModal = ({
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
-                  Borrowed Date:
+                  Employee ID:
                 </Text>
                 <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.transactionDate).format(
-                    "MM/DD/yyyy"
-                  )}
+                  {borrowedDetailsData[0]?.empId
+                    ? borrowedDetailsData[0]?.empId
+                    : "-"}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee Name:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.fullName
+                    ? borrowedDetailsData[0]?.fullName
+                    : "-"}
                 </Text>
               </HStack>
             </VStack>

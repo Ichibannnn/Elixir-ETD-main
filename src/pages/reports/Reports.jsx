@@ -57,8 +57,6 @@ const Reports = () => {
     // console.log(worksheet);
   };
 
-  const minimumDateForInventoryMovement = "2022-01-01";
-
   // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);

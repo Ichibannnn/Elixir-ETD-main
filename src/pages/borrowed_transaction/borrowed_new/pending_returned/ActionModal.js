@@ -61,8 +61,6 @@ export const ViewModal = ({
 
   const { isOpen: isCoa, onOpen: openCoa, onClose: closeCoa } = useDisclosure();
 
-  const toast = useToast();
-
   const id = statusBody.id;
   const fetchBorrowedDetailsApi = async (id) => {
     const res = await request.get(
@@ -151,15 +149,6 @@ export const ViewModal = ({
             <VStack alignItems="start" spacing={1} mt={4}>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
-                  Transaction ID:
-                </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
-              </HStack>
-
-              <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
                   Borrowed Date:
                 </Text>
                 <Text fontSize="xs">
@@ -192,7 +181,38 @@ export const ViewModal = ({
               </HStack>
             </VStack>
 
-            <VStack alignItems="start" spacing={-1}></VStack>
+            <VStack alignItems="start" spacing={-1} mt={4}>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Transaction ID:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.borrowedPKey}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee ID:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.empId
+                    ? borrowedDetailsData[0]?.empId
+                    : "-"}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee Name:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.fullName
+                    ? borrowedDetailsData[0]?.fullName
+                    : "-"}
+                </Text>
+              </HStack>
+            </VStack>
           </Flex>
 
           <VStack justifyContent="center" mt={4}>
@@ -618,7 +638,7 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
         <ModalHeader bg="primary">
           <Flex justifyContent="left">
             <Text fontSize="xs" color="white">
-              List of Consumed Materials
+              List of Consumed Materialsss
             </Text>
           </Flex>
         </ModalHeader>
@@ -633,6 +653,9 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
                       Item Information
                     </Th>
                     <Th h="40px" color="white" fontSize="10px">
+                      Service Report #
+                    </Th>
+                    <Th h="40px" color="white" fontSize="10px">
                       Charging of Accounts
                     </Th>
                   </Tr>
@@ -640,6 +663,7 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
                 <Tbody>
                   {coaList?.map((item, i) => (
                     <Tr key={i}>
+                      {/* Item Information */}
                       <Td>
                         <Flex flexDirection="column" gap="10px">
                           <Flex flexDirection="column" justifyContent="left">
@@ -675,6 +699,21 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
                           </Flex>
                         </Flex>
                       </Td>
+
+                      {/* Service Report # */}
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <Flex flexDirection="column" justifyContent="center">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.reportNumber}
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Flex>
+                      </Td>
+
+                      {/* Charging of Accounts */}
                       <Td>
                         <Flex flexDirection="column" gap="10px">
                           <Flex flexDirection="column" justifyContent="left">
@@ -736,13 +775,8 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
             </PageScroll>
           </Flex>
         </ModalBody>
-        <ModalFooter>
-          <ButtonGroup size="sm">
-            <Button colorScheme="gray" onClick={onClose}>
-              Close
-            </Button>
-          </ButtonGroup>
-        </ModalFooter>
+
+        <ModalFooter></ModalFooter>
       </ModalContent>
     </Modal>
   );

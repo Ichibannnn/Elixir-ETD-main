@@ -220,14 +220,22 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee ID:
                 </Text>
-                <Text fontSize="xs">{borrowedDetailsData[0]?.empId}</Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.empId
+                    ? borrowedDetailsData[0]?.empId
+                    : "-"}
+                </Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
-                  Fullname:
+                  Employee Name:
                 </Text>
-                <Text fontSize="xs">{borrowedDetailsData[0]?.fullName}</Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.fullName
+                    ? borrowedDetailsData[0]?.fullName
+                    : "-"}
+                </Text>
               </HStack>
             </VStack>
           </Flex>

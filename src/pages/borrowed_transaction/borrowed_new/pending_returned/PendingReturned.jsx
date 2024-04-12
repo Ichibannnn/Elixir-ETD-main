@@ -219,12 +219,6 @@ const PendingReturned = ({ fetchNotificationWithParams }) => {
                 <Th h="40px" color="white" fontSize="10px">
                   Returned Date
                 </Th>
-                {/* <Th h="40px" color="white" fontSize="10px">
-                  Transacted By
-                </Th> */}
-                {/* <Th h="40px" color="white" fontSize="10px">
-                  Status
-                </Th> */}
                 <Th h="40px" color="white" fontSize="10px" textAlign="center">
                   Action
                 </Th>
@@ -260,8 +254,6 @@ const PendingReturned = ({ fetchNotificationWithParams }) => {
                   <Td fontSize="xs">
                     {moment(borrow.returnedDate).format("MM/DD/yyyy")}
                   </Td>
-                  {/* <Td fontSize="xs">{borrow.preparedBy}</Td> */}
-                  {/* <Td fontSize="xs">{borrow.statusApprove}</Td> */}
                   <Td fontSize="xs">
                     <Flex justifyContent="center">
                       <Box>

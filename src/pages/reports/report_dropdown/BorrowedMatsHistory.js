@@ -39,10 +39,10 @@ export const BorrowedMatsHistory = ({
   const [buttonChanger, setButtonChanger] = useState(true);
 
   const fetchBorrowedHistoryApi = async (dateFrom, dateTo, search) => {
-    const dayaDate = new Date();
-    const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
+    const dayaDate = moment(dateTo).add(1, "day").format("yyyy-MM-DD");
+
     const res = await request.get(
-      `Reports/BorrowedTransactionReports?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`,
+      `Reports/BorrowedTransactionReports?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dayaDate}`,
       {
         params: {
           search: search,
@@ -63,21 +63,20 @@ export const BorrowedMatsHistory = ({
             "Customer Code": item.customerCode,
             "Customer Name": item.customerName,
             "Item Code": item.itemCode,
-            "Item Description": item.itemDescrption,
+            "Item Description": item.itemDescription,
             UOM: item.uom,
-            "Borrowed Qty": item.borrowedQuantity,
-            "Borrowed Date": item.borrowedDate,
-            Consumed: item.consumed,
-            "Returned Qty": item.returnedQuantity,
-            "Returned Date": item.returnedDate,
-            "Company Code": item.companyCode,
-            "Company Name": item.companyName,
-            "Department Code": item.departmentCode,
-            "Department Name": item.departmentName,
-            "Location Code": item.locationCode,
-            "Location Name": item.locationName,
-            "Account Title": item.accountTitles,
-            Status: item.statusApprove,
+            "Aging Days": item.agingDays.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }),
+            "Borrowed Qty": item.borrowedQuantity.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }),
+            "Borrowed Date": moment(item.borrowedDate).format("MM-DD-YYYY"),
+            "Employee Id": item.empId,
+            "Employee Name": item.fullName,
+            Status: item.status,
             "Transaction By": item.transactedBy,
           };
         })
@@ -110,31 +109,32 @@ export const BorrowedMatsHistory = ({
                   Borrowed ID
                 </Th>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Customer Code
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Customer Name
+                  Customer Information
                 </Th>
                 {buttonChanger ? (
                   <>
                     <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Item Code
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Item Description
+                      Item Information
                     </Th>
                     <Th color="white" fontSize="10px" fontWeight="semibold">
                       UOM
                     </Th>
-                  </>
-                ) : (
-                  <>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Aging Days
+                    </Th>
                     <Th color="white" fontSize="10px" fontWeight="semibold">
                       Borrowed Qty
                     </Th>
                     <Th color="white" fontSize="10px" fontWeight="semibold">
                       Borrowed Date
                     </Th>
+                  </>
+                ) : (
+                  <>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Employee Information
+                    </Th>
+
                     <Th color="white" fontSize="10px" fontWeight="semibold">
                       Status
                     </Th>
@@ -149,29 +149,123 @@ export const BorrowedMatsHistory = ({
               {borrowedData?.inventory?.map((item, i) => (
                 <Tr key={i}>
                   <Td fontSize="xs">{item.borrowedId}</Td>
-                  <Td fontSize="xs">{item.customerCode}</Td>
-                  <Td fontSize="xs">{item.customerName}</Td>
+
+                  {/* Customer Information */}
+                  <Td>
+                    <Flex flexDirection="column" gap="10px">
+                      <Flex flexDirection="column" justifyContent="left">
+                        <HStack fontSize="sm" spacing="5px">
+                          <Text color="gray.700" fontWeight="bold">
+                            {item.customerName}
+                          </Text>
+                        </HStack>
+
+                        <HStack fontSize="xs" spacing="5px">
+                          <Text color="gray.700">{item.customerCode}</Text>
+                        </HStack>
+                      </Flex>
+                    </Flex>
+                  </Td>
                   {buttonChanger ? (
                     <>
-                      <Td fontSize="xs">{item.itemCode}</Td>
-                      <Td fontSize="xs">{item.itemDescription}</Td>
-                      <Td fontSize="xs">{item.uom}</Td>
+                      {/* Item Information  */}
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <Flex flexDirection="column" justifyContent="left">
+                            <HStack fontSize="sm" spacing="5px">
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.itemDescription}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700">{item.itemCode}</Text>
+                            </HStack>
+                          </Flex>
+                        </Flex>
+                      </Td>
+
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <HStack fontSize="xs" spacing="5px">
+                            <Text color="gray.700" fontWeight="semibold">
+                              {item.uom}
+                            </Text>
+                          </HStack>
+                        </Flex>
+                      </Td>
+
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <HStack fontSize="xs" spacing="5px">
+                            <Text color="gray.700" fontWeight="semibold">
+                              {item.agingDays.toLocaleString(undefined, {
+                                maximumFractionDigits: 2,
+                                minimumFractionDigits: 2,
+                              })}
+                            </Text>
+                          </HStack>
+                        </Flex>
+                      </Td>
+
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <HStack fontSize="xs" spacing="5px">
+                            <Text color="gray.700" fontWeight="semibold">
+                              {item.borrowedQuantity.toLocaleString(undefined, {
+                                maximumFractionDigits: 2,
+                                minimumFractionDigits: 2,
+                              })}
+                            </Text>
+                          </HStack>
+                        </Flex>
+                      </Td>
+
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <HStack fontSize="xs" spacing="5px">
+                            <Text color="gray.700">
+                              {item.borrowedDate !== null
+                                ? moment(item.borrowedDate).format("MM/DD/yyyy")
+                                : "Pending Borrowed"}
+                            </Text>
+                          </HStack>
+                        </Flex>
+                      </Td>
                     </>
                   ) : (
                     <>
-                      <Td fontSize="xs">
-                        {item.borrowedQuantity.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <Flex flexDirection="column" justifyContent="left">
+                            <HStack fontSize="sm" spacing="5px">
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.fullName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700">{item.empId}</Text>
+                            </HStack>
+                          </Flex>
+                        </Flex>
                       </Td>
-                      <Td fontSize="xs">
-                        {item.borrowedDate !== null
-                          ? moment(item.borrowedDate).format("MM/DD/yyyy")
-                          : "Pending Borrowed"}
+
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <HStack fontSize="xs" spacing="5px">
+                            <Text color="gray.700">{item.status}</Text>
+                          </HStack>
+                        </Flex>
                       </Td>
-                      <Td fontSize="xs">{item.status}</Td>
-                      <Td fontSize="xs">{item.transactedBy}</Td>
+
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <HStack fontSize="xs" spacing="5px">
+                            <Text color="gray.700">{item.transactedBy}</Text>
+                          </HStack>
+                        </Flex>
+                      </Td>
                     </>
                   )}
                 </Tr>

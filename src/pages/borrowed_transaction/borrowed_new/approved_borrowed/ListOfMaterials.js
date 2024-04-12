@@ -45,6 +45,7 @@ export const ListOfMaterials = ({
   setBorrowedId,
   fetchMaterialsList,
   fetchNotificationWithParams,
+  isLoading,
   setIsLoading,
   setButtonChanger,
   setReturnQuantity,
@@ -105,6 +106,7 @@ export const ListOfMaterials = ({
       setConsumedHandler("");
     }
   };
+
   const submitConsumeHandler = (data) => {
     console.log(data);
     Swal.fire({
@@ -301,7 +303,7 @@ export const ListOfMaterials = ({
         </Text>
       </Flex>
       <Flex justifyContent="left" w="full" mb={1} p={2}>
-        <Flex>
+        <Flex w="full" justifyContent="space-between">
           <VStack alignItems="start" spacing={1}>
             <HStack>
               <Text fontSize="sm" fontWeight="semibold">
@@ -309,24 +311,47 @@ export const ListOfMaterials = ({
               </Text>
               <Text fontSize="sm">{materialList[0]?.borrowedPKey}</Text>
             </HStack>
+
             <HStack>
               <Text fontSize="sm" fontWeight="semibold">
                 Customer:{" "}
               </Text>
               <Text fontSize="sm">{materialList[0]?.customerCode}</Text>
             </HStack>
+
             <HStack>
               <Text fontSize="sm" fontWeight="semibold">
                 Customer Name:{" "}
               </Text>
               <Text fontSize="sm">{materialList[0]?.customerName}</Text>
             </HStack>
+
             <HStack>
               <Text fontSize="sm" fontWeight="semibold">
                 Borrowed Date:{" "}
               </Text>
               <Text fontSize="sm">
                 {moment(materialList[0]?.borrowedDate).format("MM/DD/yyyy")}
+              </Text>
+            </HStack>
+          </VStack>
+
+          <VStack alignItems="start" spacing={1}>
+            <HStack>
+              <Text fontSize="sm" fontWeight="semibold">
+                Employee ID:{" "}
+              </Text>
+              <Text fontSize="sm">
+                {materialList[0]?.empId ? materialList[0]?.empId : "-"}
+              </Text>
+            </HStack>
+
+            <HStack>
+              <Text fontSize="sm" fontWeight="semibold">
+                Employee Name
+              </Text>
+              <Text fontSize="sm">
+                {materialList[0]?.fullName ? materialList[0]?.fullName : "-"}
               </Text>
             </HStack>
           </VStack>
@@ -460,6 +485,7 @@ export const ListOfMaterials = ({
         <ButtonGroup>
           <Button
             colorScheme="blue"
+            isLoading={isLoading}
             size="sm"
             fontSize="xs"
             width="100px"

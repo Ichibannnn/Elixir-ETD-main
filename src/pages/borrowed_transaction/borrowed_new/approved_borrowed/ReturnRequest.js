@@ -54,6 +54,7 @@ export const ReturnRequest = ({
   consumedHandler,
   setIsLoading,
   fetchMaterialsList,
+  serviceReportNo,
 }) => {
   const [returnRequest, setReturnRequest] = useState([]);
   const [editData, setEditData] = useState([]);
@@ -181,6 +182,9 @@ export const ReturnRequest = ({
                       Item Information
                     </Th>
                     <Th h="40px" color="white" fontSize="10px">
+                      Service Report #
+                    </Th>
+                    <Th h="40px" color="white" fontSize="10px">
                       Charging of Accounts
                     </Th>
                     <Th h="20px" color="white" fontSize="10px">
@@ -194,6 +198,8 @@ export const ReturnRequest = ({
                       <Td fontSize="xs" color="gray.700" fontWeight="semibold">
                         {item.id}
                       </Td>
+
+                      {/* ITEM INFORMATION */}
                       <Td>
                         <Flex flexDirection="column" gap="10px">
                           <Flex flexDirection="column" justifyContent="left">
@@ -232,6 +238,21 @@ export const ReturnRequest = ({
                           </Flex>
                         </Flex>
                       </Td>
+
+                      {/* Service Report # */}
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <Flex flexDirection="column" justifyContent="center">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.reportNumber}
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Flex>
+                      </Td>
+
+                      {/* Charging of Accounts */}
                       <Td>
                         <Flex flexDirection="column" gap="10px">
                           <Flex flexDirection="column" justifyContent="left">

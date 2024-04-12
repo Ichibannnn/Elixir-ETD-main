@@ -110,17 +110,31 @@ export const ViewModal = ({ isOpen, onCloseView, statusBody }) => {
                   {borrowedDetailsData[0]?.customerCode}
                 </Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer Name:
                 </Text>
                 <Text fontSize="xs">{borrowedDetailsData[0]?.customer}</Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Details:
                 </Text>
-                <Text fontSize="xs">{borrowedDetailsData[0]?.remarks}</Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.details}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Borrowed Date:
+                </Text>
+                <Text fontSize="xs">
+                  {" "}
+                  {moment(borrowedDetailsData[0]?.preparedDate).format(
+                    "MM/DD/yyyy"
+                  )}
+                </Text>
               </HStack>
             </VStack>
 
@@ -136,14 +150,16 @@ export const ViewModal = ({ isOpen, onCloseView, statusBody }) => {
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
-                  Transaction Date:
+                  Employee Id:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.preparedDate).format(
-                    "MM/DD/yyyy"
-                  )}
+                <Text fontSize="xs">{borrowedDetailsData[0]?.empId}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee Name:
                 </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.fullName}</Text>
               </HStack>
             </VStack>
           </Flex>
@@ -240,8 +256,6 @@ export const ConsumeModal = ({
   setIsConsumeModalOpen,
   isLoading,
   setIsLoading,
-  highlighterId,
-  materialList,
   setMaterialList,
   fetchMaterialsList,
   fetchReturnRequest,
@@ -253,6 +267,8 @@ export const ConsumeModal = ({
   setBorrowedId,
   consumedQuantity,
   setConsumedQuantity,
+  serviceReportNo,
+  setServiceReportNo,
   itemCode,
   setItemCode,
   itemDescription,
@@ -267,6 +283,10 @@ export const ConsumeModal = ({
       consume: yup
         .number()
         .required("Consume quantity is required")
+        .typeError("Must be a number"),
+      serviceReportNo: yup
+        .number()
+        .required("Service report number is required")
         .typeError("Must be a number"),
       companyId: yup.object().required().typeError("Company Name is required"),
       departmentId: yup
@@ -400,6 +420,7 @@ export const ConsumeModal = ({
         locationId: "",
         accountId: "",
         consume: "",
+        serviceReportNo: "",
         empId: "",
         fullName: "",
         addedBy: currentUser.userName,
@@ -440,7 +461,7 @@ export const ConsumeModal = ({
 
   // console.log(isValid);
   // console.log(isLoading);
-  // console.log(consumedQuantity);
+  console.log("Service Report No:", serviceReportNo);
   // console.log(returnQuantity);
   // console.log(watch("formData"));
 
@@ -459,7 +480,6 @@ export const ConsumeModal = ({
       width: "40em",
       customClass: {
         container: "my-swal",
-        // content: "my-swal-text",
       },
     }).then((result) => {
       if (result.isConfirmed) {
@@ -474,6 +494,7 @@ export const ConsumeModal = ({
               itemDescription: itemDescription,
               uom: uom,
               consume: consumedQuantity,
+              reportNumber: serviceReportNo,
               companyCode: data.formData.companyId.value.code,
               companyName: data.formData.companyId.value.name,
               departmentCode: data.formData.departmentId.value.code,
@@ -497,6 +518,7 @@ export const ConsumeModal = ({
               );
               setIsLoading(false);
               setConsumedQuantity("");
+              setServiceReportNo("");
               fetchBorrowed();
               setIsConsumeModalOpen(false);
               fetchMaterialsList();
@@ -525,9 +547,14 @@ export const ConsumeModal = ({
     }
   };
 
+  const serviceReportHandler = (data) => {
+    setServiceReportNo(data);
+  };
+
   const clearConsumedQty = () => {
     setIsConsumeModalOpen(false);
     setConsumedQuantity("");
+    setServiceReportNo("");
   };
 
   return (
@@ -535,7 +562,7 @@ export const ConsumeModal = ({
       isOpen={isConsumeModalOpen}
       onClose={() => setIsConsumeModalOpen(false)}
       isCentered
-      size="3xl"
+      size="5xl"
       closeOnOverlayClick={false}
       closeOnEsc={false}
     >
@@ -555,9 +582,22 @@ export const ConsumeModal = ({
                 w="50%"
                 h="full"
               >
-                <Text fontWeight="semibold">Input Consume Quantity</Text>
+                <HStack gap={1}>
+                  <Text fontWeight="semibold">Input Consume Quantity</Text>
+                  <Badge
+                    colorScheme="green"
+                    variant="solid"
+                    className="inputConsume"
+                  >
+                    <Text>{`Available consume: ${returnQuantity}`}</Text>
+                  </Badge>
+                </HStack>
+
                 <Box>
-                  <Text fontSize="xs">Consume Quantity</Text>
+                  <Text fontSize="xs" fontWeight="semibold">
+                    Consume Quantity
+                  </Text>
+
                   {/* <NumericFormat
                     {...register("formData.consume")}
                     customInput={Input}
@@ -586,6 +626,28 @@ export const ConsumeModal = ({
                   />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.consume?.message}
+                  </Text>
+                </Box>
+
+                <Box>
+                  <Text fontSize="xs" fontWeight="semibold">
+                    Service Report #
+                  </Text>
+                  <Input
+                    {...register("formData.serviceReportNo")}
+                    fontSize="xs"
+                    onChange={(e) => serviceReportHandler(e.target.value)}
+                    type="number"
+                    onWheel={(e) => e.target.blur()}
+                    onKeyDown={(e) =>
+                      ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
+                    onPaste={(e) => e.preventDefault()}
+                    autoComplete="off"
+                    min="1"
+                  />
+                  <Text color="red" fontSize="xs">
+                    {errors.formData?.serviceReportNo?.message}
                   </Text>
                 </Box>
               </Stack>
@@ -835,6 +897,12 @@ export const ConsumeModal = ({
                 )}
               </Stack>
             </HStack>
+            <HStack>
+              {/* <Text
+                fontSize="xs"
+                fontWeight="semibold"
+              >{`Remaining Return Qty: ${returnQuantity}`}</Text> */}
+            </HStack>
           </ModalBody>
           <ModalFooter gap={2}>
             <Button
@@ -859,6 +927,7 @@ export const ConsumeModal = ({
                 !watch("formData.locationId") ||
                 !watch("formData.accountId") ||
                 !watch("formData.consume") ||
+                !watch("formData.serviceReportNo") ||
                 // !watch("formData.empId")
                 // !watch("formData.fullName")
                 // !consumedQuantity ||
@@ -886,6 +955,7 @@ export const EditQuantityModal = (props) => {
     borrowedId,
     materialListId,
     availableConsume,
+    serviceReportNo,
   } = props;
 
   const schema = yup.object().shape({
@@ -958,7 +1028,6 @@ export const EditQuantityModal = (props) => {
         }
       );
       setCompany(res.data.result.companies);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
@@ -975,7 +1044,6 @@ export const EditQuantityModal = (props) => {
         }
       );
       setDepartment(res.data.result.departments);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
@@ -992,7 +1060,6 @@ export const EditQuantityModal = (props) => {
         }
       );
       setLocation(res.data.result.locations);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
@@ -1008,7 +1075,6 @@ export const EditQuantityModal = (props) => {
         }
       );
       setAccount(res.data.result.account_titles);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
@@ -1055,7 +1121,6 @@ export const EditQuantityModal = (props) => {
     }
     setSelectedAccount(selectAccountTitle?.name);
   };
-  // console.log(selectedAccount);
 
   const [idNumber, setIdNumber] = useState();
   const [info, setInfo] = useState();
@@ -1075,23 +1140,6 @@ export const EditQuantityModal = (props) => {
     return () => {};
   }, [idNumber]);
 
-  // location
-  // useEffect(() => {
-  //   if (
-  //     location.length &&
-  //     // !watch("formData.companyId") &&
-  //     // !watch("formData.departmentId") &&
-  //     !watch("formData.locationId")
-  //   ) {
-  //     const consumedMaterial = returnRequest?.find(
-  //       (item) => item.id === editData.id
-  //     );
-  //     setValue(
-  //       "formData.locationId",
-  //       location?.find((x) => x.name === consumedMaterial?.locationName)?.id
-  //     );
-  //   }
-  // }, [isOpen, location]);
   useEffect(() => {
     const returnEdit = returnRequest?.find((item) => item.id === editData.id);
 
@@ -1107,22 +1155,6 @@ export const EditQuantityModal = (props) => {
     }
   }, [editData.id, location]);
 
-  // department
-  // useEffect(() => {
-  //   if (
-  //     department.length &&
-  //     // !watch("formData.companyId") &&
-  //     !watch("formData.departmentId")
-  //   ) {
-  //     const consumedMaterial = returnRequest?.find(
-  //       (item) => item.id === editData.id
-  //     );
-  //     setValue(
-  //       "formData.departmentId",
-  //       department?.find((x) => x.name === consumedMaterial?.departmentName)?.id
-  //     );
-  //   }
-  // }, [isOpen, department]);
   useEffect(() => {
     const returnEdit = returnRequest?.find((item) => item.id === editData.id);
 
@@ -1140,18 +1172,6 @@ export const EditQuantityModal = (props) => {
     }
   }, [editData.id, department]);
 
-  // company
-  // useEffect(() => {
-  //   if (company.length && !watch("formData.companyId")) {
-  //     const consumedMaterial = returnRequest?.find(
-  //       (item) => item.id === editData.id
-  //     );
-  //     setValue(
-  //       "formData.companyId",
-  //       company?.find((x) => x.name === consumedMaterial?.companyName)?.id
-  //     );
-  //   }
-  // }, [isOpen, company]);
   useEffect(() => {
     const returnEdit = returnRequest?.find((item) => item.id === editData.id);
 
@@ -1163,32 +1183,6 @@ export const EditQuantityModal = (props) => {
     }
   }, [editData.id, company]);
 
-  // account title
-  // useEffect(() => {
-  //   if (account.length && !watch("formData.accountTitleId")) {
-  //     const consumedMaterial = returnRequest?.find(
-  //       (item) => item.id === editData.id
-  //     );
-  //     setValue(
-  //       "formData.accountTitleId",
-  //       account?.find((x) => x.name === consumedMaterial?.accountTitles)?.id
-  //     );
-  //     triggerPointHandler({
-  //       target: {
-  //         value: account?.find(
-  //           (x) => x.name === consumedMaterial?.accountTitles
-  //         )?.id,
-  //       },
-  //     });
-  //   }
-
-  //   if (!watch("formData.empId")) {
-  //     setValue("formData.empId", editData.empId || "");
-  //   }
-  //   if (!watch("formData.fullName")) {
-  //     setValue("formData.fullName", editData.fullName || "");
-  //   }
-  // }, [isOpen, account]);
   useEffect(() => {
     if (account.length && !watch("formData.accountTitleId")) {
       const returnEdit = returnRequest?.find((item) => item.id === editData.id);
@@ -1199,8 +1193,6 @@ export const EditQuantityModal = (props) => {
       setSelectedAccount(returnEdit.accountTitles);
     }
   }, [editData.id, account]);
-
-  console.log("Edit Data: ", editData);
 
   // Employee id & Fullname && Consumed Quantity
   useEffect(() => {
@@ -1236,9 +1228,8 @@ export const EditQuantityModal = (props) => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        // console.log(submitArrayBody);
-        // console.log(borrowedId);
-        // console.log(materialListId);
+        console.log("Edit Data: ", editData);
+
         setIsLoading(true);
         try {
           const response = request
@@ -1257,6 +1248,7 @@ export const EditQuantityModal = (props) => {
               consume: data.formData.consumedQty,
               borrowedPkey: borrowedId,
               borrowedItemPkey: materialListId,
+              reportNumber: editData.reportNumber,
             })
             .then((response) => {
               sessionStorage.removeItem("Borrowed ID");
@@ -1267,7 +1259,6 @@ export const EditQuantityModal = (props) => {
                 "success",
                 toast
               );
-              // setEditData([]);
               fetchReturnRequest();
               fetchMaterialsList();
               setIsLoading(false);
@@ -1283,13 +1274,11 @@ export const EditQuantityModal = (props) => {
               setIsLoading(false);
             });
         } catch (error) {
-          console.log(error);
+          ToastComponent("Update Failed", error.response.data, "error", toast);
         }
       }
     });
   };
-
-  // console.log(availableConsume);
 
   return (
     <>

@@ -36,6 +36,7 @@ import moment from "moment";
 import { decodeUser } from "../../../../services/decode-user";
 import { ViewModal } from "./ActionModal";
 import { GrView } from "react-icons/gr";
+import { SlPrinter } from "react-icons/sl";
 
 const fetchBorrowedApi = async (pageNumber, pageSize, search, status) => {
   const res = await request.get(
@@ -195,7 +196,7 @@ export const ApprovedBorrowedApprover = () => {
                   Requested By
                 </Th>
                 <Th h="40px" color="white" fontSize="10px">
-                  View
+                  Print
                 </Th>
               </Tr>
             </Thead>
@@ -229,7 +230,7 @@ export const ApprovedBorrowedApprover = () => {
                       bg="none"
                       size="xs"
                     >
-                      <GrView fontSize="17px" />
+                      <SlPrinter fontSize="17px" />
                     </Button>
                   </Td>
                 </Tr>

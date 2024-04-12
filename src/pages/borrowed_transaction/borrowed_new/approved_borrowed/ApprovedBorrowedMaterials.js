@@ -76,6 +76,7 @@ export const ApprovedBorrowedMaterials = ({
   const [materialListId, setMaterialListId] = useState("");
   const [highlighterId, setHighlighterId] = useState("");
   const [consumedQuantity, setConsumedQuantity] = useState("");
+  const [serviceReportNo, setServiceReportNo] = useState("");
 
   const [pageTotal, setPageTotal] = useState(undefined);
   const [status, setStatus] = useState(true);
@@ -502,6 +503,8 @@ export const ApprovedBorrowedMaterials = ({
                 fetchBorrowed={fetchBorrowed}
                 consumedQuantity={consumedQuantity}
                 setConsumedQuantity={setConsumedQuantity}
+                serviceReportNo={serviceReportNo}
+                setServiceReportNo={setServiceReportNo}
                 itemCode={itemCode}
                 setItemCode={setItemCode}
                 itemDescription={itemDescription}

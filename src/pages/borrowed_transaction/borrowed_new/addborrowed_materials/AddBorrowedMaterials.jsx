@@ -57,6 +57,7 @@ const AddBorrowedMaterials = ({
     customerCode: currentUser?.deparment,
     customerName: currentUser?.fullName,
   });
+
   const [rawMatsInfo, setRawMatsInfo] = useState({
     itemCode: "",
     itemDescription: "",

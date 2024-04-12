@@ -394,8 +394,8 @@ export const SaveConfirmation = ({
   });
 
   const saveSubmitHandler = () => {
-    console.log("Employee Data: ", employeeData[0]?.empId);
-    console.log("Fullname Data: ", employeeData[0]?.fullName);
+    // console.log("Employee Data: ", employeeData[0]?.empId);
+    // console.log("Fullname Data: ", employeeData[0]?.fullName);
 
     if (totalQuantity > 0) {
       setIsLoading(true);
@@ -441,7 +441,7 @@ export const SaveConfirmation = ({
                       "success",
                       toast
                     );
-                    onClose();
+
                     fetchRawMats();
                     setEmployeeData([]);
                     setTotalQuantity("");
@@ -456,6 +456,7 @@ export const SaveConfirmation = ({
                     });
                     setIsLoading(false);
                     setHideButton(false);
+                    onClose();
                   });
               } catch (error) {
                 console.log(error);

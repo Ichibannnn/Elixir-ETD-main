@@ -776,10 +776,8 @@ export const RawMatsInfoModal = ({
         itemDescription: "",
         customerName: rawMatsInfo.customerName,
         uom: "",
-        // expirationDate: ''
         warehouseId: rawMatsInfo.warehouseId,
         quantity: rawMatsInfo.quantity,
-        // unitCost: rawMatsInfo.unitCost,
       });
     }
   };
@@ -815,8 +813,6 @@ export const RawMatsInfoModal = ({
       });
     }
   };
-
-  // console.log(barcodeNo);
 
   useEffect(() => {
     setAvailableStock("");
@@ -870,26 +866,6 @@ export const RawMatsInfoModal = ({
                   >
                     Item Code:{" "}
                   </Text>
-                  {/* {rawMats.length > 0 ? (
-                    <Select
-                      fontSize="sm"
-                      onChange={(e) => itemCodeHandler(e.target.value)}
-                      w="full"
-                      placeholder="Select Item Code"
-                      border="1px"
-                      borderColor="gray.400"
-                      borderRadius="none"
-                      // bgColor="#fff8dc"
-                    >
-                      {rawMats?.map((item, i) => (
-                        <option key={i} value={JSON.stringify(item)}>
-                          {item.itemCode}
-                        </option>
-                      ))}
-                    </Select>
-                  ) : (
-                    <Spinner />
-                  )} */}
                   <Controller
                     control={control}
                     name="formData.rawMats"

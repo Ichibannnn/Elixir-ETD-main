@@ -91,6 +91,7 @@ export const ViewModalApproval = ({ isOpen, onClose, statusBody }) => {
                   )}
                 </Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
@@ -99,12 +100,14 @@ export const ViewModalApproval = ({ isOpen, onClose, statusBody }) => {
                   {borrowedDetailsData[0]?.customerCode}
                 </Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer Name:
                 </Text>
                 <Text fontSize="xs">{borrowedDetailsData[0]?.customer}</Text>
               </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Details:
@@ -113,7 +116,29 @@ export const ViewModalApproval = ({ isOpen, onClose, statusBody }) => {
               </HStack>
             </VStack>
 
-            <VStack alignItems="start" spacing={-1}></VStack>
+            <VStack alignItems="start" spacing={-1} mt={4}>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee ID:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.empId
+                    ? borrowedDetailsData[0]?.empId
+                    : "-"}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee Name:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.fullName
+                    ? borrowedDetailsData[0]?.fullName
+                    : "-"}
+                </Text>
+              </HStack>
+            </VStack>
           </Flex>
 
           <VStack justifyContent="center" mt={2}>

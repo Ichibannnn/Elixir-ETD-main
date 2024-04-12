@@ -90,14 +90,6 @@ export const ViewModal = ({
             <VStack alignItems="start" spacing={1} mt={4}>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
-                  Transaction ID:
-                </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
-              </HStack>
-              <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
                   Customer:
                 </Text>
                 <Text fontSize="xs">
@@ -140,7 +132,38 @@ export const ViewModal = ({
               </HStack>
             </VStack>
 
-            <VStack alignItems="start" spacing={-1}></VStack>
+            <VStack alignItems="start" spacing={-1} mt={4}>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Transaction ID:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.borrowedPKey}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee ID:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.empId
+                    ? borrowedDetailsData[0]?.empId
+                    : "-"}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Employee Name:
+                </Text>
+                <Text fontSize="xs">
+                  {borrowedDetailsData[0]?.fullName
+                    ? borrowedDetailsData[0]?.fullName
+                    : "-"}
+                </Text>
+              </HStack>
+            </VStack>
           </Flex>
 
           <VStack justifyContent="center" mt={4}>
@@ -514,59 +537,17 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
                       Item Information
                     </Th>
                     <Th h="40px" color="white" fontSize="10px">
+                      Service Report #
+                    </Th>
+                    <Th h="40px" color="white" fontSize="10px">
                       Charging of Accounts
                     </Th>
-                    {/* <Th h="20px" color="white" fontSize="10px">
-                      Item Code
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Item Description
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Uom
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Consumed Qty
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Company Code
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Company Name
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Department Code
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Department Name
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Location Code
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Location Name
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Account Code
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Account Title
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Employee Id
-                    </Th>
-                    <Th h="20px" color="white" fontSize="10px">
-                      Full Name
-                    </Th> */}
-                    {/* <Th h="20px" color="white" fontSize="10px">
-                Action
-              </Th> */}
                   </Tr>
                 </Thead>
                 <Tbody>
                   {coaList?.map((item, i) => (
                     <Tr key={i}>
-                      {/* <Td fontSize="xs">{item.id}</Td> */}
+                      {/* Item Information */}
                       <Td>
                         <Flex flexDirection="column" gap="10px">
                           <Flex flexDirection="column" justifyContent="left">
@@ -602,6 +583,21 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
                           </Flex>
                         </Flex>
                       </Td>
+
+                      {/* Service Report # */}
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <Flex flexDirection="column" justifyContent="center">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.reportNumber}
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Flex>
+                      </Td>
+
+                      {/* Charging of Accounts */}
                       <Td>
                         <Flex flexDirection="column" gap="10px">
                           <Flex flexDirection="column" justifyContent="left">
@@ -663,13 +659,7 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
             </PageScroll>
           </Flex>
         </ModalBody>
-        <ModalFooter>
-          <ButtonGroup size="sm">
-            <Button colorScheme="gray" onClick={onClose}>
-              Close
-            </Button>
-          </ButtonGroup>
-        </ModalFooter>
+        <ModalFooter></ModalFooter>
       </ModalContent>
     </Modal>
   );

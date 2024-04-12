@@ -227,6 +227,12 @@ export const ApprovedReturnApprover = () => {
                   Customer Name
                 </Th>
                 <Th h="40px" color="white" fontSize="10px">
+                  Aging Days
+                </Th>
+                <Th h="40px" color="white" fontSize="10px">
+                  Borrowed Date
+                </Th>
+                <Th h="40px" color="white" fontSize="10px">
                   Returned Qty
                 </Th>
                 <Th h="40px" color="white" fontSize="10px">
@@ -235,9 +241,6 @@ export const ApprovedReturnApprover = () => {
                 <Th h="40px" color="white" fontSize="10px">
                   Returned By
                 </Th>
-                {/* <Th h="40px" color="white" fontSize="10px">
-                          Status
-                        </Th> */}
                 <Th h="40px" color="white" fontSize="10px" textAlign="center">
                   Action
                 </Th>
@@ -249,6 +252,10 @@ export const ApprovedReturnApprover = () => {
                   <Td fontSize="xs">{borrow.id}</Td>
                   <Td fontSize="xs">{borrow.customerCode}</Td>
                   <Td fontSize="xs">{borrow.customerName}</Td>
+                  <Td fontSize="xs"> {borrow.agingDays} Day(s)</Td>
+                  <Td fontSize="xs">
+                    {moment(borrow.returnedDate).format("MM/DD/yyyy")}
+                  </Td>
                   <Td fontSize="xs">
                     {" "}
                     {borrow.returnedBorrow.toLocaleString(undefined, {
@@ -279,6 +286,7 @@ export const ApprovedReturnApprover = () => {
                               >
                                 <Text fontSize="15px">View</Text>
                               </MenuItem>
+
                               <MenuItem
                                 icon={<SlPrinter fontSize="17px" />}
                                 onClick={() =>
