@@ -115,10 +115,7 @@ export const WarehouseReceivingHistory = ({
                 {buttonChanger ? (
                   <>
                     <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Item Code
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Item Description
+                      Item Information
                     </Th>
                     <Th color="white" fontSize="10px" fontWeight="semibold">
                       UOM
@@ -159,8 +156,23 @@ export const WarehouseReceivingHistory = ({
                   <Td fontSize="xs">{item.poNumber ? item.poNumber : "-"}</Td>
                   {buttonChanger ? (
                     <>
-                      <Td fontSize="xs">{item.itemCode}</Td>
-                      <Td fontSize="xs">{item.itemDescrption}</Td>
+                      {/* Item Information */}
+                      <Td>
+                        <Flex flexDirection="column" gap="10px">
+                          <Flex flexDirection="column" justifyContent="left">
+                            <HStack fontSize="sm" spacing="5px">
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.itemDescrption}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700">{item.itemCode}</Text>
+                            </HStack>
+                          </Flex>
+                        </Flex>
+                      </Td>
+
                       <Td fontSize="xs">{item.uom}</Td>
                       <Td fontSize="xs">
                         {item.quantity.toLocaleString(undefined, {

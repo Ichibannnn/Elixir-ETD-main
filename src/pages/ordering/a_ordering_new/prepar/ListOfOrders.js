@@ -186,8 +186,6 @@ export const ListOfOrders = ({
                 <Tr key={i}>
                   <Td fontSize="xs">{i + 1}</Td>
                   <Td fontSize="xs">{order.mirId}</Td>
-                  {/* <Td fontSize="xs">{order.id}</Td> */}
-                  {/* <Td fontSize="xs">{order.customerName}</Td> */}
                   <Td fontSize="xs">{order.itemCode}</Td>
                   <Td fontSize="xs">{order.itemDescription}</Td>
                   <Td fontSize="xs">{order.uom}</Td>
@@ -264,27 +262,6 @@ export const ListOfOrders = ({
                         </Menu>
                       </Box>
                     </Flex>
-                    {/* <HStack spacing={0}>
-                      <Button
-                        onClick={() => editHandler(order)}
-                        // disabled={order.stockOnHand === 0}
-                        size="xs"
-                        title="Edit"
-                        bg="none"
-                        px={4}
-                      >
-                        <FiEdit fontSize="15px" />
-                      </Button>
-                      <Button
-                        onClick={() => cancelHandler(order)}
-                        size="xs"
-                        title="Cancel"
-                        bg="none"
-                        px={4}
-                      >
-                        <GiCancel fontSize="17px" />
-                      </Button>
-                    </HStack> */}
                   </Td>
                 </Tr>
               ))}

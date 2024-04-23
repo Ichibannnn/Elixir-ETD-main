@@ -116,8 +116,6 @@ export const EditModal = ({
     fetchAccountApi();
   }, []);
 
-  console.log("Account Title: ", account);
-
   const {
     register,
     handleSubmit,
@@ -137,8 +135,6 @@ export const EditModal = ({
       },
     },
   });
-
-  // console.log("Error: ", errors);
 
   const triggerPointHandler = (event) => {
     const selectAccountTitle = account?.find((item) => {
@@ -211,7 +207,6 @@ export const EditModal = ({
   };
 
   const submitHandler = (data) => {
-    // console.log("Edit Data: ", editData);
     if (editData.standardQuantity === quantitySubmit) {
       try {
         setIsLoading(true);
@@ -220,9 +215,6 @@ export const EditModal = ({
             id: editData.id,
             quantityOrdered: quantitySubmit,
             accountCode: data?.formData?.accountId?.value?.code,
-            // accountTitles: data?.formData?.accountId?.value?.name,
-            // empId: data?.formData?.empId?.value?.full_id_number,
-            // fullName: data?.formData?.empId?.value?.full_name,
           })
           .then((res) => {
             ToastComponent(
@@ -244,10 +236,6 @@ export const EditModal = ({
       openEditRemarks();
     }
   };
-
-  // console.log("edit data: ", editData);
-  // console.log("account title: ", watch("formData"));
-  // console.log("isLoading: ", isLoading);
 
   return (
     <>
@@ -412,114 +400,6 @@ export const EditModal = ({
                       thousandSeparator=","
                     />
                   </Box>
-
-                  {/* Account Title */}
-                  {/* <Box p={2} gap={0} w="full">
-                    <FormLabel fontSize="xs" fontWeight="semibold">
-                      Account Title:
-                    </FormLabel>
-                    <Box w="full">
-                      <Controller
-                        control={control}
-                        name="formData.accountId"
-                        render={({ field }) => (
-                          <Box w="full">
-                            <AutoComplete
-                              className="react-select-layout"
-                              size="sm"
-                              ref={field.ref}
-                              value={field.value}
-                              placeholder="Select Account"
-                              onChange={(e) => {
-                                field.onChange(e);
-                                triggerPointHandler(e?.value.id);
-                              }}
-                              options={account?.map((item) => {
-                                return {
-                                  label: `${item.code} - ${item.name}`,
-                                  value: item,
-                                };
-                              })}
-                            />
-                          </Box>
-                        )}
-                      />
-                      <Text color="red" fontSize="xs">
-                        {errors.formData?.accountId?.message}
-                      </Text>
-                    </Box>
-                  </Box> */}
-
-                  {/* Employee ID */}
-                  {/* {!!selectedAccount.match(/Advances to Employees/gi) && (
-                    <>
-                      <Box p={2} gap={0} w="full">
-                        <FormLabel fontSize="xs" fontWeight="semibold">
-                          Employee ID:
-                        </FormLabel>
-                        <Box w="full">
-                          <Controller
-                            control={control}
-                            name="formData.empId"
-                            render={({ field }) => (
-                              <AutoComplete
-                                className="react-select-layout"
-                                size="sm"
-                                ref={field.ref}
-                                value={field.value}
-                                placeholder="Enter Employee ID"
-                                onChange={(e) => {
-                                  field.onChange(e);
-                                  setValue(
-                                    "formData.fullName",
-                                    e.value.full_name
-                                  );
-                                }}
-                                options={pickerItems?.map((item) => {
-                                  return {
-                                    label: item.general_info?.full_id_number,
-                                    value: {
-                                      full_id_number:
-                                        item.general_info?.full_id_number,
-                                      full_name: item.general_info?.full_name,
-                                    },
-                                  };
-                                })}
-                              />
-                            )}
-                          />
-                          <Text color="red" fontSize="xs">
-                            {errors.formData?.empId?.message}
-                          </Text>
-                        </Box>
-                      </Box>
-
-                      <Box p={2} gap={0} w="full">
-                        <FormLabel fontSize="xs" fontWeight="semibold">
-                          Full Name:
-                        </FormLabel>
-                        <Box w="full">
-                          <Input
-                            // className="react-select-layout"
-                            fontSize="sm"
-                            {...register("formData.fullName")}
-                            disabled={disableFullName}
-                            readOnly={disableFullName}
-                            _disabled={{ color: "black" }}
-                            bgColor={disableFullName && "gray.200"}
-                            autoFocus
-                            autoComplete="off"
-                            border="1px"
-                            borderColor="gray.200"
-                            borderRadius="none"
-                          />
-                          <Text color="red" fontSize="xs">
-                            {errors.formData?.fullName?.message}
-                          </Text>
-                        </Box>
-                      </Box>
-                    </>
-                  )} */}
                 </VStack>
               </Flex>
             </ModalBody>
@@ -613,8 +493,8 @@ export const EditRemarksModalConfirmation = ({
   };
 
   const editHandler = () => {
-    // console.log("Charging Info: ", chargingInfo);
-    console.log("EditData: ", editData);
+    console.log("Edit Remarks: ", editRemarks);
+    // console.log("EditData: ", editData);
     setIsLoading(true);
     try {
       const res = request
@@ -742,6 +622,8 @@ export const CancelModalConfirmation = ({
   };
 
   const cancelHandler = () => {
+    // console.log("Cancel Remarks: ", cancelRemarks);
+
     setIsLoading(true);
     try {
       const res = request
