@@ -19,7 +19,12 @@ const fetchGenusApi = async () => {
 // FETCH API ELIXIR API:
 const fetchElixirApi = async (pageNumber, pageSize, search) => {
   const response = await request.get(
-    `Material/GetAllMaterialWithPaginationOrig/true?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
+    `Material/GetAllMaterialWithPaginationOrig/true?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+    {
+      params: {
+        search: search
+      }
+    }
   );
 
   return response.data;

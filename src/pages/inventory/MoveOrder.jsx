@@ -59,7 +59,12 @@ const MoveOrder = ({ notification, fetchNotification }) => {
     search
   ) => {
     const res = await request.get(
-      `Ordering/GetAllListOfApprovedPreparedforMoveOrder?PageNumber=${pageNumber}&PageSize=${pageSize}&status=${status}&search=${search}`
+      `Ordering/GetAllListOfApprovedPreparedforMoveOrder?PageNumber=${pageNumber}&PageSize=${pageSize}&status=${status}`,
+      {
+        params: {
+          search: search,
+        },
+      }
     );
     return res.data;
   };
@@ -196,6 +201,12 @@ const MoveOrder = ({ notification, fetchNotification }) => {
       setButtonChanger(variable);
     }
   }, [orderListData]);
+
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
 
   return (
     <>

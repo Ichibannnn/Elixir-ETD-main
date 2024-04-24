@@ -16,7 +16,12 @@ import { MaterialsInformation } from "./MaterialsInformation";
 
 const fetchMRPApi = async (pageNumber, pageSize, search) => {
   const res = await request.get(
-    `Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}`
+    `Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+    {
+      params: {
+        search: search,
+      },
+    }
   );
   return res.data;
 };
@@ -97,6 +102,12 @@ const MrpPage = () => {
       setSheetData([]);
     };
   }, [pageTotal]);
+
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
 
   return (
     <Flex flexDirection="column" w="full" bg="form" p={4}>

@@ -67,15 +67,27 @@ export const WarehouseReceivingHistory = ({
             "Line Number": i + 1,
             ID: item.warehouseId,
             "Received Date": item.receiveDate,
-            "PO Number": item.poNumber,
             "Item Code": item.itemCode,
             "Item Description": item.itemDescrption,
-            UOM: item.uom,
-            Quantity: item.quantity,
-            "Total Reject": item.totalReject,
+            "PO. #": item.poNumber,
+            "SI #": item.siNumber,
             Supplier: item.supplierName,
+            Quantity: item.quantity,
+            UOM: item.uom,
+            "Unit Price": item.unitPrice.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }),
+            Amount: item.amount.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }),
+            "Total Reject": item.totalReject.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }),
             "Transaction Type": item.transactionType,
-            "Received By": item.receivedBy,
+            "Received By": item.receivedBy ? item.receivedBy : "-",
           };
         })
       );
@@ -111,6 +123,9 @@ export const WarehouseReceivingHistory = ({
                 </Th>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
                   PO Number
+                </Th>
+                <Th color="white" fontSize="10px" fontWeight="semibold">
+                  SI Number
                 </Th>
                 {buttonChanger ? (
                   <>
@@ -154,6 +169,7 @@ export const WarehouseReceivingHistory = ({
                   <Td fontSize="xs">{item.warehouseId}</Td>
                   <Td fontSize="xs">{item.receiveDate}</Td>
                   <Td fontSize="xs">{item.poNumber ? item.poNumber : "-"}</Td>
+                  <Td fontSize="xs">{item.siNumber ? item.siNumber : "-"}</Td>
                   {buttonChanger ? (
                     <>
                       {/* Item Information */}
@@ -187,7 +203,7 @@ export const WarehouseReceivingHistory = ({
                         })}
                       </Td>
                       <Td fontSize="xs">
-                        {item.totalUnitPrice.toLocaleString(undefined, {
+                        {item.amount.toLocaleString(undefined, {
                           maximumFractionDigits: 2,
                           minimumFractionDigits: 2,
                         })}

@@ -117,7 +117,12 @@ const WarehouseReceiving = () => {
   // FETCH API ROLES:
   const fetchAvailablePOApi = async (pageNumber, pageSize, search) => {
     const response = await request.get(
-      `Warehouse/GetAllAvailablePoWithPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
+      `Warehouse/GetAllAvailablePoWithPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      {
+        params: {
+          search: search,
+        },
+      }
     );
     return response.data;
   };

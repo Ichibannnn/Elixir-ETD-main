@@ -114,7 +114,12 @@ const ReceivedMaterials = () => {
   // FETCH API ROLES:
   const fetchReceivedMatsApi = async (pageNumber, pageSize, search) => {
     const response = await request.get(
-      `Warehouse/GetAllReceivedMaterialsPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
+      `Warehouse/GetAllReceivedMaterialsPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      {
+        params: {
+          search: search,
+        },
+      }
     );
 
     return response.data;

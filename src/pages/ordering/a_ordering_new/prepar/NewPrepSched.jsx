@@ -27,7 +27,12 @@ const NewPrepSched = ({ notification, fetchNotification }) => {
 
   const fetchMirListApi = async (pageNumber, pageSize, status, search) => {
     const response = await request.get(
-      `Ordering/GetAllListOfMir?PageNumber=${pageNumber}&PageSize=${pageSize}&status=${status}&search=${search}`
+      `Ordering/GetAllListOfMir?PageNumber=${pageNumber}&PageSize=${pageSize}&status=${status}`,
+      {
+        params: {
+          search: search,
+        },
+      }
     );
 
     return response.data;

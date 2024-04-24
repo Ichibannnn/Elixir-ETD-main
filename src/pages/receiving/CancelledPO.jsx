@@ -75,7 +75,12 @@ const CancelledPO = () => {
   // FETCH API CANCELLED PO:
   const fetchCancelledPOApi = async (pageNumber, pageSize, search) => {
     const response = await request.get(
-      `Warehouse/GetAllCancelledPoWithPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
+      `Warehouse/GetAllCancelledPoWithPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`,
+      {
+        params: {
+          search: search,
+        },
+      }
     );
 
     return response.data;
