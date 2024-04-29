@@ -254,7 +254,7 @@ export const ApprovedReturnApprover = () => {
                   <Td fontSize="xs">{borrow.customerName}</Td>
                   <Td fontSize="xs"> {borrow.agingDays} Day(s)</Td>
                   <Td fontSize="xs">
-                    {moment(borrow.returnedDate).format("MM/DD/yyyy")}
+                    {moment(borrow.borrowedDate).format("MM/DD/yyyy")}
                   </Td>
                   <Td fontSize="xs">
                     {" "}

@@ -78,7 +78,9 @@ export const ReturnedQuantityTransaction = ({
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             }),
-            "Returned Date": moment(item.returnedDate).format("MM-DD-YYYY"),
+            "Returned Date": item.isApproveReturnDate
+              ? moment(item.isApproveReturnDate).format("MM-DD-YYYY")
+              : "-",
             "Aging Days": `${item.agingDays} Day(s)`,
             "Service Report No.": item.reportNumber ?? "-",
             "Employee Id": item.empIdByIssue,
@@ -290,9 +292,17 @@ export const ReturnedQuantityTransaction = ({
                         <Flex flexDirection="column" gap="10px">
                           <HStack fontSize="xs" spacing="5px">
                             <Text color="gray.700">
-                              {item.returnedDate !== null
-                                ? moment(item.returnedDate).format("MM/DD/yyyy")
-                                : "Pending Return"}
+                              {item.isApproveReturnDate !== null
+                                ? moment(item.isApproveReturnDate).format(
+                                    "MM/DD/yyyy"
+                                  )
+                                : item.isApproveReturnDate === null &&
+                                  item.isActive === true
+                                ? "Pending Return"
+                                : item.isActive === false &&
+                                  item.isApproveReturnDate === null
+                                ? "Rejected"
+                                : ""}
                             </Text>
                           </HStack>
                         </Flex>
