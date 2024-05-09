@@ -59,18 +59,18 @@ const ErrorList = ({
 
   const availableImportData = errorData?.availableImport?.map((list) => {
     return {
-      pR_Number: list.pR_Number,
-      pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
-      pO_Number: list.pO_Number,
-      pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
-      itemCode: list.itemCode,
-      itemDescription: list.itemDescription,
-      ordered: list.ordered,
-      delivered: list.delivered,
-      billed: list.billed,
-      uom: list.uom,
-      unitPrice: list.unitPrice,
-      vendorName: list.vendorName,
+      pR_Number: list?.pR_Number?.toString().trim(),
+      pR_Date: moment(list.pR_Date)?.format("YYYY-MM-DD")?.toString().trim(),
+      pO_Number: list?.pO_Number?.toString().trim(),
+      pO_Date: moment(list.pO_Date)?.format("YYYY-MM-DD")?.toString().trim(),
+      itemCode: list?.itemCode?.toString().trim(),
+      itemDescription: list?.itemDescription?.toString().trim(),
+      ordered: list?.ordered?.toString().trim(),
+      delivered: list?.delivered?.toString().trim(),
+      billed: list?.billed?.toString().trim(),
+      uom: list?.uom?.toString().trim(),
+      unitPrice: list?.unitPrice?.toString().trim(),
+      vendorName: list?.vendorName?.toString().trim(),
     };
   });
 

@@ -783,6 +783,7 @@ export const RawMatsInfoModal = ({
   };
 
   const barcodeNoHandler = (data) => {
+    console.log("Barcode Data: ", data);
     if (data) {
       const newData = JSON.parse(data);
       const warehouseId = newData.warehouseId;
@@ -821,8 +822,6 @@ export const RawMatsInfoModal = ({
 
   const newDate = new Date();
   const minDate = moment(newDate).format("yyyy-MM-DD");
-
-  // console.log(!watch("formData"));
 
   const closeHandler = () => {
     setRawMatsInfo({
@@ -956,7 +955,7 @@ export const RawMatsInfoModal = ({
                     onKeyDown={(e) =>
                       ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
                     }
-                    onPaste={(e) => e.preventDefault()}
+                    // onPaste={(e) => e.preventDefault()}
                     min="1"
                     w="full"
                     placeholder="Enter Quantity"

@@ -96,19 +96,19 @@ const ImportPO = () => {
     let newPoDate = DateConverter(item.po_date);
 
     return {
-      pR_Number: item.pr_number,
-      pR_Date: moment(newPrData).format("YYYY-MM-DD"),
-      pO_Number: item.po_number,
-      pO_Date: moment(newPoDate).format("YYYY-MM-DD"),
-      itemCode: item.item_code,
-      itemDescription: item.item_description,
-      ordered: item.qty_ordered,
-      delivered: item.qty_delivered,
-      billed: item.qty_billed,
-      uom: item.uom,
-      unitPrice: item.unit_cost,
-      vendorName: item.supplier_name,
-      addedBy: currentUser.username,
+      pR_Number: item?.pr_number?.toString().trim(),
+      pR_Date: moment(newPrData)?.format("YYYY-MM-DD")?.toString().trim(),
+      pO_Number: item?.po_number?.toString().trim(),
+      pO_Date: moment(newPoDate)?.format("YYYY-MM-DD")?.toString().trim(),
+      itemCode: item?.item_code?.toString().trim(),
+      itemDescription: item?.item_description?.toString()?.trim(),
+      ordered: item?.qty_ordered?.toString().trim(),
+      delivered: item?.qty_delivered?.toString().trim(),
+      billed: item?.qty_billed?.toString().trim(),
+      uom: item?.uom?.toString().trim(),
+      unitPrice: item?.unit_cost?.toString().trim(),
+      vendorName: item?.supplier_name?.toString().trim(),
+      addedBy: currentUser.username?.toString().trim(),
     };
   });
 

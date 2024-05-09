@@ -948,7 +948,7 @@ export const RawMatsInfoModal = ({
                     onKeyDown={(e) =>
                       ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
                     }
-                    onPaste={(e) => e.preventDefault()}
+                    // onPaste={(e) => e.preventDefault()}
                     min="1"
                     placeholder="Enter Quantity"
                     border="1px"
@@ -1017,7 +1017,7 @@ export const RawMatsInfoModal = ({
                         ["E", "e", "+", "-"].includes(e.key) &&
                         e.preventDefault()
                       }
-                      onPaste={(e) => e.preventDefault()}
+                      // onPaste={(e) => e.preventDefault()}
                       min="1"
                       w="full"
                       placeholder="Enter Unit Cost"
