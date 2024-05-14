@@ -17,6 +17,7 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -34,11 +35,13 @@ import {
 import moment from "moment";
 import { ImLocation } from "react-icons/im";
 import { PrintModal, RejectModal, TrackModal } from "./ActionModal";
-import { FaShippingFast } from "react-icons/fa";
-import { GrLocation } from "react-icons/gr";
+import { GrLocation, GrTransaction } from "react-icons/gr";
 import { AiOutlineMore, AiOutlinePrinter } from "react-icons/ai";
 import { GiCancel } from "react-icons/gi";
 import { FcOk } from "react-icons/fc";
+import { RiCloseCircleFill } from "react-icons/ri";
+import { MdOutlinePendingActions, MdPending } from "react-icons/md";
+import { FaClock } from "react-icons/fa";
 
 export const ApproveMoveOrder = ({
   setCurrentPage,
@@ -64,7 +67,8 @@ export const ApproveMoveOrder = ({
     // "Category",
     "Total Quantity Order",
     "Prepared Date",
-    "Status",
+    "Transaction Status",
+    "Print Status",
     // "Rush",
     "Action",
     // "Print",
@@ -252,7 +256,7 @@ export const ApproveMoveOrder = ({
               <Tr>
                 {TableHead?.map((head, i) => (
                   <Th h="30px" p={3} key={i} color="white" fontSize="10px">
-                    {head}
+                    <Flex justifyContent="center">{head}</Flex>
                   </Th>
                 ))}
               </Tr>
@@ -260,28 +264,67 @@ export const ApproveMoveOrder = ({
             <Tbody>
               {approvedData?.moveorder?.map((order, i) => (
                 <Tr key={i}>
-                  <Td fontSize="xs">{i + 1}</Td>
-                  <Td fontSize="xs">{order.mirId}</Td>
-                  <Td fontSize="xs">{order.customerCode}</Td>
-                  <Td fontSize="xs">{order.customerName}</Td>
-                  {/* <Td fontSize="13px">{order.category}</Td> */}
                   <Td fontSize="xs">
-                    {order.quantity.toLocaleString(undefined, {
-                      maximuFractionDigits: 2,
-                      minimumFractionDigits: 2,
-                    })}
+                    <Flex justifyContent="center">{i + 1}</Flex>
                   </Td>
                   <Td fontSize="xs">
-                    {moment(order.preparedDate).format("MM/DD/yyyy")}
+                    <Flex justifyContent="center">{order.mirId}</Flex>
+                  </Td>
+                  <Td fontSize="xs">
+                    <Flex justifyContent="center">{order.customerCode}</Flex>
+                  </Td>
+                  <Td fontSize="xs">
+                    <Flex justifyContent="center">{order.customerName}</Flex>
+                  </Td>
+                  {/* <Td fontSize="13px">{order.category}</Td> */}
+                  <Td fontSize="xs">
+                    <Flex justifyContent="center">
+                      {" "}
+                      {order.quantity.toLocaleString(undefined, {
+                        maximuFractionDigits: 2,
+                        minimumFractionDigits: 2,
+                      })}
+                    </Flex>
+                  </Td>
+                  <Td fontSize="xs">
+                    <Flex justifyContent="center">
+                      {moment(order.preparedDate).format("MM/DD/yyyy")}
+                    </Flex>
                   </Td>
                   {order.isTransact ? (
                     <Td fontSize="xs">
-                      <Flex>
-                        <FcOk fontSize="20px" />
-                      </Flex>
+                      <Tooltip label="Transacted MO">
+                        <Flex justifyContent="center">
+                          <FcOk fontSize="20px" />
+                        </Flex>
+                      </Tooltip>
                     </Td>
                   ) : (
-                    <Td fontSize="xs"></Td>
+                    <Td fontSize="xs">
+                      <Tooltip label="For Transaction MO">
+                        <Flex justifyContent="center">
+                          <FaClock color="orange" fontSize="18px" />
+                        </Flex>
+                      </Tooltip>
+                    </Td>
+                  )}
+
+                  {order.isPrint === true ? (
+                    <Td fontSize="xs">
+                      <Tooltip label="Printed MOS">
+                        <Flex justifyContent="center">
+                          <FcOk fontSize="20px" />
+                        </Flex>
+                      </Tooltip>
+                    </Td>
+                  ) : (
+                    <Td fontSize="xs">
+                      <Tooltip label="For Printing MOS">
+                        <Flex justifyContent="center">
+                          <RiCloseCircleFill color="red" fontSize="22px" />
+                        </Flex>
+                      </Tooltip>
+                    </Td>
                   )}
                   <Td>
                     <Flex pl={2}>

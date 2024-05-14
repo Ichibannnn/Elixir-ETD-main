@@ -137,7 +137,7 @@ export const ListOfMaterials = ({
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        // console.log("Result Array: ", resultArray);
+        console.log("Result Array: ", resultArray);
         try {
           setIsLoading(true);
           const res = request
