@@ -42,15 +42,9 @@ import { GrView } from "react-icons/gr";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import {
-  Pagination,
-  PaginationContainer,
-  PaginationNext,
-  PaginationPage,
-  PaginationPageGroup,
-  PaginationPrevious,
-} from "@ajna/pagination";
+import { Controller, useForm } from "react-hook-form";
+import { Pagination, PaginationContainer, PaginationNext, PaginationPage, PaginationPageGroup, PaginationPrevious } from "@ajna/pagination";
+import { Select as AutoComplete } from "chakra-react-select";
 
 export const ListOfMaterials = ({
   genusMaterials,
@@ -74,11 +68,7 @@ export const ListOfMaterials = ({
   const currentUser = decodeUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const {
-    isOpen: isEdit,
-    onClose: closeEdit,
-    onOpen: openEdit,
-  } = useDisclosure();
+  const { isOpen: isEdit, onClose: closeEdit, onOpen: openEdit } = useDisclosure();
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -209,22 +199,12 @@ export const ListOfMaterials = ({
   }, [search]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="auto"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="auto" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} flexDirection="column">
         <Flex justifyContent="space-between" w="100%" p={4} mt={-3}>
           <HStack w="25%" mt={3}>
             <InputGroup size="sm">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiSearch bg="black" fontSize="18px" />}
-              />
+              <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
               <Input
                 borderRadius="lg"
                 fontSize="13px"
@@ -331,12 +311,8 @@ export const ListOfMaterials = ({
                   <Tbody>
                     {elixirMaterials?.materials
                       ?.filter((val) => {
-                        const newKeyword = new RegExp(
-                          `${keyword.toLowerCase()}`
-                        );
-                        return val?.itemCategoryName
-                          ?.toLowerCase()
-                          .match(newKeyword, "*");
+                        const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
+                        return val?.itemCategoryName?.toLowerCase().match(newKeyword, "*");
                       })
                       ?.map((mats, i) => (
                         <Tr key={i}>
@@ -352,18 +328,12 @@ export const ListOfMaterials = ({
                               minimumFractionDigirts: 2,
                             })}
                           </Td>
-                          <Td fontSize="12px">
-                            {moment(mats.dateAdded).format("yyyy/MM/DD")}
-                          </Td>
+                          <Td fontSize="12px">{moment(mats.dateAdded).format("yyyy/MM/DD")}</Td>
                           <Td fontSize="12px">{mats.addedBy}</Td>
                           <Td fontSize="12px">{mats.syncStatus}</Td>
                           <Td fontSize="xs">
                             <HStack spacing={3} justifyContent="center">
-                              <Button
-                                onClick={() => editBufferHandler(mats)}
-                                bg="none"
-                                size="xs"
-                              >
+                              <Button onClick={() => editBufferHandler(mats)} bg="none" size="xs">
                                 <AiTwotoneEdit fontSize="17px" />
                               </Button>
                             </HStack>
@@ -381,9 +351,7 @@ export const ListOfMaterials = ({
           <HStack>
             <Badge colorScheme="cyan">
               <Text color="secondary">
-                {!keyword
-                  ? `Number of records: ${ordersCount} `
-                  : `Number of records from ${keyword}: ${filteredLength.length}`}
+                {!keyword ? `Number of records: ${ordersCount} ` : `Number of records from ${keyword}: ${filteredLength.length}`}
                 {/* Number of Records: {elixirSuppliers?.supplier?.length} */}
               </Text>
             </Badge>
@@ -391,26 +359,15 @@ export const ListOfMaterials = ({
           <HStack>
             <Badge colorScheme="cyan">
               <Text color="primary" fontSize="12px">
-                {`Sync Date: ${moment(
-                  elixirMaterials?.materials?.syncDate
-                ).format("MM/DD/yyyy")}`}
+                {`Sync Date: ${moment(elixirMaterials?.materials?.syncDate).format("MM/DD/yyyy")}`}
               </Text>
             </Badge>
           </HStack>
 
           <Stack>
-            <Pagination
-              pagesCount={pagesCount}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-            >
+            <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
               <PaginationContainer>
-                <PaginationPrevious
-                  bg="primary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "btnColor", color: "white" }}
-                >
+                <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                   {"<<"}
                 </PaginationPrevious>
                 <PaginationPageGroup ml={1} mr={1}>
@@ -427,19 +384,10 @@ export const ListOfMaterials = ({
                   ))}
                 </PaginationPageGroup>
                 <HStack>
-                  <PaginationNext
-                    bg="primary"
-                    color="white"
-                    p={1}
-                    _hover={{ bg: "btnColor", color: "white" }}
-                  >
+                  <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                     {">>"}
                   </PaginationNext>
-                  <Select
-                    onChange={handlePageSizeChange}
-                    variant="outline"
-                    fontSize="md"
-                  >
+                  <Select onChange={handlePageSizeChange} variant="outline" fontSize="md">
                     <option value={Number(100)}>100</option>
                     <option value={Number(500)}>500</option>
                     <option value={Number(1000)}>1000</option>
@@ -464,14 +412,7 @@ export const ListOfMaterials = ({
           />
         )}
 
-        {isEdit && (
-          <EditModal
-            isEdit={isEdit}
-            closeEdit={closeEdit}
-            editData={editData}
-            fetchElixirMaterials={fetchElixirMaterials}
-          />
-        )}
+        {isEdit && <EditModal isEdit={isEdit} closeEdit={closeEdit} editData={editData} fetchElixirMaterials={fetchElixirMaterials} />}
       </Flex>
     </Flex>
   );
@@ -480,6 +421,7 @@ export const ListOfMaterials = ({
 const schema = yup.object().shape({
   formData: yup.object().shape({
     id: yup.string(),
+    lotNamesId: yup.object().required().typeError("Lot Name is required"),
     bufferLevel: yup
       .number()
       .required("Buffer level is required")
@@ -490,14 +432,24 @@ const schema = yup.object().shape({
   }),
 });
 
-export const EditModal = ({
-  isEdit,
-  closeEdit,
-  editData,
-  fetchElixirMaterials,
-}) => {
+export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials }) => {
   const toast = useToast();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+
+  const [lotName, setLotName] = useState([]);
+
+  const fetchLot = async () => {
+    try {
+      const res = await request.get("Lot/GetAllActiveLotCategories");
+      setLotName(res.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    try {
+      fetchLot();
+    } catch (error) {}
+  }, []);
 
   const onCloseDrawer = () => {
     setIsOpenDrawer(false);
@@ -506,6 +458,7 @@ export const EditModal = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isValid },
     setValue,
     watch,
@@ -530,12 +483,7 @@ export const EditModal = ({
           closeEdit();
         })
         .catch((error) => {
-          ToastComponent(
-            "Update Failed",
-            error.response.data,
-            "warning",
-            toast
-          );
+          ToastComponent("Update Failed", error.response.data, "warning", toast);
           fetchElixirMaterials();
         });
     } catch (err) {}
@@ -560,18 +508,53 @@ export const EditModal = ({
         <DrawerOverlay />
         <form onSubmit={handleSubmit(submitHandler)}>
           <DrawerContent>
-            <DrawerHeader borderBottomWidth="1px">
-              Edit Buffer Level
-            </DrawerHeader>
+            <DrawerHeader borderBottomWidth="1px">Edit Material</DrawerHeader>
             <DrawerBody>
               <Stack spacing="7px">
                 <Box>
-                  <FormLabel>Buffer Level:</FormLabel>
-                  <Input
-                    {...register("formData.bufferLevel")}
-                    placeholder="Please enter Buffer Level"
-                    autoComplete="off"
+                  <FormLabel>Lot Name:</FormLabel>
+                  {/* {lotName.length > 0 ? (
+                    <Select fontSize="md" {...register("formData.lotNamesId")} placeholder="Select Lot Name">
+                      {lotName.map((ln) => (
+                        <option key={ln.id} value={ln.id}>
+                          {ln.lotCode} - {ln.lotName}
+                        </option>
+                      ))}
+                    </Select>
+                  ) : (
+                    "loading"
+                  )}
+                  <Text color="red" fontSize="xs">
+                    {errors.formData?.lotNamesId?.message}
+                  </Text> */}
+
+                  <Controller
+                    control={control}
+                    name="formData.lotNamesId"
+                    render={({ field }) => (
+                      <AutoComplete
+                        className="react-select-layout"
+                        ref={field.ref}
+                        value={field.value}
+                        size="md"
+                        placeholder="Select Lot Name"
+                        onChange={(e) => {
+                          field.onChange(e);
+                        }}
+                        options={lotName?.map((item) => {
+                          return {
+                            label: `${item.lotCode} - ${item.lotName}`,
+                            value: item,
+                          };
+                        })}
+                      />
+                    )}
                   />
+                </Box>
+
+                <Box>
+                  <FormLabel>Buffer Level:</FormLabel>
+                  <Input {...register("formData.bufferLevel")} placeholder="Please enter Buffer Level" autoComplete="off" />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.bufferLevel?.message}
                   </Text>

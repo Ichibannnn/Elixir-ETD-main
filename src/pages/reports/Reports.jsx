@@ -1,18 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import * as XLSX from "xlsx";
-import {
-  Badge,
-  Button,
-  Flex,
-  HStack,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Select,
-  Skeleton,
-  Text,
-} from "@chakra-ui/react";
+import { Badge, Button, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Skeleton, Text } from "@chakra-ui/react";
 import { WarehouseReceivingHistory } from "./report_dropdown/WarehouseReceivingHistory";
 import { MoveOrderHistory } from "./report_dropdown/MoveOrderHistory";
 import { MiscIssueHistory } from "./report_dropdown/MiscIssueHistory";
@@ -28,9 +17,7 @@ import { FaFileExport } from "react-icons/fa";
 import { BiExport } from "react-icons/bi";
 
 const Reports = () => {
-  const [dateFrom, setDateFrom] = useState(
-    moment(new Date()).format("yyyy-MM-DD")
-  );
+  const [dateFrom, setDateFrom] = useState(moment(new Date()).format("yyyy-MM-DD"));
   const [dateTo, setDateTo] = useState(moment(new Date()).format("yyyy-MM-DD"));
 
   const [sample, setSample] = useState("");
@@ -78,13 +65,7 @@ const Reports = () => {
                 <Badge>Report Name:</Badge>
               </Flex>
               <HStack>
-                <Select
-                  onChange={(e) => navigationHandler(Number(e.target.value))}
-                  placeholder=" "
-                  bgColor="#fff8dc"
-                  w="full"
-                  fontSize="xs"
-                >
+                <Select onChange={(e) => navigationHandler(Number(e.target.value))} placeholder=" " bgColor="#fff8dc" w="full" fontSize="xs">
                   <option value={1}>Warehouse Receiving History</option>
                   <option value={2}>Move Order For Transaction History</option>
                   <option value={3}>Move Order Transacted History</option>
@@ -93,51 +74,27 @@ const Reports = () => {
                   <option value={6}>Borrowed Materials History</option>
                   <option value={7}>Returned Materials History</option>
                   <option value={8}>Unserved Orders History</option>
+                  <option value={9}>Inventory Movement</option>
                 </Select>
               </HStack>
             </Flex>
             <Flex justifyContent="center" alignItems="end">
-              <Button
-                onClick={handleExport}
-                isDisabled={sheetData?.length === 0 || !sample}
-                size="sm"
-                leftIcon={<BiExport fontSize="20px" />}
-                bg="none"
-              >
+              <Button onClick={handleExport} isDisabled={sheetData?.length === 0 || !sample} size="sm" leftIcon={<BiExport fontSize="20px" />} bg="none">
                 <Text fontSize="xs">Export</Text>
               </Button>
             </Flex>
           </Flex>
 
           {/* Rendering Reports Components  */}
-          <Flex
-            w="full"
-            mt={2}
-            justifyContent="center"
-            flexDirection="column"
-            className="boxShadow"
-            borderRadius="xl"
-            p={4}
-            bg="form"
-            gap={2}
-            maxHeight="1000px"
-          >
+          <Flex w="full" mt={2} justifyContent="center" flexDirection="column" className="boxShadow" borderRadius="xl" p={4} bg="form" gap={2} maxHeight="1000px">
             <Flex justifyContent="space-between" gap={2}>
               <Flex flexDirection="column" w="full">
                 <Flex justifyContent="start">
                   <Badge>Search:</Badge>
                 </Flex>
                 <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    children={<FiSearch bg="black" fontSize="18px" />}
-                  />
-                  <Input
-                    fontSize="xs"
-                    isDisabled={!sample}
-                    borderColor="gray.400"
-                    onChange={(e) => searchHandler(e.target.value)}
-                  />
+                  <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
+                  <Input fontSize="xs" isDisabled={!sample} borderColor="gray.400" onChange={(e) => searchHandler(e.target.value)} />
                 </InputGroup>
               </Flex>
 
@@ -145,29 +102,20 @@ const Reports = () => {
               <Flex justifyContent="start">
                 {sample < 9 ? (
                   <Flex justifyContent="start" flexDirection="row">
-                    <Flex flexDirection="column" ml={1}>
-                      <Flex>
-                        <Badge>Date from:</Badge>
+                    {sample != 9 && (
+                      <Flex flexDirection="column" ml={1}>
+                        <Flex>
+                          <Badge>Date from:</Badge>
+                        </Flex>
+                        <Input fontSize="xs" bgColor="#fff8dc" type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} />
                       </Flex>
-                      <Input
-                        fontSize="xs"
-                        bgColor="#fff8dc"
-                        type="date"
-                        value={dateFrom}
-                        onChange={(e) => setDateFrom(e.target.value)}
-                      />
-                    </Flex>
+                    )}
+
                     <Flex flexDirection="column" ml={1}>
                       <Flex>
                         <Badge>Date to:</Badge>
                       </Flex>
-                      <Input
-                        fontSize="xs"
-                        bgColor="#fff8dc"
-                        type="date"
-                        value={dateTo}
-                        onChange={(e) => setDateTo(e.target.value)}
-                      />
+                      <Input fontSize="xs" bgColor="#fff8dc" type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
                     </Flex>
                   </Flex>
                 ) : (
@@ -177,72 +125,24 @@ const Reports = () => {
             </Flex>
 
             {sample === 1 ? (
-              <WarehouseReceivingHistory
-                search={search}
-                dateFrom={dateFrom}
-                dateTo={dateTo}
-                sample={sample}
-                setSheetData={setSheetData}
-              />
+              <WarehouseReceivingHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 2 ? (
-              <MoveOrderHistory
-                search={search}
-                dateFrom={dateFrom}
-                dateTo={dateTo}
-                sample={sample}
-                setSheetData={setSheetData}
-              />
+              <MoveOrderHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 3 ? (
-              <TransactedMOHistory
-                search={search}
-                dateFrom={dateFrom}
-                dateTo={dateTo}
-                sample={sample}
-                setSheetData={setSheetData}
-              />
+              <TransactedMOHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 4 ? (
-              <MiscReceiptHistory
-                search={search}
-                dateFrom={dateFrom}
-                dateTo={dateTo}
-                sample={sample}
-                setSheetData={setSheetData}
-              />
+              <MiscReceiptHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 5 ? (
-              <MiscIssueHistory
-                search={search}
-                dateFrom={dateFrom}
-                dateTo={dateTo}
-                sample={sample}
-                setSheetData={setSheetData}
-              />
+              <MiscIssueHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 6 ? (
-              <BorrowedMatsHistory
-                search={search}
-                dateFrom={dateFrom}
-                dateTo={dateTo}
-                sample={sample}
-                setSheetData={setSheetData}
-              />
+              <BorrowedMatsHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 7 ? (
-              <ReturnedQuantityTransaction
-                search={search}
-                dateFrom={dateFrom}
-                dateTo={dateTo}
-                sample={sample}
-                setSheetData={setSheetData}
-              />
+              <ReturnedQuantityTransaction search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 8 ? (
-              <CancelledOrders
-                search={search}
-                dateFrom={dateFrom}
-                dateTo={dateTo}
-                sample={sample}
-                setSheetData={setSheetData}
-              />
+              <CancelledOrders search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+            ) : sample === 9 ? (
+              <InventoryMovement dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : (
-              // : sample === 6 ?
-              //     <InventoryMovement dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
               ""
             )}
           </Flex>

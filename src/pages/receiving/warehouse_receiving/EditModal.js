@@ -136,7 +136,16 @@ export const EditModal = ({
   });
 
   const expectedDeliveryRef = useRef();
+
   const expectedDeliveryProvider = (data) => {
+    // if (data > actualDelivered) {
+    //   setExpectedDelivery("");
+    //   ToastComponent("Warning!", "Amount is greater than actual delivered", "warning", toast);
+    //   expectedDeliveryRef.current.value = "";
+    // } else {
+    //   setExpectedDelivery(data);
+    // }
+
     if (data < 1) {
       setExpectedDelivery("");
       expectedDeliveryRef.current.value = "";
@@ -145,6 +154,14 @@ export const EditModal = ({
     }
   };
 
+  useEffect(() => {
+    if (expectedDelivery > actualDelivered) {
+      setExpectedDelivery("");
+      expectedDeliveryRef.current.value = "";
+      ToastComponent("Warning!", "Amount is greater than actual delivered", "warning", toast);
+    }
+  }, [expectedDelivery, actualDelivered]);
+
   const lotSectionProvider = (data) => {
     console.log("Controller: ", data.value.sectionName);
     setLotSection(data.value.sectionName);
@@ -152,17 +169,32 @@ export const EditModal = ({
 
   const actualDeliveredRef = useRef();
 
+  // const actualDeliveredProvider = (data) => {
+  //   const allowablePercent = editData.quantityOrdered * 1.1;
+  //   const allowableAmount = allowablePercent - editData.actualGood;
+  //   if (data > allowableAmount) {
+  //     setActualDelivered("");
+  //     ToastComponent("Warning!", "Amount is greater than allowable", "warning", toast);
+  //     actualDeliveredRef.current.value = "";
+  //   } else {
+  //     setActualDelivered(data);
+  //   }
+
+  //   if (data < 1) {
+  //     setActualDelivered("");
+  //     actualDeliveredRef.current.value = "";
+  //   } else {
+  //     setActualDelivered(data);
+  //   }
+  // };
+
   const actualDeliveredProvider = (data) => {
-    const allowablePercent = editData.quantityOrdered * 1.1;
-    const allowableAmount = allowablePercent - editData.actualGood;
-    if (data > allowableAmount) {
+    // const allowablePercent = editData.quantityOrdered * 1.1;
+    // const allowableAmount = allowablePercent - editData.actualGood;
+
+    if (data > editData.actualRemaining) {
       setActualDelivered("");
-      ToastComponent(
-        "Warning!",
-        "Amount is greater than allowable",
-        "warning",
-        toast
-      );
+      ToastComponent("Warning!", "Amount is greater than actual remaining", "warning", toast);
       actualDeliveredRef.current.value = "";
     } else {
       setActualDelivered(data);
@@ -174,13 +206,6 @@ export const EditModal = ({
     } else {
       setActualDelivered(data);
     }
-
-    // if (data === 0) {
-    //   setActualDelivered("");
-    //   actualDeliveredRef.current.value = "";
-    // } else {
-    //   setActualDelivered(data);
-    // }
   };
 
   const siNumberProvider = (data) => {
@@ -273,54 +298,22 @@ export const EditModal = ({
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">
                       Item Code
-                      <Input
-                        {...register("displayData.itemCode")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.itemCode")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
                     <FormLabel w="50%" fontSize="12px">
                       Description
-                      <Input
-                        {...register("displayData.itemDescription")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.itemDescription")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
                   </Flex>
 
                   <Flex justifyContent="space-between" mt={2} p={1}>
                     <FormLabel w="50%" fontSize="12px">
                       Supplier
-                      <Input
-                        {...register("displayData.supplier")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.supplier")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
                     <FormLabel w="50%" fontSize="12px">
                       Date of Checking
-                      <Input
-                        {...register("displayData.checkingDate")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.checkingDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
                   </Flex>
                 </Stack>
@@ -335,69 +328,29 @@ export const EditModal = ({
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">
                       PO Number
-                      <Input
-                        {...register("displayData.poNumber")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.poNumber")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
                     <FormLabel w="50%" fontSize="12px">
                       PO Date
-                      <Input
-                        {...register("displayData.poDate")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.poDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
                   </Flex>
 
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">
                       PR Number
-                      <Input
-                        {...register("displayData.prNumber")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.prNumber")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
                     <FormLabel w="50%" fontSize="12px">
                       PR Date
-                      <Input
-                        {...register("displayData.prDate")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.prDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
                   </Flex>
 
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="100%" fontSize="12px">
                       UOM
-                      <Input
-                        {...register("displayData.uom")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.uom")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
 
                     <FormLabel w="100%" fontSize="12px">
@@ -410,10 +363,7 @@ export const EditModal = ({
                         bgColor="#ffffe0"
                         type="number"
                         onWheel={(e) => e.target.blur()}
-                        onKeyDown={(e) =>
-                          ["E", "e", "+", "-"].includes(e.key) &&
-                          e.preventDefault()
-                        }
+                        onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                         onPaste={(e) => e.preventDefault()}
                         autoComplete="off"
                         min="1"
@@ -427,28 +377,12 @@ export const EditModal = ({
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">
                       Qty. Ordered
-                      <Input
-                        {...register("displayData.quantityOrdered")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.quantityOrdered")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
 
                     <FormLabel w="50%" fontSize="12px">
                       Actual Remaining
-                      <Input
-                        {...register("displayData.actualRemaining")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
+                      <Input {...register("displayData.actualRemaining")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
                   </Flex>
 
@@ -459,10 +393,7 @@ export const EditModal = ({
                         {...register("submitData.expected_delivery")}
                         type="number"
                         onWheel={(e) => e.target.blur()}
-                        onKeyDown={(e) =>
-                          ["E", "e", "+", "-"].includes(e.key) &&
-                          e.preventDefault()
-                        }
+                        onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                         onPaste={(e) => e.preventDefault()}
                         autoComplete="off"
                         min="1"
@@ -470,9 +401,7 @@ export const EditModal = ({
                         size="sm"
                         placeholder="Please provide quantity of expected delivery  (Required)"
                         bgColor="#ffffe0"
-                        onChange={(e) =>
-                          expectedDeliveryProvider(e.target.value)
-                        }
+                        onChange={(e) => expectedDeliveryProvider(e.target.value)}
                         ref={expectedDeliveryRef}
                       />
                     </FormLabel>
@@ -482,10 +411,7 @@ export const EditModal = ({
                         {...register("submitData.actualDelivered")}
                         type="number"
                         onWheel={(e) => e.target.blur()}
-                        onKeyDown={(e) =>
-                          ["E", "e", "+", "-"].includes(e.key) &&
-                          e.preventDefault()
-                        }
+                        onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                         onPaste={(e) => e.preventDefault()}
                         autoComplete="off"
                         min="1"
@@ -493,9 +419,7 @@ export const EditModal = ({
                         size="sm"
                         placeholder="Please enter quantity (Required)"
                         bgColor="#ffffe0"
-                        onChange={(e) =>
-                          actualDeliveredProvider(e.target.value)
-                        }
+                        onChange={(e) => actualDeliveredProvider(e.target.value)}
                         ref={actualDeliveredRef}
                       />
                     </FormLabel>
@@ -523,9 +447,7 @@ export const EditModal = ({
                         fontSize="13px"
                         bgColor="#ffffe0"
                         onChange={receivingDateProvider}
-                        min={moment(
-                          new Date(new Date().setDate(new Date().getDate() - 3))
-                        ).format("yyyy-MM-DD")}
+                        min={moment(new Date(new Date().setDate(new Date().getDate() - 3))).format("yyyy-MM-DD")}
                         max={moment(new Date()).format("yyyy-MM-DD")}
                         type="date"
                       />

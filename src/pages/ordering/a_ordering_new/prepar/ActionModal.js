@@ -43,23 +43,12 @@ import { NumericFormat } from "react-number-format";
 
 const currentUser = decodeUser();
 
-export const EditModal = ({
-  isOpen,
-  onClose,
-  editData,
-  fetchOrderList,
-  fetchCustomerList,
-  orderList,
-}) => {
+export const EditModal = ({ isOpen, onClose, editData, fetchOrderList, fetchCustomerList, orderList }) => {
   const schema = yup.object().shape({
     formData: yup.object().shape({}),
   });
 
-  const {
-    isOpen: isEditRemarks,
-    onOpen: openEditRemarks,
-    onClose: closeEditRemarks,
-  } = useDisclosure();
+  const { isOpen: isEditRemarks, onOpen: openEditRemarks, onClose: closeEditRemarks } = useDisclosure();
 
   const [account, setAccount] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
@@ -94,21 +83,13 @@ export const EditModal = ({
   // FETCH Account API
   const fetchAccountApi = async () => {
     try {
-      const res = await axios.get(
-        `http://genus-aio.rdfmis.ph/etd/backend/public/api/elixir_order?paginate=0&page=1&row=10&status=all`,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get(`http://genus-aio.rdfmis.ph/etd/backend/public/api/elixir_order?paginate=0&page=1&row=10&status=all`, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+        },
+      });
       // console.log("Response: ", res.data.result);
-      setAccount(
-        res.data.result
-          ?.find((items) => items.id === editData.mirId)
-          ?.orders?.find((items) => items.id === editData.orderNo)
-          ?.account_title
-      );
+      setAccount(res.data.result?.find((items) => items.id === editData.mirId)?.orders?.find((items) => items.id === editData.orderNo)?.account_title);
     } catch (error) {}
   };
 
@@ -155,9 +136,7 @@ export const EditModal = ({
     setInfo(
       pickerItems
         .filter((item) => {
-          return item?.general_info?.full_id_number_full_name
-            .toLowerCase()
-            .includes(idNumber);
+          return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
         .splice(0, 50)
     );
@@ -168,14 +147,10 @@ export const EditModal = ({
   // Bind Account Title
   useEffect(() => {
     if (account.length && !watch("formData.accountId")) {
-      const editAccountTitle = orderList?.find(
-        (item) => item.id === editData.id
-      );
+      const editAccountTitle = orderList?.find((item) => item.id === editData.id);
       setValue("formData.accountId", {
         label: `${editAccountTitle.accountCode} - ${editAccountTitle.accountTitles}`,
-        value: account?.find(
-          (item) => item.code === editAccountTitle.accountCode
-        ),
+        value: account?.find((item) => item.code === editAccountTitle.accountCode),
       });
       setSelectedAccount(editAccountTitle.accountTitles);
     }
@@ -217,12 +192,7 @@ export const EditModal = ({
             accountCode: data?.formData?.accountId?.value?.code,
           })
           .then((res) => {
-            ToastComponent(
-              "Success",
-              "Order has been edited!",
-              "success",
-              toast
-            );
+            ToastComponent("Success", "Order has been edited!", "success", toast);
             onClose();
             fetchOrderList();
           })
@@ -261,16 +231,7 @@ export const EditModal = ({
                     <FormLabel fontSize="xs" fontWeight="semibold">
                       MIR ID:
                     </FormLabel>
-                    <Text
-                      fontSize="sm"
-                      textAlign="left"
-                      bgColor="gray.200"
-                      w="full"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                      px={4}
-                    >
+                    <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
                       {editData?.mirId ? editData?.mirId : ""}
                     </Text>
                   </Box>
@@ -280,16 +241,7 @@ export const EditModal = ({
                     <FormLabel fontSize="xs" fontWeight="semibold">
                       Order ID:
                     </FormLabel>
-                    <Text
-                      fontSize="sm"
-                      textAlign="left"
-                      bgColor="gray.200"
-                      w="full"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={3}
-                      px={4}
-                    >
+                    <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={3} px={4}>
                       {editData?.id ? editData?.id : ""}
                     </Text>
                   </Box>
@@ -299,16 +251,7 @@ export const EditModal = ({
                     <FormLabel fontSize="xs" fontWeight="semibold">
                       Item Code:
                     </FormLabel>
-                    <Text
-                      fontSize="sm"
-                      textAlign="left"
-                      bgColor="gray.200"
-                      w="full"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                      px={4}
-                    >
+                    <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
                       {editData?.itemCode ? editData?.itemCode : ""}
                     </Text>
                   </Box>
@@ -318,19 +261,8 @@ export const EditModal = ({
                     <FormLabel fontSize="xs" fontWeight="semibold">
                       Item Description
                     </FormLabel>
-                    <Text
-                      fontSize="sm"
-                      textAlign="left"
-                      bgColor="gray.200"
-                      w="full"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                      px={4}
-                    >
-                      {editData?.itemDescription
-                        ? editData?.itemDescription
-                        : ""}
+                    <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
+                      {editData?.itemDescription ? editData?.itemDescription : ""}
                     </Text>
                   </Box>
 
@@ -339,16 +271,7 @@ export const EditModal = ({
                     <FormLabel fontSize="xs" fontWeight="semibold">
                       UOM:
                     </FormLabel>
-                    <Text
-                      fontSize="sm"
-                      textAlign="left"
-                      bgColor="gray.200"
-                      w="full"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                      px={4}
-                    >
+                    <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
                       {editData?.uom ? editData?.uom : ""}
                     </Text>
                   </Box>
@@ -360,19 +283,8 @@ export const EditModal = ({
                     <FormLabel fontSize="xs" fontWeight="semibold">
                       Quantity Order:
                     </FormLabel>
-                    <Text
-                      fontSize="sm"
-                      textAlign="left"
-                      bgColor="gray.200"
-                      w="full"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                      px={4}
-                    >
-                      {editData?.standardQuantity
-                        ? editData?.standardQuantity
-                        : ""}
+                    <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
+                      {editData?.standardQuantity ? editData?.standardQuantity : ""}
                     </Text>
                   </Box>
 
@@ -387,10 +299,7 @@ export const EditModal = ({
                       onValueChange={(e) => quantityHandler(e.value)}
                       value={quantitySubmit}
                       onWheel={(e) => e.target.blur()}
-                      onKeyDown={(e) =>
-                        ["E", "e", "+", "-"].includes(e.key) &&
-                        e.preventDefault()
-                      }
+                      onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                       onPaste={(e) => e.preventDefault()}
                       min="1"
                       w="full"
@@ -406,26 +315,10 @@ export const EditModal = ({
 
             <ModalFooter justifyItems="center">
               <ButtonGroup size="xs" mt={5}>
-                <Button
-                  px={4}
-                  isLoading={isLoading}
-                  isDisabled={
-                    !quantitySubmit ||
-                    isLoading ||
-                    quantitySubmit > editData.standardQuantity
-                  }
-                  colorScheme="blue"
-                  type="submit"
-                >
+                <Button px={4} isLoading={isLoading} isDisabled={!quantitySubmit || isLoading || quantitySubmit > editData.standardQuantity} colorScheme="blue" type="submit">
                   Save
                 </Button>
-                <Button
-                  onClick={onClose}
-                  isLoading={isLoading}
-                  disabled={isLoading}
-                  variant="outline"
-                  color="black"
-                >
+                <Button onClick={onClose} isLoading={isLoading} disabled={isLoading} variant="outline" color="black">
                   Cancel
                 </Button>
               </ButtonGroup>
@@ -449,16 +342,7 @@ export const EditModal = ({
   );
 };
 
-export const EditRemarksModalConfirmation = ({
-  isEditRemarks,
-  closeEditRemarks,
-  onClose,
-  remarksId,
-  fetchOrderList,
-  quantitySubmit,
-  chargingInfo,
-  editData,
-}) => {
+export const EditRemarksModalConfirmation = ({ isEditRemarks, closeEditRemarks, onClose, remarksId, fetchOrderList, quantitySubmit, chargingInfo, editData }) => {
   const [editRemarks, setEditRemarks] = useState("");
   const [reasons, setReasons] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -485,6 +369,8 @@ export const EditRemarksModalConfirmation = ({
   }, []);
 
   const remarksHandler = (data) => {
+    // console.log("remarks: ", data);
+
     if (data) {
       setEditRemarks(data);
     } else {
@@ -522,12 +408,7 @@ export const EditRemarksModalConfirmation = ({
   };
 
   return (
-    <Modal
-      isCentered
-      size="xl"
-      isOpen={isEditRemarks}
-      onClose={closeEditRemarks}
-    >
+    <Modal isCentered size="xl" isOpen={isEditRemarks} onClose={closeEditRemarks}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader bg="primary" color="white">
@@ -541,34 +422,16 @@ export const EditRemarksModalConfirmation = ({
             <Text>Reason of editing order?</Text>
             <HStack w="full">
               <FormLabel>Reason: </FormLabel>
-              <Input
-                fontSize="md"
-                onChange={(e) => remarksHandler(e.target.value)}
-                placeholder="Enter a reason"
-                w="65%"
-              />
+              <Input className="all-capital" fontSize="md" onChange={(e) => remarksHandler(e.target.value.toUpperCase())} placeholder="Enter a reason" w="65%" />
             </HStack>
           </VStack>
         </ModalBody>
 
         <ModalFooter>
-          <Button
-            variant="outline"
-            color="black"
-            onClick={onClose}
-            disabled={isLoading}
-            isLoading={isLoading}
-            mr={2}
-          >
+          <Button variant="outline" color="black" onClick={onClose} disabled={isLoading} isLoading={isLoading} mr={2}>
             No
           </Button>
-          <Button
-            onClick={() => editHandler()}
-            isDisabled={!editRemarks}
-            isLoading={isLoading}
-            colorScheme="blue"
-            _hover={{ bgColor: "accent" }}
-          >
+          <Button onClick={() => editHandler()} isDisabled={!editRemarks} isLoading={isLoading} colorScheme="blue" _hover={{ bgColor: "accent" }}>
             Yes
           </Button>
         </ModalFooter>
@@ -577,17 +440,7 @@ export const EditRemarksModalConfirmation = ({
   );
 };
 
-export const CancelModalConfirmation = ({
-  isOpen,
-  onClose,
-  cancelId,
-  fetchOrderList,
-  fetchMirList,
-  fetchCustomerList,
-  setCustomerName,
-  fetchNotification,
-  setIsAllChecked,
-}) => {
+export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderList, fetchMirList, fetchCustomerList, setCustomerName, fetchNotification, setIsAllChecked }) => {
   const [cancelRemarks, setCancelRemarks] = useState("");
   const [reasons, setReasons] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -622,7 +475,7 @@ export const CancelModalConfirmation = ({
   };
 
   const cancelHandler = () => {
-    // console.log("Cancel Remarks: ", cancelRemarks);
+    console.log("Cancel Remarks: ", cancelRemarks);
 
     setIsLoading(true);
     try {
@@ -634,12 +487,7 @@ export const CancelModalConfirmation = ({
         })
         .then((res) => {
           // setIsAllChecked([]);
-          ToastComponent(
-            "Success",
-            "Order has been cancelled!",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Order has been cancelled!", "success", toast);
           fetchNotification();
           setIsLoading(false);
           onClose();
@@ -667,12 +515,7 @@ export const CancelModalConfirmation = ({
           <VStack justifyContent="center" mt={4} mb={7}>
             <Text>Are you sure you want to cancel this order?</Text>
             {reasons.length > 0 ? (
-              <Select
-                fontSize="md"
-                onChange={(e) => remarksHandler(e.target.value)}
-                placeholder="Please select a reason"
-                w="65%"
-              >
+              <Select fontSize="md" onChange={(e) => remarksHandler(e.target.value)} placeholder="Please select a reason" w="65%">
                 {reasons?.map((item, i) => (
                   <option key={i} value={item.reasonName}>
                     {item.reasonName}
@@ -686,23 +529,10 @@ export const CancelModalConfirmation = ({
         </ModalBody>
 
         <ModalFooter>
-          <Button
-            variant="outline"
-            color="black"
-            onClick={onClose}
-            isDisabled={isLoading}
-            isLoading={isLoading}
-            mr={2}
-          >
+          <Button variant="outline" color="black" onClick={onClose} isDisabled={isLoading} isLoading={isLoading} mr={2}>
             No
           </Button>
-          <Button
-            onClick={() => cancelHandler()}
-            isDisabled={!cancelRemarks}
-            isLoading={isLoading}
-            colorScheme="blue"
-            _hover={{ bgColor: "accent" }}
-          >
+          <Button onClick={() => cancelHandler()} isDisabled={!cancelRemarks} isLoading={isLoading} colorScheme="blue" _hover={{ bgColor: "accent" }}>
             Yes
           </Button>
         </ModalFooter>
@@ -711,18 +541,7 @@ export const CancelModalConfirmation = ({
   );
 };
 
-export const ScheduleModal = ({
-  isOpen,
-  onClose,
-  fetchMirList,
-  selectedMIRIds,
-  setSelectedMIRIds,
-  setIsAllChecked,
-  setCurrentPage,
-  setSearch,
-  fetchNotification,
-  orderList,
-}) => {
+export const ScheduleModal = ({ isOpen, onClose, fetchMirList, selectedMIRIds, setSelectedMIRIds, setIsAllChecked, setCurrentPage, setSearch, fetchNotification, orderList }) => {
   const [preparationDate, setPreparationDate] = useState();
   const date = new Date();
   // const maxDate = moment(new Date(date.setMonth(date.getMonth() + 6))).format(
@@ -788,12 +607,7 @@ export const ScheduleModal = ({
           const res = request
             .put(`Ordering/PreparationOfSchedule`, submitArray)
             .then((res) => {
-              ToastComponent(
-                "Success",
-                "Orders were successfully scheduled",
-                "success",
-                toast
-              );
+              ToastComponent("Success", "Orders were successfully scheduled", "success", toast);
               fetchNotification();
               onClose();
               setSelectedMIRIds([]);
@@ -814,24 +628,14 @@ export const ScheduleModal = ({
 
         // GENUS STATUS
         try {
-          axios.patch(
-            `http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`,
-            genusStatus,
-            {
-              headers: {
-                Authorization:
-                  "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-              },
-            }
-          );
+          axios.patch(`http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`, genusStatus, {
+            headers: {
+              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+            },
+          });
         } catch (error) {
           console.log(error);
-          ToastComponent(
-            "Error",
-            "Genus ETD update status failed",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Genus ETD update status failed", "error", toast);
         }
       }
     });
@@ -873,12 +677,7 @@ export const ScheduleModal = ({
             <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button
-              px={5}
-              colorScheme="blue"
-              isDisabled={!preparationDate}
-              onClick={submitValidate}
-            >
+            <Button px={5} colorScheme="blue" isDisabled={!preparationDate} onClick={submitValidate}>
               Submit
             </Button>
           </ButtonGroup>
@@ -965,10 +764,7 @@ export const ViewDetailsModal = (props) => {
                 <Text fontSize="xs" fontWeight="semibold">
                   Date Needed:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(viewData[0]?.dateNeeded).format("MM/DD/yyyy")}
-                </Text>
+                <Text fontSize="xs"> {moment(viewData[0]?.dateNeeded).format("MM/DD/yyyy")}</Text>
               </HStack>
             </VStack>
             <VStack alignItems="start" spacing={-1}></VStack>
@@ -1013,16 +809,8 @@ export const ViewDetailsModal = (props) => {
                               minimumFractionDigits: 2,
                             })}
                           </Td>
-                          {list.itemRemarks ? (
-                            <Td fontSize="xs">{list.itemRemarks}</Td>
-                          ) : (
-                            <Td fontSize="xs">-</Td>
-                          )}
-                          {list.assetTag ? (
-                            <Td fontSize="xs">{list.assetTag}</Td>
-                          ) : (
-                            <Td fontSize="xs">-</Td>
-                          )}
+                          {list.itemRemarks ? <Td fontSize="xs">{list.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
+                          {list.assetTag ? <Td fontSize="xs">{list.assetTag}</Td> : <Td fontSize="xs">-</Td>}
                         </Tr>
                       ))}
                     </React.Fragment>
