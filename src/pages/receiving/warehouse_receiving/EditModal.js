@@ -138,14 +138,6 @@ export const EditModal = ({
   const expectedDeliveryRef = useRef();
 
   const expectedDeliveryProvider = (data) => {
-    // if (data > actualDelivered) {
-    //   setExpectedDelivery("");
-    //   ToastComponent("Warning!", "Amount is greater than actual delivered", "warning", toast);
-    //   expectedDeliveryRef.current.value = "";
-    // } else {
-    //   setExpectedDelivery(data);
-    // }
-
     if (data < 1) {
       setExpectedDelivery("");
       expectedDeliveryRef.current.value = "";
@@ -155,10 +147,10 @@ export const EditModal = ({
   };
 
   useEffect(() => {
-    if (expectedDelivery > actualDelivered) {
+    if (expectedDelivery > editData.actualRemaining) {
       setExpectedDelivery("");
       expectedDeliveryRef.current.value = "";
-      ToastComponent("Warning!", "Amount is greater than actual delivered", "warning", toast);
+      ToastComponent("Warning!", "Expected delivery is greater than actual delivered", "warning", toast);
     }
   }, [expectedDelivery, actualDelivered]);
 
@@ -169,6 +161,7 @@ export const EditModal = ({
 
   const actualDeliveredRef = useRef();
 
+  // ALLOWABLE -----------
   // const actualDeliveredProvider = (data) => {
   //   const allowablePercent = editData.quantityOrdered * 1.1;
   //   const allowableAmount = allowablePercent - editData.actualGood;
@@ -189,12 +182,9 @@ export const EditModal = ({
   // };
 
   const actualDeliveredProvider = (data) => {
-    // const allowablePercent = editData.quantityOrdered * 1.1;
-    // const allowableAmount = allowablePercent - editData.actualGood;
-
     if (data > editData.actualRemaining) {
       setActualDelivered("");
-      ToastComponent("Warning!", "Amount is greater than actual remaining", "warning", toast);
+      ToastComponent("Warning!", "Actual delivered is greater than actual remaining", "warning", toast);
       actualDeliveredRef.current.value = "";
     } else {
       setActualDelivered(data);
@@ -264,6 +254,8 @@ export const EditModal = ({
       backgroundColor: "#ffffe0",
     }),
   };
+
+  console.log("Edit data asdas: ", editData);
 
   return (
     <ReceivingContext.Provider
@@ -447,37 +439,14 @@ export const EditModal = ({
                         fontSize="13px"
                         bgColor="#ffffe0"
                         onChange={receivingDateProvider}
-                        min={moment(new Date(new Date().setDate(new Date().getDate() - 3))).format("yyyy-MM-DD")}
-                        max={moment(new Date()).format("yyyy-MM-DD")}
+                        // min={moment(new Date(new Date().setDate(new Date().getDate() - 3))).format("yyyy-MM-DD")}
+                        // max={moment(new Date()).format("yyyy-MM-DD")}
                         type="date"
                       />
                     </FormLabel>
 
                     <FormLabel w="50%" fontSize="12px">
                       LOT Section
-                      {/* {lotCategories.length > 0 ? (
-                        <Select
-                          size="sm"
-                          fontSize="13px"
-                          onChange={(e) => lotSectionProvider(e.target.value)}
-                          disabled={!receivingDate}
-                          placeholder="Select a lot section"
-                          title={
-                            !receivingDate
-                              ? "Please provide a Receiving Date first"
-                              : "Select a lot section"
-                          }
-                          bgColor="#ffffe0"
-                        >
-                          {lotCategories?.map((lot) => (
-                            <option key={lot.id} value={lot.sectionName}>
-                              {lot.sectionName}
-                            </option>
-                          ))}
-                        </Select>
-                      ) : (
-                        "Loading"
-                      )} */}
                       <Controller
                         control={control}
                         name="formData.lotCategories"

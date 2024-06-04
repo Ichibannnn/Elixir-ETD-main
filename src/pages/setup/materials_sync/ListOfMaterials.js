@@ -45,6 +45,8 @@ import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { Pagination, PaginationContainer, PaginationNext, PaginationPage, PaginationPageGroup, PaginationPrevious } from "@ajna/pagination";
 import { Select as AutoComplete } from "chakra-react-select";
+import { RiToolsFill } from "react-icons/ri";
+import { FaTools } from "react-icons/fa";
 
 export const ListOfMaterials = ({
   genusMaterials,
@@ -187,8 +189,9 @@ export const ListOfMaterials = ({
   }, [elixirMaterials]);
 
   const editBufferHandler = (mats) => {
+    // console.log(mats);
     setEditData(mats);
-    console.log("Edit Data: ", editData);
+    // console.log("Edit Data: ", editData);
     openEdit();
   };
 
@@ -292,6 +295,9 @@ export const ListOfMaterials = ({
                         UOM
                       </Th>
                       <Th color="#D6D6D6" fontSize="10px">
+                        Lot Section
+                      </Th>
+                      <Th color="#D6D6D6" fontSize="10px">
                         Buffer Level
                       </Th>
                       <Th color="#D6D6D6" fontSize="10px">
@@ -322,6 +328,7 @@ export const ListOfMaterials = ({
                           <Td fontSize="12px">{mats.itemDescription}</Td>
                           <Td fontSize="12px">{mats.itemCategoryName}</Td>
                           <Td fontSize="12px">{mats.uom}</Td>
+                          <Td fontSize="12px">{mats.sectionName === null ? "-" : `${mats.sectionName}`}</Td>
                           <Td fontSize="12px">
                             {mats.bufferLevel.toLocaleString(undefined, {
                               maximumFractionDigits: 2,
@@ -420,8 +427,8 @@ export const ListOfMaterials = ({
 
 const schema = yup.object().shape({
   formData: yup.object().shape({
-    id: yup.string(),
-    lotNamesId: yup.object().required().typeError("Lot Name is required"),
+    id: yup.number(),
+    lotSectionId: yup.object(),
     bufferLevel: yup
       .number()
       .required("Buffer level is required")
@@ -436,18 +443,18 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
   const toast = useToast();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
 
-  const [lotName, setLotName] = useState([]);
+  const [lotSection, setLotSection] = useState([]);
 
-  const fetchLot = async () => {
+  const fetchLotSection = async () => {
     try {
-      const res = await request.get("Lot/GetAllActiveLotCategories");
-      setLotName(res.data);
+      const res = await request.get("Lot/GetAllActiveLotNames");
+      setLotSection(res.data);
     } catch (error) {}
   };
 
   useEffect(() => {
     try {
-      fetchLot();
+      fetchLotSection();
     } catch (error) {}
   }, []);
 
@@ -468,17 +475,28 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
     defaultValues: {
       formData: {
         id: "",
+        lotSectionId: "",
         bufferLevel: "",
       },
     },
   });
 
   const submitHandler = async (data) => {
+    console.log("data: ", data);
+
+    const payload = {
+      id: data.formData?.id,
+      bufferLevel: data?.formData?.bufferLevel,
+      lotSectionId: data?.formData?.lotSectionId?.value?.id,
+    };
+
+    console.log("payyllloaddddd: ", payload);
+
     try {
       const res = await request
-        .put(`Material/UpdateAsyncBufferLvl`, data.formData)
+        .put(`Material/UpdateAsyncBufferLvl`, payload)
         .then((res) => {
-          ToastComponent("Success", "Buffer Level Updated", "success", toast);
+          ToastComponent("Success", "Updated material information", "success", toast);
           fetchElixirMaterials();
           closeEdit();
         })
@@ -490,7 +508,7 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
   };
 
   useEffect(() => {
-    if (editData.id) {
+    if (editData) {
       setValue(
         "formData",
         {
@@ -499,6 +517,13 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
         },
         { shouldValidate: true }
       );
+
+      setValue("formData.lotSectionId", {
+        label: editData?.sectionName,
+        value: {
+          id: editData?.lotSectionId,
+        },
+      });
     }
   }, [editData]);
 
@@ -511,45 +536,53 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
             <DrawerHeader borderBottomWidth="1px">Edit Material</DrawerHeader>
             <DrawerBody>
               <Stack spacing="7px">
-                <Box>
-                  <FormLabel>Lot Name:</FormLabel>
-                  {/* {lotName.length > 0 ? (
-                    <Select fontSize="md" {...register("formData.lotNamesId")} placeholder="Select Lot Name">
-                      {lotName.map((ln) => (
-                        <option key={ln.id} value={ln.id}>
-                          {ln.lotCode} - {ln.lotName}
+                <Stack direction="row" gap={0.5}>
+                  <FaTools fontSize="26px" />
+                  <Text fontSize="16px" fontWeight="semibold">
+                    {`${editData.itemCode} - ${editData.itemDescription}`}{" "}
+                  </Text>
+                </Stack>
+
+                <Box mt={2}>
+                  {/* <FormLabel>Lot Section:</FormLabel>
+                  {lotSection.length > 0 ? (
+                    <Select fontSize="md" {...register("formData.lotSectionId")} placeholder="Select Lot Name">
+                      {lotSection.map((lotSection) => (
+                        <option key={lotSection.id} value={lotSection.id}>
+                          {lotSection.sectionName}
                         </option>
                       ))}
                     </Select>
                   ) : (
                     "loading"
-                  )}
-                  <Text color="red" fontSize="xs">
-                    {errors.formData?.lotNamesId?.message}
-                  </Text> */}
+                  )} */}
 
+                  <FormLabel fontSize="sm">Lot Section</FormLabel>
                   <Controller
                     control={control}
-                    name="formData.lotNamesId"
+                    name="formData.lotSectionId"
                     render={({ field }) => (
                       <AutoComplete
-                        className="react-select-layout"
                         ref={field.ref}
                         value={field.value}
                         size="md"
-                        placeholder="Select Lot Name"
+                        placeholder="Select Lot Section"
                         onChange={(e) => {
                           field.onChange(e);
                         }}
-                        options={lotName?.map((item) => {
+                        options={lotSection?.map((item) => {
                           return {
-                            label: `${item.lotCode} - ${item.lotName}`,
+                            label: ` ${item.sectionName}`,
                             value: item,
                           };
                         })}
                       />
                     )}
                   />
+
+                  {/* <Text color="red" fontSize="xs">
+                    {errors.formData?.companyId?.message}
+                  </Text> */}
                 </Box>
 
                 <Box>
@@ -566,7 +599,7 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
                 Cancel
               </Button>
 
-              <Button type="submit" colorScheme="blue" isDisabled={!isValid}>
+              <Button type="submit" colorScheme="blue" isDisabled={!isValid || !watch("formData.lotSectionId")}>
                 Submit
               </Button>
             </DrawerFooter>

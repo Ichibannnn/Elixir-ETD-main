@@ -1,39 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  Flex,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  Button,
-  HStack,
-  Select,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text } from "@chakra-ui/react";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
 import moment from "moment";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
-export const CancelledOrders = ({
-  dateFrom,
-  dateTo,
-  sample,
-  setSheetData,
-  search,
-}) => {
+export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
   const [buttonChanger, setButtonChanger] = useState(true);
   const [cancelledData, setCancelledData] = useState([]);
 
@@ -41,14 +13,11 @@ export const CancelledOrders = ({
   console.log("Date To: ", dateTo);
 
   const fetchCancelledOrdersApi = async (dateFrom, dateTo, search) => {
-    const res = await request.get(
-      `Reports/CancelledOrderedReports?PageNumber=1&PageSize=1000000&dateFrom=${dateFrom}&dateTo=${dateTo}`,
-      {
-        params: {
-          search: search,
-        },
-      }
-    );
+    const res = await request.get(`Reports/CancelledOrderedReports?PageNumber=1&PageSize=1000000&dateFrom=${dateFrom}&dateTo=${dateTo}`, {
+      params: {
+        search: search,
+      },
+    });
     return res.data;
   };
 
@@ -69,13 +38,10 @@ export const CancelledOrders = ({
             "Charging Location": `${item.locationCode} - ${item.locationName}`,
             "Item Code": item.itemCode,
             "Item Description": item.itemDescription,
-            "Quantity Unserved": item.quantityOrdered.toLocaleString(
-              undefined,
-              {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }
-            ),
+            "Quantity Unserved": item.quantityOrdered.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }),
             Reason: item.reason,
             "Cancelled Date": moment(item.cancelledDate).format("yyyy-MM-DD"),
             "Cancelled By": item.cancelledBy,
@@ -98,13 +64,7 @@ export const CancelledOrders = ({
       <Flex className="boxShadow">
         <PageScroll minHeight="720px" maxHeight="740px">
           <Table size="md" variant="striped">
-            <Thead
-              bgColor="primary"
-              h="40px"
-              position="sticky"
-              top={0}
-              zIndex="1"
-            >
+            <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
               <Tr>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
                   MIR ID
@@ -174,19 +134,9 @@ export const CancelledOrders = ({
                     })}
                   </Td>
                   <Td fontSize="xs">{item.reason}</Td>
-                  {item.cancelledDate ? (
-                    <Td fontSize="xs">
-                      {moment(item.cancelledDate).format("yyyy-MM-DD")}
-                    </Td>
-                  ) : (
-                    <Td fontSize="xs">-</Td>
-                  )}
+                  {item.cancelledDate ? <Td fontSize="xs">{moment(item.cancelledDate).format("yyyy-MM-DD")}</Td> : <Td fontSize="xs">-</Td>}
 
-                  {item.cancelledBy ? (
-                    <Td fontSize="xs">{item.cancelledBy}</Td>
-                  ) : (
-                    <Td fontSize="xs">-</Td>
-                  )}
+                  {item.cancelledBy ? <Td fontSize="xs">{item.cancelledBy}</Td> : <Td fontSize="xs">-</Td>}
                 </Tr>
               ))}
             </Tbody>

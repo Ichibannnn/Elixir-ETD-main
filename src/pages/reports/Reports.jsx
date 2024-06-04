@@ -49,6 +49,8 @@ const Reports = () => {
     setSearch(inputValue);
   };
 
+  const minimumDateForInventoryMovement = "2022-01-01";
+
   return (
     <>
       <Flex w="full" p={3} bg="form">
@@ -100,20 +102,27 @@ const Reports = () => {
 
               {/* Viewing Condition  */}
               <Flex justifyContent="start">
-                {sample < 9 ? (
+                {sample < 10 ? (
                   <Flex justifyContent="start" flexDirection="row">
                     {sample != 9 && (
                       <Flex flexDirection="column" ml={1}>
                         <Flex>
                           <Badge>Date from:</Badge>
                         </Flex>
-                        <Input fontSize="xs" bgColor="#fff8dc" type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} />
+                        <Input
+                          fontSize="xs"
+                          bgColor="#fff8dc"
+                          type="date"
+                          value={dateFrom}
+                          onChange={(e) => setDateFrom(e.target.value)}
+                          min={sample === 9 ? minimumDateForInventoryMovement : undefined}
+                        />
                       </Flex>
                     )}
 
                     <Flex flexDirection="column" ml={1}>
                       <Flex>
-                        <Badge>Date to:</Badge>
+                        <Badge>{sample === 9 ? `Rollback Date:` : `Date To:`}</Badge>
                       </Flex>
                       <Input fontSize="xs" bgColor="#fff8dc" type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
                     </Flex>
@@ -141,7 +150,7 @@ const Reports = () => {
             ) : sample === 8 ? (
               <CancelledOrders search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 9 ? (
-              <InventoryMovement dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <InventoryMovement search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : (
               ""
             )}

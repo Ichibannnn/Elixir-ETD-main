@@ -37,14 +37,7 @@ import { FcInfo } from "react-icons/fc";
 const currentUser = decodeUser();
 
 //Cancel Approved Date
-export const CancelApprovedDate = ({
-  isOpen,
-  onClose,
-  id,
-  setOrderId,
-  fetchApprovedMoveOrders,
-  fetchNotification,
-}) => {
+export const CancelApprovedDate = ({ isOpen, onClose, id, setOrderId, fetchApprovedMoveOrders, fetchNotification }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,12 +48,7 @@ export const CancelApprovedDate = ({
       const res = request
         .put(`Ordering/CancelOrdersInMoveOrder`, [{ trasactId: id }])
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Successfully cancelled approved date",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Successfully cancelled approved date", "success", toast);
           setOrderId("");
           fetchApprovedMoveOrders();
           fetchNotification();
@@ -88,31 +76,16 @@ export const CancelApprovedDate = ({
 
           <ModalBody>
             <VStack justifyContent="center">
-              <Text>
-                Are you sure you want to cancel this approved date for
-                re-scheduling?
-              </Text>
+              <Text>Are you sure you want to cancel this approved date for re-scheduling?</Text>
             </VStack>
           </ModalBody>
 
           <ModalFooter mt={10} justifyContent="center">
             <ButtonGroup size="sm" mt={3}>
-              <Button
-                onClick={submitHandler}
-                isLoading={isLoading}
-                isDisabled={isLoading}
-                colorScheme="blue"
-                px={4}
-              >
+              <Button onClick={submitHandler} isLoading={isLoading} isDisabled={isLoading} colorScheme="blue" px={4}>
                 Yes
               </Button>
-              <Button
-                onClick={onClose}
-                isLoading={isLoading}
-                disabled={isLoading}
-                colorScheme="red"
-                px={4}
-              >
+              <Button onClick={onClose} isLoading={isLoading} disabled={isLoading} colorScheme="red" px={4}>
                 No
               </Button>
             </ButtonGroup>
@@ -142,22 +115,14 @@ export const SaveButton = ({
   fetchNotification,
   moveData,
 }) => {
-  const {
-    isOpen: isPlateNumber,
-    onClose: closePlateNumber,
-    onOpen: openPlateNumber,
-  } = useDisclosure();
+  const { isOpen: isPlateNumber, onClose: closePlateNumber, onOpen: openPlateNumber } = useDisclosure();
 
   return (
     <Flex w="full" justifyContent="end">
       <Button
         onClick={() => openPlateNumber()}
         // disabled={!deliveryStatus || !batchNumber}
-        title={
-          deliveryStatus
-            ? `Save with delivery status "${deliveryStatus}" and batch number "${batchNumber}"`
-            : "Please select a delivery status and batch number."
-        }
+        title={deliveryStatus ? `Save with delivery status "${deliveryStatus}" and batch number "${batchNumber}"` : "Please select a delivery status and batch number."}
         size="xs"
         colorScheme="blue"
         px={6}
@@ -193,10 +158,7 @@ const schema = yup.object().shape({
   formData: yup.object().shape({
     orderId: yup.string(),
     companyId: yup.object().required().typeError("Company Name is required"),
-    departmentId: yup
-      .object()
-      .required()
-      .typeError("Department Category is required"),
+    departmentId: yup.object().required().typeError("Department Category is required"),
     locationId: yup.object().required().typeError("Location Name is required"),
   }),
 });
@@ -254,14 +216,11 @@ export const AccountTitleModal = ({
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setCompany(res.data.result.companies);
       // console.log(res.data.result.companies);
     } catch (error) {}
@@ -270,15 +229,11 @@ export const AccountTitleModal = ({
   // FETCH DEPT API
   const fetchDepartmentApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setDepartment(res.data.result.departments);
       // console.log(res.data.result.companies);
     } catch (error) {}
@@ -287,24 +242,18 @@ export const AccountTitleModal = ({
   // FETCH Loc API
   const fetchLocationApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setLocation(res.data.result.locations);
       // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
   useEffect(() => {
-    fetchLocationApi().then(() =>
-      fetchDepartmentApi().then(() => fetchCompanyApi())
-    );
+    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
   }, []);
 
   const {
@@ -333,11 +282,7 @@ export const AccountTitleModal = ({
   useEffect(() => {
     const order = moveData?.orders?.find((item) => item.id === orderId);
 
-    if (
-      location.length &&
-      !watch("formData.locationId") &&
-      !watch("formData.departmentId")
-    ) {
+    if (location.length && !watch("formData.locationId") && !watch("formData.departmentId")) {
       setValue("formData.locationId", {
         label: `${order.locationCode} - ${order.locationName}`,
         value: location?.find((item) => item.code === order.locationCode),
@@ -349,11 +294,7 @@ export const AccountTitleModal = ({
   useEffect(() => {
     const order = moveData?.orders?.find((item) => item.id === orderId);
 
-    if (
-      department.length &&
-      !watch("formData.departmentId") &&
-      !watch("formData.companyId")
-    ) {
+    if (department.length && !watch("formData.departmentId") && !watch("formData.companyId")) {
       setValue("formData.departmentId", {
         label: `${order.departmentCode} - ${order.department}`,
         value: department?.find((item) => item.code === order.departmentCode),
@@ -424,12 +365,7 @@ export const AccountTitleModal = ({
           const response = request
             .put(`Ordering/AddSavePreparedMoveOrder`, submitArrayBody)
             .then((response) => {
-              ToastComponent(
-                "Success",
-                "Items prepared successfully.",
-                "success",
-                toast
-              );
+              ToastComponent("Success", "Items prepared successfully.", "success", toast);
               // fetchMoveOrder();
               setOrderId("");
               setHighlighterId("");
@@ -452,24 +388,14 @@ export const AccountTitleModal = ({
 
         // GENUS STATUS
         try {
-          axios.patch(
-            `http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`,
-            genusStatus,
-            {
-              headers: {
-                Authorization:
-                  "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-              },
-            }
-          );
+          axios.patch(`http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`, genusStatus, {
+            headers: {
+              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+            },
+          });
         } catch (error) {
           console.log(error);
-          ToastComponent(
-            "Error",
-            "Genus ETD update status failed",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Genus ETD update status failed", "error", toast);
         }
       }
     });
@@ -632,9 +558,7 @@ export const AccountTitleModal = ({
                 isLoading={isLoading}
                 isDisabled={
                   // !isValid
-                  !watch("formData.companyId") ||
-                  !watch("formData.departmentId") ||
-                  !watch("formData.locationId")
+                  !watch("formData.companyId") || !watch("formData.departmentId") || !watch("formData.locationId")
                 }
                 colorScheme="blue"
                 px={4}
@@ -685,12 +609,7 @@ export const AddQuantityConfirmation = ({
           preparedBy: currentUser.userName,
         })
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Quantity has been prepared.",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Quantity has been prepared.", "success", toast);
           setQuantity("");
           setHighlighterId("");
           setWarehouseId("");
@@ -720,34 +639,17 @@ export const AddQuantityConfirmation = ({
 
           <ModalBody>
             <VStack justifyContent="center">
-              <Text fontSize="sm">
-                Are you sure you want to add this quantity?
-              </Text>
+              <Text fontSize="sm">Are you sure you want to add this quantity?</Text>
               <Text fontSize="sm">{`[ MIR ID: ${orderNo} ] [ Item Code: ${itemCode} ] [ Quantity Ordered: ${quantity} ]`}</Text>
             </VStack>
           </ModalBody>
 
           <ModalFooter justifyContent="center">
             <ButtonGroup size="sm" mt={3}>
-              <Button
-                onClick={submitHandler}
-                isLoading={isLoading}
-                disabled={isLoading}
-                colorScheme="blue"
-                px={4}
-                size="xs"
-              >
+              <Button onClick={submitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="blue" px={4} size="xs">
                 Yes
               </Button>
-              <Button
-                onClick={onClose}
-                isLoading={isLoading}
-                disabled={isLoading}
-                color="black"
-                variant="outline"
-                px={4}
-                size="xs"
-              >
+              <Button onClick={onClose} isLoading={isLoading} disabled={isLoading} color="black" variant="outline" px={4} size="xs">
                 No
               </Button>
             </ButtonGroup>
@@ -760,15 +662,7 @@ export const AddQuantityConfirmation = ({
 
 //Cancel Prepared
 
-export const CancelConfirmation = ({
-  isOpen,
-  onClose,
-  id,
-  fetchPreparedItems,
-  fetchOrderList,
-  setCancelId,
-  fetchNotification,
-}) => {
+export const CancelConfirmation = ({ isOpen, onClose, id, fetchPreparedItems, fetchOrderList, setCancelId, fetchNotification }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -778,12 +672,7 @@ export const CancelConfirmation = ({
       const res = request
         .put(`Ordering/CancelPreparedItems`, { id: id })
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Successfully cancelled prepared item",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Successfully cancelled prepared item", "success", toast);
           setCancelId("");
           fetchPreparedItems();
           fetchNotification();
@@ -818,23 +707,10 @@ export const CancelConfirmation = ({
 
           <ModalFooter justifyContent="center">
             <ButtonGroup size="sm" mt={3}>
-              <Button
-                onClick={submitHandler}
-                isLoading={isLoading}
-                disabled={isLoading}
-                colorScheme="blue"
-                px={4}
-              >
+              <Button onClick={submitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="blue" px={4}>
                 Yes
               </Button>
-              <Button
-                onClick={onClose}
-                isLoading={isLoading}
-                disabled={isLoading}
-                color="black"
-                variant="outline"
-                px={4}
-              >
+              <Button onClick={onClose} isLoading={isLoading} disabled={isLoading} color="black" variant="outline" px={4}>
                 No
               </Button>
             </ButtonGroup>

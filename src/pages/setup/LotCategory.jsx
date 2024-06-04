@@ -49,15 +49,7 @@ import { ToastComponent } from "../../components/Toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
 const LotCategory = () => {
   const [lotCategory, setLotCategory] = useState([]);
@@ -73,9 +65,7 @@ const LotCategory = () => {
 
   // FETCH API LOT CATEGORY:
   const fetchLotCategoryApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Lot/GetAllLotNameWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
-    );
+    const response = await request.get(`Lot/GetAllLotNameWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
     return response.data;
   };
@@ -83,14 +73,7 @@ const LotCategory = () => {
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -189,23 +172,13 @@ const LotCategory = () => {
   }, [search]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="full"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} w="full">
         <Flex flexDirection="column" gap={1} w="full">
           <Flex justifyContent="space-between" alignItems="center">
             <HStack w="25%" mt={3}>
               <InputGroup size="sm">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<FiSearch bg="black" fontSize="18px" />}
-                />
+                <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
                 <Input
                   borderRadius="lg"
                   fontSize="13px"
@@ -222,10 +195,7 @@ const LotCategory = () => {
 
             <HStack flexDirection="row">
               <Text fontSize="12px">STATUS:</Text>
-              <Select
-                fontSize="12px"
-                onChange={(e) => statusHandler(e.target.value)}
-              >
+              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
@@ -253,14 +223,7 @@ const LotCategory = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
                       <Th h="40px" color="white" fontSize="10px">
@@ -299,12 +262,7 @@ const LotCategory = () => {
                         <Td pl={0}>
                           <Flex>
                             <HStack>
-                              <Button
-                                bg="none"
-                                p={0}
-                                size="sm"
-                                onClick={() => editLotCategoryHandler(cat)}
-                              >
+                              <Button bg="none" p={0} size="sm" onClick={() => editLotCategoryHandler(cat)}>
                                 <AiTwotoneEdit />
                               </Button>
 
@@ -314,19 +272,11 @@ const LotCategory = () => {
                                     <PopoverTrigger>
                                       {cat.isActive === true ? (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnon.png"
-                                            title="active"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnon.png" title="active" />
                                         </Button>
                                       ) : (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnoff.png"
-                                            title="inactive"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnoff.png" title="inactive" />
                                         </Button>
                                       )}
                                     </PopoverTrigger>
@@ -334,32 +284,15 @@ const LotCategory = () => {
                                       <PopoverContent bg="primary" color="#fff">
                                         <PopoverArrow bg="primary" />
                                         <PopoverCloseButton />
-                                        <PopoverHeader>
-                                          Confirmation!
-                                        </PopoverHeader>
+                                        <PopoverHeader>Confirmation!</PopoverHeader>
                                         <PopoverBody>
                                           <VStack onClick={onClose}>
                                             {cat.isActive === true ? (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this Lot Category inactive?
-                                              </Text>
+                                              <Text>Are you sure you want to set this Lot Category inactive?</Text>
                                             ) : (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this Lot Category active?
-                                              </Text>
+                                              <Text>Are you sure you want to set this Lot Category active?</Text>
                                             )}
-                                            <Button
-                                              colorScheme="green"
-                                              size="sm"
-                                              onClick={() =>
-                                                changeStatusHandler(
-                                                  cat.id,
-                                                  cat.isActive
-                                                )
-                                              }
-                                            >
+                                            <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(cat.id, cat.isActive)}>
                                               Yes
                                             </Button>
                                           </VStack>
@@ -407,18 +340,9 @@ const LotCategory = () => {
               )}
 
               <Stack>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                    >
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                       {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
@@ -435,19 +359,10 @@ const LotCategory = () => {
                       ))}
                     </PaginationPageGroup>
                     <HStack>
-                      <PaginationNext
-                        bg="primary"
-                        color="white"
-                        p={1}
-                        _hover={{ bg: "btnColor", color: "white" }}
-                      >
+                      <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                         {">>"}
                       </PaginationNext>
-                      <Select
-                        onChange={handlePageSizeChange}
-                        variant="outline"
-                        fontSize="md"
-                      >
+                      <Select onChange={handlePageSizeChange} variant="outline" fontSize="md">
                         <option value={Number(5)}>5</option>
                         <option value={Number(10)}>10</option>
                         <option value={Number(25)}>25</option>
@@ -470,11 +385,8 @@ export default LotCategory;
 const schema = yup.object().shape({
   formData: yup.object().shape({
     id: yup.string().uppercase(),
-    lotNamesId: yup.number().required("Lot Name name is required"),
-    sectionName: yup
-      .string()
-      .uppercase()
-      .required("Lot Section name is required"),
+    lotNamesId: yup.number().required("Lot Name is required"),
+    sectionName: yup.string().uppercase().required("Lot Section name is required"),
     addedBy: yup.string().uppercase(),
   }),
 });
@@ -531,12 +443,7 @@ const DrawerComponent = (props) => {
         const res = await request
           .post("Lot/AddNewLotName", data.formData)
           .then((res) => {
-            ToastComponent(
-              "Success",
-              "New Lot Section created!",
-              "success",
-              toast
-            );
+            ToastComponent("Success", "New Lot Section created!", "success", toast);
             getLotCategoryHandler();
             onClose();
           })
@@ -553,12 +460,7 @@ const DrawerComponent = (props) => {
             onClose(onClose);
           })
           .catch((error) => {
-            ToastComponent(
-              "Update Failed",
-              error.response.data,
-              "warning",
-              toast
-            );
+            ToastComponent("Update Failed", error.response.data, "warning", toast);
           });
       }
     } catch (err) {}
@@ -587,20 +489,14 @@ const DrawerComponent = (props) => {
         <DrawerOverlay />
         <form onSubmit={handleSubmit(submitHandler)}>
           <DrawerContent>
-            <DrawerHeader borderBottomWidth="1px">
-              Lot Section Form
-            </DrawerHeader>
+            <DrawerHeader borderBottomWidth="1px">Lot Section Form</DrawerHeader>
             {/* <DrawerCloseButton /> */}
             <DrawerBody>
               <Stack spacing="7px">
                 <Box>
                   <FormLabel>Lot Name:</FormLabel>
                   {lotName.length > 0 ? (
-                    <Select
-                      fontSize="md"
-                      {...register("formData.lotNamesId")}
-                      placeholder="Select Lot Name"
-                    >
+                    <Select fontSize="md" {...register("formData.lotNamesId")} placeholder="Select Lot Name">
                       {lotName.map((ln) => (
                         <option key={ln.id} value={ln.id}>
                           {ln.lotCode} - {ln.lotName}
@@ -617,11 +513,7 @@ const DrawerComponent = (props) => {
 
                 <Box>
                   <FormLabel>Lot Section:</FormLabel>
-                  <Input
-                    {...register("formData.sectionName")}
-                    placeholder="Please enter Lot Section"
-                    autoComplete="off"
-                  />
+                  <Input {...register("formData.sectionName")} placeholder="Please enter Lot Section" autoComplete="off" />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.sectionName?.message}
                   </Text>
