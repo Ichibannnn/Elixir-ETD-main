@@ -72,20 +72,20 @@ export const EditModal = ({
   const [sumQuantity, setSumQuantity] = useState(0);
   const [submitDataThree, setSubmitDataThree] = useState([]);
   const [submitDataTwo, setSubmitDataTwo] = useState([]);
-  const [lotCategories, setLotCategories] = useState([]);
+  // const [lotCategories, setLotCategories] = useState([]);
   const [receivingDateDisplay, setReceivingDateDisplay] = useState(null);
   const [disableQuantity, setDisableQuantity] = useState(0);
 
   // FETCH LOT CATEGORY
-  const fetchLotCategory = async () => {
-    fetchLotCategoryApi().then((res) => {
-      setLotCategories(res);
-    });
-  };
+  // const fetchLotCategory = async () => {
+  //   fetchLotCategoryApi().then((res) => {
+  //     setLotCategories(res);
+  //   });
+  // };
 
-  useEffect(() => {
-    fetchLotCategory();
-  }, [setLotCategories]);
+  // useEffect(() => {
+  //   fetchLotCategory();
+  // }, [setLotCategories]);
 
   const {
     register,
@@ -131,6 +131,7 @@ export const EditModal = ({
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         }),
+        lotSection: editData.lotSection === null ? "Setup a lot section for this material before receiving" : editData.lotSection,
       },
     },
   });
@@ -154,10 +155,9 @@ export const EditModal = ({
     }
   }, [expectedDelivery, actualDelivered]);
 
-  const lotSectionProvider = (data) => {
-    console.log("Controller: ", data.value.sectionName);
-    setLotSection(data.value.sectionName);
-  };
+  // const lotSectionProvider = (data) => {
+  //   setLotSection(data.value.sectionName);
+  // };
 
   const actualDeliveredRef = useRef();
 
@@ -227,7 +227,7 @@ export const EditModal = ({
     siNumber: siNumber,
     totalReject: sumQuantity,
     addedBy: currentUser.fullName,
-    lotSection: lotSection,
+    lotSection: editData.lotSection,
   };
 
   useEffect(() => {
@@ -356,7 +356,7 @@ export const EditModal = ({
                         type="number"
                         onWheel={(e) => e.target.blur()}
                         onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
-                        onPaste={(e) => e.preventDefault()}
+                        // onPaste={(e) => e.preventDefault()}
                         autoComplete="off"
                         min="1"
                         onChange={(e) => unitPriceProvider(e.target.value)}
@@ -386,7 +386,7 @@ export const EditModal = ({
                         type="number"
                         onWheel={(e) => e.target.blur()}
                         onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
-                        onPaste={(e) => e.preventDefault()}
+                        // onPaste={(e) => e.preventDefault()}
                         autoComplete="off"
                         min="1"
                         fontSize="13px"
@@ -404,7 +404,7 @@ export const EditModal = ({
                         type="number"
                         onWheel={(e) => e.target.blur()}
                         onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
-                        onPaste={(e) => e.preventDefault()}
+                        // onPaste={(e) => e.preventDefault()}
                         autoComplete="off"
                         min="1"
                         fontSize="13px"
@@ -445,7 +445,7 @@ export const EditModal = ({
                       />
                     </FormLabel>
 
-                    <FormLabel w="50%" fontSize="12px">
+                    {/* <FormLabel w="50%" fontSize="12px">
                       LOT Section
                       <Controller
                         control={control}
@@ -473,6 +473,19 @@ export const EditModal = ({
                             })}
                           />
                         )}
+                      />
+                    </FormLabel> */}
+
+                    <FormLabel w="100%" fontSize="12px">
+                      Lot Section
+                      <Input
+                        {...register("displayData.lotSection")}
+                        disabled={true}
+                        readOnly={true}
+                        _disabled={{ color: editData.lotSection === null ? "red" : "black" }}
+                        fontSize="13px"
+                        size="sm"
+                        bg="gray.300"
                       />
                     </FormLabel>
                   </Flex>
@@ -512,7 +525,7 @@ export const EditModal = ({
                 editData={editData}
                 receivingDate={receivingDate}
                 setReceivingDate={setReceivingDate}
-                lotSection={lotSection}
+                // lotSection={lotSection}
                 lotCategory={lotCategory}
                 setDisableQuantity={setDisableQuantity}
                 disableQuantity={disableQuantity}

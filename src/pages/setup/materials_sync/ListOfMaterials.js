@@ -527,6 +527,8 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
     }
   }, [editData]);
 
+  console.log("Watch Lot Section: ", watch("formData.lotSectionId"));
+
   return (
     <>
       <Drawer isOpen={isEdit} placement="right" onClose={onCloseDrawer}>
@@ -599,7 +601,7 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
                 Cancel
               </Button>
 
-              <Button type="submit" colorScheme="blue" isDisabled={!isValid || !watch("formData.lotSectionId")}>
+              <Button type="submit" colorScheme="blue" isDisabled={!isValid || watch("formData.lotSectionId")?.label === null}>
                 Submit
               </Button>
             </DrawerFooter>

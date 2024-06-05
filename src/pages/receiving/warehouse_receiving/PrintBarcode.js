@@ -28,7 +28,7 @@ import { ReceivingContext } from "../../../components/context/ReceivingContext";
 const PrintBarcode = ({
   printData,
   receivingDate,
-  lotSection,
+  // lotSection,
   actualGood,
   sumQuantity,
   isOpen,
@@ -67,7 +67,7 @@ const PrintBarcode = ({
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }),
-    "Lot Section": lotSection,
+    "Lot Section": printData.lotSection,
     "SI Number": siNumber,
   };
 
@@ -96,8 +96,7 @@ const PrintBarcode = ({
               <VStack spacing={0} justifyContent="start">
                 <Image src="/images/RDF Logo.png" w="20%" ml={3} />
                 <Text fontSize="9px" ml={2} textAlign="center">
-                  Purok 6, Brgy. Lara, City of San Fernando, Pampanga,
-                  Philippines
+                  Purok 6, Brgy. Lara, City of San Fernando, Pampanga, Philippines
                 </Text>
               </VStack>
               <Flex mt={3} w="90%" justifyContent="center">
@@ -126,12 +125,7 @@ const PrintBarcode = ({
               ))}
 
               <VStack spacing={0} w="90%" ml={4} justifyContent="center">
-                <Barcode
-                  fontSize="16"
-                  width={3}
-                  height={25}
-                  value={receivingId}
-                />
+                <Barcode fontSize="16" width={3} height={25} value={receivingId} />
               </VStack>
 
               <Flex w="full"></Flex>
@@ -172,12 +166,7 @@ const PrintBarcode = ({
             ))}
 
             <VStack spacing={0} w="90%" ml={4} justifyContent="center">
-              <Barcode
-                fontSize="16"
-                width={3}
-                height={25}
-                value={receivingId}
-              />
+              <Barcode fontSize="16" width={3} height={25} value={receivingId} />
             </VStack>
 
             <Flex w="full"></Flex>

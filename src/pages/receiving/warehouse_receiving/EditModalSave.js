@@ -41,7 +41,7 @@ const EditModalSave = ({
   setCode,
   editData,
   disableQuantity,
-  lotSection,
+  // lotSection,
   quantity,
   receivingId,
   isValid,
@@ -57,11 +57,7 @@ const EditModalSave = ({
   const submitNotNull = { ...submitUnitPriceNull, ...submitDataThree };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isPrintModalOpen,
-    onOpen: openPrintModal,
-    onClose: closePrintModal,
-  } = useDisclosure();
+  const { isOpen: isPrintModalOpen, onOpen: openPrintModal, onClose: closePrintModal } = useDisclosure();
 
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
@@ -74,12 +70,7 @@ const EditModalSave = ({
       const res = request
         .put(`Warehouse/ReceiveRawMaterialsById`, firstSubmit)
         .then((res) => {
-          ToastComponent(
-            "Success!",
-            "Purchase order updated.",
-            "success",
-            toast
-          );
+          ToastComponent("Success!", "Purchase order updated.", "success", toast);
           setReceivingId(res.data.id);
           setReceivingDate(receivingDate);
           setIsLoading(false);
@@ -104,10 +95,7 @@ const EditModalSave = ({
 
           if (sumQuantity > 0) {
             try {
-              const res = request.put(
-                `Warehouse/ReceiveRawMaterialsById`,
-                secondSubmit
-              );
+              const res = request.put(`Warehouse/ReceiveRawMaterialsById`, secondSubmit);
             } catch (err) {
               console.log(err);
             }
@@ -141,20 +129,12 @@ const EditModalSave = ({
           !unitPrice === 0 ||
           !siNumber ||
           !receivingDate ||
-          !lotSection ||
+          editData.lotSection === null ||
+          // !lotSection ||
           disableQuantity < 0 ||
           quantity
         }
-        title={
-          isSubmitDisabled ||
-          !expectedDelivery ||
-          !actualDelivered ||
-          !siNumber ||
-          !unitPrice ||
-          !editData.unitPrice
-            ? "Please provide required fields"
-            : ""
-        }
+        title={isSubmitDisabled || !expectedDelivery || !actualDelivered || !siNumber || !unitPrice || !editData.unitPrice ? "Please provide required fields" : ""}
       >
         Receive
       </Button>
@@ -175,20 +155,10 @@ const EditModalSave = ({
           </ModalBody>
           <ModalFooter justifyContent="center">
             <ButtonGroup size="md">
-              <Button
-                size="sm"
-                colorScheme="blue"
-                isLoading={isLoading}
-                onClick={() => submitEditedHandler()}
-              >
+              <Button size="sm" colorScheme="blue" isLoading={isLoading} onClick={() => submitEditedHandler()}>
                 Yes
               </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={onClose}
-                color="black"
-              >
+              <Button size="sm" variant="outline" onClick={onClose} color="black">
                 No
               </Button>
             </ButtonGroup>
@@ -201,7 +171,7 @@ const EditModalSave = ({
           printData={editData}
           // unitPrice={unitPrice}
           receivingDate={receivingDate}
-          lotSection={lotSection}
+          // lotSection={lotSection}
           actualGood={actualGood}
           sumQuantity={sumQuantity}
           setCode={setCode}
