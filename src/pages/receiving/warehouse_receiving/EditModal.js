@@ -72,24 +72,26 @@ export const EditModal = ({
   const [sumQuantity, setSumQuantity] = useState(0);
   const [submitDataThree, setSubmitDataThree] = useState([]);
   const [submitDataTwo, setSubmitDataTwo] = useState([]);
-  // const [lotCategories, setLotCategories] = useState([]);
+  const [lotCategories, setLotCategories] = useState([]);
   const [receivingDateDisplay, setReceivingDateDisplay] = useState(null);
   const [disableQuantity, setDisableQuantity] = useState(0);
 
   // FETCH LOT CATEGORY
-  // const fetchLotCategory = async () => {
-  //   fetchLotCategoryApi().then((res) => {
-  //     setLotCategories(res);
-  //   });
-  // };
+  const fetchLotCategory = async () => {
+    fetchLotCategoryApi().then((res) => {
+      setLotCategories(res);
+    });
+  };
 
-  // useEffect(() => {
-  //   fetchLotCategory();
-  // }, [setLotCategories]);
+  useEffect(() => {
+    fetchLotCategory();
+  }, [setLotCategories]);
 
   const {
     register,
     control,
+    setValue,
+    watch,
     // formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(schema),
@@ -103,7 +105,7 @@ export const EditModal = ({
         addedBy: currentUser.fullName,
       },
       formData: {
-        lotCategories: "",
+        lotCategories: null,
       },
       displayData: {
         id: editData.id,
@@ -155,9 +157,9 @@ export const EditModal = ({
     }
   }, [expectedDelivery, actualDelivered]);
 
-  // const lotSectionProvider = (data) => {
-  //   setLotSection(data.value.sectionName);
-  // };
+  const lotSectionProvider = (data) => {
+    setLotSection(data.value.sectionName);
+  };
 
   const actualDeliveredRef = useRef();
 
@@ -227,7 +229,8 @@ export const EditModal = ({
     siNumber: siNumber,
     totalReject: sumQuantity,
     addedBy: currentUser.fullName,
-    lotSection: editData.lotSection,
+    // lotSection: editData.lotSection,
+    lotSection: lotSection,
   };
 
   useEffect(() => {
@@ -245,8 +248,12 @@ export const EditModal = ({
     } else {
       setReceivingDateDisplay(null);
       setReceivingDate(null);
+      setLotSection(null);
+      setValue("formData.lotCategories", null);
     }
   };
+
+  console.log("Receiving Date: ", receivingDate);
 
   const customStyles = {
     control: (provided) => ({
@@ -255,7 +262,23 @@ export const EditModal = ({
     }),
   };
 
-  console.log("Edit data asdas: ", editData);
+  // console.log("Edit data asdas: ", editData);
+
+  useEffect(() => {
+    if (editData) {
+      setValue("formData.lotCategories", {
+        label: editData?.lotSection,
+        value: {
+          id: editData?.lotSection,
+        },
+      });
+
+      setLotSection(editData.lotSection);
+    }
+  }, [editData]);
+
+  // console.log("Lot section: ", watch("formData.lotCategories"));
+  // console.log("Lot section State: ", lotSection);
 
   return (
     <ReceivingContext.Provider
@@ -445,7 +468,7 @@ export const EditModal = ({
                       />
                     </FormLabel>
 
-                    {/* <FormLabel w="50%" fontSize="12px">
+                    <FormLabel w="50%" fontSize="12px">
                       LOT Section
                       <Controller
                         control={control}
@@ -458,9 +481,9 @@ export const EditModal = ({
                             variant="filled"
                             ref={field.ref}
                             value={field.value}
-                            isDisabled={!receivingDate}
+                            isDisabled={watch("formData.lotCategories")?.label === null && receivingDate === null}
                             size="sm"
-                            placeholder="Select Lot Section"
+                            placeholder={watch("formData.lotCategories")?.label === null && !receivingDate ? "Select Lot Section" : "Select Lot Section"}
                             onChange={(e) => {
                               field.onChange(e);
                               lotSectionProvider(e);
@@ -474,9 +497,9 @@ export const EditModal = ({
                           />
                         )}
                       />
-                    </FormLabel> */}
+                    </FormLabel>
 
-                    <FormLabel w="100%" fontSize="12px">
+                    {/* <FormLabel w="100%" fontSize="12px">
                       Lot Section
                       <Input
                         {...register("displayData.lotSection")}
@@ -487,7 +510,7 @@ export const EditModal = ({
                         size="sm"
                         bg="gray.300"
                       />
-                    </FormLabel>
+                    </FormLabel> */}
                   </Flex>
                 </Stack>
 
@@ -525,7 +548,7 @@ export const EditModal = ({
                 editData={editData}
                 receivingDate={receivingDate}
                 setReceivingDate={setReceivingDate}
-                // lotSection={lotSection}
+                lotSection={lotSection}
                 lotCategory={lotCategory}
                 setDisableQuantity={setDisableQuantity}
                 disableQuantity={disableQuantity}

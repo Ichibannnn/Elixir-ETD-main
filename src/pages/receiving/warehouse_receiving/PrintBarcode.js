@@ -28,7 +28,7 @@ import { ReceivingContext } from "../../../components/context/ReceivingContext";
 const PrintBarcode = ({
   printData,
   receivingDate,
-  // lotSection,
+  lotSection,
   actualGood,
   sumQuantity,
   isOpen,
@@ -67,7 +67,7 @@ const PrintBarcode = ({
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }),
-    "Lot Section": printData.lotSection,
+    "Lot Section": lotSection,
     "SI Number": siNumber,
   };
 

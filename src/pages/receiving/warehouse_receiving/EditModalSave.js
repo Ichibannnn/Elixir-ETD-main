@@ -41,7 +41,7 @@ const EditModalSave = ({
   setCode,
   editData,
   disableQuantity,
-  // lotSection,
+  lotSection,
   quantity,
   receivingId,
   isValid,
@@ -65,6 +65,8 @@ const EditModalSave = ({
   });
 
   const submitEditedHandler = () => {
+    console.log("First submit: ", firstSubmit);
+
     try {
       setIsLoading(true);
       const res = request
@@ -129,8 +131,8 @@ const EditModalSave = ({
           !unitPrice === 0 ||
           !siNumber ||
           !receivingDate ||
-          editData.lotSection === null ||
-          // !lotSection ||
+          // editData.lotSection === null ||
+          !lotSection ||
           disableQuantity < 0 ||
           quantity
         }
@@ -171,7 +173,7 @@ const EditModalSave = ({
           printData={editData}
           // unitPrice={unitPrice}
           receivingDate={receivingDate}
-          // lotSection={lotSection}
+          lotSection={lotSection}
           actualGood={actualGood}
           sumQuantity={sumQuantity}
           setCode={setCode}
