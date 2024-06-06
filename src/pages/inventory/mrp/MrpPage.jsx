@@ -1,35 +1,21 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  HStack,
-  Input,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Flex, HStack, Input, Text, VStack } from "@chakra-ui/react";
 import { usePagination } from "@ajna/pagination";
 import request from "../../../services/ApiClient";
 import { MrpTable } from "./MrpTable";
 import { MaterialsInformation } from "./MaterialsInformation";
 
 const fetchMRPApi = async (pageNumber, pageSize, search) => {
-  const res = await request.get(
-    `Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}`,
-    {
-      params: {
-        search: search,
-      },
-    }
-  );
+  const res = await request.get(`Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
+    params: {
+      search: search,
+    },
+  });
   return res.data;
 };
 
 const fetchMRPForSheetApi = async (pageTotal) => {
-  const res = await request.get(
-    `Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=1&pageSize=${pageTotal}&search=`
-  );
+  const res = await request.get(`Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=1&pageSize=${pageTotal}&search=`);
   return res.data;
 };
 
@@ -38,14 +24,7 @@ const MrpPage = () => {
   const [search, setSearch] = useState("");
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -68,20 +47,50 @@ const MrpPage = () => {
 
   const [sheetData, setSheetData] = useState([]);
 
-  const fetchMRP = () => {
-    fetchMRPApi(currentPage, pageSize, search).then((res) => {
-      setMrpData(res);
-      // setSheetData(res.inventory);
-      setPageTotal(res.totalCount);
-      console.log("Page Total: ", res.totalCount);
-    });
+  // const fetchMRP = (ignore) => {
+  //   fetchMRPApi(currentPage, pageSize, search).then((res) => {
+  //     if (!ignore) {
+  //       setMrpData(res);
+  //       // setSheetData(res.inventory);
+  //       setPageTotal(res.totalCount);
+  //       console.log("Page Total: ", res.totalCount);
+  //     }
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   let ignore = false;
+
+  //   fetchMRP(ignore);
+
+  //   return () => {
+  //     ignore = true;
+  //     // setMrpData([]);
+  //   };
+  // }, [currentPage, pageSize, search]);
+
+  const fetchMRP = (signal) => {
+    fetchMRPApi(currentPage, pageSize, search, { signal })
+      .then((res) => {
+        setMrpData(res);
+        setPageTotal(res.totalCount);
+        console.log("Page Total: ", res.totalCount);
+      })
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          console.error("Fetch error:", err);
+        }
+      });
   };
 
   useEffect(() => {
-    fetchMRP();
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    fetchMRP(signal);
 
     return () => {
-      setMrpData([]);
+      controller.abort();
     };
   }, [currentPage, pageSize, search]);
 
@@ -108,6 +117,8 @@ const MrpPage = () => {
       setCurrentPage(1);
     }
   }, [search]);
+
+  console.log("Search: ", search);
 
   return (
     <Flex flexDirection="column" w="full" bg="form" p={4}>

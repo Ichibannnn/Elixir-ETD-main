@@ -27,14 +27,7 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import {
-  Pagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import PageScroll from "../../../utils/PageScroll";
 import { BiExport, BiRightArrow } from "react-icons/bi";
 import { FaPrint, FaSearch } from "react-icons/fa";
@@ -65,13 +58,9 @@ export const MrpTable = ({
 }) => {
   const [buttonChanger, setButtonChanger] = useState(false);
 
-  const {
-    isOpen: isInformation,
-    onOpen: openInformation,
-    onClose: closeInformation,
-  } = useDisclosure();
+  const { isOpen: isInformation, onOpen: openInformation, onClose: closeInformation } = useDisclosure();
 
-  console.log("Sheet Data: ", sheetData);
+  // console.log("Sheet Data: ", sheetData);
 
   const handleExport = () => {
     var workbook = XLSX.utils.book_new(),
@@ -96,10 +85,7 @@ export const MrpTable = ({
     setSearch(inputValue);
   };
 
-  const selectorHandler = (
-    id,
-    { itemCode, itemDescription, soh, bufferLevel, averageIssuance, daysLevel }
-  ) => {
+  const selectorHandler = (id, { itemCode, itemDescription, soh, bufferLevel, averageIssuance, daysLevel }) => {
     if (id) {
       setSelectorId(id);
       setRawMatsInfo({
@@ -124,11 +110,7 @@ export const MrpTable = ({
     }
   };
 
-  const {
-    isOpen: isPrint,
-    onOpen: openPrint,
-    onClose: closePrint,
-  } = useDisclosure();
+  const { isOpen: isPrint, onOpen: openPrint, onClose: closePrint } = useDisclosure();
   const printMRPHandler = () => {
     openPrint();
   };
@@ -137,19 +119,8 @@ export const MrpTable = ({
     <Flex w="full" justifyContent="center" flexDirection="column">
       <Flex justifyContent="space-between" mb={1}>
         <InputGroup w="30%">
-          <InputLeftElement
-            pointerEvents="none"
-            children={<FaSearch color="gray.300" />}
-            fontSize="xs"
-          />
-          <Input
-            onChange={(e) => searchHandler(e.target.value)}
-            type="text"
-            fontSize="xs"
-            placeholder="Search"
-            focusBorderColor="btnColor"
-            borderColor="gray.300"
-          />
+          <InputLeftElement pointerEvents="none" children={<FaSearch color="gray.300" />} fontSize="xs" />
+          <Input onChange={(e) => searchHandler(e.target.value)} type="text" fontSize="xs" placeholder="Search" focusBorderColor="btnColor" borderColor="gray.300" />
           <Button
             onClick={printMRPHandler}
             ml={3}
@@ -163,27 +134,12 @@ export const MrpTable = ({
           >
             Print
           </Button>
-          <Button
-            onClick={handleExport}
-            leftIcon={<BiExport fontSize="20px" />}
-            disabled={!sheetData}
-            ml={2}
-            px={5}
-            colorScheme="facebook"
-            fontSize="xs"
-            w="40%"
-          >
+          <Button onClick={handleExport} leftIcon={<BiExport fontSize="20px" />} disabled={!sheetData} ml={2} px={5} colorScheme="facebook" fontSize="xs" w="40%">
             Export
           </Button>
         </InputGroup>
 
-        <Button
-          onClick={() => setButtonChanger(!buttonChanger)}
-          ml={2}
-          px={5}
-          colorScheme="blue"
-          fontSize="xs"
-        >
+        <Button onClick={() => setButtonChanger(!buttonChanger)} ml={2} px={5} colorScheme="blue" fontSize="xs">
           {buttonChanger ? "<< Previous" : "Next >>"}
         </Button>
       </Flex>
@@ -244,13 +200,7 @@ export const MrpTable = ({
               <Tr
                 key={i}
                 onClick={() => selectorHandler(i + 1, item)}
-                bgColor={
-                  selectorId === i + 1
-                    ? "blue.200"
-                    : "none" && item.bufferLevel > item.reserve
-                    ? "gray.300"
-                    : "none"
-                }
+                bgColor={selectorId === i + 1 ? "blue.200" : "none" && item.bufferLevel > item.reserve ? "gray.300" : "none"}
                 cursor="pointer"
               >
                 {selectorId === i + 1 ? (
@@ -260,13 +210,7 @@ export const MrpTable = ({
                 ) : (
                   <Td p={0}></Td>
                 )}
-                <Td fontSize="xs">
-                  {item.bufferLevel > item.reserve ? (
-                    <TiWarning fontSize="18px" color="red" />
-                  ) : (
-                    ""
-                  )}
-                </Td>
+                <Td fontSize="xs">{item.bufferLevel > item.reserve ? <TiWarning fontSize="18px" color="red" /> : ""}</Td>
                 <Td fontSize="xs">{i + 1}</Td>
                 <Td fontSize="xs">{item.itemCode}</Td>
                 <Td fontSize="xs">{item.itemDescription}</Td>
@@ -381,18 +325,9 @@ export const MrpTable = ({
           Total Records/page: {mrpData?.inventory?.length}
         </Text>
         <Stack>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
+          <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
             <PaginationContainer>
-              <PaginationPrevious
-                bg="primary"
-                color="white"
-                p={1}
-                _hover={{ bg: "btnColor", color: "white" }}
-              >
+              <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                 {"<<"}
               </PaginationPrevious>
               <PaginationPageGroup ml={1} mr={1}>
@@ -409,19 +344,10 @@ export const MrpTable = ({
                 ))}
               </PaginationPageGroup>
               <HStack>
-                <PaginationNext
-                  bg="primary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "btnColor", color: "white" }}
-                >
+                <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                   {">>"}
                 </PaginationNext>
-                <Select
-                  onChange={handlePageSizeChange}
-                  variant="filled"
-                  fontSize="md"
-                >
+                <Select onChange={handlePageSizeChange} variant="filled" fontSize="md">
                   <option value={Number(50)}>50</option>
                   <option value={Number(5)}>5</option>
                   <option value={Number(10)}>10</option>
@@ -434,17 +360,9 @@ export const MrpTable = ({
         </Stack>
       </Flex>
 
-      {isPrint && (
-        <PrintModal isOpen={isPrint} onClose={closePrint} mrpData={mrpData} />
-      )}
+      {isPrint && <PrintModal isOpen={isPrint} onClose={closePrint} mrpData={mrpData} />}
 
-      {isInformation && (
-        <MaterialInformationModal
-          isOpen={isInformation}
-          onClose={closeInformation}
-          rawMatsInfo={rawMatsInfo}
-        />
-      )}
+      {isInformation && <MaterialInformationModal isOpen={isInformation} onClose={closeInformation} rawMatsInfo={rawMatsInfo} />}
     </Flex>
   );
 };
@@ -473,19 +391,8 @@ const PrintModal = ({ isOpen, onClose, mrpData }) => {
 
           <ModalBody mt={5}>
             <PageScroll minHeight="617px" maxHeight="618px">
-              <Table
-                size="sm"
-                variant="simple"
-                ref={componentRef}
-                bg="gray.100"
-              >
-                <Thead
-                  bgColor="primary"
-                  position="sticky"
-                  top={0}
-                  zIndex={1}
-                  h="40px"
-                >
+              <Table size="sm" variant="simple" ref={componentRef} bg="gray.100">
+                <Thead bgColor="primary" position="sticky" top={0} zIndex={1} h="40px">
                   <Tr>
                     <Th p={0} color="white"></Th>
                     <Th color="white">Item Code</Th>
@@ -501,13 +408,7 @@ const PrintModal = ({ isOpen, onClose, mrpData }) => {
                 <Tbody>
                   {mrpData?.inventory?.map((item, i) => (
                     <Tr key={i}>
-                      <Td>
-                        {item.bufferLevel > item.reserve ? (
-                          <TiWarning fontSize="20px" color="red" />
-                        ) : (
-                          ""
-                        )}
-                      </Td>
+                      <Td>{item.bufferLevel > item.reserve ? <TiWarning fontSize="20px" color="red" /> : ""}</Td>
                       <Td>{item.itemCode}</Td>
                       <Td>{item.itemDescription}</Td>
                       <Td>{item.itemCategory}</Td>
