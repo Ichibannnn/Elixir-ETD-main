@@ -1,0 +1,205 @@
+import React, { useEffect, useState } from "react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text } from "@chakra-ui/react";
+import request from "../../../services/ApiClient";
+import PageScroll from "../../../utils/PageScroll";
+import moment from "moment";
+
+export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
+  const [buttonChanger, setButtonChanger] = useState(true);
+  const [consolidatedData, setConsolidatedData] = useState([]);
+
+  const fetchConsolidatedApi = async (dateFrom, dateTo, search) => {
+    const res = await request.get(`Reports/ConsolidationFinanceReports?DateFrom=${dateFrom}&DateTo=${dateTo}`, {
+      params: {
+        Search: search,
+      },
+    });
+    return res.data;
+  };
+
+  const fetchConsolidated = () => {
+    fetchConsolidatedApi(dateFrom, dateTo, search).then((res) => {
+      setConsolidatedData(res);
+      setSheetData(res);
+    });
+  };
+
+  useEffect(() => {
+    fetchConsolidated();
+
+    return () => {
+      setConsolidatedData([]);
+    };
+  }, [dateFrom, dateTo, search]);
+
+  return (
+    <Flex w="full" flexDirection="column">
+      <Flex className="boxShadow">
+        <PageScroll minHeight="720px" maxHeight="740px">
+          <Table size="md" variant="striped">
+            <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
+              <Tr>
+                <Th color="white" fontSize="10px" fontWeight="semibold">
+                  ID
+                </Th>
+                <Th color="white" fontSize="10px" fontWeight="semibold">
+                  Transaction Date
+                </Th>
+                <Th color="white" fontSize="10px" fontWeight="semibold">
+                  Item Code
+                </Th>
+                <Th color="white" fontSize="10px" fontWeight="semibold">
+                  Item Description
+                </Th>
+                {buttonChanger ? (
+                  <>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      UOM
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Category
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Quantity
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Unit Cost
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Line Amount
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Source
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Reason
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Reference
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Encoded By
+                    </Th>
+                  </>
+                ) : (
+                  <>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Company Code
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Company Name
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Department Code
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Department Name
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Location Code
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Location Name
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Account Title Code
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Account Title
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      EmpID
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Fullname
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Asset Tag
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      CIP #
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Helpdesk #
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Remarks
+                    </Th>
+                    <Th color="white" fontSize="10px" fontWeight="semibold">
+                      Rush
+                    </Th>
+                  </>
+                )}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {consolidatedData?.map((item, i) => (
+                <Tr key={i}>
+                  <Td fontSize="xs">{item.id}</Td>
+                  <Td fontSize="xs">{moment(item.transactionDate).format("YYYY-MM-DD")}</Td>
+                  <Td fontSize="xs">{item.itemCode}</Td>
+                  <Td fontSize="xs">{item.itemDescription}</Td>
+                  {buttonChanger ? (
+                    <>
+                      <Td fontSize="xs">{item.uom}</Td>
+                      <Td fontSize="xs">{item.category}</Td>
+                      <Td fontSize="xs">
+                        {item.quantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.unitCost.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.lineAmount.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">{item.source}</Td>
+                      <Td fontSize="xs">{item.reason ? item.reason : "-"}</Td>
+                      <Td fontSize="xs">{item.reference ? item.reference : "-"}</Td>
+                      <Td fontSize="xs">{item.encodedBy}</Td>
+                    </>
+                  ) : (
+                    <>
+                      <Td fontSize="xs">{item.companyCode}</Td>
+                      <Td fontSize="xs">{item.companyName}</Td>
+                      <Td fontSize="xs">{item.departmentCode}</Td>
+                      <Td fontSize="xs">{item.departmentName}</Td>
+                      <Td fontSize="xs">{item.locationCode}</Td>
+                      <Td fontSize="xs">{item.locationName}</Td>
+                      <Td fontSize="xs">{item.accountTitleCode ? item.accountTitleCode : "-"}</Td>
+                      <Td fontSize="xs">{item.accountTitleCode ? item.accountTitle : "-"}</Td>
+                      <Td fontSize="xs">{item.empId ? item.empId : "-"}</Td>
+                      <Td fontSize="xs">{item.fullname ? item.fullname : "-"}</Td>
+                      <Td fontSize="xs">{item.assetTag ? item.assetTag : "-"}</Td>
+                      <Td fontSize="xs">{item.cipNo ? item.cipNo : "-"}</Td>
+                      <Td fontSize="xs">{item.helpdesk ? item.helpdesk : "-"}</Td>
+                      <Td fontSize="xs">{item.remarks ? item.remarks : "-"}</Td>
+                      <Td fontSize="xs">{item.rush ? item.rush : "-"}</Td>
+                    </>
+                  )}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </PageScroll>
+      </Flex>
+
+      <Flex justifyContent="space-between" mt={2}>
+        <Text fontSize="xs" fontWeight="semibold">
+          Total Records: {consolidatedData?.length}
+        </Text>
+        <Button size="md" colorScheme="blue" onClick={() => setButtonChanger(!buttonChanger)}>
+          {buttonChanger ? `>>>>` : `<<<<`}
+        </Button>
+      </Flex>
+    </Flex>
+  );
+};

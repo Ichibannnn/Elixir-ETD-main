@@ -1,54 +1,22 @@
 import React, { useEffect, useState } from "react";
-import {
-  Flex,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  Button,
-  HStack,
-  Select,
-  Stack,
-  Text,
-  Box,
-} from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text, Box } from "@chakra-ui/react";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
 import moment from "moment";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
-export const TransactedMOHistory = ({
-  dateFrom,
-  dateTo,
-  sample,
-  setSheetData,
-  search,
-}) => {
+export const TransactedMOHistory = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
   const [moData, setMoData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
 
   const fetchTransactedMoveOrdersApi = async (dateFrom, dateTo, search) => {
     const dayaDate = new Date();
     const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
-    const res = await request.get(
-      `Reports/TransactionReport?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`,
-      {
-        params: {
-          search: search,
-        },
-      }
-    );
+    const res = await request.get(`Reports/TransactionReport?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`, {
+      params: {
+        search: search,
+      },
+    });
     return res.data;
   };
 
@@ -58,51 +26,39 @@ export const TransactedMOHistory = ({
       setSheetData(
         res?.inventory?.map((item, i) => {
           return {
-            "Line Number": i + 1,
             "MIR ID": item.mirId,
-            Requestor: item.requestor,
-            Approver: item.approver,
+            "CIP#": item.cip_No === null ? "-" : item.cip_No,
+            "Transaction Date": item.transactedDate ? new Date(moment(item.transactedDate).format("MM/DD/YYYY")) : "",
             "Customer Code": item.customerCode,
             "Customer Name": item.customerName,
             "Customer Type": item.customerType,
-            "Item Code": item.itemCode,
-            "Item Description": item.itemDescription,
-            UOM: item.uom,
-            Category: item.category,
-            Quantity: item.quantity,
-            "Unit Cost": item.unitCost,
-            "Line Amount": item.lineAmount,
-            "Asset Tag": item.assetTag === null ? "-" : item.assetTag,
-            "CIP #": item.cip_No === null ? "-" : item.cip_No,
-            "Helpdesk #": item.helpDesk === 0 ? "-" : item.helpDesk,
-            Remarks: item.itemRemarks === null ? "-" : item.itemRemarks,
-            Rush: item.rush === null ? "-" : item.rush,
-            "Order Date": item.orderDate
-              ? moment(item.orderDate).format("yyyy-MM-DD")
-              : "",
-            "Date Needed": item.dateNeeded
-              ? moment(item.dateNeeded).format("yyyy-MM-DD")
-              : "",
-            "Date Approved": item.dateApproved
-              ? moment(item.dateApproved).format("yyyy-MM-DD")
-              : "-",
-            Status: item.transactedDate ? "Transacted" : "For Transaction",
+            "Transacted By": item.transactedBy ? item.transactedBy : "",
+            "Account Title Code": item.accountCode,
+            "Account Title": item.accountTitles,
             "Company Code": item.companyCode,
             "Company Name": item.companyName,
             "Department Code": item.departmentCode,
             "Department Name": item.departmentName,
             "Location Code": item.locationCode,
             "Location Name": item.locationName,
-            "Account Title Code": item.accountCode,
-            "Account Title": item.accountTitles,
-            "Move Order Date": item.moveOrderDate
-              ? moment(item.moveOrderDate).format("yyyy-MM-DD")
-              : "",
+            Description: `${item.itemCode} - ${item.itemDescription}`,
+            "Qty.": item.quantity,
+            UOM: item.uom,
+            "Unit Cost": item.unitCost,
+            "Line Amount": item.lineAmount,
+            Remarks: item.itemRemarks === null ? "-" : item.itemRemarks,
+            Category: item.category,
+            "Asset Tag": item.assetTag === null ? "-" : item.assetTag,
+            "Helpdesk #": item.helpDesk === 0 ? "-" : item.helpDesk,
+            Rush: item.rush === null ? "-" : item.rush,
+            "Order Date": item.orderDate ? new Date(moment(item.orderDate).format("MM/DD/YYYY")) : "",
+            "Date Needed": item.dateNeeded ? new Date(moment(item.dateNeeded).format("MM/DD/YYYY")) : "",
+            "Date Approved": item.dateApproved ? new Date(moment(item.dateApproved).format("MM/DD/YYYY")) : "-",
+            Status: item.transactedDate ? "Transacted" : "For Transaction",
+            Requestor: item.requestor,
+            Approver: item.approver,
+            "Move Order Date": item.moveOrderDate ? new Date(moment(item.moveOrderDate).format("MM/DD/YYYY")) : "",
             "Move Order By": item.moveOrderBy,
-            "Transacted Date": item.transactedDate
-              ? moment(item.transactedDate).format("yyyy-MM-DD")
-              : "",
-            "Transacted By": item.transactedBy ? item.transactedBy : "",
           };
         })
       );
@@ -122,13 +78,7 @@ export const TransactedMOHistory = ({
       <Flex className="boxShadow">
         <PageScroll minHeight="720px" maxHeight="740px">
           <Table size="md" variant="striped">
-            <Thead
-              bgColor="primary"
-              h="40px"
-              position="sticky"
-              top={0}
-              zIndex={1}
-            >
+            <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex={1}>
               <Tr>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
                   MIR ID
@@ -249,22 +199,10 @@ export const TransactedMOHistory = ({
                           maximumFractionDigits: 2,
                         })}
                       </Td>
-                      <Td fontSize="xs">
-                        {item.assetTag === null ? "-" : item.assetTag}
-                      </Td>
-                      <Td fontSize="xs">
-                        {item.cip_No === null ? "-" : item.cip_No}
-                      </Td>
-                      <Td fontSize="xs">
-                        {item.orderDate
-                          ? moment(item.orderDate).format("yyyy-MM-DD")
-                          : "-"}
-                      </Td>
-                      <Td fontSize="xs">
-                        {item.dateNeeded
-                          ? moment(item.dateNeeded).format("yyyy-MM-DD")
-                          : "-"}
-                      </Td>
+                      <Td fontSize="xs">{item.assetTag === null ? "-" : item.assetTag}</Td>
+                      <Td fontSize="xs">{item.cip_No === null ? "-" : item.cip_No}</Td>
+                      <Td fontSize="xs">{item.orderDate ? moment(item.orderDate).format("yyyy-MM-DD") : "-"}</Td>
+                      <Td fontSize="xs">{item.dateNeeded ? moment(item.dateNeeded).format("yyyy-MM-DD") : "-"}</Td>
                       {/* <Td fontSize="xs">
                         {item.transactedDate ? "Transacted" : "For Transaction"}
                       </Td> */}
@@ -280,17 +218,9 @@ export const TransactedMOHistory = ({
                       <Td fontSize="xs">{item.locationName}</Td>
                       <Td fontSize="xs">{item.accountCode}</Td>
                       <Td fontSize="xs">{item.accountTitles}</Td>
-                      <Td fontSize="xs">
-                        {item.transactedDate ? "Transacted" : "For Transaction"}
-                      </Td>
-                      <Td fontSize="xs">
-                        {item.transactedDate
-                          ? moment(item.transactedDate).format("yyyy-MM-DD")
-                          : "-"}
-                      </Td>
-                      <Td fontSize="xs">
-                        {item.transactedBy ? item.transactedBy : "-"}
-                      </Td>
+                      <Td fontSize="xs">{item.transactedDate ? "Transacted" : "For Transaction"}</Td>
+                      <Td fontSize="xs">{item.transactedDate ? moment(item.transactedDate).format("yyyy-MM-DD") : "-"}</Td>
+                      <Td fontSize="xs">{item.transactedBy ? item.transactedBy : "-"}</Td>
                     </>
                   )}
                 </Tr>
@@ -357,11 +287,7 @@ export const TransactedMOHistory = ({
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {moData?.inventory?.length}
         </Text>
-        <Button
-          size="xs"
-          colorScheme="blue"
-          onClick={() => setButtonChanger(!buttonChanger)}
-        >
+        <Button size="xs" colorScheme="blue" onClick={() => setButtonChanger(!buttonChanger)}>
           {buttonChanger ? `>>>>` : `<<<<`}
         </Button>
       </Flex>

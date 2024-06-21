@@ -1,58 +1,22 @@
 import React, { useEffect, useState } from "react";
-import {
-  Flex,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  Button,
-  HStack,
-  Select,
-  Stack,
-  Text,
-  Box,
-} from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text, Box } from "@chakra-ui/react";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import moment from "moment";
 
-export const MiscIssueHistory = ({
-  dateFrom,
-  dateTo,
-  sample,
-  setSheetData,
-  search,
-}) => {
+export const MiscIssueHistory = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
   const [miscIssueData, setMiscIssueData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
 
-  const fetchMiscellaneousIssueHistoryApi = async (
-    dateFrom,
-    dateTo,
-    search
-  ) => {
+  const fetchMiscellaneousIssueHistoryApi = async (dateFrom, dateTo, search) => {
     const dayaDate = new Date();
     const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
-    const res = await request.get(
-      `Reports/MiscellaneousIssueReport?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`,
-      {
-        params: {
-          search: search,
-        },
-      }
-    );
+    const res = await request.get(`Reports/MiscellaneousIssueReport?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`, {
+      params: {
+        search: search,
+      },
+    });
     return res.data;
   };
 
@@ -73,7 +37,7 @@ export const MiscIssueHistory = ({
             Quantity: item.quantity,
             // 'Expiration Date': item.expirationDate,
             "Transacted By": item.transactBy,
-            "Transaction Date": moment(item.transactDate).format("yyyy-MM-DD"),
+            "Transaction Date": new Date(moment(item.transactDate).format("MM/DD/YYYY")),
           };
         })
       );
@@ -93,13 +57,7 @@ export const MiscIssueHistory = ({
       <Flex className="boxShadow">
         <PageScroll minHeight="720px" maxHeight="740px">
           <Table size="md" variant="striped">
-            <Thead
-              bgColor="primary"
-              h="40px"
-              position="sticky"
-              top={0}
-              zIndex="1"
-            >
+            <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
               <Tr>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
                   Issue ID
@@ -182,9 +140,7 @@ export const MiscIssueHistory = ({
                         })}
                       </Td>
                       <Td fontSize="xs">{item.transactBy}</Td>
-                      <Td fontSize="xs">
-                        {moment(item.transactDate).format("yyyy-MM-DD")}
-                      </Td>
+                      <Td fontSize="xs">{moment(item.transactDate).format("yyyy-MM-DD")}</Td>
                     </>
                   ) : (
                     <>
@@ -262,11 +218,7 @@ export const MiscIssueHistory = ({
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {miscIssueData?.inventory?.length}
         </Text>
-        <Button
-          size="xs"
-          colorScheme="blue"
-          onClick={() => setButtonChanger(!buttonChanger)}
-        >
+        <Button size="xs" colorScheme="blue" onClick={() => setButtonChanger(!buttonChanger)}>
           {buttonChanger ? `>>>>` : `<<<<`}
         </Button>
       </Flex>

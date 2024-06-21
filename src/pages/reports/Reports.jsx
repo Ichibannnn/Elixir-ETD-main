@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import * as XLSX from "xlsx";
 import { Badge, Button, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Skeleton, Text } from "@chakra-ui/react";
@@ -12,9 +12,9 @@ import { InventoryMovement } from "./report_dropdown/InventoryMovement";
 import { BorrowedMatsHistory } from "./report_dropdown/BorrowedMatsHistory";
 import { ReturnedQuantityTransaction } from "./report_dropdown/ReturnedQuantityTransaction";
 import { FiSearch } from "react-icons/fi";
-import PageScroll from "../../utils/PageScroll";
-import { FaFileExport } from "react-icons/fa";
 import { BiExport } from "react-icons/bi";
+import { ConsolidatedReportsFinance } from "./report_dropdown/ConsolidatedReportsFinance";
+import request from "../../services/ApiClient";
 
 const Reports = () => {
   const [dateFrom, setDateFrom] = useState(moment(new Date()).format("yyyy-MM-DD"));
@@ -23,6 +23,7 @@ const Reports = () => {
   const [sample, setSample] = useState("");
   const [sheetData, setSheetData] = useState([]);
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigationHandler = (data) => {
     if (data) {
@@ -33,13 +34,42 @@ const Reports = () => {
     }
   };
 
-  const handleExport = () => {
-    var workbook = XLSX.utils.book_new(),
-      worksheet = XLSX.utils.json_to_sheet(sheetData);
+  console.log("Date From: ", dateFrom);
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  const handleExport = async () => {
+    setIsLoading(true);
+    if (sample === 9) {
+      try {
+        const response = await request.get("Reports/ExportConsolidateFinance", {
+          params: {
+            DateFrom: dateFrom,
+            DateTo: dateTo,
+            Search: search,
+          },
+          responseType: "blob",
+        });
 
-    XLSX.writeFile(workbook, "Elixir_ETD_Reports_ExportFile.xlsx");
+        console.log("Response: ", response);
+
+        const url = window.URL.createObjectURL(new Blob([response.data]), { type: response.headers["content-type"] });
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "Consolidated_Finance_Report.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Error", error);
+      }
+    } else {
+      var workbook = XLSX.utils.book_new(),
+        worksheet = XLSX.utils.json_to_sheet(sheetData);
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+      XLSX.writeFile(workbook, "Elixir_ETD_Reports_ExportFile.xlsx");
+    }
 
     // console.log(worksheet);
   };
@@ -76,12 +106,20 @@ const Reports = () => {
                   <option value={6}>Borrowed Materials History</option>
                   <option value={7}>Returned Materials History</option>
                   <option value={8}>Unserved Orders History</option>
-                  <option value={9}>Inventory Movement</option>
+                  <option value={9}>Consolidated Report (Finance)</option>
+                  <option value={10}>Inventory Movement</option>
                 </Select>
               </HStack>
             </Flex>
             <Flex justifyContent="center" alignItems="end">
-              <Button onClick={handleExport} isDisabled={sheetData?.length === 0 || !sample} size="sm" leftIcon={<BiExport fontSize="20px" />} bg="none">
+              <Button
+                onClick={handleExport}
+                isLoading={sample === 9 ? isLoading : ""}
+                isDisabled={sheetData?.length === 0 || !sample}
+                size="sm"
+                leftIcon={<BiExport fontSize="20px" />}
+                bg="none"
+              >
                 <Text fontSize="xs">Export</Text>
               </Button>
             </Flex>
@@ -102,9 +140,9 @@ const Reports = () => {
 
               {/* Viewing Condition  */}
               <Flex justifyContent="start">
-                {sample < 10 ? (
+                {sample < 11 ? (
                   <Flex justifyContent="start" flexDirection="row">
-                    {sample != 9 && (
+                    {sample != 10 && (
                       <Flex flexDirection="column" ml={1}>
                         <Flex>
                           <Badge>Date from:</Badge>
@@ -115,14 +153,14 @@ const Reports = () => {
                           type="date"
                           value={dateFrom}
                           onChange={(e) => setDateFrom(e.target.value)}
-                          min={sample === 9 ? minimumDateForInventoryMovement : undefined}
+                          min={sample === 10 ? minimumDateForInventoryMovement : undefined}
                         />
                       </Flex>
                     )}
 
                     <Flex flexDirection="column" ml={1}>
                       <Flex>
-                        <Badge>{sample === 9 ? `Rollback Date:` : `Date To:`}</Badge>
+                        <Badge>{sample === 10 ? `Rollback Date:` : `Date To:`}</Badge>
                       </Flex>
                       <Input fontSize="xs" bgColor="#fff8dc" type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
                     </Flex>
@@ -150,6 +188,8 @@ const Reports = () => {
             ) : sample === 8 ? (
               <CancelledOrders search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 9 ? (
+              <ConsolidatedReportsFinance search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} isLoading={isLoading} />
+            ) : sample === 10 ? (
               <InventoryMovement search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : (
               ""
