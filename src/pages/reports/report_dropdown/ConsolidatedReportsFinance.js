@@ -48,6 +48,8 @@ export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, sample, setSheetD
     };
   }, [dateFrom, dateTo, search]);
 
+  console.log("Consolidated: ", consolidatedData);
+
   return (
     <Flex w="full" flexDirection="column">
       <Flex>
@@ -87,6 +89,9 @@ export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, sample, setSheetD
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Source
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Transaction Type
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Reason
@@ -179,6 +184,7 @@ export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, sample, setSheetD
                           })}
                         </Td>
                         <Td fontSize="xs">{item.source}</Td>
+                        <Td fontSize="xs">{item.transactionType ? item.transactionType : "-"}</Td>
                         <Td fontSize="xs">{item.reason ? item.reason : "-"}</Td>
                         <Td fontSize="xs">{item.reference ? item.reference : "-"}</Td>
                         <Td fontSize="xs">{item.encodedBy}</Td>
