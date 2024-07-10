@@ -42,6 +42,7 @@ export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData, search
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             }),
+            "Item Remarks": item.itemRemarks ? item.itemRemarks : "-",
             Reason: item.reason,
             "Cancelled Date": moment(item.cancelledDate).format("yyyy-MM-DD"),
             "Cancelled By": item.cancelledBy,
@@ -100,6 +101,9 @@ export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData, search
                   Quantity Unserved
                 </Th>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
+                  Item Remarks
+                </Th>
+                <Th color="white" fontSize="10px" fontWeight="semibold">
                   Reason
                 </Th>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
@@ -133,6 +137,7 @@ export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData, search
                       maximumFractionDigits: 2,
                     })}
                   </Td>
+                  {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
                   <Td fontSize="xs">{item.reason}</Td>
                   {item.cancelledDate ? <Td fontSize="xs">{moment(item.cancelledDate).format("yyyy-MM-DD")}</Td> : <Td fontSize="xs">-</Td>}
 
