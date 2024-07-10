@@ -30,15 +30,7 @@ import request from "../../../services/ApiClient";
 import moment from "moment";
 import OrdersConfirmation from "./OrdersConfirmation";
 
-export const ListOrders = ({
-  genusOrders,
-  fetchingData,
-  setFromDate,
-  setToDate,
-  fromDate,
-  toDate,
-  fetchNotification,
-}) => {
+export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, fromDate, toDate, fetchNotification }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [errorData, setErrorData] = useState([]);
@@ -58,7 +50,7 @@ export const ListOrders = ({
         orderNo: itemsub?.id,
         orderDate: item?.date_ordered,
         dateNeeded: item?.date_needed,
-        department: item?.department_name,
+        department: item?.charge_department_name,
         customerCode: item?.customer_code,
         customerName: item?.customer_name,
         customerType: item?.order_type,
@@ -84,7 +76,7 @@ export const ListOrders = ({
     })
   );
 
-  // console.log("Result Array: ", resultArray);
+  console.log("From genus: ", genusOrders);
 
   const dateVar = new Date();
   const startDate = moment(dateVar).format("yyyy-MM-DD");
@@ -145,7 +137,7 @@ export const ListOrders = ({
         };
       });
       if (result.isConfirmed) {
-        console.log("Submit Array: ", submitBody);
+        console.log("Result without errors: ", submitBody);
         try {
           setIsLoading(true);
           const res = request
@@ -247,10 +239,7 @@ export const ListOrders = ({
             <Flex justifyContent="space-between" w="100%" p={4} mt={-3}>
               <HStack>
                 <InputGroup size="sm">
-                  <InputLeftElement
-                    pointerEvents="none"
-                    children={<FiSearch bg="black" fontSize="18px" />}
-                  />
+                  <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
                   <Input
                     fontSize="13px"
                     size="sm"
@@ -265,14 +254,7 @@ export const ListOrders = ({
               </HStack>
 
               <HStack>
-                <Button
-                  colorScheme="blue"
-                  size="sm"
-                  fontSize="13px"
-                  leftIcon={<TiArrowSync fontSize="19px" />}
-                  onClick={() => syncHandler()}
-                  isLoading={isLoading}
-                >
+                <Button colorScheme="blue" size="sm" fontSize="13px" leftIcon={<TiArrowSync fontSize="19px" />} onClick={() => syncHandler()} isLoading={isLoading}>
                   Sync
                 </Button>
               </HStack>
@@ -319,12 +301,7 @@ export const ListOrders = ({
                       bg="gray.200"
                       variant="striped"
                     >
-                      <Thead
-                        bg="secondary"
-                        position="sticky"
-                        top={0}
-                        zIndex={1}
-                      >
+                      <Thead bg="secondary" position="sticky" top={0} zIndex={1}>
                         <Tr>
                           {/* <Th color="#D6D6D6" fontSize="10px">
                             ID
@@ -379,13 +356,9 @@ export const ListOrders = ({
                       <Tbody>
                         {genusOrders?.result
                           ?.filter((val) => {
-                            const newKeyword = new RegExp(
-                              `${keyword.toLowerCase()}`
-                            );
+                            const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
 
-                            return val?.customer_name
-                              ?.toLowerCase()
-                              .match(newKeyword, "*");
+                            return val?.customer_name?.toLowerCase().match(newKeyword, "*");
                             //   ||
                             // val?.orders?.some((order) =>
                             //   order?.material_name
@@ -398,25 +371,13 @@ export const ListOrders = ({
                               <Tr key={i}>
                                 {/* <Td fontSize="12px">{sub.id}</Td> */}
                                 <Td fontSize="12px">{sub.transaction_id}</Td>
-                                <Td fontSize="12px">
-                                  {moment(order.date_ordered).format(
-                                    "yyyy-MM-DD"
-                                  )}
-                                </Td>
-                                <Td fontSize="12px">
-                                  {moment(order.date_needed).format(
-                                    "yyyy-MM-DD"
-                                  )}
-                                </Td>
+                                <Td fontSize="12px">{moment(order.date_ordered).format("yyyy-MM-DD")}</Td>
+                                <Td fontSize="12px">{moment(order.date_needed).format("yyyy-MM-DD")}</Td>
                                 <Td fontSize="12px">{order.customer_code}</Td>
                                 <Td fontSize="12px">{order.customer_name}</Td>
                                 <Td fontSize="12px">{order.order_type}</Td>
-                                <Td fontSize="12px">
-                                  {order.charge_department_name}
-                                </Td>
-                                <Td fontSize="12px">
-                                  {order.charge_location_name}
-                                </Td>
+                                <Td fontSize="12px">{order.charge_department_name}</Td>
+                                <Td fontSize="12px">{order.charge_location_name}</Td>
                                 <Td fontSize="12px">{sub.material_code}</Td>
                                 <Td fontSize="12px">{sub.material_name}</Td>
                                 <Td fontSize="12px">{sub.category_name}</Td>
@@ -427,16 +388,8 @@ export const ListOrders = ({
                                     maximumFractionDigi: 2,
                                   })}
                                 </Td>
-                                {sub.remarks ? (
-                                  <Td fontSize="12px">{sub.remarks}</Td>
-                                ) : (
-                                  <Td fontSize="12px">-</Td>
-                                )}
-                                {sub.plate_no ? (
-                                  <Td fontSize="12px">{sub.plate_no}</Td>
-                                ) : (
-                                  <Td fontSize="12px">-</Td>
-                                )}
+                                {sub.remarks ? <Td fontSize="12px">{sub.remarks}</Td> : <Td fontSize="12px">-</Td>}
+                                {sub.plate_no ? <Td fontSize="12px">{sub.plate_no}</Td> : <Td fontSize="12px">-</Td>}
                               </Tr>
                             ))
                           )}
@@ -456,8 +409,7 @@ export const ListOrders = ({
             <HStack>
               <Badge colorScheme="cyan">
                 <Text color="secondary">
-                  {genusOrders?.result?.length > 0 &&
-                    genusOrders?.result?.orders?.length}
+                  {genusOrders?.result?.length > 0 && genusOrders?.result?.orders?.length}
                   {!keyword
                     ? `Number of records: ${ordersCount}`
                     : // : `Results for ${keyword}`}

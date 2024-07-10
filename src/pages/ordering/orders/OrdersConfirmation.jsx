@@ -37,16 +37,7 @@ import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
 import { TiWarning } from "react-icons/ti";
 
-const OrdersConfirmation = ({
-  isOpen,
-  onOpen,
-  onClose,
-  errorData,
-  setErrorData,
-  isLoading,
-  setIsLoading,
-  fetchNotification,
-}) => {
+const OrdersConfirmation = ({ isOpen, onOpen, onClose, errorData, setErrorData, isLoading, setIsLoading, fetchNotification }) => {
   const toast = useToast();
 
   // console.log("Error Data: ", errorData);
@@ -122,25 +113,23 @@ const OrdersConfirmation = ({
     };
   });
 
-  const itemDescriptionNotExist = errorData?.itemDescriptionNotExist?.map(
-    (list) => {
-      return {
-        trasactId: list?.trasactId,
-        department: list?.department,
-        customercode: list?.customercode,
-        customerName: list?.customerName,
-        customerType: list?.customerType,
-        orderNo: list?.orderNo,
-        orderDate: moment(list?.orderDate).format("yyyy-MM-DD"),
-        dateNeeded: moment(list?.dateNeeded).format("yyyy-MM-DD"),
-        itemCode: list?.itemCode,
-        itemdDescription: list?.itemdDescription,
-        uom: list?.uom,
-        quantityOrdered: list?.quantityOrdered,
-        category: list?.category,
-      };
-    }
-  );
+  const itemDescriptionNotExist = errorData?.itemDescriptionNotExist?.map((list) => {
+    return {
+      trasactId: list?.trasactId,
+      department: list?.department,
+      customercode: list?.customercode,
+      customerName: list?.customerName,
+      customerType: list?.customerType,
+      orderNo: list?.orderNo,
+      orderDate: moment(list?.orderDate).format("yyyy-MM-DD"),
+      dateNeeded: moment(list?.dateNeeded).format("yyyy-MM-DD"),
+      itemCode: list?.itemCode,
+      itemdDescription: list?.itemdDescription,
+      uom: list?.uom,
+      quantityOrdered: list?.quantityOrdered,
+      category: list?.category,
+    };
+  });
 
   const uomNotExist = errorData?.uomNotExist?.map((list) => {
     return {
@@ -311,7 +300,7 @@ const OrdersConfirmation = ({
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("Result Array: ", resultArray);
+        console.log("Result with errors: ", resultArray);
         try {
           setIsLoading(true);
           const res = request
@@ -376,10 +365,7 @@ const OrdersConfirmation = ({
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="4xl">
       <ModalOverlay />
-      <ModalContent
-        color="white"
-        bg="linear-gradient(rgba(0, 0, 0, 0.850),rgba(0, 0, 0, 3))"
-      >
+      <ModalContent color="white" bg="linear-gradient(rgba(0, 0, 0, 0.850),rgba(0, 0, 0, 3))">
         <ModalHeader>
           <Flex justifyContent="left">
             <Text fontSize="11px" color="white">
@@ -396,16 +382,9 @@ const OrdersConfirmation = ({
                 <AccordionItem bgColor="gray.300">
                   <Flex>
                     <AccordionButton fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
                         <Text color="green">
-                          Available for syncing{" "}
-                          <Badge color="green">{filteredOrders?.length}</Badge>
+                          Available for syncing <Badge color="green">{filteredOrders?.length}</Badge>
                         </Text>
                       </Box>
                       <AccordionIcon color="secondary" />
@@ -416,12 +395,7 @@ const OrdersConfirmation = ({
                     <PageScroll minHeight="500px" maxHeight="501px">
                       {filteredOrders ? (
                         <Table variant="striped" size="sm" bg="form">
-                          <Thead
-                            bgColor="gray.600"
-                            position="sticky"
-                            top={0}
-                            zIndex={1}
-                          >
+                          <Thead bgColor="gray.600" position="sticky" top={0} zIndex={1}>
                             <Tr>
                               <Th color="white" fontSize="9px">
                                 Line
@@ -522,22 +496,14 @@ const OrdersConfirmation = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
                     </PageScroll>
                     {filteredOrders ? (
                       <Flex justifyContent="end" mt={2}>
-                        <Button
-                          onClick={() => validationAvailableToSync()}
-                          size="sm"
-                          _hover={{ bgColor: "accent", color: "white" }}
-                          colorScheme="blue"
-                          isLoading={isLoading}
-                        >
+                        <Button onClick={() => validationAvailableToSync()} size="sm" _hover={{ bgColor: "accent", color: "white" }} colorScheme="blue" isLoading={isLoading}>
                           Sync
                         </Button>
                       </Flex>
@@ -555,15 +521,8 @@ const OrdersConfirmation = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Duplicated Lists{" "}
-                        <Badge color="red">{duplicateList?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Duplicated Lists <Badge color="red">{duplicateList?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -573,12 +532,7 @@ const OrdersConfirmation = ({
                     <PageScrollImport maxHeight="470px">
                       {duplicateList ? (
                         <Table variant="striped" size="sm">
-                          <Thead
-                            bgColor="gray.600"
-                            position="sticky"
-                            top={0}
-                            zIndex={1}
-                          >
+                          <Thead bgColor="gray.600" position="sticky" top={0} zIndex={1}>
                             <Tr>
                               <Th color="white" fontSize="9px">
                                 Line
@@ -678,9 +632,7 @@ const OrdersConfirmation = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -696,15 +648,8 @@ const OrdersConfirmation = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Material Information does not exist{" "}
-                        <Badge color="red">{itemCodesExist?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Material Information does not exist <Badge color="red">{itemCodesExist?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -714,12 +659,7 @@ const OrdersConfirmation = ({
                     <PageScrollImport maxHeight="470px">
                       {itemCodesExist ? (
                         <Table variant="striped" size="sm">
-                          <Thead
-                            bgColor="gray.600"
-                            position="sticky"
-                            top={0}
-                            zIndex={1}
-                          >
+                          <Thead bgColor="gray.600" position="sticky" top={0} zIndex={1}>
                             <Tr>
                               <Th color="white" fontSize="9px">
                                 Line
@@ -771,10 +711,7 @@ const OrdersConfirmation = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated material lists on this
-                              file
-                            </Text>
+                            <Text color="white">There are no duplicated material lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -790,17 +727,8 @@ const OrdersConfirmation = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Item Description Does Exist{" "}
-                        <Badge color="red">
-                          {itemDescriptionNotExist?.length}
-                        </Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Item Description Does Exist <Badge color="red">{itemDescriptionNotExist?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -810,12 +738,7 @@ const OrdersConfirmation = ({
                     <PageScrollImport maxHeight="470px">
                       {itemDescriptionNotExist ? (
                         <Table variant="striped" size="sm">
-                          <Thead
-                            bgColor="gray.600"
-                            position="sticky"
-                            top={0}
-                            zIndex={1}
-                          >
+                          <Thead bgColor="gray.600" position="sticky" top={0} zIndex={1}>
                             <Tr>
                               <Th color="white" fontSize="9px">
                                 Line
@@ -891,10 +814,7 @@ const OrdersConfirmation = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated item description lists on
-                              this file
-                            </Text>
+                            <Text color="white">There are no duplicated item description lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -910,15 +830,8 @@ const OrdersConfirmation = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        UOM does not exist{" "}
-                        <Badge color="red">{uomNotExist?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        UOM does not exist <Badge color="red">{uomNotExist?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -928,12 +841,7 @@ const OrdersConfirmation = ({
                     <PageScrollImport maxHeight="470px">
                       {uomNotExist ? (
                         <Table variant="striped" size="sm">
-                          <Thead
-                            bgColor="gray.600"
-                            position="sticky"
-                            top={0}
-                            zIndex={1}
-                          >
+                          <Thead bgColor="gray.600" position="sticky" top={0} zIndex={1}>
                             <Tr>
                               <Th color="white" fontSize="9px">
                                 Line
@@ -1015,9 +923,7 @@ const OrdersConfirmation = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated uom lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated uom lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -1033,15 +939,8 @@ const OrdersConfirmation = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Department does not exist{" "}
-                        <Badge color="red">{departmentNotExist?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Department does not exist <Badge color="red">{departmentNotExist?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -1051,12 +950,7 @@ const OrdersConfirmation = ({
                     <PageScrollImport maxHeight="470px">
                       {departmentNotExist ? (
                         <Table variant="striped" size="sm">
-                          <Thead
-                            bgColor="gray.600"
-                            position="sticky"
-                            top={0}
-                            zIndex={1}
-                          >
+                          <Thead bgColor="gray.600" position="sticky" top={0} zIndex={1}>
                             <Tr>
                               <Th color="white" fontSize="9px">
                                 Line
@@ -1144,10 +1038,7 @@ const OrdersConfirmation = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated customer code lists on
-                              this file
-                            </Text>
+                            <Text color="white">There are no duplicated customer code lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -1163,17 +1054,8 @@ const OrdersConfirmation = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Customer Information does not exist{" "}
-                        <Badge color="red">
-                          {customerNameNotExist?.length}
-                        </Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Customer Information does not exist <Badge color="red">{customerNameNotExist?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -1183,12 +1065,7 @@ const OrdersConfirmation = ({
                     <PageScrollImport maxHeight="470px">
                       {customerNameNotExist ? (
                         <Table variant="striped" size="sm">
-                          <Thead
-                            bgColor="gray.600"
-                            position="sticky"
-                            top={0}
-                            zIndex={1}
-                          >
+                          <Thead bgColor="gray.600" position="sticky" top={0} zIndex={1}>
                             <Tr>
                               <Th color="white" fontSize="9px">
                                 Line
@@ -1234,10 +1111,7 @@ const OrdersConfirmation = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated customer name lists on
-                              this file
-                            </Text>
+                            <Text color="white">There are no duplicated customer name lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -1253,15 +1127,8 @@ const OrdersConfirmation = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Invalid Date Needed{" "}
-                        <Badge color="red">{previousDateNeeded?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Invalid Date Needed <Badge color="red">{previousDateNeeded?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -1271,12 +1138,7 @@ const OrdersConfirmation = ({
                     <PageScrollImport maxHeight="470px">
                       {previousDateNeeded ? (
                         <Table variant="striped" size="sm">
-                          <Thead
-                            bgColor="gray.600"
-                            position="sticky"
-                            top={0}
-                            zIndex={1}
-                          >
+                          <Thead bgColor="gray.600" position="sticky" top={0} zIndex={1}>
                             <Tr>
                               <Th color="white" fontSize="9px">
                                 Line
@@ -1358,9 +1220,7 @@ const OrdersConfirmation = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -1376,15 +1236,8 @@ const OrdersConfirmation = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Check Empty Account Title Code{" "}
-                        <Badge color="red">{accountCodeEmpty?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Check Empty Account Title Code <Badge color="red">{accountCodeEmpty?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -1394,12 +1247,7 @@ const OrdersConfirmation = ({
                     <PageScrollImport maxHeight="470px">
                       {accountCodeEmpty ? (
                         <Table variant="striped" size="sm">
-                          <Thead
-                            bgColor="gray.600"
-                            position="sticky"
-                            top={0}
-                            zIndex={1}
-                          >
+                          <Thead bgColor="gray.600" position="sticky" top={0} zIndex={1}>
                             <Tr>
                               <Th color="white" fontSize="9px">
                                 Line
@@ -1457,10 +1305,7 @@ const OrdersConfirmation = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated Accunt Title Code lists on
-                              this file
-                            </Text>
+                            <Text color="white">There are no duplicated Accunt Title Code lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -1476,15 +1321,8 @@ const OrdersConfirmation = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Check Empty Account Title Name{" "}
-                        <Badge color="red">{accountTitleEmpty?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Check Empty Account Title Name <Badge color="red">{accountTitleEmpty?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -1494,12 +1332,7 @@ const OrdersConfirmation = ({
                     <PageScrollImport maxHeight="470px">
                       {accountTitleEmpty ? (
                         <Table variant="striped" size="sm">
-                          <Thead
-                            bgColor="gray.600"
-                            position="sticky"
-                            top={0}
-                            zIndex={1}
-                          >
+                          <Thead bgColor="gray.600" position="sticky" top={0} zIndex={1}>
                             <Tr>
                               <Th color="white" fontSize="9px">
                                 Line
@@ -1557,10 +1390,7 @@ const OrdersConfirmation = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated Accunt Title Name lists on
-                              this file
-                            </Text>
+                            <Text color="white">There are no duplicated Accunt Title Name lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -1575,8 +1405,7 @@ const OrdersConfirmation = ({
             <HStack mt={20} textAlign="center" fontWeight="semibold">
               <TiWarning color="orange" />
               <Text fontSize="12px" color="orange">
-                Note: Before synching, please check that every Genus ETD orders
-                has been fulfilled.
+                Note: Before synching, please check that every Genus ETD orders has been fulfilled.
               </Text>
             </HStack>
           </ModalBody>
