@@ -1,25 +1,12 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Checkbox,
-  Flex,
-  HStack,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, Checkbox, Flex, HStack, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
 import PageScroll from "../../../utils/PageScroll";
 import moment from "moment";
 // import { ViewModal } from './Action-Modals-Transact'
 import { decodeUser } from "../../../services/decode-user";
 import { ViewModal } from "./ActionModalTransact";
 import { FaShippingFast, FaSort } from "react-icons/fa";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const currentUser = decodeUser();
 
@@ -31,19 +18,13 @@ export const ListMoveOrder = ({
   checkedItems,
   setCheckedItems,
   status,
+  displayedData,
+  fetchMoreData,
+  hasMore,
 }) => {
-  const {
-    isOpen: isView,
-    onClose: closeView,
-    onOpen: openView,
-  } = useDisclosure();
+  const { isOpen: isView, onClose: closeView, onOpen: openView } = useDisclosure();
 
-  const viewHandler = ({
-    mirId,
-    deliveryStatus,
-    customerName,
-    customerCode,
-  }) => {
+  const viewHandler = ({ mirId, deliveryStatus, customerName, customerCode }) => {
     // Add delivery status for condition
     if (mirId && customerName && customerCode) {
       setMoveOrderInformation({
@@ -101,9 +82,7 @@ export const ListMoveOrder = ({
     if (e.target.checked) {
       setCheckedItems([...checkedItems, valueSubmit]);
     } else {
-      const filterData = checkedItems?.filter(
-        (item) => item.orderNo !== valueSubmit.orderNo
-      );
+      const filterData = checkedItems?.filter((item) => item.orderNo !== valueSubmit.orderNo);
       setCheckedItems(filterData);
       console.log(checkedItems);
     }
@@ -112,16 +91,10 @@ export const ListMoveOrder = ({
   //Sort by date start line
   const [preparedSort, setPreparedSort] = useState("asc");
   function descendingComparator(a, b) {
-    if (
-      moment(b?.preparedDate).format("yyyy-MM-DD") <
-      moment(a?.preparedDate).format("yyyy-MM-DD")
-    ) {
+    if (moment(b?.preparedDate).format("yyyy-MM-DD") < moment(a?.preparedDate).format("yyyy-MM-DD")) {
       return -1;
     }
-    if (
-      moment(b?.preparedDate).format("yyyy-MM-DD") >
-      moment(a?.preparedDate).format("yyyy-MM-DD")
-    ) {
+    if (moment(b?.preparedDate).format("yyyy-MM-DD") > moment(a?.preparedDate).format("yyyy-MM-DD")) {
       return 1;
     }
     return 0;
@@ -129,93 +102,80 @@ export const ListMoveOrder = ({
 
   //Sort by date end line
   function getComparator(order) {
-    return order === "desc"
-      ? (a, b) => descendingComparator(a, b)
-      : (a, b) => -descendingComparator(a, b);
+    return order === "desc" ? (a, b) => descendingComparator(a, b) : (a, b) => -descendingComparator(a, b);
   }
+
+  // console.log("Displayed Data: ", displayedData);
 
   return (
     <>
       <Flex w="full" flexDirection="column">
         <VStack spacing={0}>
-          <Text
-            pb={2}
-            textAlign="center"
-            fontSize="md"
-            color="white"
-            bgColor="primary"
-            w="full"
-            mb={-1.5}
-          >
+          <Text pb={2} textAlign="center" fontSize="md" color="white" bgColor="primary" w="full" mb={-1.5}>
             List of Move Orders
           </Text>
           <PageScroll minHeight="690px" maxHeight="770px">
-            <Table size="sm" variant="simple">
-              <Thead bgColor="secondary" position="sticky" top={0} zIndex={1}>
-                <Tr h="40px">
-                  <Th color="white" fontSize="10px">
-                    <Checkbox
-                      size="sm"
-                      fontSize="10px"
-                      onChange={parentCheckHandler}
-                      isChecked={submitData?.length === checkedItems?.length}
-                      isDisabled={status}
-                      title={status ? "Order already transacted" : ""}
-                      color="white"
-                    >
-                      Line
-                    </Checkbox>
-                  </Th>
-                  <Th color="white" fontSize="11px">
-                    MIR Id
-                  </Th>
-                  <Th color="white" fontSize="11px">
-                    Customer Code
-                  </Th>
-                  <Th color="white" fontSize="11px">
-                    Customer Name
-                  </Th>
-                  <Th color="white" fontSize="11px">
-                    Total Quantity Order
-                  </Th>
-                  <Th color="white" fontSize="11px">
-                    <HStack>
-                      <Text>Prepared Date</Text>
-                      <Button
-                        cursor="pointer"
-                        onClick={() => {
-                          setPreparedSort(
-                            preparedSort === "asc" ? "desc" : "asc"
-                          );
-                        }}
-                        size="xs"
-                        p={0}
-                        m={0}
-                        background="none"
-                        _hover={{ background: "none" }}
+            <InfiniteScroll dataLength={displayedData.length} next={fetchMoreData} hasMore={hasMore} loader={<h4>Loading...</h4>} height={740} scrollThreshold={0.9}>
+              <Table size="sm" variant="simple">
+                <Thead bgColor="secondary" position="sticky" top={0} zIndex={1}>
+                  <Tr h="40px">
+                    <Th color="white" fontSize="10px">
+                      <Checkbox
+                        size="sm"
+                        fontSize="10px"
+                        onChange={parentCheckHandler}
+                        isChecked={submitData?.length === checkedItems?.length}
+                        isDisabled={status}
+                        title={status ? "Order already transacted" : ""}
+                        color="white"
                       >
-                        <FaSort />
-                      </Button>
-                    </HStack>
-                  </Th>
-                  <Th color="white" fontSize="11px">
-                    View
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {moveOrderList
-                  ?.sort(getComparator(preparedSort))
-                  .map((list, i) => (
+                        Line
+                      </Checkbox>
+                    </Th>
+                    <Th color="white" fontSize="11px">
+                      MIR Id
+                    </Th>
+                    <Th color="white" fontSize="11px">
+                      Customer Code
+                    </Th>
+                    <Th color="white" fontSize="11px">
+                      Customer Name
+                    </Th>
+                    <Th color="white" fontSize="11px">
+                      Total Quantity Order
+                    </Th>
+                    <Th color="white" fontSize="11px">
+                      <HStack>
+                        <Text>Prepared Date</Text>
+                        <Button
+                          cursor="pointer"
+                          onClick={() => {
+                            setPreparedSort(preparedSort === "asc" ? "desc" : "asc");
+                          }}
+                          size="xs"
+                          p={0}
+                          m={0}
+                          background="none"
+                          _hover={{ background: "none" }}
+                        >
+                          <FaSort />
+                        </Button>
+                      </HStack>
+                    </Th>
+                    <Th color="white" fontSize="11px">
+                      View
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {displayedData?.sort(getComparator(preparedSort)).map((list, i) => (
                     <Tr key={i} cursor="pointer">
                       <Td>
                         <Checkbox
                           size="sm"
                           // onChange={() => childCheckHandler(list)}
                           onChange={childCheckHandler}
-                          isChecked={checkedItems.some(
-                            (item) => item.orderNo === list.mirId
-                          )}
+                          isChecked={checkedItems.some((item) => item.orderNo === list.mirId)}
                           value={JSON.stringify(list)}
                           color="black"
                           isDisabled={status}
@@ -228,9 +188,7 @@ export const ListMoveOrder = ({
                       <Td fontSize="xs">{list.customerCode}</Td>
                       <Td fontSize="xs">{list.customerName}</Td>
                       <Td fontSize="xs">{list.totalOrders}</Td>
-                      <Td fontSize="xs">
-                        {moment(list.preparedDate).format("MM/DD/yyyy")}
-                      </Td>
+                      <Td fontSize="xs">{moment(list.preparedDate).format("MM/DD/yyyy")}</Td>
                       <Td fontSize="xs">
                         <Button
                           size="xs"
@@ -243,19 +201,13 @@ export const ListMoveOrder = ({
                       </Td>
                     </Tr>
                   ))}
-              </Tbody>
-            </Table>
+                </Tbody>
+              </Table>
+            </InfiniteScroll>
           </PageScroll>
         </VStack>
       </Flex>
-      {isView && (
-        <ViewModal
-          isOpen={isView}
-          onClose={closeView}
-          moveOrderInformation={moveOrderInformation}
-          moveOrderViewTable={moveOrderViewTable}
-        />
-      )}
+      {isView && <ViewModal isOpen={isView} onClose={closeView} moveOrderInformation={moveOrderInformation} moveOrderViewTable={moveOrderViewTable} />}
     </>
   );
 };

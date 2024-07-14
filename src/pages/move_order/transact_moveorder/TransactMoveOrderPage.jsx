@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Flex,
-  HStack,
-  Input,
-  Select,
-  Text,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, Flex, HStack, Input, Select, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { ListMoveOrder } from "./ListMoveOrder";
 import request from "../../../services/ApiClient";
 // import { TransactConfirmation } from './transactmoveorder/Action-Modals-Transact';
@@ -18,17 +9,13 @@ import { TransactConfirmation } from "./ActionModalTransact";
 //Move Order List
 
 const fetchMoveOrderListApi = async (status) => {
-  const res = await request.get(
-    `Ordering/GetTotalListForMoveOrder?status=${status}`
-  );
+  const res = await request.get(`Ordering/GetTotalListForMoveOrder?status=${status}`);
   return res.data;
 };
 
 //Move Order Lists by Order No
 const fetchMoveOrderViewTableApi = async (orderNo) => {
-  const res = await request.get(
-    `Ordering/ListOfMoveOrdersForTransact?orderId=${orderNo}`
-  );
+  const res = await request.get(`Ordering/ListOfMoveOrdersForTransact?orderId=${orderNo}`);
   return res.data;
 };
 
@@ -37,6 +24,10 @@ const TransactMoveOrderPage = ({ fetchNotification }) => {
 
   const [moveOrderList, setMoveOrderList] = useState([]);
   const [moveOrderViewTable, setMoveOrderViewTable] = useState([]);
+
+  const [displayedData, setDisplayedData] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const itemsPerPage = 50;
 
   const [moveOrderInformation, setMoveOrderInformation] = useState({
     orderNo: "",
@@ -47,17 +38,23 @@ const TransactMoveOrderPage = ({ fetchNotification }) => {
   const orderNo = moveOrderInformation.orderNo;
   const [deliveryDate, setDeliveryDate] = useState("");
   const [checkedItems, setCheckedItems] = useState([]);
-  const {
-    isOpen: isTransact,
-    onClose: closeTransact,
-    onOpen: openTransact,
-  } = useDisclosure();
+  const { isOpen: isTransact, onClose: closeTransact, onOpen: openTransact } = useDisclosure();
 
   //Get Move Order List
   const fetchMoveOrderList = () => {
     fetchMoveOrderListApi(status).then((res) => {
       setMoveOrderList(res);
+      setDisplayedData(res.slice(0, itemsPerPage));
+      setHasMore(res.length > itemsPerPage);
     });
+  };
+
+  const fetchMoreData = () => {
+    if (displayedData.length >= moveOrderList.length) {
+      setHasMore(false);
+      return;
+    }
+    setDisplayedData(displayedData.concat(moveOrderList.slice(displayedData.length, displayedData.length + itemsPerPage)));
   };
 
   useEffect(() => {
@@ -65,6 +62,7 @@ const TransactMoveOrderPage = ({ fetchNotification }) => {
 
     return () => {
       setMoveOrderList([]);
+      setDisplayedData([]);
     };
   }, [status]);
 
@@ -87,9 +85,7 @@ const TransactMoveOrderPage = ({ fetchNotification }) => {
 
   const newDate = new Date();
   const maxDate = moment(newDate).format("yyyy-MM-DD");
-  const minDate = moment(newDate.setDate(newDate.getDate() - 7)).format(
-    "yyyy-MM-DD"
-  );
+  const minDate = moment(newDate.setDate(newDate.getDate() - 7)).format("yyyy-MM-DD");
 
   return (
     <>
@@ -102,10 +98,7 @@ const TransactMoveOrderPage = ({ fetchNotification }) => {
         <Flex justifyContent="space-between" w="full">
           <HStack justifyContent="space-between" mt={5} pl={5}>
             <Text fontSize="xs">Status:</Text>
-            <Select
-              fontSize="xs"
-              onChange={(e) => setStatus(Boolean(Number(e.target.value)))}
-            >
+            <Select fontSize="xs" onChange={(e) => setStatus(Boolean(Number(e.target.value)))}>
               <option value={0}>For Transaction</option>
               <option value={1}>Transacted Orders</option>
             </Select>
@@ -119,11 +112,7 @@ const TransactMoveOrderPage = ({ fetchNotification }) => {
                 min={minDate}
                 max={maxDate}
                 isDisabled={checkedItems <= 0}
-                title={
-                  checkedItems <= 0
-                    ? "Please select items to transact first"
-                    : ""
-                }
+                title={checkedItems <= 0 ? "Please select items to transact first" : ""}
                 type="date"
                 bgColor="#fff8dc"
               />
@@ -134,6 +123,9 @@ const TransactMoveOrderPage = ({ fetchNotification }) => {
         <VStack p={2} w="full" spacing={0}>
           <ListMoveOrder
             moveOrderList={moveOrderList}
+            displayedData={displayedData}
+            fetchMoreData={fetchMoreData}
+            hasMore={hasMore}
             moveOrderInformation={moveOrderInformation}
             setMoveOrderInformation={setMoveOrderInformation}
             moveOrderViewTable={moveOrderViewTable}

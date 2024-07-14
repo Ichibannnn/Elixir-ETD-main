@@ -1,59 +1,23 @@
 import React, { useEffect, useState } from "react";
-import {
-  Flex,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  Button,
-  HStack,
-  Select,
-  Stack,
-  Text,
-  Box,
-} from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text, Box } from "@chakra-ui/react";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import moment from "moment";
 
-export const WarehouseReceivingHistory = ({
-  dateFrom,
-  dateTo,
-  sample,
-  setSheetData,
-  search,
-}) => {
+export const WarehouseReceivingHistory = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
   const [warehouseData, setWarehouseData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
 
-  const fetchWarehouseReceivingHistoryApi = async (
-    dateFrom,
-    dateTo,
-    search
-  ) => {
+  const fetchWarehouseReceivingHistoryApi = async (dateFrom, dateTo, search) => {
     const dayaDate = new Date();
     const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
-    const res = await request.get(
-      `Reports/WareHouseReceivingReports?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`,
-      {
-        params: {
-          search: search,
-        },
-      }
-    );
+    const res = await request.get(`Reports/WareHouseReceivingReports?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`, {
+      params: {
+        search: search,
+      },
+    });
     return res.data;
   };
 
@@ -107,13 +71,7 @@ export const WarehouseReceivingHistory = ({
       <Flex className="boxShadow">
         <PageScroll minHeight="720px" maxHeight="740px">
           <Table size="md" variant="striped">
-            <Thead
-              bgColor="primary"
-              h="40px"
-              position="sticky"
-              top={0}
-              zIndex="1"
-            >
+            <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
               <Tr>
                 <Th color="white" fontSize="10px" fontWeight="semibold">
                   ID
@@ -219,9 +177,7 @@ export const WarehouseReceivingHistory = ({
                       </Td>
                       <Td fontSize="xs">{item.supplierName}</Td>
                       <Td fontSize="xs">{item.transactionType}</Td>
-                      <Td fontSize="xs">
-                        {item.receivedBy ? item.receivedBy : "-"}
-                      </Td>
+                      <Td fontSize="xs">{item.receivedBy ? item.receivedBy : "-"}</Td>
                     </>
                   )}
                 </Tr>
@@ -288,11 +244,7 @@ export const WarehouseReceivingHistory = ({
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {warehouseData?.inventory?.length}
         </Text>
-        <Button
-          size="md"
-          colorScheme="blue"
-          onClick={() => setButtonChanger(!buttonChanger)}
-        >
+        <Button size="md" colorScheme="blue" onClick={() => setButtonChanger(!buttonChanger)}>
           {buttonChanger ? `>>>>` : `<<<<`}
         </Button>
       </Flex>
