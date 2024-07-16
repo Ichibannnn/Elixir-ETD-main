@@ -4,10 +4,15 @@ import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
 import moment from "moment";
 import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export const MiscReceiptHistory = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
   const [miscReceiptData, setMiscReceiptData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
+
+  const [displayedData, setDisplayedData] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const itemsPerPage = 50;
 
   const fetchMiscellaenouseReceiptApi = async (dateFrom, dateTo, search) => {
     const dayaDate = new Date();
@@ -41,7 +46,18 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, sample, setSheetData, sea
           };
         })
       );
+
+      setDisplayedData(res?.inventory?.slice(0, itemsPerPage));
+      setHasMore(res?.inventory?.length > itemsPerPage);
     });
+  };
+
+  const fetchMoreData = () => {
+    if (displayedData?.length >= miscReceiptData?.inventory?.length) {
+      setHasMore(false);
+      return;
+    }
+    setDisplayedData(displayedData.concat(miscReceiptData?.inventory?.slice(displayedData.length, displayedData.length + itemsPerPage)));
   };
 
   useEffect(() => {
@@ -49,6 +65,7 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, sample, setSheetData, sea
 
     return () => {
       setMiscReceiptData([]);
+      setDisplayedData([]);
     };
   }, [dateFrom, dateTo, search]);
 
@@ -56,170 +73,119 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, sample, setSheetData, sea
     <Flex w="full" flexDirection="column">
       <Flex className="boxShadow">
         <PageScroll minHeight="720px" maxHeight="740px">
-          <Table size="md" variant="striped">
-            <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
-              <Tr>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Receipt ID
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Receipt Date
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Supplier Code
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Supplier Name
-                </Th>
-                {buttonChanger ? (
-                  <>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Details
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Item Code
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Item Description
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      UOM
-                    </Th>
-                    {/* <Th color='white'>category</Th> */}
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Quantity
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Transacted By
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Transaction Date
-                    </Th>
-                  </>
-                ) : (
-                  <>
-                    {/* <Th color='white'>Expiration Date</Th> */}
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Company Code
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Company Name
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Department Code
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Department Name
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Location Code
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Location Name
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Account Title
-                    </Th>
-                  </>
-                )}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {miscReceiptData?.inventory?.map((item, i) => (
-                <Tr key={i}>
-                  <Td fontSize="xs">{item.receiptId}</Td>
-                  <Td fontSize="xs">{item.receivingDate}</Td>
-                  <Td fontSize="xs">{item.supplierCode}</Td>
-                  <Td fontSize="xs">{item.supplierName}</Td>
+          <InfiniteScroll dataLength={displayedData.length} next={fetchMoreData} hasMore={hasMore} loader={<h4>Loading...</h4>} height={740} scrollThreshold={0.9}>
+            <Table size="md" variant="striped">
+              <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
+                <Tr>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Receipt ID
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Receipt Date
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Supplier Code
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Supplier Name
+                  </Th>
                   {buttonChanger ? (
                     <>
-                      <Td fontSize="xs">{item.details}</Td>
-                      <Td fontSize="xs">{item.itemCode}</Td>
-                      <Td fontSize="xs">{item.itemDescription}</Td>
-                      <Td fontSize="xs">{item.uom}</Td>
-                      {/* <Td>{item.category}</Td> */}
-                      <Td fontSize="xs">
-                        {item.quantity.toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td fontSize="xs">{item.transactBy}</Td>
-                      <Td fontSize="xs">{moment(item.transactDate).format("yyyy-MM-DD")}</Td>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Details
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Item Code
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Item Description
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        UOM
+                      </Th>
+                      {/* <Th color='white'>category</Th> */}
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Quantity
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Transacted By
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Transaction Date
+                      </Th>
                     </>
                   ) : (
                     <>
-                      {/* <Td>{item.expirationDate}</Td> */}
-                      <Td fontSize="xs">{item.companyCode}</Td>
-                      <Td fontSize="xs">{item.companyName}</Td>
-                      <Td fontSize="xs">{item.departmentCode}</Td>
-                      <Td fontSize="xs">{item.departmentName}</Td>
-                      <Td fontSize="xs">{item.locationCode}</Td>
-                      <Td fontSize="xs">{item.locationName}</Td>
-                      <Td fontSize="xs">{item.accountTitles}</Td>
+                      {/* <Th color='white'>Expiration Date</Th> */}
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Company Code
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Company Name
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Department Code
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Department Name
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Location Code
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Location Name
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Account Title
+                      </Th>
                     </>
                   )}
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
+              </Thead>
+              <Tbody>
+                {displayedData?.map((item, i) => (
+                  <Tr key={i}>
+                    <Td fontSize="xs">{item.receiptId}</Td>
+                    <Td fontSize="xs">{item.receivingDate}</Td>
+                    <Td fontSize="xs">{item.supplierCode}</Td>
+                    <Td fontSize="xs">{item.supplierName}</Td>
+                    {buttonChanger ? (
+                      <>
+                        <Td fontSize="xs">{item.details}</Td>
+                        <Td fontSize="xs">{item.itemCode}</Td>
+                        <Td fontSize="xs">{item.itemDescription}</Td>
+                        <Td fontSize="xs">{item.uom}</Td>
+                        {/* <Td>{item.category}</Td> */}
+                        <Td fontSize="xs">
+                          {item.quantity.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </Td>
+                        <Td fontSize="xs">{item.transactBy}</Td>
+                        <Td fontSize="xs">{moment(item.transactDate).format("yyyy-MM-DD")}</Td>
+                      </>
+                    ) : (
+                      <>
+                        {/* <Td>{item.expirationDate}</Td> */}
+                        <Td fontSize="xs">{item.companyCode}</Td>
+                        <Td fontSize="xs">{item.companyName}</Td>
+                        <Td fontSize="xs">{item.departmentCode}</Td>
+                        <Td fontSize="xs">{item.departmentName}</Td>
+                        <Td fontSize="xs">{item.locationCode}</Td>
+                        <Td fontSize="xs">{item.locationName}</Td>
+                        <Td fontSize="xs">{item.accountTitles}</Td>
+                      </>
+                    )}
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </InfiniteScroll>
         </PageScroll>
       </Flex>
 
       <Flex justifyContent="space-between" mt={2}>
-        {/* <Stack>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
-            <PaginationContainer>
-              <PaginationPrevious
-                bg="primary"
-                color="white"
-                p={1}
-                _hover={{ bg: "btnColor", color: "white" }}
-              >
-                {"<<"}
-              </PaginationPrevious>
-              <PaginationPageGroup ml={1} mr={1}>
-                {pages.map((page) => (
-                  <PaginationPage
-                    _hover={{ bg: "btnColor", color: "white" }}
-                    _focus={{ bg: "btnColor" }}
-                    p={3}
-                    bg="primary"
-                    color="white"
-                    key={`pagination_page_${page}`}
-                    page={page}
-                  />
-                ))}
-              </PaginationPageGroup>
-              <HStack>
-                <PaginationNext
-                  bg="primary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "btnColor", color: "white" }}
-                >
-                  {">>"}
-                </PaginationNext>
-                <Select
-                  onChange={handlePageSizeChange}
-                  variant="outline"
-                  fontSize="md"
-                >
-                  <option value={Number(5)}>5</option>
-                  <option value={Number(10)}>10</option>
-                  <option value={Number(25)}>25</option>
-                  <option value={Number(50)}>50</option>
-                  <option value={Number(100)}>100</option>
-                </Select>
-              </HStack>
-            </PaginationContainer>
-          </Pagination>
-        </Stack> */}
-
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {miscReceiptData?.inventory?.length}
         </Text>

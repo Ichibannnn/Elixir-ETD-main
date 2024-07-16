@@ -1,54 +1,27 @@
 import React, { useEffect, useState } from "react";
-import {
-  Flex,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  Button,
-  HStack,
-  Select,
-  Stack,
-  Text,
-  Box,
-} from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text, Box } from "@chakra-ui/react";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
 import moment from "moment";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-export const BorrowedMatsHistory = ({
-  dateFrom,
-  dateTo,
-  sample,
-  setSheetData,
-  search,
-}) => {
+export const BorrowedMatsHistory = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
   const [borrowedData, setBorrowedData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
+
+  const [displayedData, setDisplayedData] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const itemsPerPage = 50;
 
   const fetchBorrowedHistoryApi = async (dateFrom, dateTo, search) => {
     const dayaDate = moment(dateTo).add(1, "day").format("yyyy-MM-DD");
 
-    const res = await request.get(
-      `Reports/BorrowedTransactionReports?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dayaDate}`,
-      {
-        params: {
-          search: search,
-        },
-      }
-    );
+    const res = await request.get(`Reports/BorrowedTransactionReports?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dayaDate}`, {
+      params: {
+        search: search,
+      },
+    });
     return res.data;
   };
 
@@ -81,7 +54,18 @@ export const BorrowedMatsHistory = ({
           };
         })
       );
+
+      setDisplayedData(res?.inventory?.slice(0, itemsPerPage));
+      setHasMore(res?.inventory?.length > itemsPerPage);
     });
+  };
+
+  const fetchMoreData = () => {
+    if (displayedData?.length >= borrowedData?.inventory?.length) {
+      setHasMore(false);
+      return;
+    }
+    setDisplayedData(displayedData.concat(borrowedData?.inventory?.slice(displayedData.length, displayedData.length + itemsPerPage)));
   };
 
   useEffect(() => {
@@ -89,6 +73,7 @@ export const BorrowedMatsHistory = ({
 
     return () => {
       setBorrowedData([]);
+      setDisplayedData([]);
     };
   }, [dateFrom, dateTo, search]);
 
@@ -96,247 +81,182 @@ export const BorrowedMatsHistory = ({
     <Flex w="full" flexDirection="column">
       <Flex className="boxShadow">
         <PageScroll minHeight="720px" maxHeight="740px">
-          <Table size="md" variant="striped">
-            <Thead
-              bgColor="primary"
-              h="40px"
-              position="sticky"
-              top={0}
-              zIndex="1"
-            >
-              <Tr>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Borrowed ID
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Customer Information
-                </Th>
-                {buttonChanger ? (
-                  <>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Item Information
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      UOM
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Aging Days
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Borrowed Qty
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Borrowed Date
-                    </Th>
-                  </>
-                ) : (
-                  <>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Employee Information
-                    </Th>
-
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Status
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Requested By
-                    </Th>
-                  </>
-                )}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {borrowedData?.inventory?.map((item, i) => (
-                <Tr key={i}>
-                  <Td fontSize="xs">{item.borrowedId}</Td>
-
-                  {/* Customer Information */}
-                  <Td>
-                    <Flex flexDirection="column" gap="10px">
-                      <Flex flexDirection="column" justifyContent="left">
-                        <HStack fontSize="sm" spacing="5px">
-                          <Text color="gray.700" fontWeight="bold">
-                            {item.customerName}
-                          </Text>
-                        </HStack>
-
-                        <HStack fontSize="xs" spacing="5px">
-                          <Text color="gray.700">{item.customerCode}</Text>
-                        </HStack>
-                      </Flex>
-                    </Flex>
-                  </Td>
+          <InfiniteScroll dataLength={displayedData.length} next={fetchMoreData} hasMore={hasMore} loader={<h4>Loading...</h4>} height={740} scrollThreshold={0.9}>
+            <Table size="md" variant="striped">
+              <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
+                <Tr>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Borrowed ID
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Customer Information
+                  </Th>
                   {buttonChanger ? (
                     <>
-                      {/* Item Information  */}
-                      <Td>
-                        <Flex flexDirection="column" gap="10px">
-                          <Flex flexDirection="column" justifyContent="left">
-                            <HStack fontSize="sm" spacing="5px">
-                              <Text color="gray.700" fontWeight="bold">
-                                {item.itemDescription}
-                              </Text>
-                            </HStack>
-
-                            <HStack fontSize="xs" spacing="5px">
-                              <Text color="gray.700">{item.itemCode}</Text>
-                            </HStack>
-                          </Flex>
-                        </Flex>
-                      </Td>
-
-                      <Td>
-                        <Flex flexDirection="column" gap="10px">
-                          <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700" fontWeight="semibold">
-                              {item.uom}
-                            </Text>
-                          </HStack>
-                        </Flex>
-                      </Td>
-
-                      <Td>
-                        <Flex flexDirection="column" gap="10px">
-                          <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700" fontWeight="semibold">
-                              {item.agingDays.toLocaleString(undefined, {
-                                maximumFractionDigits: 2,
-                                minimumFractionDigits: 2,
-                              })}
-                            </Text>
-                          </HStack>
-                        </Flex>
-                      </Td>
-
-                      <Td>
-                        <Flex flexDirection="column" gap="10px">
-                          <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700" fontWeight="semibold">
-                              {item.borrowedQuantity.toLocaleString(undefined, {
-                                maximumFractionDigits: 2,
-                                minimumFractionDigits: 2,
-                              })}
-                            </Text>
-                          </HStack>
-                        </Flex>
-                      </Td>
-
-                      <Td>
-                        <Flex flexDirection="column" gap="10px">
-                          <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700">
-                              {item.borrowedDate !== null
-                                ? moment(item.borrowedDate).format("MM/DD/yyyy")
-                                : "Pending Borrowed"}
-                            </Text>
-                          </HStack>
-                        </Flex>
-                      </Td>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Item Information
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        UOM
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Aging Days
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Borrowed Qty
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Borrowed Date
+                      </Th>
                     </>
                   ) : (
                     <>
-                      <Td>
-                        <Flex flexDirection="column" gap="10px">
-                          <Flex flexDirection="column" justifyContent="left">
-                            <HStack fontSize="sm" spacing="5px">
-                              <Text color="gray.700" fontWeight="bold">
-                                {item.fullName}
-                              </Text>
-                            </HStack>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Employee Information
+                      </Th>
 
-                            <HStack fontSize="xs" spacing="5px">
-                              <Text color="gray.700">{item.empId}</Text>
-                            </HStack>
-                          </Flex>
-                        </Flex>
-                      </Td>
-
-                      <Td>
-                        <Flex flexDirection="column" gap="10px">
-                          <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700">{item.status}</Text>
-                          </HStack>
-                        </Flex>
-                      </Td>
-
-                      <Td>
-                        <Flex flexDirection="column" gap="10px">
-                          <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700">{item.transactedBy}</Text>
-                          </HStack>
-                        </Flex>
-                      </Td>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Status
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Requested By
+                      </Th>
                     </>
                   )}
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
+              </Thead>
+              <Tbody>
+                {displayedData?.map((item, i) => (
+                  <Tr key={i}>
+                    <Td fontSize="xs">{item.borrowedId}</Td>
+
+                    {/* Customer Information */}
+                    <Td>
+                      <Flex flexDirection="column" gap="10px">
+                        <Flex flexDirection="column" justifyContent="left">
+                          <HStack fontSize="sm" spacing="5px">
+                            <Text color="gray.700" fontWeight="bold">
+                              {item.customerName}
+                            </Text>
+                          </HStack>
+
+                          <HStack fontSize="xs" spacing="5px">
+                            <Text color="gray.700">{item.customerCode}</Text>
+                          </HStack>
+                        </Flex>
+                      </Flex>
+                    </Td>
+                    {buttonChanger ? (
+                      <>
+                        {/* Item Information  */}
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <Flex flexDirection="column" justifyContent="left">
+                              <HStack fontSize="sm" spacing="5px">
+                                <Text color="gray.700" fontWeight="bold">
+                                  {item.itemDescription}
+                                </Text>
+                              </HStack>
+
+                              <HStack fontSize="xs" spacing="5px">
+                                <Text color="gray.700">{item.itemCode}</Text>
+                              </HStack>
+                            </Flex>
+                          </Flex>
+                        </Td>
+
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700" fontWeight="semibold">
+                                {item.uom}
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Td>
+
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700" fontWeight="semibold">
+                                {item.agingDays.toLocaleString(undefined, {
+                                  maximumFractionDigits: 2,
+                                  minimumFractionDigits: 2,
+                                })}
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Td>
+
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700" fontWeight="semibold">
+                                {item.borrowedQuantity.toLocaleString(undefined, {
+                                  maximumFractionDigits: 2,
+                                  minimumFractionDigits: 2,
+                                })}
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Td>
+
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700">{item.borrowedDate !== null ? moment(item.borrowedDate).format("MM/DD/yyyy") : "Pending Borrowed"}</Text>
+                            </HStack>
+                          </Flex>
+                        </Td>
+                      </>
+                    ) : (
+                      <>
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <Flex flexDirection="column" justifyContent="left">
+                              <HStack fontSize="sm" spacing="5px">
+                                <Text color="gray.700" fontWeight="bold">
+                                  {item.fullName}
+                                </Text>
+                              </HStack>
+
+                              <HStack fontSize="xs" spacing="5px">
+                                <Text color="gray.700">{item.empId}</Text>
+                              </HStack>
+                            </Flex>
+                          </Flex>
+                        </Td>
+
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700">{item.status}</Text>
+                            </HStack>
+                          </Flex>
+                        </Td>
+
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700">{item.transactedBy}</Text>
+                            </HStack>
+                          </Flex>
+                        </Td>
+                      </>
+                    )}
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </InfiniteScroll>
         </PageScroll>
       </Flex>
 
       <Flex justifyContent="space-between" mt={2}>
-        {/* <Stack>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
-            <PaginationContainer>
-              <PaginationPrevious
-                bg="primary"
-                color="white"
-                p={1}
-                _hover={{ bg: "btnColor", color: "white" }}
-              >
-                {"<<"}
-              </PaginationPrevious>
-              <PaginationPageGroup ml={1} mr={1}>
-                {pages.map((page) => (
-                  <PaginationPage
-                    _hover={{ bg: "btnColor", color: "white" }}
-                    _focus={{ bg: "btnColor" }}
-                    p={3}
-                    bg="primary"
-                    color="white"
-                    key={`pagination_page_${page}`}
-                    page={page}
-                  />
-                ))}
-              </PaginationPageGroup>
-              <HStack>
-                <PaginationNext
-                  bg="primary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "btnColor", color: "white" }}
-                >
-                  {">>"}
-                </PaginationNext>
-                <Select
-                  onChange={handlePageSizeChange}
-                  variant="outline"
-                  fontSize="md"
-                >
-                  <option value={Number(5)}>5</option>
-                  <option value={Number(10)}>10</option>
-                  <option value={Number(25)}>25</option>
-                  <option value={Number(50)}>50</option>
-                  <option value={Number(100)}>100</option>
-                </Select>
-              </HStack>
-            </PaginationContainer>
-          </Pagination>
-        </Stack> */}
-
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {borrowedData?.inventory?.length}
         </Text>
-        <Button
-          size="xs"
-          colorScheme="blue"
-          onClick={() => setButtonChanger(!buttonChanger)}
-        >
+        <Button size="xs" colorScheme="blue" onClick={() => setButtonChanger(!buttonChanger)}>
           {buttonChanger ? `>>>>` : `<<<<`}
         </Button>
       </Flex>

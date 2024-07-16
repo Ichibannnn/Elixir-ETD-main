@@ -4,6 +4,7 @@ import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
 import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import moment from "moment";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export const WarehouseReceivingHistory = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
   const [warehouseData, setWarehouseData] = useState([]);
@@ -27,8 +28,9 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, sample, setSheetDa
 
   const fetchWarehouseReceivingHistory = () => {
     fetchWarehouseReceivingHistoryApi(dateFrom, dateTo, search).then((res) => {
+      // console.log("Res", res);
+
       setWarehouseData(res);
-      // console.log(warehouseData);
       setSheetData(
         res?.inventory?.map((item, i) => {
           return {
@@ -59,7 +61,18 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, sample, setSheetDa
           };
         })
       );
+
+      setDisplayedData(res?.inventory?.slice(0, itemsPerPage));
+      setHasMore(res?.inventory?.length > itemsPerPage);
     });
+  };
+
+  const fetchMoreData = () => {
+    if (displayedData?.length >= warehouseData?.inventory?.length) {
+      setHasMore(false);
+      return;
+    }
+    setDisplayedData(displayedData.concat(warehouseData?.inventory?.slice(displayedData.length, displayedData.length + itemsPerPage)));
   };
 
   useEffect(() => {
@@ -67,184 +80,136 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, sample, setSheetDa
 
     return () => {
       setWarehouseData([]);
+      setDisplayedData([]);
     };
   }, [dateFrom, dateTo, search]);
+
+  // console.log("Display data: ", displayedData);
 
   return (
     <Flex w="full" flexDirection="column">
       <Flex className="boxShadow">
         <PageScroll minHeight="720px" maxHeight="740px">
-          <Table size="md" variant="striped">
-            <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
-              <Tr>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  ID
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Received Date
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  PO Number
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  SI Number
-                </Th>
-                {buttonChanger ? (
-                  <>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Item Information
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      UOM
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Quantity
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Unit Cost
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Line Amount
-                    </Th>
-                  </>
-                ) : (
-                  <>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Total Reject
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Supplier
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Transaction Type
-                    </Th>
-                    <Th color="white" fontSize="10px" fontWeight="semibold">
-                      Received By
-                    </Th>
-                  </>
-                )}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {warehouseData?.inventory?.map((item, i) => (
-                <Tr key={i}>
-                  <Td fontSize="xs">{item.warehouseId}</Td>
-                  <Td fontSize="xs">{item.receiveDate}</Td>
-                  <Td fontSize="xs">{item.poNumber ? item.poNumber : "-"}</Td>
-                  <Td fontSize="xs">{item.siNumber ? item.siNumber : "-"}</Td>
+          <InfiniteScroll dataLength={displayedData.length} next={fetchMoreData} hasMore={hasMore} loader={<h4>Loading...</h4>} height={740} scrollThreshold={0.9}>
+            <Table size="md" variant="striped">
+              <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
+                <Tr>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    ID
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Received Date
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    PO Number
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    SI Number
+                  </Th>
                   {buttonChanger ? (
                     <>
-                      {/* Item Information */}
-                      <Td>
-                        <Flex flexDirection="column" gap="10px">
-                          <Flex flexDirection="column" justifyContent="left">
-                            <HStack fontSize="sm" spacing="5px">
-                              <Text color="gray.700" fontWeight="bold">
-                                {item.itemDescrption}
-                              </Text>
-                            </HStack>
-
-                            <HStack fontSize="xs" spacing="5px">
-                              <Text color="gray.700">{item.itemCode}</Text>
-                            </HStack>
-                          </Flex>
-                        </Flex>
-                      </Td>
-
-                      <Td fontSize="xs">{item.uom}</Td>
-                      <Td fontSize="xs">
-                        {item.quantity.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td fontSize="xs">
-                        {item.unitPrice.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td fontSize="xs">
-                        {item.amount.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Item Information
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        UOM
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Quantity
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Unit Cost
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Line Amount
+                      </Th>
                     </>
                   ) : (
                     <>
-                      <Td fontSize="xs">
-                        {item.totalReject.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td fontSize="xs">{item.supplierName}</Td>
-                      <Td fontSize="xs">{item.transactionType}</Td>
-                      <Td fontSize="xs">{item.receivedBy ? item.receivedBy : "-"}</Td>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Total Reject
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Supplier
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Transaction Type
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Received By
+                      </Th>
                     </>
                   )}
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
+              </Thead>
+              <Tbody>
+                {displayedData?.map((item, i) => (
+                  <Tr key={i}>
+                    <Td fontSize="xs">{item.warehouseId}</Td>
+                    <Td fontSize="xs">{item.receiveDate}</Td>
+                    <Td fontSize="xs">{item.poNumber ? item.poNumber : "-"}</Td>
+                    <Td fontSize="xs">{item.siNumber ? item.siNumber : "-"}</Td>
+                    {buttonChanger ? (
+                      <>
+                        {/* Item Information */}
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <Flex flexDirection="column" justifyContent="left">
+                              <HStack fontSize="sm" spacing="5px">
+                                <Text color="gray.700" fontWeight="bold">
+                                  {item.itemDescrption}
+                                </Text>
+                              </HStack>
+
+                              <HStack fontSize="xs" spacing="5px">
+                                <Text color="gray.700">{item.itemCode}</Text>
+                              </HStack>
+                            </Flex>
+                          </Flex>
+                        </Td>
+
+                        <Td fontSize="xs">{item.uom}</Td>
+                        <Td fontSize="xs">
+                          {item.quantity.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2,
+                          })}
+                        </Td>
+                        <Td fontSize="xs">
+                          {item.unitPrice.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2,
+                          })}
+                        </Td>
+                        <Td fontSize="xs">
+                          {item.amount.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2,
+                          })}
+                        </Td>
+                      </>
+                    ) : (
+                      <>
+                        <Td fontSize="xs">
+                          {item.totalReject.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2,
+                          })}
+                        </Td>
+                        <Td fontSize="xs">{item.supplierName}</Td>
+                        <Td fontSize="xs">{item.transactionType}</Td>
+                        <Td fontSize="xs">{item.receivedBy ? item.receivedBy : "-"}</Td>
+                      </>
+                    )}
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </InfiniteScroll>
         </PageScroll>
       </Flex>
 
       <Flex justifyContent="space-between" mt={2}>
-        {/* <Stack>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
-            <PaginationContainer>
-              <PaginationPrevious
-                bg="primary"
-                color="white"
-                p={1}
-                _hover={{ bg: "btnColor", color: "white" }}
-              >
-                {"<<"}
-              </PaginationPrevious>
-              <PaginationPageGroup ml={1} mr={1}>
-                {pages.map((page) => (
-                  <PaginationPage
-                    _hover={{ bg: "btnColor", color: "white" }}
-                    _focus={{ bg: "btnColor" }}
-                    p={3}
-                    bg="primary"
-                    color="white"
-                    key={`pagination_page_${page}`}
-                    page={page}
-                  />
-                ))}
-              </PaginationPageGroup>
-              <HStack>
-                <PaginationNext
-                  bg="primary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "btnColor", color: "white" }}
-                >
-                  {">>"}
-                </PaginationNext>
-                <Select
-                  onChange={handlePageSizeChange}
-                  variant="outline"
-                  fontSize="md"
-                >
-                  <option value={Number(5)}>5</option>
-                  <option value={Number(10)}>10</option>
-                  <option value={Number(25)}>25</option>
-                  <option value={Number(50)}>50</option>
-                  <option value={Number(100)}>100</option>
-                </Select>
-              </HStack>
-            </PaginationContainer>
-          </Pagination>
-        </Stack> */}
-
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {warehouseData?.inventory?.length}
         </Text>

@@ -4,13 +4,15 @@ import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
 import moment from "moment";
 import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
   const [buttonChanger, setButtonChanger] = useState(true);
   const [cancelledData, setCancelledData] = useState([]);
 
-  console.log("Date From: ", dateFrom);
-  console.log("Date To: ", dateTo);
+  const [displayedData, setDisplayedData] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const itemsPerPage = 50;
 
   const fetchCancelledOrdersApi = async (dateFrom, dateTo, search) => {
     const res = await request.get(`Reports/CancelledOrderedReports?PageNumber=1&PageSize=1000000&dateFrom=${dateFrom}&dateTo=${dateTo}`, {
@@ -49,7 +51,18 @@ export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData, search
           };
         })
       );
+
+      setDisplayedData(res?.inventory?.slice(0, itemsPerPage));
+      setHasMore(res?.inventory?.length > itemsPerPage);
     });
+  };
+
+  const fetchMoreData = () => {
+    if (displayedData?.length >= cancelledData?.inventory?.length) {
+      setHasMore(false);
+      return;
+    }
+    setDisplayedData(displayedData.concat(cancelledData?.inventory?.slice(displayedData.length, displayedData.length + itemsPerPage)));
   };
 
   useEffect(() => {
@@ -57,6 +70,7 @@ export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData, search
 
     return () => {
       setCancelledData([]);
+      setDisplayedData([]);
     };
   }, [dateFrom, dateTo, search]);
 
@@ -64,162 +78,98 @@ export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData, search
     <Flex w="full" flexDirection="column">
       <Flex className="boxShadow">
         <PageScroll minHeight="720px" maxHeight="740px">
-          <Table size="md" variant="striped">
-            <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
-              <Tr>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  MIR ID
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Order ID
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Date Ordered
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Date Needed
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Customer Code
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Customer Name
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Charging Department
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Charging Location
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Item Code
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Item Description
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Quantity Unserved
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Item Remarks
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Reason
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Cancelled Date
-                </Th>
-                <Th color="white" fontSize="10px" fontWeight="semibold">
-                  Cancelled By
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {cancelledData?.inventory?.map((item, i) => (
-                <Tr key={i}>
-                  <Td fontSize="xs">{item.mirId}</Td>
-                  <Td fontSize="xs">{item.orderId}</Td>
-                  <Td fontSize="xs">{item.dateOrdered}</Td>
-                  <Td fontSize="xs">{item.dateNeeded}</Td>
-                  <Td fontSize="xs">{item.customerCode}</Td>
-                  <Td fontSize="xs">{item.customerName}</Td>
-                  <Td fontSize="xs">
-                    {item.departmentCode} - {item.department}
-                  </Td>
-                  <Td fontSize="xs">
-                    {item.locationCode} - {item.locationName}
-                  </Td>
-                  <Td fontSize="xs">{item.itemCode}</Td>
-                  <Td fontSize="xs">{item.itemDescription}</Td>
-                  <Td fontSize="xs">
-                    {item.quantityOrdered.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-                  </Td>
-                  {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
-                  <Td fontSize="xs">{item.reason}</Td>
-                  {item.cancelledDate ? <Td fontSize="xs">{moment(item.cancelledDate).format("yyyy-MM-DD")}</Td> : <Td fontSize="xs">-</Td>}
-
-                  {item.cancelledBy ? <Td fontSize="xs">{item.cancelledBy}</Td> : <Td fontSize="xs">-</Td>}
+          <InfiniteScroll dataLength={displayedData.length} next={fetchMoreData} hasMore={hasMore} loader={<h4>Loading...</h4>} height={740} scrollThreshold={0.9}>
+            <Table size="md" variant="striped">
+              <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
+                <Tr>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    MIR ID
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Order ID
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Date Ordered
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Date Needed
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Customer Code
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Customer Name
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Charging Department
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Charging Location
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Item Code
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Item Description
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Quantity Unserved
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Item Remarks
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Reason
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Cancelled Date
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Cancelled By
+                  </Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
+              </Thead>
+              <Tbody>
+                {displayedData?.map((item, i) => (
+                  <Tr key={i}>
+                    <Td fontSize="xs">{item.mirId}</Td>
+                    <Td fontSize="xs">{item.orderId}</Td>
+                    <Td fontSize="xs">{item.dateOrdered}</Td>
+                    <Td fontSize="xs">{item.dateNeeded}</Td>
+                    <Td fontSize="xs">{item.customerCode}</Td>
+                    <Td fontSize="xs">{item.customerName}</Td>
+                    <Td fontSize="xs">
+                      {item.departmentCode} - {item.department}
+                    </Td>
+                    <Td fontSize="xs">
+                      {item.locationCode} - {item.locationName}
+                    </Td>
+                    <Td fontSize="xs">{item.itemCode}</Td>
+                    <Td fontSize="xs">{item.itemDescription}</Td>
+                    <Td fontSize="xs">
+                      {item.quantityOrdered.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </Td>
+                    {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
+                    <Td fontSize="xs">{item.reason}</Td>
+                    {item.cancelledDate ? <Td fontSize="xs">{moment(item.cancelledDate).format("yyyy-MM-DD")}</Td> : <Td fontSize="xs">-</Td>}
+
+                    {item.cancelledBy ? <Td fontSize="xs">{item.cancelledBy}</Td> : <Td fontSize="xs">-</Td>}
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </InfiniteScroll>
         </PageScroll>
       </Flex>
 
       <Flex justifyContent="space-between" mt={2}>
-        {/* <Stack>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
-            <PaginationContainer>
-              <PaginationPrevious
-                bg="primary"
-                color="white"
-                p={1}
-                _hover={{ bg: "btnColor", color: "white" }}
-              >
-                {"<<"}
-              </PaginationPrevious>
-              <PaginationPageGroup ml={1} mr={1}>
-                {pages.map((page) => (
-                  <PaginationPage
-                    _hover={{ bg: "btnColor", color: "white" }}
-                    _focus={{ bg: "btnColor" }}
-                    p={3}
-                    bg="primary"
-                    color="white"
-                    key={`pagination_page_${page}`}
-                    page={page}
-                  />
-                ))}
-              </PaginationPageGroup>
-              <HStack>
-                <PaginationNext
-                  bg="primary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "btnColor", color: "white" }}
-                >
-                  {">>"}
-                </PaginationNext>
-                <Select
-                  onChange={handlePageSizeChange}
-                  variant="outline"
-                  fontSize="md"
-                >
-                  <option value={Number(5)}>5</option>
-                  <option value={Number(10)}>10</option>
-                  <option value={Number(25)}>25</option>
-                  <option value={Number(50)}>50</option>
-                  <option value={Number(100)}>100</option>
-                </Select>
-              </HStack>
-            </PaginationContainer>
-          </Pagination>
-        </Stack> */}
-
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {cancelledData?.inventory?.length}
         </Text>
-        {/* <Button
-          size="xs"
-          colorScheme="blue"
-          onClick={() => setButtonChanger(!buttonChanger)}
-        >
-          {buttonChanger ? `>>>>` : `<<<<`}
-        </Button> */}
       </Flex>
-
-      {/* <Flex justifyContent='end' mt={2}>
-          <Button size='xs' colorScheme='teal' onClick={() => setButtonChanger(!buttonChanger)}>
-              {buttonChanger ? `>>>>` : `<<<<`}
-          </Button>
-      </Flex> */}
     </Flex>
   );
 };
