@@ -10,6 +10,10 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, sample, setSheetDa
   const [buttonChanger, setButtonChanger] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
 
+  const [displayedData, setDisplayedData] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const itemsPerPage = 50;
+
   const fetchWarehouseReceivingHistoryApi = async (dateFrom, dateTo, search) => {
     const dayaDate = new Date();
     const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);

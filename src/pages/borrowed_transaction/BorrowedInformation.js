@@ -71,11 +71,7 @@ export const BorrowedInformation = ({
 
   const currentUser = decodeUser();
 
-  const {
-    isOpen: isModal,
-    onClose: closeModal,
-    onOpen: openModal,
-  } = useDisclosure();
+  const { isOpen: isModal, onClose: closeModal, onOpen: openModal } = useDisclosure();
 
   const fetchEmployees = async () => {
     try {
@@ -116,9 +112,7 @@ export const BorrowedInformation = ({
     setInfo(
       employees
         .filter((item) => {
-          return item?.general_info?.full_id_number_full_name
-            .toLowerCase()
-            .includes(idNumber);
+          return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
         .splice(0, 50)
     );
@@ -186,20 +180,8 @@ export const BorrowedInformation = ({
 
   if (employees.length <= 0) {
     return (
-      <Flex
-        width="full"
-        height="full"
-        justifyContent="center"
-        alignItems="center"
-        flexDirection="column"
-        gap={1}
-      >
-        <Spinner
-          thickness="4px"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
+      <Flex width="full" height="full" justifyContent="center" alignItems="center" flexDirection="column" gap={1}>
+        <Spinner thickness="4px" emptyColor="gray.200" color="blue.500" size="xl" />
         <Text>Loading....</Text>
       </Flex>
     );
@@ -218,30 +200,14 @@ export const BorrowedInformation = ({
       </Box>
 
       <VStack w="full" spacing={6}>
-        <Text
-          bgColor="secondary"
-          w="full"
-          color="white"
-          textAlign="center"
-          fontSize="sm"
-          p={2}
-        >
+        <Text bgColor="secondary" w="full" color="white" textAlign="center" fontSize="sm" p={2}>
           Customer Information
         </Text>
         <Flex w="95%" justifyContent="space-between">
           <VStack alignItems="start" w="40%" mx={5}>
             {/* Customer Code */}
             <HStack w="full">
-              <Text
-                minW="50%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                fontSize="xs"
-                pl={2}
-                pr={10}
-                py={2.5}
-              >
+              <Text minW="50%" w="auto" bgColor="primary" color="white" fontSize="xs" pl={2} pr={10} py={2.5}>
                 Customer:{" "}
               </Text>
 
@@ -255,53 +221,23 @@ export const BorrowedInformation = ({
                 py={2.5}
                 // onChange={(e) => customerHandler(e.target.value)}
               >
-                {customerData.customerCode
-                  ? customerData.customerCode
-                  : "Select a customer"}
+                {customerData.customerCode ? customerData.customerCode : "Select a customer"}
               </Text>
             </HStack>
 
             {/* Customer Name */}
             <HStack w="full">
-              <Text
-                minW="50%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                pr={10}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="50%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                 Customer Name:{" "}
               </Text>
-              <Text
-                fontSize="sm"
-                w="full"
-                border="1px"
-                bg="gray.300"
-                borderColor="gray.400"
-                pl={4}
-                py={2.5}
-              >
-                {customerData.customerName
-                  ? customerData.customerName
-                  : "Select a customer"}
+              <Text fontSize="sm" w="full" border="1px" bg="gray.300" borderColor="gray.400" pl={4} py={2.5}>
+                {customerData.customerName ? customerData.customerName : "Select a customer"}
               </Text>
             </HStack>
 
             {/* Details */}
             <HStack w="full">
-              <Text
-                minW="50%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                pr={5}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="50%" w="auto" bgColor="primary" color="white" pl={2} pr={5} py={2.5} fontSize="xs">
                 Details:{" "}
               </Text>
               <Input
@@ -320,15 +256,7 @@ export const BorrowedInformation = ({
           <VStack alignItems="start" w="40%" mx={5}>
             {/* Transaction Date */}
             <HStack w="full">
-              <Text
-                minW="50%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="50%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
                 Transaction Date:{" "}
               </Text>
               <Input
@@ -351,15 +279,7 @@ export const BorrowedInformation = ({
 
             {/* Employee ID*/}
             <HStack w="full">
-              <Text
-                minW="50%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="50%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
                 Employee ID:{" "}
               </Text>
               <Box w="full">
@@ -397,15 +317,7 @@ export const BorrowedInformation = ({
 
             {/* Fullname */}
             <HStack w="full">
-              <Text
-                minW="50%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="50%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
                 Employee Name:{" "}
               </Text>
               <Box w="full">
@@ -667,16 +579,7 @@ export const RawMatsInfoModal = ({
               <VStack alignItems="start" w="full" mx={5}>
                 {/* Item Code */}
                 <HStack w="full">
-                  <Text
-                    minW="25%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={10}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                     Item Code:{" "}
                   </Text>
 
@@ -707,16 +610,7 @@ export const RawMatsInfoModal = ({
 
                 {/* Barcode No */}
                 <HStack w="full">
-                  <Text
-                    minW="25%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={7}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
                     Barcode Number:{" "}
                   </Text>
                   <Select
@@ -739,16 +633,7 @@ export const RawMatsInfoModal = ({
 
                 {/* Quantity */}
                 <HStack w="full">
-                  <Text
-                    minW="25%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={10}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                     Quantity:{" "}
                   </Text>
                   <NumericFormat
@@ -765,9 +650,7 @@ export const RawMatsInfoModal = ({
                       })
                     }
                     onWheel={(e) => e.target.blur()}
-                    onKeyDown={(e) =>
-                      ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
+                    onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                     onPaste={(e) => e.preventDefault()}
                     min="1"
                     w="full"
@@ -783,99 +666,35 @@ export const RawMatsInfoModal = ({
               <VStack alignItems="start" w="full" mx={5}>
                 {/* Item Description */}
                 <HStack w="full">
-                  <Text
-                    minW="30%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={10}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                     Item Description:{" "}
                   </Text>
-                  <Text
-                    fontSize="sm"
-                    textAlign="left"
-                    bgColor="gray.200"
-                    w="full"
-                    border="1px"
-                    borderColor="gray.200"
-                    py={1.5}
-                    px={4}
-                  >
-                    {rawMatsInfo.itemDescription
-                      ? rawMatsInfo.itemDescription
-                      : "Select an item code"}
+                  <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
+                    {rawMatsInfo.itemDescription ? rawMatsInfo.itemDescription : "Select an item code"}
                   </Text>
                 </HStack>
 
                 {/* UOM */}
                 <HStack w="full">
-                  <Text
-                    minW="30%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={10}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                     UOM:{" "}
                   </Text>
-                  <Text
-                    fontSize="sm"
-                    textAlign="left"
-                    bgColor="gray.200"
-                    w="full"
-                    border="1px"
-                    borderColor="gray.200"
-                    py={1.5}
-                    px={4}
-                  >
+                  <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
                     {rawMatsInfo.uom ? rawMatsInfo.uom : "Select an item code"}
                   </Text>
                 </HStack>
 
                 {/* Reserve */}
                 <HStack w="full">
-                  <Text
-                    minW="30%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={10}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                     Available stocks:{" "}
                   </Text>
                   {rawMats.length === 0 ? (
-                    <Text
-                      textAlign="center"
-                      fontSize="xs"
-                      w="full"
-                      bgColor="gray.200"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                    >
+                    <Text textAlign="center" fontSize="xs" w="full" bgColor="gray.200" border="1px" borderColor="gray.200" py={1.5}>
                       No stock
                     </Text>
                   ) : (
-                    <Text
-                      fontSize="sm"
-                      textAlign="left"
-                      bgColor="gray.200"
-                      w="full"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                      px={4}
-                    >
+                    <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
                       {reserve
                         ? reserve.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
@@ -888,42 +707,15 @@ export const RawMatsInfoModal = ({
 
                 {/* SOH */}
                 <HStack w="full">
-                  <Text
-                    minW="30%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={10}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                     SOH per Barcode:{" "}
                   </Text>
                   {barcodeNo.length === 0 ? (
-                    <Text
-                      fontSize="sm"
-                      textAlign="left"
-                      bgColor="gray.200"
-                      w="full"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                      px={4}
-                    >
+                    <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
                       No Stock on Hand
                     </Text>
                   ) : (
-                    <Text
-                      textAlign="left"
-                      fontSize="sm"
-                      w="full"
-                      bgColor="gray.200"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                      px={4}
-                    >
+                    <Text textAlign="left" fontSize="sm" w="full" bgColor="gray.200" border="1px" borderColor="gray.200" py={1.5} px={4}>
                       {availableStock
                         ? availableStock.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
@@ -936,42 +728,15 @@ export const RawMatsInfoModal = ({
 
                 {/* Unit Cost */}
                 <HStack w="full">
-                  <Text
-                    minW="30%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={10}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                     Unit Cost:{" "}
                   </Text>
                   {barcodeNo.length === 0 ? (
-                    <Text
-                      fontSize="sm"
-                      textAlign="left"
-                      w="full"
-                      bgColor="gray.200"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                      px={4}
-                    >
+                    <Text fontSize="sm" textAlign="left" w="full" bgColor="gray.200" border="1px" borderColor="gray.200" py={1.5} px={4}>
                       Select a barcode number
                     </Text>
                   ) : (
-                    <Text
-                      textAlign="left"
-                      fontSize="sm"
-                      w="full"
-                      bgColor="gray.200"
-                      border="1px"
-                      borderColor="gray.200"
-                      py={1.5}
-                      px={4}
-                    >
+                    <Text textAlign="left" fontSize="sm" w="full" bgColor="gray.200" border="1px" borderColor="gray.200" py={1.5} px={4}>
                       {unitCost
                         ? unitCost.toLocaleString(undefined, {
                             maximumFractionDigits: 2,

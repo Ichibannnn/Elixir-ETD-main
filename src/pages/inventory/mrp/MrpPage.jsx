@@ -47,50 +47,20 @@ const MrpPage = () => {
 
   const [sheetData, setSheetData] = useState([]);
 
-  // const fetchMRP = (ignore) => {
-  //   fetchMRPApi(currentPage, pageSize, search).then((res) => {
-  //     if (!ignore) {
-  //       setMrpData(res);
-  //       // setSheetData(res.inventory);
-  //       setPageTotal(res.totalCount);
-  //       console.log("Page Total: ", res.totalCount);
-  //     }
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   let ignore = false;
-
-  //   fetchMRP(ignore);
-
-  //   return () => {
-  //     ignore = true;
-  //     // setMrpData([]);
-  //   };
-  // }, [currentPage, pageSize, search]);
-
-  const fetchMRP = (signal) => {
-    fetchMRPApi(currentPage, pageSize, search, { signal })
-      .then((res) => {
-        setMrpData(res);
-        setPageTotal(res.totalCount);
-        console.log("Page Total: ", res.totalCount);
-      })
-      .catch((err) => {
-        if (err.name !== "AbortError") {
-          console.error("Fetch error:", err);
-        }
-      });
+  const fetchMRP = () => {
+    fetchMRPApi(currentPage, pageSize, search).then((res) => {
+      setMrpData(res);
+      // setSheetData(res.inventory);
+      setPageTotal(res.totalCount);
+      console.log("Page Total: ", res.totalCount);
+    });
   };
 
   useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    fetchMRP(signal);
+    fetchMRP();
 
     return () => {
-      controller.abort();
+      setMrpData([]);
     };
   }, [currentPage, pageSize, search]);
 
@@ -118,7 +88,53 @@ const MrpPage = () => {
     }
   }, [search]);
 
-  console.log("Search: ", search);
+  // IGNORE SEARCH----------------
+  // const fetchMRP = (signal) => {
+  //   fetchMRPApi(currentPage, pageSize, search, { signal })
+  //     .then((res) => {
+  //       setMrpData(res);
+  //       setPageTotal(res.totalCount);
+  //       console.log("Page Total: ", res.totalCount);
+  //     })
+  //     .catch((err) => {
+  //       if (err.name !== "AbortError") {
+  //         console.error("Fetch error:", err);
+  //       }
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   const controller = new AbortController();
+  //   const { signal } = controller;
+
+  //   fetchMRP(signal);
+
+  //   return () => {
+  //     controller.abort();
+  //   };
+  // }, [currentPage, pageSize, search]);
+
+  // const fetchMRPForSheet = () => {
+  //   fetchMRPForSheetApi(pageTotal).then((res) => {
+  //     setSheetData(res.inventory);
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   if (pageTotal) {
+  //     fetchMRPForSheet();
+  //   }
+
+  //   return () => {
+  //     setSheetData([]);
+  //   };
+  // }, [pageTotal]);
+
+  // useEffect(() => {
+  //   if (search) {
+  //     setCurrentPage(1);
+  //   }
+  // }, [search]);
 
   return (
     <Flex flexDirection="column" w="full" bg="form" p={4}>

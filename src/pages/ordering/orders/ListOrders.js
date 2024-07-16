@@ -80,6 +80,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
 
   const dateVar = new Date();
   const startDate = moment(dateVar).format("yyyy-MM-DD");
+  const minDate = moment(dateVar.setDate(dateVar.getDate() - 5)).format("yyyy-MM-DD");
 
   // SYNC ORDER BUTTON
   const syncHandler = () => {
@@ -213,7 +214,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
             <Input
               onChange={(date) => setFromDate(date.target.value)}
               defaultValue={fromDate}
-              min={startDate}
+              min={minDate}
               // size="sm"
               type="date"
               fontSize="11px"
