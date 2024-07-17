@@ -81,7 +81,7 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
     // }, [dateFrom, dateTo])
   }, [dateTo, search]);
 
-  console.log("Display Data: ", displayedData);
+  // console.log("Display Data: ", displayedData);
 
   return (
     <Flex w="full" flexDirection="column">

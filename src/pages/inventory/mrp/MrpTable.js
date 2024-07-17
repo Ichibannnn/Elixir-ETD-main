@@ -11,12 +11,12 @@ import {
   InputLeftElement,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
   Select,
+  Skeleton,
   Stack,
   Table,
   Tbody,
@@ -31,17 +31,14 @@ import { Pagination, PaginationNext, PaginationPage, PaginationPrevious, Paginat
 import PageScroll from "../../../utils/PageScroll";
 import { BiExport, BiRightArrow } from "react-icons/bi";
 import { FaPrint, FaSearch } from "react-icons/fa";
-import { CgDanger } from "react-icons/cg";
 import { AiOutlinePrinter } from "react-icons/ai";
 import { useReactToPrint } from "react-to-print";
-import { MdOutlineWarning } from "react-icons/md";
-import { ImWarning } from "react-icons/im";
 import { MaterialInformationModal } from "./MaterialInformationModal";
-// import apiClient from '../../../services/apiClient'
 import { TiWarning } from "react-icons/ti";
 
 export const MrpTable = ({
   mrpData,
+  fetchingData,
   setSelectorId,
   selectorId,
   rawMatsInfo,
@@ -51,16 +48,13 @@ export const MrpTable = ({
   currentPage,
   setCurrentPage,
   setPageSize,
+  search,
   setSearch,
-  pageTotal,
   sheetData,
-  mrpDataLength,
 }) => {
   const [buttonChanger, setButtonChanger] = useState(false);
 
   const { isOpen: isInformation, onOpen: openInformation, onClose: closeInformation } = useDisclosure();
-
-  // console.log("Sheet Data: ", sheetData);
 
   const handleExport = () => {
     var workbook = XLSX.utils.book_new(),
@@ -80,10 +74,16 @@ export const MrpTable = ({
     setPageSize(pageSize);
   };
 
+  // SEARCH
   const searchHandler = (inputValue) => {
-    setCurrentPage(1);
     setSearch(inputValue);
   };
+
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
 
   const selectorHandler = (id, { itemCode, itemDescription, soh, bufferLevel, averageIssuance, daysLevel }) => {
     if (id) {
@@ -144,180 +144,184 @@ export const MrpTable = ({
         </Button>
       </Flex>
 
-      <Text
-        textAlign="center"
-        bgColor="primary"
-        color="white"
-        fontSize="14px"
-        // fontWeight="semibold"
-      >
+      <Text textAlign="center" bgColor="primary" color="white" fontSize="14px">
         Material Requisition Planning
       </Text>
       <PageScroll minHeight="680px" maxHeight="700px">
-        <Table size="sm">
-          <Thead bgColor="primary" position="sticky" top={0}>
-            <Tr>
-              <Th p={0} color="white" fontSize="xs"></Th>
-              <Th p={0} color="white" fontSize="xs"></Th>
-              <Th color="white" fontSize="xs">
-                Line
-              </Th>
-              <Th color="white" fontSize="xs">
-                Item Code
-              </Th>
-              <Th color="white" fontSize="xs">
-                Item Description
-              </Th>
-              {!buttonChanger ? (
-                <>
-                  <Th color="white">Item Category</Th>
-                  <Th color="white">UOM</Th>
-                  <Th color="white">Unit Cost</Th>
-                  <Th color="white">Total Cost</Th>
-                  <Th color="white">SOH</Th>
-                  <Th color="white">Reserve</Th>
-                  <Th color="white">Buffer Level</Th>
-                </>
-              ) : (
-                <>
-                  <Th color="white">{`Receive (IN)`}</Th>
-                  <Th color="white">{`Receipt (IN)`}</Th>
-                  <Th color="white">{`Move Order (OUT)`}</Th>
-                  <Th color="white">{`Issue (OUT)`}</Th>
-                  <Th color="white">{`Borrowed`}</Th>
-                  <Th color="white">{`Returned`}</Th>
-                  <Th color="white">{`Consumed`}</Th>
-                  {/* <Th color="white">{`Borrowed Qty`}</Th>
-                  <Th color="white">{`Returned Qty`}</Th> */}
-                  <Th color="white">Average Issuance</Th>
-                  <Th color="white">Days Level</Th>
-                </>
-              )}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {mrpData?.inventory?.map((item, i) => (
-              <Tr
-                key={i}
-                onClick={() => selectorHandler(i + 1, item)}
-                bgColor={selectorId === i + 1 ? "blue.200" : "none" && item.bufferLevel > item.reserve ? "gray.300" : "none"}
-                cursor="pointer"
-              >
-                {selectorId === i + 1 ? (
-                  <Td p={0}>
-                    <BiRightArrow />
-                  </Td>
-                ) : (
-                  <Td p={0}></Td>
-                )}
-                <Td fontSize="xs">{item.bufferLevel > item.reserve ? <TiWarning fontSize="18px" color="red" /> : ""}</Td>
-                <Td fontSize="xs">{i + 1}</Td>
-                <Td fontSize="xs">{item.itemCode}</Td>
-                <Td fontSize="xs">{item.itemDescription}</Td>
+        {fetchingData ? (
+          <Stack width="full">
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+            <Skeleton height="20px" />
+          </Stack>
+        ) : (
+          <Table size="sm">
+            <Thead bgColor="primary" position="sticky" top={0}>
+              <Tr>
+                <Th p={0} color="white" fontSize="xs"></Th>
+                <Th p={0} color="white" fontSize="xs"></Th>
+                <Th color="white" fontSize="xs">
+                  Line
+                </Th>
+                <Th color="white" fontSize="xs">
+                  Item Code
+                </Th>
+                <Th color="white" fontSize="xs">
+                  Item Description
+                </Th>
                 {!buttonChanger ? (
                   <>
-                    <Td fontSize="xs">{item.itemCategory}</Td>
-                    <Td fontSize="xs">{item.uom}</Td>
-                    <Td fontSize="xs">
-                      {item.unitCost?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.totalCost?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.soh?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.reserve?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.bufferLevel?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
+                    <Th color="white">Item Category</Th>
+                    <Th color="white">UOM</Th>
+                    <Th color="white">Unit Cost</Th>
+                    <Th color="white">Total Cost</Th>
+                    <Th color="white">SOH</Th>
+                    <Th color="white">Reserve</Th>
+                    <Th color="white">Buffer Level</Th>
                   </>
                 ) : (
                   <>
-                    <Td fontSize="xs">
-                      {item.receiveIn?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.receiptIn?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.moveOrderOut?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.issueOut?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.borrowedOut?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.returnedBorrowed?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.borrowConsume?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    {/* <Td fontSize="xs">
-                      {item.borrowedDepartment?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.returnedBorrowed?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td> */}
-                    <Td fontSize="xs">
-                      {item.averageIssuance?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">{item.daysLevel?.toLocaleString()}</Td>
+                    <Th color="white">{`Receive (IN)`}</Th>
+                    <Th color="white">{`Receipt (IN)`}</Th>
+                    <Th color="white">{`Move Order (OUT)`}</Th>
+                    <Th color="white">{`Issue (OUT)`}</Th>
+                    <Th color="white">{`Borrowed`}</Th>
+                    <Th color="white">{`Returned`}</Th>
+                    <Th color="white">{`Consumed`}</Th>
+                    {/* <Th color="white">{`Borrowed Qty`}</Th>
+                  <Th color="white">{`Returned Qty`}</Th> */}
+                    <Th color="white">Average Issuance</Th>
+                    <Th color="white">Days Level</Th>
                   </>
                 )}
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {mrpData?.inventory?.map((item, i) => (
+                <Tr
+                  key={i}
+                  onClick={() => selectorHandler(i + 1, item)}
+                  bgColor={selectorId === i + 1 ? "blue.200" : "none" && item.bufferLevel > item.reserve ? "gray.300" : "none"}
+                  cursor="pointer"
+                >
+                  {selectorId === i + 1 ? (
+                    <Td p={0}>
+                      <BiRightArrow />
+                    </Td>
+                  ) : (
+                    <Td p={0}></Td>
+                  )}
+                  <Td fontSize="xs">{item.bufferLevel > item.reserve ? <TiWarning fontSize="18px" color="red" /> : ""}</Td>
+                  <Td fontSize="xs">{i + 1}</Td>
+                  <Td fontSize="xs">{item.itemCode}</Td>
+                  <Td fontSize="xs">{item.itemDescription}</Td>
+                  {!buttonChanger ? (
+                    <>
+                      <Td fontSize="xs">{item.itemCategory}</Td>
+                      <Td fontSize="xs">{item.uom}</Td>
+                      <Td fontSize="xs">
+                        {item.unitCost?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.totalCost?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.soh?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.reserve?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.bufferLevel?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                    </>
+                  ) : (
+                    <>
+                      <Td fontSize="xs">
+                        {item.receiveIn?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.receiptIn?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.moveOrderOut?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.issueOut?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.borrowedOut?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.returnedBorrowed?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.borrowConsume?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.averageIssuance?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">{item.daysLevel?.toLocaleString()}</Td>
+                    </>
+                  )}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        )}
       </PageScroll>
 
       <Flex mt={5} justifyContent="space-between" w="full">
@@ -387,7 +391,6 @@ const PrintModal = ({ isOpen, onClose, mrpData }) => {
               </Text>
             </Flex>
           </ModalHeader>
-          {/* <ModalCloseButton onClick={onClose} /> */}
 
           <ModalBody mt={5}>
             <PageScroll minHeight="617px" maxHeight="618px">

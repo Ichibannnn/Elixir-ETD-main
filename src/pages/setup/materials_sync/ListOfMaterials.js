@@ -87,12 +87,6 @@ export const ListOfMaterials = ({
     console.log(inputValue);
   };
 
-  useEffect(() => {
-    if (search) {
-      setCurrentPage(1);
-    }
-  }, [search]);
-
   // ARRAY FOR THE LIST DATA OF SUPPLIERS
   const resultArray = genusMaterials?.result?.map((item) => {
     return {
