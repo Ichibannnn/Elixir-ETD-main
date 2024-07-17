@@ -38,15 +38,7 @@ import { ToastComponent } from "../../../components/Toast";
 const currentUser = decodeUser();
 
 // PRINT MODAL --------------------------------------
-export const PrintModal = ({
-  isOpen,
-  onClose,
-  printData,
-  closeApprove,
-  fetchApprovedMO,
-  orderId,
-  totalQuantity,
-}) => {
+export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchApprovedMO, orderId, totalQuantity }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const componentRef = useRef();
@@ -125,23 +117,17 @@ export const PrintModal = ({
               <Flex flexDirection="column">
                 <Text fontSize="xs">MIR ID: {orderId && orderId}</Text>
                 <Text fontSize="xs">Unit: {`WAREHOUSE`}</Text>
+                <Text fontSize="xs">Customer: {printData[0]?.customerName}</Text>
                 <Text fontSize="xs">
-                  Customer: {printData[0]?.customerName}
+                  Charging Department: {printData[0]?.departmentCode} - {printData[0]?.departmentName}
                 </Text>
                 <Text fontSize="xs">
-                  Charging Department: {printData[0]?.departmentCode} -{" "}
-                  {printData[0]?.departmentName}
-                </Text>
-                <Text fontSize="xs">
-                  Charging Location: {printData[0]?.locationCode} -{" "}
-                  {printData[0]?.locationName}
+                  Charging Location: {printData[0]?.locationCode} - {printData[0]?.locationName}
                 </Text>
               </Flex>
               <Flex flexDirection="column">
                 <Barcode width={3} height={40} value={Number(orderId)} />
-                <Text fontSize="xs">
-                  Date: {moment(dateToday).format("MM/DD/yyyy")}
-                </Text>
+                <Text fontSize="xs">Date: {moment(dateToday).format("MM/DD/yyyy")}</Text>
               </Flex>
             </Flex>
 
@@ -162,13 +148,10 @@ export const PrintModal = ({
                       UOM
                     </Th>
                     <Th color="white" fontSize="xs">
-                      QUANTITY
+                      ORDERED QTY
                     </Th>
                     <Th color="white" fontSize="xs">
-                      UNIT COST
-                    </Th>
-                    <Th color="white" fontSize="xs">
-                      TOTAL COST
+                      SERVED QTY
                     </Th>
                     <Th color="white" fontSize="xs">
                       ITEM REMARKS
@@ -177,7 +160,7 @@ export const PrintModal = ({
                       ASSET TAG
                     </Th>
                     <Th color="white" fontSize="xs">
-                      ACTUAL QTY RECEIVED
+                      UNSERVED QTY
                     </Th>
                   </Tr>
                 </Thead>
@@ -195,29 +178,21 @@ export const PrintModal = ({
                         })}
                       </Td>
                       <Td fontSize="xs">
-                        {item.unitCost.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td fontSize="xs">
-                        {item.totalCost.toLocaleString(undefined, {
+                        {item.servedQuantity.toLocaleString(undefined, {
                           maximumFractionDigits: 2,
                           minimumFractionDigits: 2,
                         })}
                       </Td>
 
-                      {item.itemRemarks ? (
-                        <Td fontSize="xs">{item.itemRemarks}</Td>
-                      ) : (
-                        <Td fontSize="xs">-</Td>
-                      )}
-                      {item.assetTag ? (
-                        <Td fontSize="xs">{item.assetTag}</Td>
-                      ) : (
-                        <Td fontSize="xs">-</Td>
-                      )}
-                      <Td fontSize="xs"></Td>
+                      {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
+                      {item.assetTag ? <Td fontSize="xs">{item.assetTag}</Td> : <Td fontSize="xs">-</Td>}
+
+                      <Td fontSize="xs">
+                        {item.unservedQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
                     </Tr>
                   ))}
                   <Tr>
@@ -233,18 +208,19 @@ export const PrintModal = ({
                         minimumFractionDigits: 2,
                       })}
                     </Td>
-                    <Td fontSize="xs" fontWeight="bold">
+                    {/* <Td fontSize="xs" fontWeight="bold">
                       {printData[0]?.tUnitCost.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
+
                     <Td fontSize="xs" fontWeight="bold">
                       {printData[0]?.tTotalCost.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
-                    </Td>
+                    </Td> */}
                     <Td fontSize="xs"></Td>
                     <Td fontSize="xs"></Td>
                     <Td fontSize="xs"></Td>
@@ -257,24 +233,17 @@ export const PrintModal = ({
               <HStack>
                 <Text fontSize="xs">Delivery Status:</Text>
                 <Text textDecoration="underline" fontSize="xs">
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {`Pick-Up`}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
               <VStack spacing={0}>
                 <HStack>
                   <Text fontSize="xs">Checked By:</Text>
                   <Text textDecoration="underline" fontSize="xs">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   </Text>
                 </HStack>
@@ -286,14 +255,9 @@ export const PrintModal = ({
                 <HStack>
                   <Text fontSize="xs">Prepared By:</Text>
                   <Text textDecoration="underline" fontSize="xs">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   </Text>
                 </HStack>
               </VStack>
@@ -301,12 +265,8 @@ export const PrintModal = ({
                 <HStack>
                   <Text fontSize="xs">Received By:</Text>
                   <Text textDecoration="underline" fontSize="xs">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   </Text>
                 </HStack>
@@ -776,15 +736,10 @@ export const PrintModal = ({
 
                 {/* MO SLIP Ready to print*/}
                 <Flex w="full" mt={2} p={5} flexDirection="column">
-                  <Flex
-                    spacing={0}
-                    justifyContent="start"
-                    flexDirection="column"
-                  >
+                  <Flex spacing={0} justifyContent="start" flexDirection="column">
                     <Image src="/images/RDF Logo.png" w="13%" ml={3} />
                     <Text fontSize="8px" ml={2}>
-                      Purok 6, Brgy. Lara, City of San Fernando, Pampanga,
-                      Philippines
+                      Purok 6, Brgy. Lara, City of San Fernando, Pampanga, Philippines
                     </Text>
                   </Flex>
 
@@ -800,23 +755,17 @@ export const PrintModal = ({
                     <Flex flexDirection="column">
                       <Text fontSize="xs">Order ID: {orderId && orderId}</Text>
                       <Text fontSize="xs">Warehouse: {`WAREHOUSE`}</Text>
+                      <Text fontSize="xs">Customer: {printData[0]?.customerName}</Text>
                       <Text fontSize="xs">
-                        Customer: {printData[0]?.customerName}
+                        Charging Department: {printData[0]?.departmentCode} - {printData[0]?.departmentName}
                       </Text>
                       <Text fontSize="xs">
-                        Charging Department: {printData[0]?.departmentCode} -{" "}
-                        {printData[0]?.departmentName}
-                      </Text>
-                      <Text fontSize="xs">
-                        Charging Location: {printData[0]?.locationCode} -{" "}
-                        {printData[0]?.locationName}
+                        Charging Location: {printData[0]?.locationCode} - {printData[0]?.locationName}
                       </Text>
                     </Flex>
                     <Flex flexDirection="column">
                       <Barcode width={3} height={40} value={Number(orderId)} />
-                      <Text fontSize="xs">
-                        Date: {moment(dateToday).format("MM/DD/yyyy")}
-                      </Text>
+                      <Text fontSize="xs">Date: {moment(dateToday).format("MM/DD/yyyy")}</Text>
                     </Flex>
                   </Flex>
 
@@ -875,16 +824,8 @@ export const PrintModal = ({
                               minimumFractionDigits: 2,
                             })}
                           </Td>
-                          {item.itemRemarks ? (
-                            <Td fontSize="xs">{item.itemRemarks}</Td>
-                          ) : (
-                            <Td fontSize="xs">-</Td>
-                          )}
-                          {item.assetTag ? (
-                            <Td fontSize="xs">{item.assetTag}</Td>
-                          ) : (
-                            <Td fontSize="xs">-</Td>
-                          )}
+                          {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
+                          {item.assetTag ? <Td fontSize="xs">{item.assetTag}</Td> : <Td fontSize="xs">-</Td>}
                           <Td fontSize="xs"></Td>
                         </Tr>
                       ))}
@@ -925,24 +866,17 @@ export const PrintModal = ({
                     <HStack>
                       <Text fontSize="xs">Delivery Status:</Text>
                       <Text textDecoration="underline" fontSize="xs">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         {`Pick-Up`}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       </Text>
                     </HStack>
                     <VStack spacing={0}>
                       <HStack>
                         <Text fontSize="xs">Checked By:</Text>
                         <Text textDecoration="underline" fontSize="xs">
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </Text>
                       </HStack>
@@ -954,14 +888,9 @@ export const PrintModal = ({
                       <HStack>
                         <Text fontSize="xs">Prepared By:</Text>
                         <Text textDecoration="underline" fontSize="xs">
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </Text>
                       </HStack>
                     </VStack>
@@ -969,48 +898,25 @@ export const PrintModal = ({
                       <HStack>
                         <Text fontSize="xs">Received By:</Text>
                         <Text textDecoration="underline" fontSize="xs">
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </Text>
                       </HStack>
                     </VStack>
                   </Flex>
 
-                  <Flex
-                    mt={10}
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
+                  <Flex mt={10} justifyContent="space-between" alignItems="center">
                     <VStack>
                       <CheckboxGroup colorScheme="blue">
                         <HStack spacing={3}>
-                          <Checkbox
-                            border="1px"
-                            borderColor="black"
-                            size="sm"
-                            isChecked={selectedCheckboxes?.includes("Option 1")}
-                          >
+                          <Checkbox border="1px" borderColor="black" size="sm" isChecked={selectedCheckboxes?.includes("Option 1")}>
                             Exceeds Expectation
                           </Checkbox>
-                          <Checkbox
-                            border="1px"
-                            borderColor="black"
-                            size="sm"
-                            isChecked={selectedCheckboxes?.includes("Option 2")}
-                          >
+                          <Checkbox border="1px" borderColor="black" size="sm" isChecked={selectedCheckboxes?.includes("Option 2")}>
                             Meets Expectation
                           </Checkbox>
-                          <Checkbox
-                            border="1px"
-                            borderColor="black"
-                            size="sm"
-                            isChecked={selectedCheckboxes?.includes("Option 3")}
-                          >
+                          <Checkbox border="1px" borderColor="black" size="sm" isChecked={selectedCheckboxes?.includes("Option 3")}>
                             Needs Improvement
                           </Checkbox>
                         </HStack>
@@ -1029,22 +935,10 @@ export const PrintModal = ({
 
         <ModalFooter mt={2}>
           <ButtonGroup size="sm">
-            <Button
-              isLoading={isLoading}
-              disabled={isLoading}
-              colorScheme="blue"
-              color="white"
-              onClick={printAndUpdate}
-            >
+            <Button isLoading={isLoading} disabled={isLoading} colorScheme="blue" color="white" onClick={printAndUpdate}>
               Print
             </Button>
-            <Button
-              isLoading={isLoading}
-              disabled={isLoading}
-              color="black"
-              variant="outline"
-              onClick={closeHandler}
-            >
+            <Button isLoading={isLoading} disabled={isLoading} color="black" variant="outline" onClick={closeHandler}>
               Close
             </Button>
           </ButtonGroup>
@@ -1071,18 +965,7 @@ export const PrintModal = ({
 
 // TRACKING OF ORDERS -------------------------------
 export const TrackModal = ({ isOpen, onClose, trackData, trackList }) => {
-  const TableHead = [
-    "Line",
-    // "Barcode",
-    "Item Code",
-    "Item Description",
-    "Quantity",
-    "Unit Cost",
-    "Total Cost",
-    "Item Remarks",
-    "Asset Tag",
-    "Remarks",
-  ];
+  const TableHead = ["Line", "Item Code", "Item Description", "Ordered Qty", "Item Remarks", "Asset Tag", "Remarks"];
 
   console.log(trackList);
 
@@ -1103,58 +986,28 @@ export const TrackModal = ({ isOpen, onClose, trackData, trackList }) => {
           <Flex>
             <div className="tracker">
               <div className="circle">
-                <div
-                  className={
-                    trackData[0]?.isPrepared ? "darkShape" : "lightShape"
-                  }
-                >
-                  &nbsp;
-                </div>
+                <div className={trackData[0]?.isPrepared ? "darkShape" : "lightShape"}>&nbsp;</div>
                 <div className="desc">Prepared</div>
               </div>
 
-              <div
-                className={trackData[0]?.isApproved ? "darkLine" : "lightLine"}
-              ></div>
+              <div className={trackData[0]?.isApproved ? "darkLine" : "lightLine"}></div>
 
               <div className="circle">
-                <div
-                  className={
-                    trackData[0]?.isApproved ? "darkShape" : "lightShape"
-                  }
-                >
-                  &nbsp;
-                </div>
+                <div className={trackData[0]?.isApproved ? "darkShape" : "lightShape"}>&nbsp;</div>
                 <div className="desc">Approved</div>
               </div>
 
-              <div
-                className={trackData[0]?.isApproved ? "darkLine" : "lightLine"}
-              ></div>
+              <div className={trackData[0]?.isApproved ? "darkLine" : "lightLine"}></div>
 
               <div className="circle">
-                <div
-                  className={
-                    trackData[0]?.isApproved ? "darkShape" : "lightShape"
-                  }
-                >
-                  &nbsp;
-                </div>
+                <div className={trackData[0]?.isApproved ? "darkShape" : "lightShape"}>&nbsp;</div>
                 <div className="desc">Printing Move Order</div>
               </div>
 
-              <div
-                className={trackData[0]?.isTransact ? "darkLine" : "lightLine"}
-              ></div>
+              <div className={trackData[0]?.isTransact ? "darkLine" : "lightLine"}></div>
 
               <div className="circle">
-                <div
-                  className={
-                    trackData[0]?.isTransact ? "darkShape" : "lightShape"
-                  }
-                >
-                  &nbsp;
-                </div>
+                <div className={trackData[0]?.isTransact ? "darkShape" : "lightShape"}>&nbsp;</div>
                 <div className="desc">Transact Move Order</div>
               </div>
             </div>
@@ -1176,39 +1029,19 @@ export const TrackModal = ({ isOpen, onClose, trackData, trackList }) => {
                   {trackList?.map((item, i) => (
                     <Tr key={i}>
                       <Td fontSize="11px">{i + 1}</Td>
-                      {/* <Td fontSize="11px">{item.barcodeNo}</Td> */}
                       <Td fontSize="11px">{item.itemCode}</Td>
                       <Td fontSize="11px">{item.itemDescription}</Td>
-                      <Td fontSize="11px">{item.quantity}</Td>
-                      <Td fontSize="xs">
-                        {item.unitCost.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td fontSize="xs">
-                        {item.totalCost.toLocaleString(undefined, {
+                      <Td fontSize="11px">
+                        {item.quantity.toLocaleString(undefined, {
                           maximumFractionDigits: 2,
                           minimumFractionDigits: 2,
                         })}
                       </Td>
 
-                      {item.itemRemarks ? (
-                        <Td fontSize="11px">{item.itemRemarks}</Td>
-                      ) : (
-                        <Td fontSize="11px">-</Td>
-                      )}
-                      {item.assetTag ? (
-                        <Td fontSize="11px">{item.assetTag}</Td>
-                      ) : (
-                        <Td fontSize="11px">-</Td>
-                      )}
+                      {item.itemRemarks ? <Td fontSize="11px">{item.itemRemarks}</Td> : <Td fontSize="11px">-</Td>}
+                      {item.assetTag ? <Td fontSize="11px">{item.assetTag}</Td> : <Td fontSize="11px">-</Td>}
 
-                      {item.rush ? (
-                        <Td fontSize="11px">{item.rush}</Td>
-                      ) : (
-                        <Td fontSize="11px">-</Td>
-                      )}
+                      {item.rush ? <Td fontSize="11px">{item.rush}</Td> : <Td fontSize="11px">-</Td>}
                       {/* <Td>{moment(item.expiration).format("MM/DD/yyyy")}</Td> */}
                     </Tr>
                   ))}
@@ -1220,13 +1053,7 @@ export const TrackModal = ({ isOpen, onClose, trackData, trackList }) => {
 
         <ModalFooter>
           <ButtonGroup size="sm" mt={7}>
-            <Button
-              color="black"
-              variant="outline"
-              onClick={onClose}
-              borderRadius="none"
-              fontSize="11px"
-            >
+            <Button color="black" variant="outline" onClick={onClose} borderRadius="none" fontSize="11px">
               Close
             </Button>
           </ButtonGroup>
@@ -1237,13 +1064,7 @@ export const TrackModal = ({ isOpen, onClose, trackData, trackList }) => {
 };
 
 //REJECT APPROVED MO --------------------------------
-export const RejectModal = ({
-  isOpen,
-  onClose,
-  id,
-  fetchApprovedMO,
-  fetchNotification,
-}) => {
+export const RejectModal = ({ isOpen, onClose, id, fetchApprovedMO, fetchNotification }) => {
   const [reasonSubmit, setReasonSubmit] = useState("");
 
   const [reasons, setReasons] = useState([]);
@@ -1281,24 +1102,14 @@ export const RejectModal = ({
           rejectBy: currentUser?.userName,
         })
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Move order has been rejected",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Move order has been rejected", "success", toast);
           // fetchNotification()
           fetchApprovedMO();
           setIsLoading(false);
           onClose();
         })
         .catch((err) => {
-          ToastComponent(
-            "Error",
-            "Move order was not rejected",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Move order was not rejected", "error", toast);
           setIsLoading(false);
         });
     } catch (error) {}
@@ -1321,12 +1132,7 @@ export const RejectModal = ({
               Are you sure you want to reject this move order?
             </Text>
             {reasons?.length > 0 ? (
-              <Select
-                fontSize="xs"
-                onChange={(e) => setReasonSubmit(e.target.value)}
-                w="70%"
-                placeholder="Please select a reason"
-              >
+              <Select fontSize="xs" onChange={(e) => setReasonSubmit(e.target.value)} w="70%" placeholder="Please select a reason">
                 {reasons?.map((reason, i) => (
                   <option key={i} value={reason.reasonName}>
                     {reason.reasonName}
@@ -1341,21 +1147,10 @@ export const RejectModal = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup size="sm" mt={7}>
-            <Button
-              onClick={submitHandler}
-              isDisabled={!reasonSubmit || isLoading}
-              isLoading={isLoading}
-              colorScheme="blue"
-            >
+            <Button onClick={submitHandler} isDisabled={!reasonSubmit || isLoading} isLoading={isLoading} colorScheme="blue">
               Yes
             </Button>
-            <Button
-              disabled={isLoading}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-              onClick={onClose}
-            >
+            <Button disabled={isLoading} isLoading={isLoading} color="black" variant="outline" onClick={onClose}>
               No
             </Button>
           </ButtonGroup>

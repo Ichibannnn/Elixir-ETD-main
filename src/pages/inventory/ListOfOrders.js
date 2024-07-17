@@ -88,7 +88,7 @@ export const ListOfOrders = ({
                 UOM
               </Th>
               <Th color="white" fontSize="10px">
-                Qty Ordered
+                 Ordered Qty
               </Th>
               <Th color="white" fontSize="10px">
                 Prepared Qty

@@ -142,7 +142,7 @@ export const ListMoveOrder = ({
                       Customer Name
                     </Th>
                     <Th color="white" fontSize="11px">
-                      Total Quantity Order
+                      Total Ordered Qty
                     </Th>
                     <Th color="white" fontSize="11px">
                       <HStack>
@@ -187,7 +187,12 @@ export const ListMoveOrder = ({
                       <Td fontSize="xs">{list.mirId}</Td>
                       <Td fontSize="xs">{list.customerCode}</Td>
                       <Td fontSize="xs">{list.customerName}</Td>
-                      <Td fontSize="xs">{list.totalOrders}</Td>
+                      <Td fontSize="xs">
+                        {list.totalOrders.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
                       <Td fontSize="xs">{moment(list.preparedDate).format("MM/DD/yyyy")}</Td>
                       <Td fontSize="xs">
                         <Button

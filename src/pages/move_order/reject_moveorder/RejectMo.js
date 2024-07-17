@@ -1,56 +1,17 @@
 import React, { useEffect, useState } from "react";
-import {
-  Badge,
-  Button,
-  Flex,
-  HStack,
-  Input,
-  Select,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Badge, Button, Flex, HStack, Input, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import PageScroll from "../../../utils/PageScroll";
 import { MdOutlineSettingsBackupRestore } from "react-icons/md";
 // import { ReturnModal } from './Return-Modal'
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import moment from "moment";
 import ReturnModal from "./ReturnModal";
 import { FaShippingFast } from "react-icons/fa";
 
-export const RejectMo = ({
-  setCurrentPage,
-  setPageSize,
-  search,
-  setSearch,
-  pagesCount,
-  currentPage,
-  pageSize,
-  rejectedData,
-  fetchRejectedMO,
-  status,
-  setStatus,
-}) => {
+export const RejectMo = ({ setCurrentPage, setPageSize, search, setSearch, pagesCount, currentPage, pageSize, rejectedData, fetchRejectedMO, status, setStatus }) => {
   const [orderNo, setOrderNo] = useState("");
 
-  const {
-    isOpen: isReturn,
-    onOpen: openReturn,
-    onClose: closeReturn,
-  } = useDisclosure();
+  const { isOpen: isReturn, onOpen: openReturn, onClose: closeReturn } = useDisclosure();
 
   const TableHead = [
     "Line",
@@ -58,7 +19,7 @@ export const RejectMo = ({
     "Customer Code",
     "Customer Name",
     // "Category",
-    "Total Quantity Order",
+    "Total Ordered Quantity",
     "Prepared Date",
     // "Date Needed",
     // "Reject Date",
@@ -101,13 +62,7 @@ export const RejectMo = ({
   return (
     <Flex w="full" flexDirection="column" p={5} bg="form">
       <Flex justifyContent="space-between">
-        <Select
-          fontSize="11px"
-          borderColor="gray.400"
-          onChange={handlePageSizeChange}
-          w="7%"
-          variant="filled"
-        >
+        <Select fontSize="11px" borderColor="gray.400" onChange={handlePageSizeChange} w="7%" variant="filled">
           <option value={Number(10)}>10</option>
           <option value={Number(20)}>20</option>
           <option value={Number(30)}>30</option>
@@ -115,13 +70,7 @@ export const RejectMo = ({
         </Select>
         <HStack w="17%">
           <Text fontSize="13px">Search:</Text>
-          <Input
-            borderColor="gray.400"
-            fontSize="11px"
-            borderRadius="none"
-            placeholder="Order Id"
-            onChange={(e) => searchHandler(e.target.value)}
-          />
+          <Input borderColor="gray.400" fontSize="11px" borderRadius="none" placeholder="Order Id" onChange={(e) => searchHandler(e.target.value)} />
         </HStack>
       </Flex>
 
@@ -192,9 +141,7 @@ export const RejectMo = ({
                       minimumFractionDigits: 2,
                     })}
                   </Td>
-                  <Td fontSize="xs">
-                    {moment(data.preparedDate).format("MM/DD/yyyy")}
-                  </Td>
+                  <Td fontSize="xs">{moment(data.preparedDate).format("MM/DD/yyyy")}</Td>
                   {/* <Td>{data.dateNeeded}</Td> */}
                   {/* <Td>{moment(data.rejectedDate).format("MM/DD/yyyy")}</Td> */}
                   {/* <Td fontSize="xs">
@@ -233,12 +180,7 @@ export const RejectMo = ({
                       <MdOutlineSettingsBackupRestore fontSize="20px" />
                     </Button> */}
 
-                    <Button
-                      onClick={() => returnHandler(data.mirId)}
-                      bg="none"
-                      size="xs"
-                      borderRadius="none"
-                    >
+                    <Button onClick={() => returnHandler(data.mirId)} bg="none" size="xs" borderRadius="none">
                       <MdOutlineSettingsBackupRestore fontSize="20px" />
                     </Button>
                   </Td>
@@ -250,36 +192,18 @@ export const RejectMo = ({
       </Flex>
 
       <Flex justifyContent="space-between" mt={7}>
-        <Text fontSize="xs">
-          {rejectedData?.moveorder?.length > 0
-            ? `Showing ${rejectedData?.moveorder?.length} entries`
-            : "No entries available"}
-        </Text>
+        <Text fontSize="xs">{rejectedData?.moveorder?.length > 0 ? `Showing ${rejectedData?.moveorder?.length} entries` : "No entries available"}</Text>
 
         <Flex>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
+          <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
             <PaginationContainer>
-              <PaginationPrevious
-                border="1px"
-                fontSize="xs"
-                px={2}
-                _hover={{ bg: "accent", color: "white" }}
-              >
+              <PaginationPrevious border="1px" fontSize="xs" px={2} _hover={{ bg: "accent", color: "white" }}>
                 {"< Previous"}
               </PaginationPrevious>
               <Text mx={1} bgColor="secondary" color="white" px={2} pt={1.5}>
                 {currentPage}
               </Text>
-              <PaginationNext
-                border="1px"
-                fontSize="xs"
-                px={4}
-                _hover={{ bg: "accent", color: "white" }}
-              >
+              <PaginationNext border="1px" fontSize="xs" px={4} _hover={{ bg: "accent", color: "white" }}>
                 {"Next >"}
               </PaginationNext>
             </PaginationContainer>

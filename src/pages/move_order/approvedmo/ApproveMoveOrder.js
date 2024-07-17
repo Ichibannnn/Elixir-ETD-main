@@ -23,15 +23,7 @@ import {
 } from "@chakra-ui/react";
 import PageScroll from "../../../utils/PageScroll";
 // import { PrintModal, RejectModal, TrackModal } from './Action-Modals'
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import moment from "moment";
 import { ImLocation } from "react-icons/im";
 import { PrintModal, RejectModal, TrackModal } from "./ActionModal";
@@ -65,7 +57,7 @@ export const ApproveMoveOrder = ({
     "Customer Name",
     // "Status",
     // "Category",
-    "Total Quantity Order",
+    "Total Ordered Qty",
     "Prepared Date",
     "Transaction Status",
     "Print Status",
@@ -90,21 +82,9 @@ export const ApproveMoveOrder = ({
 
   const [totalQuantity, setTotalQuantity] = useState("");
 
-  const {
-    isOpen: isTrack,
-    onClose: closeTrack,
-    onOpen: openTrack,
-  } = useDisclosure();
-  const {
-    isOpen: isReject,
-    onClose: closeReject,
-    onOpen: openReject,
-  } = useDisclosure();
-  const {
-    isOpen: isPrint,
-    onClose: closePrint,
-    onOpen: openPrint,
-  } = useDisclosure();
+  const { isOpen: isTrack, onClose: closeTrack, onOpen: openTrack } = useDisclosure();
+  const { isOpen: isReject, onClose: closeReject, onOpen: openReject } = useDisclosure();
+  const { isOpen: isPrint, onClose: closePrint, onOpen: openPrint } = useDisclosure();
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -184,13 +164,7 @@ export const ApproveMoveOrder = ({
   return (
     <Flex w="full" flexDirection="column" p={5} bg="form">
       <Flex justifyContent="space-between">
-        <Select
-          onChange={handlePageSizeChange}
-          w="7%"
-          variant="filled"
-          fontSize="11px"
-          borderColor="gray.400"
-        >
+        <Select onChange={handlePageSizeChange} w="7%" variant="filled" fontSize="11px" borderColor="gray.400">
           <option value={Number(10)}>10</option>
           <option value={Number(20)}>20</option>
           <option value={Number(30)}>30</option>
@@ -198,13 +172,7 @@ export const ApproveMoveOrder = ({
         </Select>
         <HStack w="17%">
           <Text fontSize="13px">Search:</Text>
-          <Input
-            borderColor="gray.400"
-            fontSize="11px"
-            borderRadius="none"
-            placeholder="MIR Id"
-            onChange={(e) => searchHandler(e.target.value)}
-          />
+          <Input borderColor="gray.400" fontSize="11px" borderRadius="none" placeholder="MIR Id" onChange={(e) => searchHandler(e.target.value)} />
         </HStack>
       </Flex>
 
@@ -287,9 +255,7 @@ export const ApproveMoveOrder = ({
                     </Flex>
                   </Td>
                   <Td fontSize="xs">
-                    <Flex justifyContent="center">
-                      {moment(order.preparedDate).format("MM/DD/yyyy")}
-                    </Flex>
+                    <Flex justifyContent="center">{moment(order.preparedDate).format("MM/DD/yyyy")}</Flex>
                   </Td>
                   {order.isTransact ? (
                     <Td fontSize="xs">
@@ -330,43 +296,23 @@ export const ApproveMoveOrder = ({
                     <Flex pl={2}>
                       <Box>
                         <Menu>
-                          <MenuButton
-                            alignItems="center"
-                            justifyContent="center"
-                            bg="none"
-                          >
+                          <MenuButton alignItems="center" justifyContent="center" bg="none">
                             <AiOutlineMore fontSize="20px" />
                           </MenuButton>
                           <MenuList>
-                            <MenuItem
-                              icon={<GrLocation fontSize="17px" />}
-                              onClick={() => trackHandler(order)}
-                            >
+                            <MenuItem icon={<GrLocation fontSize="17px" />} onClick={() => trackHandler(order)}>
                               <Text fontSize="15px">Track</Text>
                             </MenuItem>
-                            <MenuItem
-                              icon={<AiOutlinePrinter fontSize="17px" />}
-                              onClick={() =>
-                                printHandler(order.mirId, order.quantity)
-                              }
-                            >
+                            <MenuItem icon={<AiOutlinePrinter fontSize="17px" />} onClick={() => printHandler(order.mirId, order.quantity)}>
                               <Text fontSize="15px">Print</Text>
                             </MenuItem>
                             <MenuItem
                               icon={<GiCancel color="red" fontSize="17px" />}
                               onClick={() => rejectHandler(order.mirId)}
                               isDisabled={order.isTransact}
-                              title={
-                                order.isTransact
-                                  ? "Order was already transacted"
-                                  : "Order not yet transacted"
-                              }
+                              title={order.isTransact ? "Order was already transacted" : "Order not yet transacted"}
                             >
-                              <Text
-                                fontSize="15px"
-                                color="red"
-                                _hover={{ color: "red" }}
-                              >
+                              <Text fontSize="15px" color="red" _hover={{ color: "red" }}>
                                 Reject
                               </Text>
                             </MenuItem>
@@ -420,36 +366,18 @@ export const ApproveMoveOrder = ({
       </Flex>
 
       <Flex justifyContent="space-between" mt={7}>
-        <Text fontSize="xs">
-          {approvedData?.moveorder?.length > 0
-            ? `Showing ${approvedData?.moveorder?.length} entries`
-            : "No entries available"}
-        </Text>
+        <Text fontSize="xs">{approvedData?.moveorder?.length > 0 ? `Showing ${approvedData?.moveorder?.length} entries` : "No entries available"}</Text>
 
         <Flex>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
+          <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
             <PaginationContainer>
-              <PaginationPrevious
-                border="1px"
-                fontSize="xs"
-                px={2}
-                _hover={{ bg: "accent", color: "white" }}
-              >
+              <PaginationPrevious border="1px" fontSize="xs" px={2} _hover={{ bg: "accent", color: "white" }}>
                 {"< Previous"}
               </PaginationPrevious>
               <Text mx={1} bgColor="secondary" color="white" px={2} pt={1.5}>
                 {currentPage}
               </Text>
-              <PaginationNext
-                border="1px"
-                fontSize="xs"
-                px={4}
-                _hover={{ bg: "accent", color: "white" }}
-              >
+              <PaginationNext border="1px" fontSize="xs" px={4} _hover={{ bg: "accent", color: "white" }}>
                 {"Next >"}
               </PaginationNext>
             </PaginationContainer>
@@ -457,25 +385,9 @@ export const ApproveMoveOrder = ({
         </Flex>
       </Flex>
 
-      {isTrack && (
-        <TrackModal
-          isOpen={isTrack}
-          onClose={closeTrack}
-          trackData={trackData}
-          trackList={printData}
-        />
-      )}
+      {isTrack && <TrackModal isOpen={isTrack} onClose={closeTrack} trackData={trackData} trackList={printData} />}
 
-      {isPrint && (
-        <PrintModal
-          isOpen={isPrint}
-          onClose={closePrint}
-          printData={printData}
-          fetchApprovedMO={fetchApprovedMO}
-          orderId={orderId}
-          totalQuantity={totalQuantity}
-        />
-      )}
+      {isPrint && <PrintModal isOpen={isPrint} onClose={closePrint} printData={printData} fetchApprovedMO={fetchApprovedMO} orderId={orderId} totalQuantity={totalQuantity} />}
 
       {isReject && (
         <RejectModal

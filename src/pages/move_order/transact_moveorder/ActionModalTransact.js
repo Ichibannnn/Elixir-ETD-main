@@ -27,12 +27,7 @@ import { decodeUser } from "../../../services/decode-user";
 import { ToastComponent } from "../../../components/Toast";
 import axios from "axios";
 
-export const ViewModal = ({
-  isOpen,
-  onClose,
-  moveOrderInformation,
-  moveOrderViewTable,
-}) => {
+export const ViewModal = ({ isOpen, onClose, moveOrderInformation, moveOrderViewTable }) => {
   const TableHead = [
     "Line",
     "Order Date",
@@ -40,8 +35,8 @@ export const ViewModal = ({
     "Item Description",
     "UOM",
     "Quantity",
-    "Unit Cost",
-    "Total Cost",
+    // "Unit Cost",
+    // "Total Cost",
     "Item Remarks",
     "Asset Tag",
   ];
@@ -75,10 +70,7 @@ export const ViewModal = ({
                   <Text fontSize="sm" fontWeight="semibold">
                     Delivery Status:
                   </Text>
-                  <Text fontSize="sm">
-                    {" "}
-                    {moveOrderInformation.deliveryStatus}
-                  </Text>
+                  <Text fontSize="sm"> {moveOrderInformation.deliveryStatus}</Text>
                 </HStack>
                 <HStack>
                   <Text fontSize="sm" fontWeight="semibold">
@@ -118,8 +110,13 @@ export const ViewModal = ({
                           <Td fontSize="sm">{list.itemCode}</Td>
                           <Td fontSize="sm">{list.itemDescription}</Td>
                           <Td fontSize="sm">{list.uom}</Td>
-                          <Td fontSize="sm">{list.quantity}</Td>
                           <Td fontSize="sm">
+                            {list.quantity.toLocaleString(undefined, {
+                              maximumFractionDigits: 2,
+                              minimumFractionDigits: 2,
+                            })}
+                          </Td>
+                          {/* <Td fontSize="sm">
                             {list.unitCost.toLocaleString(undefined, {
                               maximumFractionDigits: 2,
                               minimumFractionDigits: 2,
@@ -130,17 +127,9 @@ export const ViewModal = ({
                               maximumFractionDigits: 2,
                               minimumFractionDigits: 2,
                             })}
-                          </Td>
-                          {list.itemRemarks ? (
-                            <Td fontSize="sm">{list.itemRemarks}</Td>
-                          ) : (
-                            <Td fontSize="sm">-</Td>
-                          )}
-                          {list.assetTag ? (
-                            <Td fontSize="sm">{list.assetTag}</Td>
-                          ) : (
-                            <Td fontSize="sm">-</Td>
-                          )}
+                          </Td> */}
+                          {list.itemRemarks ? <Td fontSize="sm">{list.itemRemarks}</Td> : <Td fontSize="sm">-</Td>}
+                          {list.assetTag ? <Td fontSize="sm">{list.assetTag}</Td> : <Td fontSize="sm">-</Td>}
                         </Tr>
                       ))}
                     </Tbody>
@@ -220,15 +209,11 @@ export const TransactConfirmation = ({
 
     // GENUS STATUS
     try {
-      axios.patch(
-        `http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`,
-        genusStatus,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-          },
-        }
-      );
+      axios.patch(`http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`, genusStatus, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+        },
+      });
     } catch (error) {
       console.log(error);
       ToastComponent("Error", "Genus ETD update status failed", "error", toast);
@@ -247,27 +232,15 @@ export const TransactConfirmation = ({
         <ModalCloseButton onClick={onClose} />
         <ModalBody>
           <Flex justifyContent="center" mt={7}>
-            <Text fontSize="sm">
-              Are you sure you want to transact this move order?
-            </Text>
+            <Text fontSize="sm">Are you sure you want to transact this move order?</Text>
           </Flex>
         </ModalBody>
         <ModalFooter justifyContent="center">
           <ButtonGroup size="sm" mt={7}>
-            <Button
-              onClick={submitHandler}
-              isLoading={isLoading}
-              disabled={isLoading}
-              colorScheme="blue"
-            >
+            <Button onClick={submitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="blue">
               Yes
             </Button>
-            <Button
-              onClick={onClose}
-              isLoading={isLoading}
-              disabled={isLoading}
-              colorScheme="blackAlpha"
-            >
+            <Button onClick={onClose} isLoading={isLoading} disabled={isLoading} colorScheme="blackAlpha">
               No
             </Button>
           </ButtonGroup>

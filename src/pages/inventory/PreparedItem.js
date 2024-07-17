@@ -1,44 +1,23 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
 // import PageScrollReusable from '../../../components/PageScroll-Reusable'
 import PageScroll from "../../utils/PageScroll";
 import { CancelConfirmation } from "./ActionModal";
 // import { CancelConfirmation } from './Action-Modals'
 
-export const PreparedItem = ({
-  preparedData,
-  fetchPreparedItems,
-  fetchOrderList,
-  fetchNotification,
-}) => {
+export const PreparedItem = ({ preparedData, fetchPreparedItems, fetchOrderList, fetchNotification }) => {
   const [cancelId, setCancelId] = useState([]);
 
-  const {
-    isOpen: isCancel,
-    onClose: closeCancel,
-    onOpen: openCancel,
-  } = useDisclosure();
+  const { isOpen: isCancel, onClose: closeCancel, onOpen: openCancel } = useDisclosure();
 
   const TableHead = [
     "Line",
     "Barcode",
     "Item Code",
     "Item Description",
-    "Quantity",
-    "Unit Cost",
-    "Total Cost",
+    "Prepared Qty",
+    // "Unit Cost",
+    // "Total Cost",
     "Cancel",
   ];
 
@@ -56,13 +35,7 @@ export const PreparedItem = ({
   return (
     <VStack w="full" spacing={0} justifyContent="center" mt={10}>
       <Box w="full" bgColor="primary" h="25px">
-        <Text
-          fontWeight="semibold"
-          fontSize="13px"
-          color="white"
-          textAlign="center"
-          justifyContent="center"
-        >
+        <Text fontWeight="semibold" fontSize="13px" color="white" textAlign="center" justifyContent="center">
           Prepared Items
         </Text>
       </Box>
@@ -90,7 +63,7 @@ export const PreparedItem = ({
                     minimumFractionDigits: 2,
                   })}
                 </Td>
-                <Td fontSize="xs">
+                {/* <Td fontSize="xs">
                   {items.unitCost.toLocaleString(undefined, {
                     maximuFractionDigits: 2,
                     minimumFractionDigits: 2,
@@ -101,16 +74,11 @@ export const PreparedItem = ({
                     maximuFractionDigits: 2,
                     minimumFractionDigits: 2,
                   })}
-                </Td>
+                </Td> */}
 
                 {/* <Td>{moment(items.expiration).format("yyyy-MM-DD")}</Td> */}
                 <Td>
-                  <Button
-                    onClick={() => cancelHandler(items.id)}
-                    size="xs"
-                    colorScheme="red"
-                    fontSize="11px"
-                  >
+                  <Button onClick={() => cancelHandler(items.id)} size="xs" colorScheme="red" fontSize="11px">
                     Cancel
                   </Button>
                 </Td>
