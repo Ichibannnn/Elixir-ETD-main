@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Flex, VStack } from "@chakra-ui/react";
 import { usePagination } from "@ajna/pagination";
 import request from "../../../services/ApiClient";
 import { MrpTable } from "./MrpTable";
+import { debounce } from "lodash";
 
 const fetchMRPApi = async (pageNumber, pageSize, search) => {
   const res = await request.get(`Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
@@ -49,14 +50,14 @@ const MrpPage = () => {
     initialState: { currentPage: 1, pageSize: 50 },
   });
 
-  const fetchMRP = () => {
+  const fetchMRP = useCallback(async () => {
+    // console.log("fetchMRP called with search:", search);
     setIsLoading(true);
-    fetchMRPApi(currentPage, pageSize, search).then((res) => {
-      setMrpData(res);
-      setIsLoading(false);
-      setPageTotal(res.totalCount);
-    });
-  };
+    const res = await fetchMRPApi(currentPage, pageSize, search);
+    setMrpData(res);
+    setIsLoading(false);
+    setPageTotal(res.totalCount);
+  }, [currentPage, pageSize, search]);
 
   useEffect(() => {
     fetchMRP();
@@ -64,7 +65,7 @@ const MrpPage = () => {
     return () => {
       setMrpData([]);
     };
-  }, [currentPage, pageSize, search]);
+  }, [fetchMRP]);
 
   const fetchMRPForSheet = () => {
     fetchMRPForSheetApi(pageTotal).then((res) => {
@@ -82,6 +83,44 @@ const MrpPage = () => {
     };
   }, [pageTotal]);
 
+  const debouncedSetSearch = debounce((value) => {
+    setSearch(value);
+  }, 300);
+
+  // OLD CODE---
+  // const fetchMRP = () => {
+  //   setIsLoading(true);
+  //   fetchMRPApi(currentPage, pageSize, search).then((res) => {
+  //     setMrpData(res);
+  //     setIsLoading(false);
+  //     setPageTotal(res.totalCount);
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   fetchMRP();
+
+  //   return () => {
+  //     setMrpData([]);
+  //   };
+  // }, [currentPage, pageSize, search]);
+
+  // const fetchMRPForSheet = () => {
+  //   fetchMRPForSheetApi(pageTotal).then((res) => {
+  //     setSheetData(res.inventory);
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   if (pageTotal) {
+  //     fetchMRPForSheet();
+  //   }
+
+  //   return () => {
+  //     setSheetData([]);
+  //   };
+  // }, [pageTotal]);
+
   return (
     <Flex flexDirection="column" w="full" bg="form" p={4}>
       <VStack w="full" p={5} justifyContent="space-between" spacing={5}>
@@ -98,7 +137,8 @@ const MrpPage = () => {
           setCurrentPage={setCurrentPage}
           setPageSize={setPageSize}
           search={search}
-          setSearch={setSearch}
+          setSearch={debouncedSetSearch}
+          // setSearch={setSearch}
           pageTotal={pageTotal}
           sheetData={sheetData}
           mrpDataLength={mrpData?.inventory?.length}
