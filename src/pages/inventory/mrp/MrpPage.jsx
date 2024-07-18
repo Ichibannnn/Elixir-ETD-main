@@ -14,16 +14,17 @@ const fetchMRPApi = async (pageNumber, pageSize, search) => {
   return res.data;
 };
 
-const fetchMRPForSheetApi = async (pageTotal) => {
-  const res = await request.get(`Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=1&pageSize=${pageTotal}&search=`);
+const fetchMRPForSheetApi = async (pageTotalSheet) => {
+  const res = await request.get(`Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=1&pageSize=${pageTotalSheet}&search=`);
   return res.data;
 };
 
 const MrpPage = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingExport, setLoadingExport] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
+  const [pageTotalSheet, setPageTotalSheet] = useState(100000);
   const [search, setSearch] = useState("");
-
   const [mrpData, setMrpData] = useState([]);
   const [selectorId, setSelectorId] = useState("");
   const [rawMatsInfo, setRawMatsInfo] = useState({
@@ -68,20 +69,32 @@ const MrpPage = () => {
   }, [fetchMRP]);
 
   const fetchMRPForSheet = () => {
-    fetchMRPForSheetApi(pageTotal).then((res) => {
+    fetchMRPForSheetApi(pageTotalSheet).then((res) => {
+      console.log("res", res);
       setSheetData(res.inventory);
     });
   };
 
   useEffect(() => {
-    if (pageTotal) {
+    if (pageTotalSheet) {
       fetchMRPForSheet();
     }
 
     return () => {
       setSheetData([]);
     };
-  }, [pageTotal]);
+  }, [pageTotalSheet]);
+
+  useEffect(() => {
+    if (sheetData.length > 0) {
+      setLoadingExport(false);
+    } else {
+      setLoadingExport(true);
+    }
+  }, [sheetData]);
+
+  console.log("Page Total: ", pageTotal);
+  console.log("Sheet Data: ", sheetData);
 
   const debouncedSetSearch = debounce((value) => {
     setSearch(value);
@@ -127,6 +140,7 @@ const MrpPage = () => {
         <MrpTable
           mrpData={mrpData}
           fetchingData={isLoading}
+          loadingExport={loadingExport}
           setSelectorId={setSelectorId}
           selectorId={selectorId}
           rawMatsInfo={rawMatsInfo}

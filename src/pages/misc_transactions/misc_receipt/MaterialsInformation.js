@@ -42,10 +42,7 @@ const schema = yup.object().shape({
   formData: yup.object().shape({
     suppliers: yup.object(),
     companyId: yup.object().required().typeError("Company Name is required"),
-    departmentId: yup
-      .object()
-      .required()
-      .typeError("Department Category is required"),
+    departmentId: yup.object().required().typeError("Department Category is required"),
     locationId: yup.object().required().typeError("Location Name is required"),
     // accountId: yup.object().required().typeError("Account Name is required"),
     // empId: yup.object().nullable(),
@@ -85,14 +82,11 @@ export const MaterialsInformation = ({
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setCompany(res.data.result.companies);
       // console.log(res.data.result.companies);
     } catch (error) {}
@@ -101,15 +95,11 @@ export const MaterialsInformation = ({
   // FETCH DEPT API
   const fetchDepartmentApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setDepartment(res.data.result.departments);
       // console.log(res.data.result.departments);
     } catch (error) {}
@@ -118,23 +108,17 @@ export const MaterialsInformation = ({
   // FETCH Loc API
   const fetchLocationApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setLocation(res.data.result.locations);
     } catch (error) {}
   };
 
   useEffect(() => {
-    fetchLocationApi().then(() =>
-      fetchDepartmentApi().then(() => fetchCompanyApi())
-    );
+    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
   }, []);
 
   const {
@@ -162,11 +146,7 @@ export const MaterialsInformation = ({
     },
   });
 
-  const {
-    isOpen: isModal,
-    onClose: closeModal,
-    onOpen: openModal,
-  } = useDisclosure();
+  const { isOpen: isModal, onClose: closeModal, onOpen: openModal } = useDisclosure();
 
   const detailHandler = (data) => {
     if (data) {
@@ -243,38 +223,9 @@ export const MaterialsInformation = ({
           <VStack alignItems="start" w="40%" mx={5}>
             {/* Supplier Code */}
             <HStack w="full">
-              <Text
-                minW="30%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
                 Supplier Code:{" "}
               </Text>
-              {/* {suppliers.length > 0 ? (
-                <Select
-                  fontSize="sm"
-                  placeholder="Select Supplier"
-                  onChange={(e) => supplierHandler(e.target.value)}
-                  ref={supplierRef}
-                  w="full"
-                  border="1px"
-                  borderColor="gray.400"
-                  borderRadius="none"
-                >
-                  {suppliers?.map((item, i) => (
-                    <option
-                      key={i}
-                      value={JSON.stringify(item)}
-                    >{`${item.supplierCode} - ${item.supplierName}`}</option>
-                  ))}
-                </Select>
-              ) : (
-                <Spinner />
-              )} */}
 
               <Controller
                 control={control}
@@ -303,44 +254,17 @@ export const MaterialsInformation = ({
 
             {/* Supplier Name */}
             <HStack w="full">
-              <Text
-                minW="30%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                pr={10}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                 Supplier Name:{" "}
               </Text>
-              <Text
-                fontSize="sm"
-                bgColor="gray.300"
-                w="full"
-                border="1px"
-                borderColor="gray.400"
-                pl={2}
-                py={1.5}
-              >
-                {supplierData.supplierName
-                  ? supplierData.supplierName
-                  : "Select a supplier code"}
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={2} py={1.5}>
+                {supplierData.supplierName ? supplierData.supplierName : "Select a supplier code"}
               </Text>
             </HStack>
 
             {/* Transaction Type */}
             <HStack w="full">
-              <Text
-                minW="30%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
                 Transaction Type:{" "}
               </Text>
               {transactionType?.length > 0 ? (
@@ -368,16 +292,7 @@ export const MaterialsInformation = ({
 
             {/* Transaction Date */}
             <HStack w="full">
-              <Text
-                minW="30%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                pr={10}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                 Transaction Date:{" "}
               </Text>
               <Input
@@ -401,15 +316,7 @@ export const MaterialsInformation = ({
           <VStack alignItems="start" w="40%" mx={5}>
             {/* Company */}
             <HStack w="100%">
-              <Text
-                minW="30%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
                 Company:{" "}
               </Text>
               <Controller
@@ -444,15 +351,7 @@ export const MaterialsInformation = ({
 
             {/* Department */}
             <HStack w="full">
-              <Text
-                minW="30%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
                 Department:{" "}
               </Text>
               <Controller
@@ -487,15 +386,7 @@ export const MaterialsInformation = ({
 
             {/* Location */}
             <HStack w="full">
-              <Text
-                minW="30%"
-                w="auto"
-                bgColor="primary"
-                color="white"
-                pl={2}
-                py={2.5}
-                fontSize="xs"
-              >
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
                 Location:{" "}
               </Text>
               <Controller
@@ -530,15 +421,7 @@ export const MaterialsInformation = ({
         <VStack alignItems="start" w="full">
           {/* Details */}
           <HStack w="full">
-            <Text
-              w="auto"
-              bgColor="primary"
-              color="white"
-              pl={2}
-              pr={5}
-              py={2.5}
-              fontSize="xs"
-            >
+            <Text w="auto" bgColor="primary" color="white" pl={2} pr={5} py={2.5} fontSize="xs">
               Details:{" "}
             </Text>
             <Input
@@ -666,15 +549,11 @@ export const RawMatsInfoModal = ({
   // FETCH ACcount API
   const fetchAccountApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setAccount(res.data.result.account_titles);
     } catch (error) {}
   };
@@ -710,10 +589,7 @@ export const RawMatsInfoModal = ({
       return item.id === parseInt(event);
     });
 
-    if (
-      !selectedAccount?.name?.match(/Advances to Employees/gi) ||
-      !selectedAccount?.name?.match(/Advances from Employees/gi)
-    ) {
+    if (!selectedAccount?.name?.match(/Advances to Employees/gi) || !selectedAccount?.name?.match(/Advances from Employees/gi)) {
       setIdNumber("");
       setValue("formData.empId", "");
       setValue("formData.fullName", "");
@@ -729,9 +605,7 @@ export const RawMatsInfoModal = ({
     setInfo(
       pickerItems
         .filter((item) => {
-          return item?.general_info?.full_id_number_full_name
-            .toLowerCase()
-            .includes(idNumber);
+          return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
         .splice(0, 50)
     );
@@ -773,6 +647,8 @@ export const RawMatsInfoModal = ({
   // console.log("Raw Mats :", rawMatsInfo);
   // console.log("Account title :", watch("formData"));
 
+  // console.log("Materials: ", materials);
+
   const closeHandler = () => {
     setRawMatsInfo({
       itemCode: "",
@@ -802,38 +678,9 @@ export const RawMatsInfoModal = ({
               <VStack alignItems="start" w="full" mx={5}>
                 {/* Item Code */}
                 <HStack w="full">
-                  <Text
-                    minW="25%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={7}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
                     Item Code:{" "}
                   </Text>
-                  {/* {materials.length > 0 ? (
-                    <Select
-                      fontSize="sm"
-                      onChange={(e) => itemCodeHandler(e.target.value)}
-                      w="full"
-                      placeholder="Select Item Code"
-                      border="1px"
-                      borderColor="gray.400"
-                      borderRadius="none"
-                      // bgColor="#fff8dc"
-                    >
-                      {materials?.map((item, i) => (
-                        <option key={i} value={JSON.stringify(item)}>
-                          {item.itemCode}
-                        </option>
-                      ))}
-                    </Select>
-                  ) : (
-                    <Spinner />
-                  )} */}
                   <Controller
                     control={control}
                     name="formData.materials"
@@ -845,6 +692,8 @@ export const RawMatsInfoModal = ({
                         size="sm"
                         placeholder="Select Item Code"
                         onChange={(e) => {
+                          console.log("E: ", e);
+
                           field.onChange(e);
                           itemCodeHandler(e);
                         }}
@@ -861,74 +710,27 @@ export const RawMatsInfoModal = ({
 
                 {/* Item Description */}
                 <HStack w="full">
-                  <Text
-                    minW="25%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={10}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                     Item Description:{" "}
                   </Text>
-                  <Text
-                    fontSize="sm"
-                    textAlign="left"
-                    bgColor="gray.200"
-                    w="full"
-                    border="1px"
-                    borderColor="gray.200"
-                    py={1.5}
-                    px={4}
-                  >
-                    {rawMatsInfo.itemDescription
-                      ? rawMatsInfo.itemDescription
-                      : "Item Code required"}
+                  <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
+                    {rawMatsInfo.itemDescription ? rawMatsInfo.itemDescription : "Item Code required"}
                   </Text>
                 </HStack>
 
                 {/* UOM */}
                 <HStack w="full">
-                  <Text
-                    minW="25%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={7}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
                     UOM:{" "}
                   </Text>
-                  <Text
-                    fontSize="sm"
-                    textAlign="left"
-                    bgColor="gray.200"
-                    w="full"
-                    border="1px"
-                    borderColor="gray.200"
-                    py={1.5}
-                    px={4}
-                  >
+                  <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
                     {rawMatsInfo.uom ? rawMatsInfo.uom : "Item Code required"}
                   </Text>
                 </HStack>
 
                 {/* Quantity */}
                 <HStack w="full">
-                  <Text
-                    minW="25%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={7}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
                     Quantity:{" "}
                   </Text>
                   <NumericFormat
@@ -945,9 +747,7 @@ export const RawMatsInfoModal = ({
                       })
                     }
                     onWheel={(e) => e.target.blur()}
-                    onKeyDown={(e) =>
-                      ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
+                    onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                     // onPaste={(e) => e.preventDefault()}
                     min="1"
                     placeholder="Enter Quantity"
@@ -956,46 +756,11 @@ export const RawMatsInfoModal = ({
                     borderRadius="none"
                     thousandSeparator=","
                   />
-                  {/* <Input
-                    onChange={(e) =>
-                      setRawMatsInfo({
-                        itemCode: rawMatsInfo.itemCode,
-                        itemDescription: rawMatsInfo.itemDescription,
-                        supplierName: rawMatsInfo.supplierName,
-                        uom: rawMatsInfo.uom,
-                        quantity: Number(e.target.value),
-                        unitPrice: rawMatsInfo.unitPrice,
-                      })
-                    }
-                    type="number"
-                    onWheel={(e) => e.target.blur()}
-                    onKeyDown={(e) =>
-                      ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
-                    min="1"
-                    onPaste={(e) => e.preventDefault()}
-                    w="full"
-                    placeholder="Enter Quantity"
-                    border="1px"
-                    borderColor="gray.400"
-                    borderRadius="none"
-                    // bgColor="#fff8dc"
-                    fontSize="sm"
-                  /> */}
                 </HStack>
 
                 {/* Unit Cost */}
                 <HStack w="full">
-                  <Text
-                    minW="25%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={7}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
                     Unit Cost:{" "}
                   </Text>
                   <InputGroup>
@@ -1013,10 +778,7 @@ export const RawMatsInfoModal = ({
                         })
                       }
                       onWheel={(e) => e.target.blur()}
-                      onKeyDown={(e) =>
-                        ["E", "e", "+", "-"].includes(e.key) &&
-                        e.preventDefault()
-                      }
+                      onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                       // onPaste={(e) => e.preventDefault()}
                       min="1"
                       w="full"
@@ -1026,48 +788,12 @@ export const RawMatsInfoModal = ({
                       borderRadius="none"
                       thousandSeparator=","
                     />
-                    {/* <Input
-                      onChange={(e) =>
-                        setRawMatsInfo({
-                          itemCode: rawMatsInfo.itemCode,
-                          itemDescription: rawMatsInfo.itemDescription,
-                          supplierName: rawMatsInfo.supplierName,
-                          uom: rawMatsInfo.uom,
-                          quantity: rawMatsInfo.quantity,
-                          unitPrice: Number(e.target.value),
-                        })
-                      }
-                      type="number"
-                      onWheel={(e) => e.target.blur()}
-                      onKeyDown={(e) =>
-                        ["E", "e", "+", "-"].includes(e.key) &&
-                        e.preventDefault()
-                      }
-                      min="1"
-                      onPaste={(e) => e.preventDefault()}
-                      w="full"
-                      // bgColor="#fff8dc"
-                      placeholder="Enter Unit Cost"
-                      border="1px"
-                      borderColor="gray.400"
-                      borderRadius="none"
-                      fontSize="sm"
-                    /> */}
                   </InputGroup>
                 </HStack>
 
                 {/* Account Title */}
                 <HStack w="full">
-                  <Text
-                    minW="25%"
-                    w="auto"
-                    bgColor="primary"
-                    color="white"
-                    pl={2}
-                    pr={7}
-                    py={2.5}
-                    fontSize="xs"
-                  >
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
                     Account Title:{" "}
                   </Text>
                   <Box w="full">
@@ -1106,16 +832,7 @@ export const RawMatsInfoModal = ({
                 {!!selectedAccount.match(/Advances to Employees/gi) && (
                   <>
                     <HStack w="full">
-                      <Text
-                        minW="25%"
-                        w="auto"
-                        bgColor="primary"
-                        color="white"
-                        pl={2}
-                        pr={7}
-                        py={2.5}
-                        fontSize="xs"
-                      >
+                      <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
                         Employee ID:{" "}
                       </Text>
                       <Box w="full">
@@ -1131,17 +848,13 @@ export const RawMatsInfoModal = ({
                               placeholder="Enter Employee ID"
                               onChange={(e) => {
                                 field.onChange(e);
-                                setValue(
-                                  "formData.fullName",
-                                  e.value.full_name
-                                );
+                                setValue("formData.fullName", e.value.full_name);
                               }}
                               options={pickerItems?.map((item) => {
                                 return {
                                   label: item.general_info?.full_id_number,
                                   value: {
-                                    full_id_number:
-                                      item.general_info?.full_id_number,
+                                    full_id_number: item.general_info?.full_id_number,
                                     full_name: item.general_info?.full_name,
                                   },
                                 };
@@ -1156,16 +869,7 @@ export const RawMatsInfoModal = ({
                     </HStack>
 
                     <HStack w="full">
-                      <Text
-                        minW="25%"
-                        w="auto"
-                        bgColor="primary"
-                        color="white"
-                        pl={2}
-                        pr={7}
-                        py={2.5}
-                        fontSize="xs"
-                      >
+                      <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
                         Full Name:{" "}
                       </Text>
                       <Box w="full">

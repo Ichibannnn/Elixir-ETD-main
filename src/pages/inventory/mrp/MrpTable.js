@@ -39,6 +39,7 @@ import { TiWarning } from "react-icons/ti";
 export const MrpTable = ({
   mrpData,
   fetchingData,
+  loadingExport,
   setSelectorId,
   selectorId,
   rawMatsInfo,
@@ -70,6 +71,7 @@ export const MrpTable = ({
   };
 
   const handlePageSizeChange = (e) => {
+    setCurrentPage(1);
     const pageSize = Number(e.target.value);
     setPageSize(pageSize);
   };
@@ -134,7 +136,17 @@ export const MrpTable = ({
           >
             Print
           </Button>
-          <Button onClick={handleExport} leftIcon={<BiExport fontSize="20px" />} disabled={!sheetData} ml={2} px={5} colorScheme="facebook" fontSize="xs" w="40%">
+          <Button
+            onClick={handleExport}
+            isLoading={loadingExport}
+            leftIcon={<BiExport fontSize="20px" />}
+            disabled={!sheetData}
+            ml={2}
+            px={5}
+            colorScheme="facebook"
+            fontSize="xs"
+            w="40%"
+          >
             Export
           </Button>
         </InputGroup>

@@ -15,6 +15,7 @@ const fetchMaterialsApi = async () => {
   const res = await request.get(`Material/GetAllActiveMaterials`);
   return res.data;
 };
+
 const fetchUOMsApi = async () => {
   const res = await request.get(`Uom/GetAllActiveUoms`);
   return res.data;
@@ -22,9 +23,7 @@ const fetchUOMsApi = async () => {
 
 //Receipts Viewing
 const fetchReceiptsApi = async (pageNumber, pageSize, search, status) => {
-  const res = await request.get(
-    `Miscellaneous/GetAllMiscellaneousReceiptPaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}&status=${status}`
-  );
+  const res = await request.get(`Miscellaneous/GetAllMiscellaneousReceiptPaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}&status=${status}`);
   return res.data;
 };
 
@@ -133,14 +132,7 @@ const MiscReceiptPage = () => {
   const [search, setSearch] = useState("");
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
