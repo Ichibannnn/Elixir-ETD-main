@@ -12,7 +12,7 @@ const fetchSuppliersApi = async () => {
   return res.data;
 };
 const fetchMaterialsApi = async () => {
-  const res = await request.get(`Material/GetAllActiveMaterials`);
+  const res = await request.get(`Miscellaneous/MiscReceiptItemList`);
   return res.data;
 };
 

@@ -620,14 +620,15 @@ export const RawMatsInfoModal = ({
       // const newData = JSON.parse(data);
       const itemCode = data.value.itemCode;
       const itemDescription = data.value.itemDescription;
-      const uom = data.value.uom;
+      const uom = data.value.uomCode;
+      const unitCost = data.value.unitCost;
       setRawMatsInfo({
         itemCode: itemCode,
         itemDescription: itemDescription,
         supplierName: rawMatsInfo.supplierName,
         uom: uom,
         quantity: rawMatsInfo.quantity,
-        unitPrice: rawMatsInfo.unitPrice,
+        unitPrice: unitCost,
       });
     } else {
       setRawMatsInfo({
@@ -636,10 +637,12 @@ export const RawMatsInfoModal = ({
         supplierName: rawMatsInfo.supplierName,
         uom: "",
         quantity: rawMatsInfo.quantity,
-        unitPrice: rawMatsInfo.unitPrice,
+        unitPrice: "",
       });
     }
   };
+
+  console.log("rawMatsInfo: ", rawMatsInfo);
 
   const newDate = new Date();
   const minDate = moment(newDate).format("yyyy-MM-DD");
@@ -728,6 +731,40 @@ export const RawMatsInfoModal = ({
                   </Text>
                 </HStack>
 
+                {/* Unit Cost */}
+                <HStack w="full">
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
+                    Unit Cost:{" "}
+                  </Text>
+                  <InputGroup>
+                    <NumericFormat
+                      customInput={Input}
+                      fontSize="sm"
+                      value={rawMatsInfo.unitPrice ? rawMatsInfo.unitPrice : ""}
+                      onValueChange={(e) =>
+                        setRawMatsInfo({
+                          itemCode: rawMatsInfo.itemCode,
+                          itemDescription: rawMatsInfo.itemDescription,
+                          supplierName: rawMatsInfo.supplierName,
+                          uom: rawMatsInfo.uom,
+                          quantity: rawMatsInfo.quantity,
+                          unitPrice: Number(e?.value),
+                        })
+                      }
+                      onWheel={(e) => e.target.blur()}
+                      onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
+                      // onPaste={(e) => e.preventDefault()}
+                      min="1"
+                      w="full"
+                      placeholder="Enter Unit Cost"
+                      border="1px"
+                      borderColor="gray.400"
+                      borderRadius="none"
+                      thousandSeparator=","
+                    />
+                  </InputGroup>
+                </HStack>
+
                 {/* Quantity */}
                 <HStack w="full">
                   <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
@@ -756,39 +793,6 @@ export const RawMatsInfoModal = ({
                     borderRadius="none"
                     thousandSeparator=","
                   />
-                </HStack>
-
-                {/* Unit Cost */}
-                <HStack w="full">
-                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
-                    Unit Cost:{" "}
-                  </Text>
-                  <InputGroup>
-                    <NumericFormat
-                      customInput={Input}
-                      fontSize="sm"
-                      onValueChange={(e) =>
-                        setRawMatsInfo({
-                          itemCode: rawMatsInfo.itemCode,
-                          itemDescription: rawMatsInfo.itemDescription,
-                          supplierName: rawMatsInfo.supplierName,
-                          uom: rawMatsInfo.uom,
-                          quantity: rawMatsInfo.quantity,
-                          unitPrice: Number(e?.value),
-                        })
-                      }
-                      onWheel={(e) => e.target.blur()}
-                      onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
-                      // onPaste={(e) => e.preventDefault()}
-                      min="1"
-                      w="full"
-                      placeholder="Enter Unit Cost"
-                      border="1px"
-                      borderColor="gray.400"
-                      borderRadius="none"
-                      thousandSeparator=","
-                    />
-                  </InputGroup>
                 </HStack>
 
                 {/* Account Title */}
