@@ -15,6 +15,7 @@ import { FiSearch } from "react-icons/fi";
 import { BiExport } from "react-icons/bi";
 import { ConsolidatedReportsFinance } from "./report_dropdown/ConsolidatedReportsFinance";
 import request from "../../services/ApiClient";
+import { ServedUnservedReports } from "./report_dropdown/ServedUnservedReports";
 
 const Reports = () => {
   const [dateFrom, setDateFrom] = useState(moment(new Date()).format("yyyy-MM-DD"));
@@ -38,7 +39,7 @@ const Reports = () => {
 
   const handleExport = async () => {
     setIsLoading(true);
-    if (sample === 9) {
+    if (sample === 10) {
       try {
         const response = await request.get("Reports/ExportConsolidateFinance", {
           params: {
@@ -62,6 +63,28 @@ const Reports = () => {
       } catch (error) {
         console.log("Error", error);
       }
+    } else if (sample === 4) {
+      try {
+        const response = await request.get("Reports/ExportMoveOrderReports", {
+          params: {
+            DateFrom: dateFrom,
+            DateTo: dateTo,
+            Search: search,
+          },
+          responseType: "blob",
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]), { type: response.headers["content-type"] });
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "Served_Unserved_Report.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Error", error);
+      }
     } else {
       var workbook = XLSX.utils.book_new(),
         worksheet = XLSX.utils.json_to_sheet(sheetData);
@@ -70,8 +93,6 @@ const Reports = () => {
 
       XLSX.writeFile(workbook, "Elixir_ETD_Reports_ExportFile.xlsx");
     }
-
-    // console.log(worksheet);
   };
 
   // SEARCH
@@ -101,20 +122,21 @@ const Reports = () => {
                   <option value={1}>Warehouse Receiving History</option>
                   <option value={2}>Move Order For Transaction History</option>
                   <option value={3}>Move Order Transacted History</option>
-                  <option value={4}>Miscellaneous Receipt History</option>
-                  <option value={5}>Miscellaneous Issue History</option>
-                  <option value={6}>Borrowed Materials History</option>
-                  <option value={7}>Returned Materials History</option>
-                  <option value={8}>Unserved Orders History</option>
-                  <option value={9}>Consolidated Report (Finance)</option>
-                  <option value={10}>Inventory Movement</option>
+                  <option value={4}>Served and Unserved Order History</option>
+                  <option value={5}>Miscellaneous Receipt History</option>
+                  <option value={6}>Miscellaneous Issue History</option>
+                  <option value={7}>Borrowed Materials History</option>
+                  <option value={8}>Returned Materials History</option>
+                  <option value={9}>Unserved Orders History</option>
+                  <option value={10}>Consolidated Report (Finance)</option>
+                  <option value={11}>Inventory Movement</option>
                 </Select>
               </HStack>
             </Flex>
             <Flex justifyContent="center" alignItems="end">
               <Button
                 onClick={handleExport}
-                isLoading={sample === 9 ? isLoading : ""}
+                isLoading={sample === 4 || sample === 10 ? isLoading : ""}
                 isDisabled={sheetData?.length === 0 || !sample}
                 size="sm"
                 leftIcon={<BiExport fontSize="20px" />}
@@ -140,9 +162,9 @@ const Reports = () => {
 
               {/* Viewing Condition  */}
               <Flex justifyContent="start">
-                {sample < 11 ? (
+                {sample < 12 ? (
                   <Flex justifyContent="start" flexDirection="row">
-                    {sample != 10 && (
+                    {sample != 11 && (
                       <Flex flexDirection="column" ml={1}>
                         <Flex>
                           <Badge>Date from:</Badge>
@@ -153,14 +175,14 @@ const Reports = () => {
                           type="date"
                           value={dateFrom}
                           onChange={(e) => setDateFrom(e.target.value)}
-                          min={sample === 10 ? minimumDateForInventoryMovement : undefined}
+                          min={sample === 11 ? minimumDateForInventoryMovement : undefined}
                         />
                       </Flex>
                     )}
 
                     <Flex flexDirection="column" ml={1}>
                       <Flex>
-                        <Badge>{sample === 10 ? `Rollback Date:` : `Date To:`}</Badge>
+                        <Badge>{sample === 11 ? `Rollback Date:` : `Date To:`}</Badge>
                       </Flex>
                       <Input fontSize="xs" bgColor="#fff8dc" type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
                     </Flex>
@@ -178,18 +200,20 @@ const Reports = () => {
             ) : sample === 3 ? (
               <TransactedMOHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 4 ? (
-              <MiscReceiptHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <ServedUnservedReports search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} isLoading={isLoading} />
             ) : sample === 5 ? (
-              <MiscIssueHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <MiscReceiptHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 6 ? (
-              <BorrowedMatsHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <MiscIssueHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 7 ? (
-              <ReturnedQuantityTransaction search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <BorrowedMatsHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 8 ? (
-              <CancelledOrders search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <ReturnedQuantityTransaction search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 9 ? (
-              <ConsolidatedReportsFinance search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} isLoading={isLoading} />
+              <CancelledOrders search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : sample === 10 ? (
+              <ConsolidatedReportsFinance search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} isLoading={isLoading} />
+            ) : sample === 11 ? (
               <InventoryMovement search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
             ) : (
               ""
