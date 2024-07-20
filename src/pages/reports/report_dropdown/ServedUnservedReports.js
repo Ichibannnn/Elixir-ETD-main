@@ -17,7 +17,7 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
   const fetchServedUnservedReportApi = async (dateFrom, dateTo, search) => {
     const dayaDate = new Date();
     const dateToDaya = dayaDate.setDate(dayaDate.getDate() + 1);
-    const res = await request.get(`Reports/MoveOrderReport?PageNumber=1&PageSize=1000000&DateFrom=${dateFrom}&DateTo=${dateTo}`, {
+    const res = await request.get(`Reports/MoveOrderReport?DateFrom=${dateFrom}&DateTo=${dateTo}`, {
       params: {
         search: search,
       },
@@ -27,23 +27,22 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
 
   const fetchServedUnservedReport = () => {
     fetchServedUnservedReportApi(dateFrom, dateTo, search).then((res) => {
-      // console.log("Res", res);
-
+      console.log("Res", res);
       setServedUnservedData(res);
       setSheetData(res);
       // setSheetData(res?.inventory?.map((item) => {}));
 
-      setDisplayedData(res?.inventory?.slice(0, itemsPerPage));
-      setHasMore(res?.inventory?.length > itemsPerPage);
+      setDisplayedData(res.slice(0, itemsPerPage));
+      setHasMore(res?.length > itemsPerPage);
     });
   };
 
   const fetchMoreData = () => {
-    if (displayedData?.length >= servedUnservedData?.inventory?.length) {
+    if (displayedData?.length >= servedUnservedData?.length) {
       setHasMore(false);
       return;
     }
-    setDisplayedData(displayedData.concat(servedUnservedData?.inventory?.slice(displayedData.length, displayedData.length + itemsPerPage)));
+    setDisplayedData(displayedData.concat(servedUnservedData?.slice(displayedData.length, displayedData.length + itemsPerPage)));
   };
 
   useEffect(() => {
@@ -55,11 +54,13 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
     };
   }, [dateFrom, dateTo, search]);
 
+  console.log("Display Data: ", displayedData);
+
   return (
     <Flex w="full" flexDirection="column">
       <Flex>
         <PageScroll minHeight="720px" maxHeight="740px">
-          <InfiniteScroll dataLength={displayedData.length} next={fetchMoreData} hasMore={hasMore} loader={<h4>Loading...</h4>} height={740} scrollThreshold={0.9}>
+          <InfiniteScroll dataLength={displayedData?.length} next={fetchMoreData} hasMore={hasMore} loader={<h4>Loading...</h4>} height={740} scrollThreshold={0.9}>
             <Table size="sm" variant="striped">
               <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
                 <Tr>
@@ -263,7 +264,7 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
 
       <Flex justifyContent="space-between" mt={2}>
         <Text fontSize="xs" fontWeight="semibold">
-          Total Records: {servedUnservedData?.inventory?.length}
+          Total Records: {servedUnservedData?.length}
         </Text>
         <Button size="md" colorScheme="blue" onClick={() => setButtonChanger(!buttonChanger)}>
           {buttonChanger ? `>>>>` : `<<<<`}
