@@ -197,6 +197,8 @@ export const MaterialsInformation = ({
     }
   }, [supplierData]);
 
+  // console.log("Materials: ", materials);
+
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
       <Box bgColor="primary" w="full" pl={2} h="20px" alignItems="center">

@@ -3,12 +3,6 @@ import {
   Badge,
   Box,
   Button,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
   Flex,
   HStack,
   Input,
@@ -17,8 +11,6 @@ import {
   Select,
   Stack,
   Table,
-  Tag,
-  TagLeftIcon,
   Tbody,
   Td,
   Text,
@@ -29,19 +21,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Pagination, PaginationContainer, PaginationNext, PaginationPage, PaginationPageGroup, PaginationPrevious } from "@ajna/pagination";
-import PageScrollImport from "../../components/PageScrollImport";
-import { VscCircleLargeFilled } from "react-icons/vsc";
-import { BiRightArrow } from "react-icons/bi";
-import { FaArrowAltCircleRight, FaShippingFast, FaSort } from "react-icons/fa";
+import { FaSort } from "react-icons/fa";
 import moment from "moment";
-import { CancelApprovedDate, CancelConfirmation } from "./ActionModal";
+import { CancelApprovedDate } from "./ActionModal";
 import PageScroll from "../../utils/PageScroll";
 import { GoArrowSmallRight } from "react-icons/go";
 import { FiSearch } from "react-icons/fi";
-import { Search2Icon } from "@chakra-ui/icons";
 
 export const ListofApprovedDate = ({
-  setCustomerName,
   moveData,
   pagesCount,
   currentPage,
@@ -54,7 +41,6 @@ export const ListofApprovedDate = ({
   setOrderId,
   orderId,
   preparedLength,
-  orderListData,
   status,
   setStatus,
   search,
@@ -133,7 +119,6 @@ export const ListofApprovedDate = ({
     setSearch(inputValue);
     setOrderId("");
     setHighlighterId("");
-    // console.log(inputValue);
   };
 
   const handleStatusChange = (newStatus) => {

@@ -54,7 +54,7 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
     };
   }, [dateFrom, dateTo, search]);
 
-  console.log("Display Data: ", displayedData);
+  // console.log("Display Data: ", displayedData);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -79,13 +79,7 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
                   {buttonChanger ? (
                     <>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
-                        SOH
-                      </Th>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         ORDERED QTY
-                      </Th>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
-                        PREPARED
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         SERVED
@@ -95,6 +89,9 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         UNSERVED REMARKS
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        PERCENTAGE
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         APPROVED DATE
@@ -202,19 +199,7 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
                     {buttonChanger ? (
                       <>
                         <Td fontSize="xs">
-                          {item.soh.toLocaleString(undefined, {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          })}
-                        </Td>
-                        <Td fontSize="xs">
                           {item.orderedQuantity.toLocaleString(undefined, {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          })}
-                        </Td>
-                        <Td fontSize="xs">
-                          {item.preparedItem.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
@@ -232,6 +217,7 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
                           })}
                         </Td>
                         <Td fontSize="xs">{item.remarks ? item.remarks : "-"}</Td>
+                        <Td fontSize="xs">TO BE UPDATED BY BORRIS</Td>
                         <Td fontSize="xs">{item.approvedDate ? moment(item.approvedDate).format("MM/DD/YYYY") : "-"}</Td>
                         <Td fontSize="xs">{item.deliveryDate ? moment(item.deliveryDate).format("MM/DD/YYYY") : "-"}</Td>
                         <Td fontSize="xs">{item.status}</Td>

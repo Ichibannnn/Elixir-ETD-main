@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Flex,
-  useDisclosure,
-  useToast,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, Flex, useDisclosure, useToast, VStack } from "@chakra-ui/react";
 import { ListofApprovedDate, ListOfApprovedDate } from "./ListOfApprovedDate";
 import { usePagination } from "@ajna/pagination";
 import { ToastComponent } from "../../components/Toast";
@@ -14,16 +8,6 @@ import { ListOfOrders } from "./ListOfOrders";
 import { ActualItemQuantity } from "./ActualItemQuantity";
 import { SaveButton } from "./ActionModal";
 import { PreparedItem } from "./PreparedItem";
-
-//Pagination
-// const fetchMoveOrderApi = async () => {
-//   const res = await request.get(
-//     `Ordering/GetAllListForMoveOrderPaginationOrig?pageSize=1&pageNumber=50000`
-//   );
-//   return res.data;
-// };
-
-//List of Approved Move Orders
 
 const MoveOrder = ({ notification, fetchNotification }) => {
   const [batchNumber, setBatchNumber] = useState("");
@@ -52,28 +36,18 @@ const MoveOrder = ({ notification, fetchNotification }) => {
 
   // console.log(notification);
 
-  const fetchApprovedMoveOrdersApi = async (
-    pageNumber,
-    pageSize,
-    status,
-    search
-  ) => {
-    const res = await request.get(
-      `Ordering/GetAllListOfApprovedPreparedforMoveOrder?PageNumber=${pageNumber}&PageSize=${pageSize}&status=${status}`,
-      {
-        params: {
-          search: search,
-        },
-      }
-    );
+  const fetchApprovedMoveOrdersApi = async (pageNumber, pageSize, status, search) => {
+    const res = await request.get(`Ordering/GetAllListOfApprovedPreparedforMoveOrder?PageNumber=${pageNumber}&PageSize=${pageSize}&status=${status}`, {
+      params: {
+        search: search,
+      },
+    });
     return res.data;
   };
 
   //List of Orders
   const fetchOrderListApi = async (orderId) => {
-    const res = await request.get(
-      `Ordering/GetAllListOfOrdersForMoveOrder?id=${orderId}`
-    );
+    const res = await request.get(`Ordering/GetAllListOfOrdersForMoveOrder?id=${orderId}`);
     return res.data;
   };
 
@@ -89,23 +63,14 @@ const MoveOrder = ({ notification, fetchNotification }) => {
 
   //Prepared Items
   const fetchPreparedItemsApi = async (orderId) => {
-    const res = await request.get(
-      `Ordering/ListOfPreparedItemsForMoveOrder?id=${orderId}`
-    );
+    const res = await request.get(`Ordering/ListOfPreparedItemsForMoveOrder?id=${orderId}`);
     return res.data;
   };
 
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -116,15 +81,13 @@ const MoveOrder = ({ notification, fetchNotification }) => {
 
   //Approved Move Orders
   const fetchApprovedMoveOrders = () => {
-    fetchApprovedMoveOrdersApi(currentPage, pageSize, status, search).then(
-      (res) => {
-        setMoveData(res);
-        setLengthIndicator(res.length);
-        // setOrderId(res[0]?.id);
-        setPageTotal(res.totalCount);
-        // console.log(res);
-      }
-    );
+    fetchApprovedMoveOrdersApi(currentPage, pageSize, status, search).then((res) => {
+      setMoveData(res);
+      setLengthIndicator(res.length);
+      // setOrderId(res[0]?.id);
+      setPageTotal(res.totalCount);
+      // console.log(res);
+    });
   };
 
   useEffect(() => {
@@ -195,9 +158,7 @@ const MoveOrder = ({ notification, fetchNotification }) => {
   //UseEffect for button change Add-Save
   useEffect(() => {
     if (orderListData.length > 0) {
-      const variable = orderListData.every(
-        (item) => item.preparedQuantity === item.quantityOrder
-      );
+      const variable = orderListData.every((item) => item.preparedQuantity === item.quantityOrder);
       setButtonChanger(variable);
     }
   }, [orderListData]);
@@ -231,7 +192,6 @@ const MoveOrder = ({ notification, fetchNotification }) => {
           fetchApprovedMoveOrders={fetchApprovedMoveOrders}
           lengthIndicator={lengthIndicator}
           preparedLength={preparedData?.length}
-          orderListData={orderListData}
           search={search}
           setSearch={setSearch}
           notification={notification}
@@ -245,7 +205,6 @@ const MoveOrder = ({ notification, fetchNotification }) => {
             setHighlighterId={setHighlighterId}
             setQtyOrdered={setQtyOrdered}
             setPreparedQty={setPreparedQty}
-            setWarehouseId={setWarehouseId}
             status={status}
           />
         ) : (
@@ -289,12 +248,7 @@ const MoveOrder = ({ notification, fetchNotification }) => {
           )
         )}
         {preparedData.length > 0 && (
-          <PreparedItem
-            preparedData={preparedData}
-            fetchPreparedItems={fetchPreparedItems}
-            fetchOrderList={fetchOrderList}
-            fetchNotification={fetchNotification}
-          />
+          <PreparedItem preparedData={preparedData} fetchPreparedItems={fetchPreparedItems} fetchOrderList={fetchOrderList} fetchNotification={fetchNotification} />
         )}
       </VStack>
     </>

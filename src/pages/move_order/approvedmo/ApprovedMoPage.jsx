@@ -2,19 +2,14 @@ import { usePagination } from "@ajna/pagination";
 import React, { useEffect, useState } from "react";
 import request from "../../../services/ApiClient";
 import { ApproveMoveOrder } from "./ApproveMoveOrder";
-// import { ApprovedMoveOrder } from './approvedmo/Approved-Move-Order'
 
 const fetchApprovedMOApi = async (pageNumber, pageSize, search, status) => {
-  const res = await request.get(
-    `Ordering/ApprovedMoveOrderPaginationOrig?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&status=${status}`
-  );
+  const res = await request.get(`Ordering/ApprovedMoveOrderPaginationOrig?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&status=${status}`);
   return res.data;
 };
 
 const fetchViewApi = async (orderId) => {
-  const res = await request.get(
-    `Ordering/ViewMoveOrderForApproval?id=${orderId}`
-  );
+  const res = await request.get(`Ordering/ViewMoveOrderForApproval?id=${orderId}`);
   return res.data;
 };
 
@@ -28,14 +23,7 @@ function ApprovedMoPage() {
 
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,

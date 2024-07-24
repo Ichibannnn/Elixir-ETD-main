@@ -1,38 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  Badge,
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Select,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tooltip,
-  Tr,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Button, Flex, HStack, Input, Menu, MenuButton, MenuItem, MenuList, Select, Table, Tbody, Td, Text, Th, Thead, Tooltip, Tr, useDisclosure } from "@chakra-ui/react";
 import PageScroll from "../../../utils/PageScroll";
-// import { PrintModal, RejectModal, TrackModal } from './Action-Modals'
-import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+import { Pagination, PaginationNext, PaginationPrevious, PaginationContainer } from "@ajna/pagination";
 import moment from "moment";
-import { ImLocation } from "react-icons/im";
 import { PrintModal, RejectModal, TrackModal } from "./ActionModal";
-import { GrLocation, GrTransaction } from "react-icons/gr";
+import { GrLocation } from "react-icons/gr";
 import { AiOutlineMore, AiOutlinePrinter } from "react-icons/ai";
 import { GiCancel } from "react-icons/gi";
 import { FcOk } from "react-icons/fc";
 import { RiCloseCircleFill } from "react-icons/ri";
-import { MdOutlinePendingActions, MdPending } from "react-icons/md";
 import { FaClock } from "react-icons/fa";
 
 export const ApproveMoveOrder = ({
@@ -50,22 +26,7 @@ export const ApproveMoveOrder = ({
   status,
   setStatus,
 }) => {
-  const TableHead = [
-    "Line",
-    "MIR ID",
-    "Customer Code",
-    "Customer Name",
-    // "Status",
-    // "Category",
-    "Total Ordered Qty",
-    "Prepared Date",
-    "Transaction Status",
-    "Print Status",
-    // "Rush",
-    "Action",
-    // "Print",
-    // "Reject",
-  ];
+  const TableHead = ["Line", "MIR ID", "Customer Code", "Customer Name", "Total Ordered Qty", "Prepared Date", "Transaction Status", "Print Status", "Action"];
 
   const [trackData, setTrackData] = useState([
     {
@@ -79,8 +40,6 @@ export const ApproveMoveOrder = ({
       isTransact: "",
     },
   ]);
-
-  const [totalQuantity, setTotalQuantity] = useState("");
 
   const { isOpen: isTrack, onClose: closeTrack, onOpen: openTrack } = useDisclosure();
   const { isOpen: isReject, onClose: closeReject, onOpen: openReject } = useDisclosure();
@@ -140,14 +99,12 @@ export const ApproveMoveOrder = ({
     }
   };
 
-  const printHandler = (id, quantity) => {
+  const printHandler = (id) => {
     if (id) {
       setOrderId(id);
-      setTotalQuantity(quantity);
       openPrint();
     } else {
       setOrderId("");
-      setTotalQuantity("");
     }
   };
 
@@ -187,11 +144,6 @@ export const ApproveMoveOrder = ({
             onClick={() => handleStatusChange(false)}
           >
             Regular Orders
-            {/* {regularOrdersCount > 0 && (
-            // <Badge ml={2} colorScheme="red" variant="solid" borderRadius="40%">
-            //   {regularOrdersCount}
-            // </Badge>
-          )} */}
           </Button>
           <Button
             size="xs"
@@ -202,21 +154,10 @@ export const ApproveMoveOrder = ({
             onClick={() => handleStatusChange(true)}
           >
             Rush Orders
-            {/* {rushOrdersCount > 0 && (
-            <Badge ml={2} colorScheme="red" variant="solid" borderRadius="40%">
-              {rushOrdersCount}
-            </Badge>
-          )} */}
           </Button>
         </Flex>
         <PageScroll minHeight="400px" maxHeight="700px">
-          <Text
-            textAlign="center"
-            bgColor="primary"
-            color="white"
-            fontSize="14px"
-            // fontWeight="semibold"
-          >
+          <Text textAlign="center" bgColor="primary" color="white" fontSize="14px">
             List of Move Orders
           </Text>
           <Table size="sm" variant="striped">
@@ -244,7 +185,6 @@ export const ApproveMoveOrder = ({
                   <Td fontSize="xs">
                     <Flex justifyContent="center">{order.customerName}</Flex>
                   </Td>
-                  {/* <Td fontSize="13px">{order.category}</Td> */}
                   <Td fontSize="xs">
                     <Flex justifyContent="center">
                       {" "}
@@ -293,71 +233,32 @@ export const ApproveMoveOrder = ({
                     </Td>
                   )}
                   <Td>
-                    <Flex pl={2}>
-                      <Box>
-                        <Menu>
-                          <MenuButton alignItems="center" justifyContent="center" bg="none">
-                            <AiOutlineMore fontSize="20px" />
-                          </MenuButton>
-                          <MenuList>
-                            <MenuItem icon={<GrLocation fontSize="17px" />} onClick={() => trackHandler(order)}>
-                              <Text fontSize="15px">Track</Text>
-                            </MenuItem>
-                            <MenuItem icon={<AiOutlinePrinter fontSize="17px" />} onClick={() => printHandler(order.mirId, order.quantity)}>
-                              <Text fontSize="15px">Print</Text>
-                            </MenuItem>
-                            <MenuItem
-                              icon={<GiCancel color="red" fontSize="17px" />}
-                              onClick={() => rejectHandler(order.mirId)}
-                              isDisabled={order.isTransact}
-                              title={order.isTransact ? "Order was already transacted" : "Order not yet transacted"}
-                            >
-                              <Text fontSize="15px" color="red" _hover={{ color: "red" }}>
-                                Reject
-                              </Text>
-                            </MenuItem>
-                          </MenuList>
-                        </Menu>
-                      </Box>
+                    <Flex justifyContent="center">
+                      <Menu>
+                        <MenuButton alignItems="center" justifyContent="center" bg="none">
+                          <AiOutlineMore fontSize="20px" />
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem icon={<GrLocation fontSize="17px" />} onClick={() => trackHandler(order)}>
+                            <Text fontSize="15px">Track</Text>
+                          </MenuItem>
+                          <MenuItem icon={<AiOutlinePrinter fontSize="17px" />} onClick={() => printHandler(order.mirId, order.quantity)}>
+                            <Text fontSize="15px">Print</Text>
+                          </MenuItem>
+                          <MenuItem
+                            icon={<GiCancel color="red" fontSize="17px" />}
+                            onClick={() => rejectHandler(order.mirId)}
+                            isDisabled={order.isTransact}
+                            title={order.isTransact ? "Order was already transacted" : "Order not yet transacted"}
+                          >
+                            <Text fontSize="15px" color="red" _hover={{ color: "red" }}>
+                              Reject
+                            </Text>
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
                     </Flex>
-                    {/* <Button
-                      size="xs"
-                      p={0}
-                      bg="none"
-                      onClick={() => trackHandler(order)}
-                    >
-                      <ImLocation color="#314E89" fontSize="19px" />
-                    </Button> */}
                   </Td>
-                  {/* <Td>
-                    <Button
-                      fontSize="13px"
-                      borderRadius="none"
-                      size="xs"
-                      colorScheme="blue"
-                      color="white"
-                      onClick={() => printHandler(order.mirId, order.quantity)}
-                    >
-                      Print
-                    </Button>
-                  </Td>
-                  <Td>
-                    <Button
-                      onClick={() => rejectHandler(order.mirId)}
-                      disabled={order.isTransact}
-                      title={
-                        order.isTransact
-                          ? "Order was already transacted"
-                          : "Order not yet transacted"
-                      }
-                      borderRadius="none"
-                      size="xs"
-                      fontSize="13px"
-                      colorScheme="red"
-                    >
-                      Reject
-                    </Button>
-                  </Td> */}
                 </Tr>
               ))}
             </Tbody>
@@ -386,18 +287,8 @@ export const ApproveMoveOrder = ({
       </Flex>
 
       {isTrack && <TrackModal isOpen={isTrack} onClose={closeTrack} trackData={trackData} trackList={printData} />}
-
-      {isPrint && <PrintModal isOpen={isPrint} onClose={closePrint} printData={printData} fetchApprovedMO={fetchApprovedMO} orderId={orderId} totalQuantity={totalQuantity} />}
-
-      {isReject && (
-        <RejectModal
-          isOpen={isReject}
-          onClose={closeReject}
-          id={orderId}
-          fetchApprovedMO={fetchApprovedMO}
-          // fetchNotification={fetchNotification}
-        />
-      )}
+      {isPrint && <PrintModal isOpen={isPrint} onClose={closePrint} printData={printData} fetchApprovedMO={fetchApprovedMO} orderId={orderId} />}
+      {isReject && <RejectModal isOpen={isReject} onClose={closeReject} id={orderId} fetchApprovedMO={fetchApprovedMO} />}
     </Flex>
   );
 };

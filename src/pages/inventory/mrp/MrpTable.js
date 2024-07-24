@@ -203,6 +203,7 @@ export const MrpTable = ({
                     <Th color="white">Total Cost</Th>
                     <Th color="white">SOH</Th>
                     <Th color="white">Reserve</Th>
+                    <Th color="white">Prepared</Th>
                     <Th color="white">Buffer Level</Th>
                   </>
                 ) : (
@@ -214,8 +215,6 @@ export const MrpTable = ({
                     <Th color="white">{`Borrowed`}</Th>
                     <Th color="white">{`Returned`}</Th>
                     <Th color="white">{`Consumed`}</Th>
-                    {/* <Th color="white">{`Borrowed Qty`}</Th>
-                  <Th color="white">{`Returned Qty`}</Th> */}
                     <Th color="white">Average Issuance</Th>
                     <Th color="white">Days Level</Th>
                   </>
@@ -227,7 +226,7 @@ export const MrpTable = ({
                 <Tr
                   key={i}
                   onClick={() => selectorHandler(i + 1, item)}
-                  bgColor={selectorId === i + 1 ? "blue.200" : "none" && item.bufferLevel > item.reserve ? "gray.300" : "none"}
+                  bgColor={selectorId === i + 1 ? "blue.200" : "none" && item.bufferLevel >= item.reserve ? "gray.300" : "none"}
                   cursor="pointer"
                 >
                   {selectorId === i + 1 ? (
@@ -237,7 +236,7 @@ export const MrpTable = ({
                   ) : (
                     <Td p={0}></Td>
                   )}
-                  <Td fontSize="xs">{item.bufferLevel > item.reserve ? <TiWarning fontSize="18px" color="red" /> : ""}</Td>
+                  <Td fontSize="xs">{item.bufferLevel >= item.reserve ? <TiWarning fontSize="18px" color="red" /> : ""}</Td>
                   <Td fontSize="xs">{i + 1}</Td>
                   <Td fontSize="xs">{item.itemCode}</Td>
                   <Td fontSize="xs">{item.itemDescription}</Td>
@@ -269,6 +268,7 @@ export const MrpTable = ({
                           minimumFractionDigits: 2,
                         })}
                       </Td>
+                      <Td fontSize="xs">TO BE UPDATED</Td>
                       <Td fontSize="xs">
                         {item.bufferLevel?.toLocaleString(undefined, {
                           maximumFractionDigits: 2,
@@ -414,7 +414,6 @@ const PrintModal = ({ isOpen, onClose, mrpData }) => {
                     <Th color="white">Item Description</Th>
                     <Th color="white">Item Category</Th>
                     <Th color="white">UOM</Th>
-
                     <Th color="white">SOH</Th>
                     <Th color="white">Reserve</Th>
                     <Th color="white">Buffer Level</Th>

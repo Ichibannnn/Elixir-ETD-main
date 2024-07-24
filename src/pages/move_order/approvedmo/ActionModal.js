@@ -38,7 +38,7 @@ import { ToastComponent } from "../../../components/Toast";
 const currentUser = decodeUser();
 
 // PRINT MODAL --------------------------------------
-export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchApprovedMO, orderId, totalQuantity }) => {
+export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchApprovedMO, orderId }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const componentRef = useRef();
@@ -72,12 +72,6 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
     }
   };
 
-  // console.log(printData);
-
-  // const [checkedItems, setCheckedItems] = useState(false);
-
-  // console.log(checkedItems, "checked");
-
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
   const handleCheckboxes = (newSelected) => {
@@ -85,7 +79,8 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
     setSelectedCheckboxes(newSelected);
   };
 
-  console.log(selectedCheckboxes);
+  console.log("Print Data: ", printData);
+
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="6xl">
       <ModalOverlay />
@@ -127,7 +122,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
               </Flex>
               <Flex flexDirection="column">
                 <Barcode width={3} height={40} value={Number(orderId)} />
-                <Text fontSize="xs">Date: {moment(dateToday).format("MM/DD/yyyy")}</Text>
+                <Text fontSize="xs">Date: {moment(printData[0]?.approvedDate).format("MM/DD/yyyy")}</Text>
               </Flex>
             </Flex>
 

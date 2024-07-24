@@ -83,6 +83,7 @@ const MiscReceiptPage = () => {
   //Raw Mats Fetching
   const fetchMaterials = () => {
     fetchMaterialsApi().then((res) => {
+      console.log("Response: ", res);
       setMaterials(res);
     });
   };
