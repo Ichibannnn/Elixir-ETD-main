@@ -268,7 +268,12 @@ export const MrpTable = ({
                           minimumFractionDigits: 2,
                         })}
                       </Td>
-                      <Td fontSize="xs">TO BE UPDATED</Td>
+                      <Td fontSize="xs">
+                        {item.preparedQuantity?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
                       <Td fontSize="xs">
                         {item.bufferLevel?.toLocaleString(undefined, {
                           maximumFractionDigits: 2,

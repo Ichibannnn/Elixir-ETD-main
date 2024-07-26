@@ -624,6 +624,7 @@ export const RawMatsInfoModal = ({
       const itemDescription = data.value.itemDescription;
       const uom = data.value.uomCode;
       const unitCost = data.value.unitCost;
+
       setRawMatsInfo({
         itemCode: itemCode,
         itemDescription: itemDescription,
@@ -644,7 +645,7 @@ export const RawMatsInfoModal = ({
     }
   };
 
-  console.log("rawMatsInfo: ", rawMatsInfo);
+  // console.log("rawMatsInfo: ", rawMatsInfo);
 
   const newDate = new Date();
   const minDate = moment(newDate).format("yyyy-MM-DD");
@@ -756,7 +757,7 @@ export const RawMatsInfoModal = ({
                       onWheel={(e) => e.target.blur()}
                       onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                       // onPaste={(e) => e.preventDefault()}
-                      min="1"
+                      min="0"
                       w="full"
                       placeholder="Enter Unit Cost"
                       border="1px"

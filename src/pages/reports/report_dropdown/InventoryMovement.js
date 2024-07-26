@@ -128,10 +128,10 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
                     Move Order (OUT)
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
-                    Receipt (IN)
+                    Miscellaneous Receipt (IN)
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
-                    Issue (OUT)
+                    Miscellaneous Issue (OUT)
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
                     Borrowed (OUT)

@@ -88,7 +88,7 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
                         UNSERVED
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
-                        UNSERVED REMARKS
+                        REASON
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         PERCENTAGE
@@ -217,7 +217,7 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
                           })}
                         </Td>
                         <Td fontSize="xs">{item.remarks ? item.remarks : "-"}</Td>
-                        <Td fontSize="xs">TO BE UPDATED BY BORRIS</Td>
+                        <Td fontSize="xs">{`${item.servedPercentage}%`}</Td>
                         <Td fontSize="xs">{item.approvedDate ? moment(item.approvedDate).format("MM/DD/YYYY") : "-"}</Td>
                         <Td fontSize="xs">{item.deliveryDate ? moment(item.deliveryDate).format("MM/DD/YYYY") : "-"}</Td>
                         <Td fontSize="xs">{item.status}</Td>

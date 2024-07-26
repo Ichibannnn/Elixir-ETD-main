@@ -49,8 +49,6 @@ export const ActualItemQuantity = ({
   fetchPreparedItems,
   qtyOrdered,
   preparedQty,
-  nearlyExpireBarcode,
-  setItemCode,
   fetchBarcodeDetails,
 }) => {
   const [availableBarcode, setAvailableBarcode] = useState([]);
@@ -260,7 +258,6 @@ export const ActualItemQuantity = ({
           quantityOrdered={quantity}
           fetchOrderList={fetchOrderList}
           fetchPreparedItems={fetchPreparedItems}
-          // expirationDate={expirationDate}
           setQuantity={setQuantity}
           setHighlighterId={setHighlighterId}
           setWarehouseId={setWarehouseId}
@@ -271,28 +268,12 @@ export const ActualItemQuantity = ({
         />
       }
 
-      {isBarcode && (
-        <AvailableBarcodeModal
-          isOpen={isBarcode}
-          onClose={closeBarcode}
-          availableBarcode={availableBarcode}
-          setWarehouseId={setWarehouseId}
-          itemCode={itemCode}
-          // setValidation={setValidation}
-        />
-      )}
+      {isBarcode && <AvailableBarcodeModal isOpen={isBarcode} onClose={closeBarcode} availableBarcode={availableBarcode} setWarehouseId={setWarehouseId} itemCode={itemCode} />}
     </Flex>
   );
 };
 
-const AvailableBarcodeModal = ({
-  isOpen,
-  onClose,
-  availableBarcode,
-  setWarehouseId,
-  itemCode,
-  // setValidation,
-}) => {
+const AvailableBarcodeModal = ({ isOpen, onClose, availableBarcode, setWarehouseId, itemCode }) => {
   const selectId = (data) => {
     // console.log("Warehouse ID: ", data);
     if (data) {
