@@ -622,14 +622,14 @@ export const RawMatsInfoModal = ({
       // const newData = JSON.parse(data);
       const itemCode = data.value.itemCode;
       const itemDescription = data.value.itemDescription;
-      const uom = data.value.uomCode;
+      const uomCode = data.value.uomCode;
       const unitCost = data.value.unitCost;
 
       setRawMatsInfo({
         itemCode: itemCode,
         itemDescription: itemDescription,
         supplierName: rawMatsInfo.supplierName,
-        uom: uom,
+        uom: uomCode,
         quantity: rawMatsInfo.quantity,
         unitPrice: unitCost,
       });

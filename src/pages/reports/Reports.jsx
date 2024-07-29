@@ -38,8 +38,8 @@ const Reports = () => {
   console.log("Date From: ", dateFrom);
 
   const handleExport = async () => {
-    setIsLoading(true);
     if (sample === 10) {
+      setIsLoading(true);
       try {
         const response = await request.get("Reports/ExportConsolidateFinance", {
           params: {
@@ -64,6 +64,7 @@ const Reports = () => {
         console.log("Error", error);
       }
     } else if (sample === 4) {
+      setIsLoading(true);
       try {
         const response = await request.get("Reports/ExportMoveOrderReports", {
           params: {
@@ -92,6 +93,7 @@ const Reports = () => {
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
 
       XLSX.writeFile(workbook, "Elixir_ETD_Reports_ExportFile.xlsx");
+      setIsLoading(false);
     }
   };
 
@@ -134,14 +136,7 @@ const Reports = () => {
               </HStack>
             </Flex>
             <Flex justifyContent="center" alignItems="end">
-              <Button
-                onClick={handleExport}
-                isLoading={sample === 4 || sample === 10 ? isLoading : ""}
-                isDisabled={sheetData?.length === 0 || !sample}
-                size="sm"
-                leftIcon={<BiExport fontSize="20px" />}
-                bg="none"
-              >
+              <Button onClick={handleExport} isLoading={isLoading} isDisabled={sheetData?.length === 0 || !sample} size="sm" leftIcon={<BiExport fontSize="20px" />} bg="none">
                 <Text fontSize="xs">Export</Text>
               </Button>
             </Flex>

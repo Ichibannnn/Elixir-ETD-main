@@ -215,24 +215,6 @@ export const ActualItemQuantity = ({
             w="50%"
             bgColor="#fff8dc"
           />
-          {/* <Text
-            ref={quantityRef}
-            bgColor="gray.200"
-            border="1px"
-            px={12}
-            fontSize="11px"
-            // placeholder="Select barcode"
-          >
-            {barcodeData?.orders?.remaining < qtyOrdered
-              ? barcodeData?.orders?.remaining.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                  minimumFractionDigits: 2,
-                })
-              : qtyOrdered.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                  minimumFractionDigits: 2,
-                })}
-          </Text> */}
         </HStack>
       </HStack>
 

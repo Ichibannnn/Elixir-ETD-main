@@ -30,50 +30,35 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
             "Item Code": item.itemCode,
             "Item Description": item.itemDescription,
             // "Item Category": item.itemCategory,
-            "Receiving (IN)": item.totalReceiving.toLocaleString(undefined, {
+            Receiving: item.totalReceiving.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             }),
-            "Move Order (OUT)": item.totalMoveOrder.toLocaleString(undefined, {
+            "Miscellaneous Receipt": item.totalReceipt.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             }),
-            "Receipt (IN)": item.totalReceipt.toLocaleString(undefined, {
+            Returned: item.totalReturned.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             }),
-            "Issue (OUT)": item.totalIssue.toLocaleString(undefined, {
+            "Move Order": item.totalMoveOrder.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             }),
-            "Borrowed (OUT))": item.totalBorrowed.toLocaleString(undefined, {
+            "Miscellaneous Issue": item.totalIssue.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             }),
-            "Returned (IN)": item.totalReturned.toLocaleString(undefined, {
+            Borrowed: item.totalBorrowed.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             }),
-            // "Ending IN": item.totalIn.toLocaleString(undefined, {
-            //   maximumFractionDigits: 2,
-            //   minimumFractionDigits: 2,
-            // }),
-            // "Ending Out": item.totalOut.toLocaleString(undefined, {
-            //   maximumFractionDigits: 2,
-            //   minimumFractionDigits: 2,
-            // }),
+
             Ending: item.ending.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             }),
-            // "Purchased Order": item.purchaseOrder.toLocaleString(undefined, {
-            //   maximumFractionDigits: 2,
-            //   minimumFractionDigits: 2,
-            // }),
-            // Others: item.otherPlus.toLocaleString(undefined, {
-            //   maximumFractionDigits: 2,
-            //   minimumFractionDigits: 2,
-            // }),
             "Current Stock": item.currentStock.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
@@ -122,34 +107,26 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
                     Item Description
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
-                    Receiving (IN)
+                    Receiving
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
-                    Move Order (OUT)
+                    Miscellaneous Receipt
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
-                    Miscellaneous Receipt (IN)
+                    Returned
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
-                    Miscellaneous Issue (OUT)
+                    Move Order
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
-                    Borrowed (OUT)
+                    Miscellaneous Issue
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
-                    Returned (IN)
+                    Borrowed
                   </Th>
-                  {/* <Th color="white" fontSize="10px" fontWeight="semibold">{`Ending (IN)`}</Th>
-                  <Th color="white" fontSize="10px" fontWeight="semibold">{`Ending (OUT)`}</Th> */}
                   <Th color="white" fontSize="10px" fontWeight="semibold">
                     Ending
                   </Th>
-                  {/* <Th color="white" fontSize="10px" fontWeight="semibold">
-                    Purchased Order
-                  </Th>
-                  <Th color="white" fontSize="10px" fontWeight="semibold">
-                    Others
-                  </Th> */}
                   <Th color="white" fontSize="10px" fontWeight="semibold">
                     Current Stock
                   </Th>
@@ -167,13 +144,19 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.totalMoveOrder.toLocaleString(undefined, {
+                      {item.totalReceipt.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.totalReceipt.toLocaleString(undefined, {
+                      {item.totalReturned.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2,
+                      })}
+                    </Td>
+                    <Td fontSize="xs">
+                      {item.totalMoveOrder.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
@@ -191,41 +174,11 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.totalReturned.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    {/* <Td fontSize="xs">
-                      {item.totalIn.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td> */}
-                    {/* <Td fontSize="xs">
-                      {item.totalOut.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td> */}
-                    <Td fontSize="xs">
                       {item.ending.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
-                    {/* <Td fontSize="xs">
-                      {item.purchaseOrder.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {item.otherPlus.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td> */}
                     <Td fontSize="xs">
                       {item.currentStock.toLocaleString(undefined, {
                         maximumFractionDigits: 2,

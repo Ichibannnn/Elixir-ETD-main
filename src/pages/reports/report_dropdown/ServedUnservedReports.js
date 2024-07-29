@@ -71,9 +71,6 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
                     CUSTOMER
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
-                    BARCODE NO.
-                  </Th>
-                  <Th color="white" fontSize="10px" fontWeight="semibold">
                     ITEM INFORMATION
                   </Th>
                   {buttonChanger ? (
@@ -173,8 +170,6 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
                       </Flex>
                     </Td>
 
-                    <Td fontSize="xs">{item.barcodeNo}</Td>
-
                     {/* Item Information */}
                     <Td>
                       <Flex flexDirection="column" gap="10px">
@@ -217,7 +212,7 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
                           })}
                         </Td>
                         <Td fontSize="xs">{item.remarks ? item.remarks : "-"}</Td>
-                        <Td fontSize="xs">{`${item.servedPercentage}%`}</Td>
+                        <Td fontSize="xs">{`${(item.servedPercentage * 100).toFixed(0)}`}%</Td>
                         <Td fontSize="xs">{item.approvedDate ? moment(item.approvedDate).format("MM/DD/YYYY") : "-"}</Td>
                         <Td fontSize="xs">{item.deliveryDate ? moment(item.deliveryDate).format("MM/DD/YYYY") : "-"}</Td>
                         <Td fontSize="xs">{item.status}</Td>

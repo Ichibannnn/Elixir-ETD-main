@@ -120,6 +120,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                   Charging Location: {printData[0]?.locationCode} - {printData[0]?.locationName}
                 </Text>
               </Flex>
+
               <Flex flexDirection="column">
                 <Barcode width={3} height={40} value={Number(orderId)} />
                 <Text fontSize="xs">Date: {moment(printData[0]?.approvedDate).format("MM/DD/yyyy")}</Text>
@@ -159,6 +160,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                     </Th>
                   </Tr>
                 </Thead>
+
                 <Tbody>
                   {printData?.map((item, i) => (
                     <Tr key={i}>
@@ -203,19 +205,6 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                         minimumFractionDigits: 2,
                       })}
                     </Td>
-                    {/* <Td fontSize="xs" fontWeight="bold">
-                      {printData[0]?.tUnitCost.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-
-                    <Td fontSize="xs" fontWeight="bold">
-                      {printData[0]?.tTotalCost.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td> */}
                     <Td fontSize="xs"></Td>
                     <Td fontSize="xs"></Td>
                     <Td fontSize="xs"></Td>
@@ -271,9 +260,6 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
             <Flex mt={10} justifyContent="space-between" alignItems="center">
               <VStack>
                 <CheckboxGroup colorScheme="blue" onChange={handleCheckboxes}>
-                  {/* <Text w="full" textAlign="left" fontSize="xs">
-                    Options:
-                  </Text> */}
                   <HStack spacing={3}>
                     <Checkbox isDisabled value="Option 1" size="sm"></Checkbox>
                     <Text fontSize="sm">Exceeds Expectation</Text>
@@ -748,8 +734,8 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
 
                   <Flex justifyContent="space-between" mb={3}>
                     <Flex flexDirection="column">
-                      <Text fontSize="xs">Order ID: {orderId && orderId}</Text>
-                      <Text fontSize="xs">Warehouse: {`WAREHOUSE`}</Text>
+                      <Text fontSize="xs">MIR ID: {orderId && orderId}</Text>
+                      <Text fontSize="xs">Unit: {`WAREHOUSE`}</Text>
                       <Text fontSize="xs">Customer: {printData[0]?.customerName}</Text>
                       <Text fontSize="xs">
                         Charging Department: {printData[0]?.departmentCode} - {printData[0]?.departmentName}
@@ -758,9 +744,10 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                         Charging Location: {printData[0]?.locationCode} - {printData[0]?.locationName}
                       </Text>
                     </Flex>
+
                     <Flex flexDirection="column">
                       <Barcode width={3} height={40} value={Number(orderId)} />
-                      <Text fontSize="xs">Date: {moment(dateToday).format("MM/DD/yyyy")}</Text>
+                      <Text fontSize="xs">Date: {moment(printData[0]?.approvedDate).format("MM/DD/yyyy")}</Text>
                     </Flex>
                   </Flex>
 
@@ -780,13 +767,10 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                           UOM
                         </Th>
                         <Th color="white" fontSize="xs">
-                          QUANTITY
+                          ORDERED QTY
                         </Th>
                         <Th color="white" fontSize="xs">
-                          UNIT COST
-                        </Th>
-                        <Th color="white" fontSize="xs">
-                          TOTAL COST
+                          SERVED QTY
                         </Th>
                         <Th color="white" fontSize="xs">
                           ITEM REMARKS
@@ -795,36 +779,42 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                           ASSET TAG
                         </Th>
                         <Th color="white" fontSize="xs">
-                          ACTUAL QTY RECEIVED
+                          UNSERVED QTY
                         </Th>
                       </Tr>
                     </Thead>
+
                     <Tbody>
                       {printData?.map((item, i) => (
-                        <Tr borderX="1px" borderBottom="1px" key={i}>
+                        <Tr key={i}>
                           <Td fontSize="xs">{i + 1}</Td>
                           <Td fontSize="xs">{item.itemCode}</Td>
                           <Td fontSize="xs">{item.itemDescription}</Td>
                           <Td fontSize="xs">{item.uom}</Td>
-                          <Td fontSize="xs">{item.quantity}</Td>
                           <Td fontSize="xs">
-                            {item.unitCost.toLocaleString(undefined, {
+                            {item.quantity.toLocaleString(undefined, {
                               maximumFractionDigits: 2,
                               minimumFractionDigits: 2,
                             })}
                           </Td>
                           <Td fontSize="xs">
-                            {item.totalCost.toLocaleString(undefined, {
+                            {item.servedQuantity.toLocaleString(undefined, {
                               maximumFractionDigits: 2,
                               minimumFractionDigits: 2,
                             })}
                           </Td>
+
                           {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
                           {item.assetTag ? <Td fontSize="xs">{item.assetTag}</Td> : <Td fontSize="xs">-</Td>}
-                          <Td fontSize="xs"></Td>
+
+                          <Td fontSize="xs">
+                            {item.unservedQuantity.toLocaleString(undefined, {
+                              maximumFractionDigits: 2,
+                              minimumFractionDigits: 2,
+                            })}
+                          </Td>
                         </Tr>
                       ))}
-
                       <Tr>
                         <Td fontSize="xs"></Td>
                         <Td fontSize="xs"></Td>
@@ -834,18 +824,6 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                         </Td>
                         <Td fontSize="xs" fontWeight="bold">
                           {printData[0]?.tQuantity.toLocaleString(undefined, {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          })}
-                        </Td>
-                        <Td fontSize="xs" fontWeight="bold">
-                          {printData[0]?.tUnitCost.toLocaleString(undefined, {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          })}
-                        </Td>
-                        <Td fontSize="xs" fontWeight="bold">
-                          {printData[0]?.tTotalCost.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
