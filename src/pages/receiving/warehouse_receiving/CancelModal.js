@@ -1,19 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ToastComponent } from "../../../components/Toast";
-import {
-  Button,
-  Flex,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Select,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
+import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, useToast } from "@chakra-ui/react";
 import request from "../../../services/ApiClient";
 
 const CancelModal = ({ isOpen, onClose, getAvailablePOHandler, poId }) => {
@@ -62,7 +49,6 @@ const CancelModal = ({ isOpen, onClose, getAvailablePOHandler, poId }) => {
         .then((res) => {
           ToastComponent("Success!", "PO Cancelled", "success", toast);
           getAvailablePOHandler();
-          // fetchNotification()
           onClose();
           setIsLoading(false);
         })
@@ -90,15 +76,9 @@ const CancelModal = ({ isOpen, onClose, getAvailablePOHandler, poId }) => {
 
           <ModalBody>
             <Flex justifyContent="center" p={2} flexDirection="column">
-              <Text fontSize="sm">
-                Are you sure to cancel this materials?
-              </Text>
+              <Text fontSize="sm">Are you sure to cancel this materials?</Text>
               {reasons.length > 0 ? (
-                <Select
-                fontSize="xs"
-                  onChange={(e) => reasonHandler(e.target.value)}
-                  placeholder="Select Reason"
-                >
+                <Select fontSize="xs" onChange={(e) => reasonHandler(e.target.value)} placeholder="Select Reason">
                   {reasons.map((reason) => (
                     <option key={reason.id} value={reason.reasonName}>
                       {reason.reasonName}
@@ -112,14 +92,12 @@ const CancelModal = ({ isOpen, onClose, getAvailablePOHandler, poId }) => {
           </ModalBody>
           <ModalFooter>
             <Flex justifyContent="end" gap={2}>
-              <Button
-                colorScheme="blue"
-                isDisabled={isDisabled}
-                onClick={() => submitCancellationHandler()}
-              >
+              <Button colorScheme="blue" isDisabled={isDisabled} onClick={() => submitCancellationHandler()}>
                 Yes
               </Button>
-              <Button onClick={onClose} variant="outline">No</Button>
+              <Button onClick={onClose} variant="outline">
+                No
+              </Button>
             </Flex>
           </ModalFooter>
         </ModalContent>

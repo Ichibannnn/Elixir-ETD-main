@@ -72,7 +72,6 @@ const Orders = ({ fetchNotification }) => {
   }, [fromDate, toDate]);
 
   //LIST ORDERS
-
   return (
     <ListOrders
       genusOrders={genusOrders}

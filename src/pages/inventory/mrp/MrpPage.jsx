@@ -11,11 +11,12 @@ const fetchMRPApi = async (pageNumber, pageSize, search) => {
       search: search,
     },
   });
+
   return res.data;
 };
 
 const fetchMRPForSheetApi = async (pageTotalSheet) => {
-  const res = await request.get(`Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=1&pageSize=${pageTotalSheet}&search=`);
+  const res = await request.get(`Inventory/GetAllItemForInventoryPaginationOrig?pageNumber=1&pageSize=${pageTotalSheet}`);
   return res.data;
 };
 
@@ -51,14 +52,60 @@ const MrpPage = () => {
     initialState: { currentPage: 1, pageSize: 50 },
   });
 
-  const fetchMRP = useCallback(async () => {
-    // console.log("fetchMRP called with search:", search);
+  //  With useCallback ~~~~~~
+  // const fetchMRP = useCallback(async () => {
+  //   setIsLoading(true);
+  //   const res = await fetchMRPApi(currentPage, pageSize, search);
+  //   setMrpData(res);
+  //   setIsLoading(false);
+  //   setPageTotal(res.totalCount);
+  // }, [currentPage, pageSize, search]);
+
+  // useEffect(() => {
+  //   fetchMRP();
+
+  //   return () => {
+  //     setMrpData([]);
+  //   };
+  // }, [fetchMRP]);
+
+  // const fetchMRPForSheet = () => {
+  //   fetchMRPForSheetApi(pageTotalSheet).then((res) => {
+  //     setSheetData(res.inventory);
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   if (pageTotalSheet) {
+  //     fetchMRPForSheet();
+  //   }
+
+  //   return () => {
+  //     setSheetData([]);
+  //   };
+  // }, [pageTotalSheet]);
+
+  // useEffect(() => {
+  //   if (sheetData.length > 0) {
+  //     setLoadingExport(false);
+  //   } else {
+  //     setLoadingExport(true);
+  //   }
+  // }, [sheetData]);
+
+  // const debouncedSetSearch = debounce((value) => {
+  //   setSearch(value);
+  // }, 300);
+
+  // OLD CODE ~~~~~
+  const fetchMRP = () => {
     setIsLoading(true);
-    const res = await fetchMRPApi(currentPage, pageSize, search);
-    setMrpData(res);
-    setIsLoading(false);
-    setPageTotal(res.totalCount);
-  }, [currentPage, pageSize, search]);
+    fetchMRPApi(currentPage, pageSize, search).then((res) => {
+      setMrpData(res);
+      setIsLoading(false);
+      setPageTotal(res.totalCount);
+    });
+  };
 
   useEffect(() => {
     fetchMRP();
@@ -66,11 +113,11 @@ const MrpPage = () => {
     return () => {
       setMrpData([]);
     };
-  }, [fetchMRP]);
+  }, [currentPage, pageSize, search]);
 
   const fetchMRPForSheet = () => {
     fetchMRPForSheetApi(pageTotalSheet).then((res) => {
-      console.log("res", res);
+      console.log("Response: ", res);
       setSheetData(res.inventory);
     });
   };
@@ -86,53 +133,12 @@ const MrpPage = () => {
   }, [pageTotalSheet]);
 
   useEffect(() => {
-    if (sheetData.length > 0) {
+    if (sheetData?.length > 0) {
       setLoadingExport(false);
     } else {
       setLoadingExport(true);
     }
   }, [sheetData]);
-
-  console.log("Page Total: ", pageTotal);
-  console.log("Sheet Data: ", sheetData);
-
-  const debouncedSetSearch = debounce((value) => {
-    setSearch(value);
-  }, 300);
-
-  // OLD CODE---
-  // const fetchMRP = () => {
-  //   setIsLoading(true);
-  //   fetchMRPApi(currentPage, pageSize, search).then((res) => {
-  //     setMrpData(res);
-  //     setIsLoading(false);
-  //     setPageTotal(res.totalCount);
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   fetchMRP();
-
-  //   return () => {
-  //     setMrpData([]);
-  //   };
-  // }, [currentPage, pageSize, search]);
-
-  // const fetchMRPForSheet = () => {
-  //   fetchMRPForSheetApi(pageTotal).then((res) => {
-  //     setSheetData(res.inventory);
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   if (pageTotal) {
-  //     fetchMRPForSheet();
-  //   }
-
-  //   return () => {
-  //     setSheetData([]);
-  //   };
-  // }, [pageTotal]);
 
   return (
     <Flex flexDirection="column" w="full" bg="form" p={4}>
@@ -151,9 +157,10 @@ const MrpPage = () => {
           setCurrentPage={setCurrentPage}
           setPageSize={setPageSize}
           search={search}
-          setSearch={debouncedSetSearch}
-          // setSearch={setSearch}
+          // setSearch={debouncedSetSearch}
+          setSearch={setSearch}
           pageTotal={pageTotal}
+          pageTotalSheet={pageTotalSheet}
           sheetData={sheetData}
           mrpDataLength={mrpData?.inventory?.length}
         />

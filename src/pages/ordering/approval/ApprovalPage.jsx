@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Box, Flex, Stack, VStack } from "@chakra-ui/react";
-import { ListOfOrders } from "./ListOfOrders";
+import { Flex, VStack } from "@chakra-ui/react";
 import request from "../../../services/ApiClient";
+
+import { ListOfOrders } from "./ListOfOrders";
 import { ListOfPreparedOrders } from "./ListOfPreparedOrders";
 
 const fetchOrderListApi = async (status) => {
-  const res = await request.get(
-    `Ordering/GetAllListForApprovalOfSchedule?status=${status}`
-  );
+  const res = await request.get(`Ordering/GetAllListForApprovalOfSchedule?status=${status}`);
   return res.data;
 };
 
 const fetchOrdersByOrderNoApi = async (orderNo) => {
-  const res = await request.get(
-    `Ordering/GetAllOrdersForScheduleApproval?id=${orderNo}`
-  );
+  const res = await request.get(`Ordering/GetAllOrdersForScheduleApproval?id=${orderNo}`);
   return res.data;
 };
 
@@ -32,8 +29,6 @@ const ApprovalPage = ({ notification, fetchNotification }) => {
       setOrders(res);
     });
   };
-
-  // console.log(orders);
 
   useEffect(() => {
     fetchOrderList();
@@ -96,6 +91,7 @@ const ApprovalPage = ({ notification, fetchNotification }) => {
 
 export default ApprovalPage;
 
+// OLD CODES
 // import React, { useState, useEffect } from "react";
 // import { Box, Flex, Stack, VStack } from "@chakra-ui/react";
 // import { ListOfOrders } from "./ListOfOrders";

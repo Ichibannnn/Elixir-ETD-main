@@ -1,36 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  Badge,
-  Button,
-  Checkbox,
-  Flex,
-  HStack,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Select,
-  Stack,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-} from "@chakra-ui/react";
-import moment from "moment";
-import PageScroll from "../../../../utils/PageScroll";
+import { Badge, Button, Checkbox, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
+import { Pagination, PaginationContainer, PaginationNext, PaginationPage, PaginationPageGroup, PaginationPrevious } from "@ajna/pagination";
 import { FiSearch } from "react-icons/fi";
-import {
-  Pagination,
-  PaginationContainer,
-  PaginationNext,
-  PaginationPage,
-  PaginationPageGroup,
-  PaginationPrevious,
-} from "@ajna/pagination";
 import { GrView } from "react-icons/gr";
+import PageScroll from "../../../../utils/PageScroll";
+
+import moment from "moment";
 import { ViewDetailsModal } from "./ActionModal";
 
 export const ListOfMir = ({
@@ -52,27 +27,18 @@ export const ListOfMir = ({
 }) => {
   const [viewParams, setViewParams] = useState("");
 
-  const {
-    isOpen: isViewDetails,
-    onOpen: openViewDetails,
-    onClose: closeViewDetails,
-  } = useDisclosure();
+  const { isOpen: isViewDetails, onOpen: openViewDetails, onClose: closeViewDetails } = useDisclosure();
 
   const handleAllCheckboxChange = (mirId) => {
     setIsAllChecked(!isAllChecked);
-    setSelectedMIRIds(
-      isAllChecked ? [] : mirList?.orders?.map((mir) => mir.mirId)
-    );
+    setSelectedMIRIds(isAllChecked ? [] : mirList?.orders?.map((mir) => mir.mirId));
   };
 
   const handleMIRCheckboxChange = (mirId) => {
-    // console.log(sele);
     setSelectedMIRIds((prevSelectedMIRIds) => {
       if (prevSelectedMIRIds.includes(mirId)) {
         // Uncheck the checkbox
-        const updatedSelectedMIRIds = prevSelectedMIRIds.filter(
-          (id) => id !== mirId
-        );
+        const updatedSelectedMIRIds = prevSelectedMIRIds.filter((id) => id !== mirId);
         setIsAllChecked(false); // Uncheck "Select All" checkbox
         return updatedSelectedMIRIds;
       } else {
@@ -85,8 +51,6 @@ export const ListOfMir = ({
       }
     });
   };
-
-  // console.log(selectedMIRIds);
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -136,8 +100,6 @@ export const ListOfMir = ({
     }
   }, [search]);
 
-  // console.log(notification);
-
   return (
     <Flex direction="column" p={4} w="full" className="boxShadow" bg="#F5F5F7">
       <Flex p={2} flexDirection="column">
@@ -152,17 +114,10 @@ export const ListOfMir = ({
               onClick={() => handleStatusChange(false)}
             >
               Regular Orders
-              {notification?.orderingNotRush?.orderingnotifcountNotRush ===
-              0 ? (
+              {notification?.orderingNotRush?.orderingnotifcountNotRush === 0 ? (
                 ""
               ) : (
-                <Badge
-                  ml={2}
-                  fontSize="10px"
-                  variant="solid"
-                  colorScheme="red"
-                  mb={1}
-                >
+                <Badge ml={2} fontSize="10px" variant="solid" colorScheme="red" mb={1}>
                   {notification?.orderingNotRush?.orderingnotifcountNotRush}
                 </Badge>
               )}
@@ -179,13 +134,7 @@ export const ListOfMir = ({
               {notification?.ordering?.orderingnotifcount === 0 ? (
                 ""
               ) : (
-                <Badge
-                  ml={2}
-                  fontSize="10px"
-                  variant="solid"
-                  colorScheme="red"
-                  mb={1}
-                >
+                <Badge ml={2} fontSize="10px" variant="solid" colorScheme="red" mb={1}>
                   {notification?.ordering?.orderingnotifcount}
                 </Badge>
               )}
@@ -193,10 +142,7 @@ export const ListOfMir = ({
           </HStack>
           <HStack>
             <InputGroup flexDirection="row" borderRadius="2xl">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiSearch color="blackAlpha" fontSize="18px" />}
-              />
+              <InputLeftElement pointerEvents="none" children={<FiSearch color="blackAlpha" fontSize="18px" />} />
               <Input
                 mb={1}
                 color="blackAlpha"
@@ -204,7 +150,6 @@ export const ListOfMir = ({
                 fontSize="xs"
                 placeholder="Search..."
                 focusBorderColor="btnColor"
-                // bg="whiteAlpha"
                 borderColor="gray.300"
                 borderRadius="md"
                 onChange={(e) => searchHandler(e.target.value)}
@@ -213,13 +158,7 @@ export const ListOfMir = ({
           </HStack>
         </Flex>
 
-        <Text
-          textAlign="center"
-          bgColor="primary"
-          color="white"
-          fontSize="14px"
-          // fontWeight="semibold"
-        >
+        <Text textAlign="center" bgColor="primary" color="white" fontSize="14px">
           LIST OF MIR ID
         </Text>
         <PageScroll minHeight="250px" maxHeight="400px">
@@ -228,15 +167,7 @@ export const ListOfMir = ({
               <Thead bgColor="secondary" position="sticky" top={0} zIndex={1}>
                 <Tr cursor="pointer">
                   <Th color="white" fontSize="11px">
-                    <Checkbox
-                      // isChecked={isAllChecked}
-                      size="lg"
-                      isChecked={mirList?.orders?.every((item) =>
-                        selectedMIRIds.includes(item.mirId)
-                      )}
-                      onChange={() => handleAllCheckboxChange()}
-                    />{" "}
-                    Line
+                    <Checkbox size="lg" isChecked={mirList?.orders?.every((item) => selectedMIRIds.includes(item.mirId))} onChange={() => handleAllCheckboxChange()} /> Line
                   </Th>
                   <Th color="white" fontSize="11px">
                     MIR ID
@@ -256,9 +187,6 @@ export const ListOfMir = ({
                   <Th color="white" fontSize="11px">
                     Customer Type
                   </Th>
-                  {/* <Th color="white" fontSize="11px">
-                    Item Remarks
-                  </Th> */}
                   <Th color="white" fontSize="11px">
                     Total Quantity
                   </Th>
@@ -271,15 +199,7 @@ export const ListOfMir = ({
               <Thead bgColor="secondary" position="sticky" top={0} zIndex={1}>
                 <Tr cursor="pointer">
                   <Th color="white" fontSize="12px">
-                    <Checkbox
-                      // isChecked={isAllChecked}
-                      size="lg"
-                      isChecked={mirList?.orders?.every((item) =>
-                        selectedMIRIds.includes(item.mirId)
-                      )}
-                      onChange={() => handleAllCheckboxChange()}
-                    />{" "}
-                    Line
+                    <Checkbox size="lg" isChecked={mirList?.orders?.every((item) => selectedMIRIds.includes(item.mirId))} onChange={() => handleAllCheckboxChange()} /> Line
                   </Th>
                   <Th color="white" fontSize="11px">
                     MIR ID
@@ -314,22 +234,13 @@ export const ListOfMir = ({
                 {mirList?.orders?.map((mir, i) => (
                   <Tr key={i}>
                     <Td fontSize="xs">
-                      <Checkbox
-                        size="lg"
-                        isChecked={selectedMIRIds.includes(mir.mirId)}
-                        onChange={() => handleMIRCheckboxChange(mir.mirId)}
-                        value={mir.mirId}
-                      >
+                      <Checkbox size="lg" isChecked={selectedMIRIds.includes(mir.mirId)} onChange={() => handleMIRCheckboxChange(mir.mirId)} value={mir.mirId}>
                         <Text fontSize="xs">{i + 1}</Text>
                       </Checkbox>
                     </Td>
                     <Td fontSize="xs">{mir.mirId}</Td>
-                    <Td fontSize="xs">
-                      {moment(mir.orderedDate).format("MM/DD/yyyy")}
-                    </Td>
-                    <Td fontSize="xs">
-                      {moment(mir.dateNeeded).format("MM/DD/yyyy")}
-                    </Td>
+                    <Td fontSize="xs">{moment(mir.orderedDate).format("MM/DD/yyyy")}</Td>
+                    <Td fontSize="xs">{moment(mir.dateNeeded).format("MM/DD/yyyy")}</Td>
                     <Td fontSize="xs">{mir.customerCode}</Td>
                     <Td fontSize="xs">{mir.customerName}</Td>
                     <Td fontSize="xs">{mir.customerType}</Td>
@@ -341,13 +252,7 @@ export const ListOfMir = ({
                     </Td>
                     <Td fontSize="xs" justifyContent="center">
                       <HStack>
-                        <Button
-                          onClick={() => viewDetailHandler(mir.mirId)}
-                          bg="none"
-                          size="xs"
-                          borderRadius="none"
-                          title="View MIR Details"
-                        >
+                        <Button onClick={() => viewDetailHandler(mir.mirId)} bg="none" size="xs" borderRadius="none" title="View MIR Details">
                           <GrView fontSize="17px" />
                         </Button>
                       </HStack>
@@ -360,21 +265,13 @@ export const ListOfMir = ({
                 {mirList?.orders?.map((mir, i) => (
                   <Tr key={i}>
                     <Td fontSize="xs">
-                      <Checkbox
-                        isChecked={selectedMIRIds.includes(mir.mirId)}
-                        onChange={() => handleMIRCheckboxChange(mir.mirId)}
-                        value={mir.mirId}
-                      >
+                      <Checkbox isChecked={selectedMIRIds.includes(mir.mirId)} onChange={() => handleMIRCheckboxChange(mir.mirId)} value={mir.mirId}>
                         <Text fontSize="11px">{i + 1}</Text>
                       </Checkbox>
                     </Td>
                     <Td fontSize="xs">{mir.mirId}</Td>
-                    <Td fontSize="xs">
-                      {moment(mir.orderedDate).format("MM/DD/yyyy")}
-                    </Td>
-                    <Td fontSize="xs">
-                      {moment(mir.dateNeeded).format("MM/DD/yyyy")}
-                    </Td>
+                    <Td fontSize="xs">{moment(mir.orderedDate).format("MM/DD/yyyy")}</Td>
+                    <Td fontSize="xs">{moment(mir.dateNeeded).format("MM/DD/yyyy")}</Td>
                     <Td fontSize="xs">{mir.customerCode}</Td>
                     <Td fontSize="xs">{mir.customerName}</Td>
                     <Td fontSize="xs">{mir.customerType}</Td>
@@ -393,18 +290,9 @@ export const ListOfMir = ({
         </PageScroll>
         <Flex justifyContent="end">
           <Stack>
-            <Pagination
-              pagesCount={pagesCount}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-            >
+            <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
               <PaginationContainer>
-                <PaginationPrevious
-                  bg="primary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "btnColor", color: "white" }}
-                >
+                <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                   {"<<"}
                 </PaginationPrevious>
                 <PaginationPageGroup ml={1} mr={1}>
@@ -421,19 +309,10 @@ export const ListOfMir = ({
                   ))}
                 </PaginationPageGroup>
                 <HStack>
-                  <PaginationNext
-                    bg="primary"
-                    color="white"
-                    p={1}
-                    _hover={{ bg: "btnColor", color: "white" }}
-                  >
+                  <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                     {">>"}
                   </PaginationNext>
-                  <Select
-                    onChange={handlePageSizeChange}
-                    variant="filled"
-                    fontSize="md"
-                  >
+                  <Select onChange={handlePageSizeChange} variant="filled" fontSize="md">
                     <option value={Number(5)}>5</option>
                     <option value={Number(50)}>50</option>
                     <option value={Number(100)}>100</option>
@@ -446,13 +325,7 @@ export const ListOfMir = ({
         </Flex>
       </Flex>
 
-      {isViewDetails && (
-        <ViewDetailsModal
-          isOpen={isViewDetails}
-          onClose={closeViewDetails}
-          viewParams={viewParams}
-        />
-      )}
+      {isViewDetails && <ViewDetailsModal isOpen={isViewDetails} onClose={closeViewDetails} viewParams={viewParams} />}
     </Flex>
   );
 };

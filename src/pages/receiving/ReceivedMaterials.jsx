@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  Heading,
   HStack,
   Input,
   InputGroup,
@@ -16,77 +15,36 @@ import {
   Tr,
   VStack,
   useDisclosure,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
   Td,
-  Portal,
   Button,
-  useToast,
-  Icon,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuGroup,
-  MenuDivider,
-  MenuItem,
-  IconButton,
   ModalOverlay,
   Modal,
   ModalContent,
   ModalHeader,
-  ModalCloseButton,
   ModalBody,
-  Tfoot,
   ModalFooter,
   ButtonGroup,
   Badge,
   Select,
   Image,
 } from "@chakra-ui/react";
-import React, { useState, useRef } from "react";
 import { FiSearch } from "react-icons/fi";
 import { useEffect } from "react";
 import { BsFillPrinterFill } from "react-icons/bs";
-import { GiCancel } from "react-icons/gi";
-import { GrView } from "react-icons/gr";
-import { AiOutlineMore } from "react-icons/ai";
-import { useForm } from "react-hook-form";
-import { AiFillPrinter } from "react-icons/ai";
-import { BsTrashFill } from "react-icons/bs";
-import { FaSearch } from "react-icons/fa";
-import { MdLibraryAdd } from "react-icons/md";
+
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+import { useReactToPrint } from "react-to-print";
+
+import React, { useState, useRef } from "react";
 import PageScroll from "../../utils/PageScroll";
 import request from "../../services/ApiClient";
-import { ToastComponent } from "../../components/Toast";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
 import moment from "moment";
 import Barcode from "react-barcode";
-import { useReactToPrint } from "react-to-print";
 
 // RECEIVED MATERIALS ----------------------------------------------
 const ReceivedMaterials = () => {
-  // const [pO, setWarehouseData] = useState([]);
   const [warehouseData, setWarehouseData] = useState([]);
   const [search, setSearch] = useState("");
-  const toast = useToast();
-  const currentUser = decodeUser();
-  // const [viewData, setViewData] = useState([]);
-  // const [editData, setEditData] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
@@ -105,22 +63,15 @@ const ReceivedMaterials = () => {
   });
 
   // OPEN MODAL FOR PRINTER
-  const {
-    isOpen: isPrintOpen,
-    onClose: closePrint,
-    onOpen: openPrint,
-  } = useDisclosure();
+  const { isOpen: isPrintOpen, onClose: closePrint, onOpen: openPrint } = useDisclosure();
 
   // FETCH API ROLES:
   const fetchReceivedMatsApi = async (pageNumber, pageSize, search) => {
-    const response = await request.get(
-      `Warehouse/GetAllReceivedMaterialsPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`,
-      {
-        params: {
-          search: search,
-        },
-      }
-    );
+    const response = await request.get(`Warehouse/GetAllReceivedMaterialsPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`, {
+      params: {
+        search: search,
+      },
+    });
 
     return response.data;
   };
@@ -128,14 +79,7 @@ const ReceivedMaterials = () => {
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -177,19 +121,7 @@ const ReceivedMaterials = () => {
   };
 
   // PRINT
-  const printHandler = ({
-    id,
-    poNumber,
-    itemCode,
-    itemDescription,
-    dateReceive,
-    uom,
-    unitPrice,
-    supplier,
-    actualGood,
-    lotSection,
-    siNumber,
-  }) => {
+  const printHandler = ({ id, poNumber, itemCode, itemDescription, dateReceive, uom, unitPrice, supplier, actualGood, lotSection, siNumber }) => {
     if (id) {
       setPrintData({
         warehouseId: id,
@@ -224,9 +156,6 @@ const ReceivedMaterials = () => {
     }
   };
 
-  //FOR DRAWER (Drawer / Drawer Tagging)
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   useEffect(() => {
     if (search) {
       setCurrentPage(1);
@@ -234,56 +163,18 @@ const ReceivedMaterials = () => {
   }, [search]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="100vh"
-      w="full"
-      borderRadius="md"
-      flexDirection="column"
-      bg="gray.300"
-    >
-      {/* <Flex bg="btnColor" borderRadius="none" w="20%" pl={2}>
-        <Text
-          p={2}
-          fontWeight="semibold"
-          fontSize="11px"
-          color="white"
-          letterSpacing="wider"
-        >
-          RECEIVED MATERIALS
-        </Text>
-      </Flex> */}
-
-      <Flex
-        w="full"
-        bg="form"
-        h="100%"
-        p={4}
-        borderRadius="md"
-        flexDirection="column"
-      >
-        <Flex
-          w="full"
-          borderRadius="lg"
-          h="5%"
-          position="sticky"
-          justifyContent="space-between"
-          alignItems="center"
-          p={3}
-        >
+    <Flex color="fontColor" h="100vh" w="full" borderRadius="md" flexDirection="column" bg="gray.300">
+      <Flex w="full" bg="form" h="100%" p={4} borderRadius="md" flexDirection="column">
+        <Flex w="full" borderRadius="lg" h="5%" position="sticky" justifyContent="space-between" alignItems="center" p={3}>
           <HStack>
-            {/* <BsReceipt fontSize="35px" /> */}
             <Text fontSize="2xl" color="black" fontWeight="semibold">
               Received Materials
             </Text>
           </HStack>
+
           <HStack w="15%" p={2} borderRadius="2xl">
             <InputGroup w="full">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiSearch color="blackAlpha" />}
-                fontSize="sm"
-              />
+              <InputLeftElement pointerEvents="none" children={<FiSearch color="blackAlpha" />} fontSize="sm" />
               <Input
                 color="blackAlpha"
                 type="text"
@@ -299,29 +190,11 @@ const ReceivedMaterials = () => {
           </HStack>
         </Flex>
 
-        <Flex
-          w="full"
-          flexDirection="column"
-          className="boxShadow"
-          borderRadius="xl"
-          h="full"
-          p={4}
-          mt={4}
-          bg="form"
-          gap={2}
-        >
+        <Flex w="full" flexDirection="column" className="boxShadow" borderRadius="xl" h="full" p={4} mt={4} bg="form" gap={2}>
           <Text fontSize="lg" color="black" fontWeight="semibold">
             List of Received Materials
           </Text>
-          {/* <Text
-            textAlign="center"
-            bgColor="primary"
-            color="white"
-            fontSize="14px"
-            // fontWeight="semibold"
-          >
-            List of Received Materials
-          </Text> */}
+
           <PageScroll maxHeight="700px">
             {isLoading ? (
               <Stack width="full">
@@ -336,20 +209,8 @@ const ReceivedMaterials = () => {
                 <Skeleton height="20px" />
               </Stack>
             ) : (
-              <Table
-                // size="sm"
-                width="full"
-                border="none"
-                boxShadow="md"
-                variant="striped"
-              >
-                <Thead
-                  bg="primary"
-                  h="40px"
-                  position="sticky"
-                  top={0}
-                  zIndex={1}
-                >
+              <Table width="full" border="none" boxShadow="md" variant="striped">
+                <Thead bg="primary" h="40px" position="sticky" top={0} zIndex={1}>
                   <Tr>
                     <Th color="white" fontSize="10px">
                       Warehouse ID
@@ -391,16 +252,8 @@ const ReceivedMaterials = () => {
                   {warehouseData?.warehouse?.map((items) => (
                     <Tr key={items.id}>
                       <Td fontSize="xs">{items.id}</Td>
-                      {items.poNumber === 0 ? (
-                        <Td fontSize="xs">-</Td>
-                      ) : (
-                        <Td fontSize="xs">{items.poNumber}</Td>
-                      )}
-                      {items.siNumber ? (
-                        <Td fontSize="xs">{items.siNumber}</Td>
-                      ) : (
-                        <Td fontSize="xs">-</Td>
-                      )}
+                      {items.poNumber === 0 ? <Td fontSize="xs">-</Td> : <Td fontSize="xs">{items.poNumber}</Td>}
+                      {items.siNumber ? <Td fontSize="xs">{items.siNumber}</Td> : <Td fontSize="xs">-</Td>}
                       <Td fontSize="xs">{items.itemCode}</Td>
                       <Td fontSize="xs">{items.itemDescription}</Td>
                       <Td fontSize="xs">
@@ -422,19 +275,11 @@ const ReceivedMaterials = () => {
                           minimumFractionDigits: 2,
                         })}
                       </Td>
-                      <Td fontSize="xs">
-                        {items.transactionType === "MiscellaneousReceipt"
-                          ? "Miscellaneous Receipt"
-                          : "Receiving"}
-                      </Td>
+                      <Td fontSize="xs">{items.transactionType === "MiscellaneousReceipt" ? "Miscellaneous Receipt" : "Receiving"}</Td>
                       <Td pl={0}>
                         <Flex>
                           <Box pl={4}>
-                            <Button
-                              size="xs"
-                              bg="none"
-                              onClick={() => printHandler(items)}
-                            >
+                            <Button size="xs" bg="none" onClick={() => printHandler(items)}>
                               <BsFillPrinterFill fontSize="16px" />
                             </Button>
                           </Box>
@@ -450,25 +295,14 @@ const ReceivedMaterials = () => {
           <Flex justifyContent="space-between">
             <HStack>
               <Badge colorScheme="cyan">
-                <Text color="secondary">
-                  Number of Records: {warehouseData.warehouse?.length}
-                </Text>
+                <Text color="secondary">Number of Records: {warehouseData.warehouse?.length}</Text>
               </Badge>
             </HStack>
 
             <Stack mt={2}>
-              <Pagination
-                pagesCount={pagesCount}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-              >
+              <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                 <PaginationContainer>
-                  <PaginationPrevious
-                    bg="primary"
-                    color="white"
-                    p={1}
-                    _hover={{ bg: "btnColor", color: "white" }}
-                  >
+                  <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                     {"<<"}
                   </PaginationPrevious>
                   <PaginationPageGroup ml={1} mr={1}>
@@ -488,11 +322,7 @@ const ReceivedMaterials = () => {
                     <PaginationNext bg="primary" color="white" p={1}>
                       {">>"}
                     </PaginationNext>
-                    <Select
-                      onChange={handlePageSizeChange}
-                      variant="outline"
-                      fontSize="md"
-                    >
+                    <Select onChange={handlePageSizeChange} variant="outline" fontSize="md">
                       <option value={Number(5)}>5</option>
                       <option value={Number(10)}>10</option>
                       <option value={Number(25)}>25</option>
@@ -505,14 +335,7 @@ const ReceivedMaterials = () => {
           </Flex>
 
           <Flex justifyContent="end">
-            {isPrintOpen && (
-              <PrintModal
-                isOpen={openPrint}
-                onClose={closePrint}
-                printData={printData}
-                getReceivedMatsHandler={getReceivedMatsHandler}
-              />
-            )}
+            {isPrintOpen && <PrintModal isOpen={openPrint} onClose={closePrint} printData={printData} getReceivedMatsHandler={getReceivedMatsHandler} />}
           </Flex>
         </Flex>
       </Flex>
@@ -545,8 +368,6 @@ const PrintModal = ({ isOpen, onClose, printData }) => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }),
-    // "Lot Section": printData?.lotSection,
-    // "SI Number": printData?.siNumber,
   };
 
   return (
@@ -569,8 +390,7 @@ const PrintModal = ({ isOpen, onClose, printData }) => {
               <VStack spacing={0} justifyContent="start">
                 <Image src="/images/RDF Logo.png" w="20%" ml={3} />
                 <Text fontSize="9px" ml={2} textAlign="center">
-                  Purok 6, Brgy. Lara, City of San Fernando, Pampanga,
-                  Philippines
+                  Purok 6, Brgy. Lara, City of San Fernando, Pampanga, Philippines
                 </Text>
               </VStack>
               <Flex mt={3} w="90%" justifyContent="center">
@@ -599,12 +419,7 @@ const PrintModal = ({ isOpen, onClose, printData }) => {
               ))}
 
               <VStack spacing={0} w="90%" ml={4} justifyContent="center">
-                <Barcode
-                  fontSize="16"
-                  width={3}
-                  height={25}
-                  value={printData?.warehouseId}
-                />
+                <Barcode fontSize="16" width={3} height={25} value={printData?.warehouseId} />
               </VStack>
 
               <Flex w="full"></Flex>
@@ -645,56 +460,11 @@ const PrintModal = ({ isOpen, onClose, printData }) => {
             ))}
 
             <VStack spacing={0} w="90%" ml={4} justifyContent="center">
-              <Barcode
-                fontSize="16"
-                width={3}
-                height={25}
-                value={printData?.warehouseId}
-              />
+              <Barcode fontSize="16" width={3} height={25} value={printData?.warehouseId} />
             </VStack>
 
             <Flex w="full"></Flex>
           </VStack>
-
-          {/* <Box>
-            <VStack spacing={0} justifyContent="center">
-              <VStack spacing={0} justifyContent="start"></VStack>
-              <Flex mt={3} w="90%" justifyContent="center">
-                <Text fontSize="15px" fontWeight="semibold">
-                  Materials
-                </Text>
-              </Flex>
-
-              <Flex
-                spacing={0}
-                ref={componentRef}
-                w="70%"
-                justifyContent="space-between"
-              >
-                <Box>
-                  <Text fontSize="13px" fontWeight="semibold">
-                    Date:
-                  </Text>
-                </Box>
-                <Box>
-                  <Text fontSize="13px">{printData?.Date} </Text>
-                </Box>
-              </Flex>
-
-              <VStack spacing={0} justifyContent="center" ref={componentRef}>
-                <Text>{printData?.itemCode}</Text>
-                <Text>{printData?.itemDescription}</Text>
-                <Text>Date Received: {printData?.dateReceive}</Text>
-                <VStack spacing={0} w="90%" ml={4} justifyContent="center">
-                  <Barcode
-                    width={2}
-                    height={30}
-                    value={printData?.warehouseId}
-                  />
-                </VStack>
-              </VStack>
-            </VStack>
-          </Box> */}
         </ModalBody>
         <ModalFooter mt={10}>
           <ButtonGroup size="xs">

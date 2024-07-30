@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Button, Flex, useDisclosure, useToast, VStack } from "@chakra-ui/react";
-import { ListofApprovedDate, ListOfApprovedDate } from "./ListOfApprovedDate";
+import { ListofApprovedDate } from "./ListOfApprovedDate";
+
+import { useToast, VStack } from "@chakra-ui/react";
 import { usePagination } from "@ajna/pagination";
-import { ToastComponent } from "../../components/Toast";
 import request from "../../services/ApiClient";
+
 import { ListOfOrders } from "./ListOfOrders";
 import { ActualItemQuantity } from "./ActualItemQuantity";
 import { SaveButton } from "./ActionModal";
@@ -33,8 +34,6 @@ const MoveOrder = ({ notification, fetchNotification }) => {
   const [preparedData, setPreparedData] = useState([]);
 
   let [buttonChanger, setButtonChanger] = useState(false);
-
-  // console.log(notification);
 
   const fetchApprovedMoveOrdersApi = async (pageNumber, pageSize, status, search) => {
     const res = await request.get(`Ordering/GetAllListOfApprovedPreparedforMoveOrder?PageNumber=${pageNumber}&PageSize=${pageSize}&status=${status}`, {
@@ -84,9 +83,7 @@ const MoveOrder = ({ notification, fetchNotification }) => {
     fetchApprovedMoveOrdersApi(currentPage, pageSize, status, search).then((res) => {
       setMoveData(res);
       setLengthIndicator(res.length);
-      // setOrderId(res[0]?.id);
       setPageTotal(res.totalCount);
-      // console.log(res);
     });
   };
 
@@ -138,7 +135,6 @@ const MoveOrder = ({ notification, fetchNotification }) => {
   }, [warehouseId, itemCode]);
 
   //Prepared Items
-
   const fetchPreparedItems = () => {
     fetchPreparedItemsApi(orderId).then((res) => {
       setPreparedData(res);

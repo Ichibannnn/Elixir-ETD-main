@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  Heading,
   HStack,
   Input,
   InputGroup,
@@ -14,101 +13,46 @@ import {
   Th,
   Thead,
   Tr,
-  VStack,
   useDisclosure,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
   Td,
-  Portal,
-  Button,
   useToast,
-  Icon,
   Menu,
   MenuButton,
   MenuList,
-  MenuGroup,
-  MenuDivider,
   MenuItem,
-  IconButton,
-  ModalOverlay,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  Tfoot,
-  ModalFooter,
   Badge,
   Select,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { FiSearch } from "react-icons/fi";
-import { useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import { GrView } from "react-icons/gr";
 import { AiOutlineMore } from "react-icons/ai";
-import { useForm } from "react-hook-form";
-import { AiTwotoneEdit } from "react-icons/ai";
-import { BsTrashFill } from "react-icons/bs";
-import { FaSearch } from "react-icons/fa";
-import { MdLibraryAdd } from "react-icons/md";
+import { FiSearch } from "react-icons/fi";
+
+import React, { useState } from "react";
+import { useEffect } from "react";
+
 import PageScroll from "../../utils/PageScroll";
 import request from "../../services/ApiClient";
-import { ToastComponent } from "../../components/Toast";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
-import moment from "moment";
-import { EditModal } from "./warehouse_receiving/EditModal";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
 const WarehouseConfirmReject = () => {
   const [pO, setPO] = useState([]);
-  const [status, setStatus] = useState(true);
   const [search, setSearch] = useState("");
-  const toast = useToast();
-  const currentUser = decodeUser();
+
   const [viewData, setViewData] = useState([]);
   const [editData, setEditData] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
-  const [disableEdit, setDisableEdit] = useState(false);
 
-  const {
-    isOpen: isViewModalOpen,
-    onOpen: openViewModal,
-    onClose: closeViewModal,
-  } = useDisclosure();
-  const {
-    isOpen: isEditModalOpen,
-    onOpen: openEditModal,
-    onClose: closeEditModal,
-  } = useDisclosure();
-  const {
-    isCancelModalOpen,
-    onOpen: openCancelModal,
-    onClose: closeCancel,
-  } = useDisclosure();
+  const { isOpen: isViewModalOpen, onOpen: openViewModal, onClose: closeViewModal } = useDisclosure();
+  const { isOpen: isEditModalOpen, onOpen: openEditModal, onClose: closeEditModal } = useDisclosure();
 
   // FETCH API ROLES:
-  const fetchAvailablePOApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Warehouse/GetAllAvailablePoWithPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`
-    );
+  const fetchAvailablePOApi = async (pageNumber, pageSize) => {
+    const response = await request.get(`Warehouse/GetAllAvailablePoWithPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`);
 
     return response.data;
   };
@@ -116,14 +60,7 @@ const WarehouseConfirmReject = () => {
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -164,14 +101,10 @@ const WarehouseConfirmReject = () => {
     console.log(inputValue);
   };
 
-  //FOR DRAWER (Drawer / Drawer Tagging)
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   const viewModalHandler = (poNumber, poDate, prNumber, prDate) => {
     setViewData({ poNumber, poDate, prNumber, prDate });
     openViewModal();
   };
-  // console.log(viewData)
 
   const editModalHandler = (data) => {
     setEditData(data);
@@ -179,36 +112,18 @@ const WarehouseConfirmReject = () => {
   };
 
   return (
-    <Flex
-      color="fontColor"
-      h="auto"
-      w="full"
-      borderRadius="md"
-      flexDirection="column"
-      bg="background"
-      boxShadow="md"
-    >
+    <Flex color="fontColor" h="auto" w="full" borderRadius="md" flexDirection="column" bg="background" boxShadow="md">
       <Flex bg="buttonColor" borderRadius="10px 10px 0px 0px" w="25%" pl={2}>
-        {/* <Icon as={BsTrashFill} mt={2} color="white" fontSize="18px" /> */}
         <Text p={2} fontWeight="semibold" fontSize="12px" color="white">
           Warehouse Receiving Confirm Reject
         </Text>
       </Flex>
 
-      <Flex
-        w="full"
-        bg="form"
-        h="100%"
-        borderRadius="md"
-        flexDirection="column"
-      >
+      <Flex w="full" bg="form" h="100%" borderRadius="md" flexDirection="column">
         <Flex w="full" borderRadius="md" bg="form" h="6%" position="sticky">
           <HStack p={2} w="20%" mt={3}>
             <InputGroup size="sm">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiSearch bg="black" fontSize="18px" />}
-              />
+              <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
               <Input
                 borderRadius="lg"
                 fontSize="13px"
@@ -239,14 +154,7 @@ const WarehouseConfirmReject = () => {
                 <Skeleton height="20px" />
               </Stack>
             ) : (
-              <Table
-                size="md"
-                width="full"
-                border="none"
-                boxShadow="md"
-                bg="gray.200"
-                variant="striped"
-              >
+              <Table size="md" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                 <Thead bg="primary">
                   <Tr>
                     <Th color="white" fontSize="9px">
@@ -299,40 +207,18 @@ const WarehouseConfirmReject = () => {
                         <Flex>
                           <Box>
                             <Menu>
-                              <MenuButton
-                                alignItems="center"
-                                justifyContent="center"
-                                bg="none"
-                              >
+                              <MenuButton alignItems="center" justifyContent="center" bg="none">
                                 <AiOutlineMore fontSize="20px" />
                               </MenuButton>
                               <MenuList>
-                                {/* <MenuGroup title='Action:' /> */}
-                                {/* <MenuDivider/> */}
-                                <MenuItem
-                                  icon={<GrView fontSize="17px" />}
-                                  onClick={() =>
-                                    viewModalHandler(
-                                      pos.poNumber,
-                                      pos.poDate,
-                                      pos.prNumber,
-                                      pos.prDate
-                                    )
-                                  }
-                                >
+                                <MenuItem icon={<GrView fontSize="17px" />} onClick={() => viewModalHandler(pos.poNumber, pos.poDate, pos.prNumber, pos.prDate)}>
                                   <Text fontSize="15px">View</Text>
                                 </MenuItem>
-                                <MenuItem
-                                  icon={<FaEdit fontSize="17px" />}
-                                  onClick={() => editModalHandler(pos)}
-                                >
+                                <MenuItem icon={<FaEdit fontSize="17px" />} onClick={() => editModalHandler(pos)}>
                                   <Text fontSize="15px">Edit</Text>
                                 </MenuItem>
                                 <MenuItem icon={<GiCancel fontSize="17px" />}>
-                                  <Text
-                                    fontSize="15px"
-                                    _hover={{ color: "red" }}
-                                  >
+                                  <Text fontSize="15px" _hover={{ color: "red" }}>
                                     Cancel
                                   </Text>
                                 </MenuItem>
@@ -351,26 +237,14 @@ const WarehouseConfirmReject = () => {
           <Flex justifyContent="space-between">
             <HStack>
               <Badge colorScheme="cyan">
-                <Text color="secondary">
-                  Number of Records: {pO.posummary?.length}
-                </Text>
+                <Text color="secondary">Number of Records: {pO.posummary?.length}</Text>
               </Badge>
             </HStack>
 
             <Stack>
-              <Pagination
-                pagesCount={pagesCount}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-              >
+              <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                 <PaginationContainer>
-                  <PaginationPrevious
-                    bg="primary"
-                    color="white"
-                    p={1}
-                    _hover={{ bg: "green", color: "white" }}
-                    size="sm"
-                  >
+                  <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "green", color: "white" }} size="sm">
                     {"<<"}
                   </PaginationPrevious>
                   <PaginationPageGroup ml={1} mr={1}>
@@ -388,23 +262,10 @@ const WarehouseConfirmReject = () => {
                     ))}
                   </PaginationPageGroup>
                   <HStack>
-                    <PaginationNext
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "green", color: "white" }}
-                      size="sm"
-                      mb={2}
-                    >
+                    <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "green", color: "white" }} size="sm" mb={2}>
                       {">>"}
                     </PaginationNext>
-                    <Select
-                      onChange={handlePageSizeChange}
-                      bg="#FFFFFF"
-                      // size="sm"
-                      mb={2}
-                      variant="outline"
-                    >
+                    <Select onChange={handlePageSizeChange} bg="#FFFFFF" mb={2} variant="outline">
                       <option value={Number(5)}>5</option>
                       <option value={Number(10)}>10</option>
                       <option value={Number(25)}>25</option>
@@ -416,16 +277,7 @@ const WarehouseConfirmReject = () => {
             </Stack>
           </Flex>
 
-          <Flex justifyContent="end">
-            {/* {isEditModalOpen && (
-              <EditModal
-                isOpen={isEditModalOpen}
-                onClose={closeEditModal}
-                editData={editData}
-                getAvailablePOHandler={getAvailablePOHandler}
-              />
-            )} */}
-          </Flex>
+          <Flex justifyContent="end"></Flex>
         </Flex>
       </Flex>
     </Flex>

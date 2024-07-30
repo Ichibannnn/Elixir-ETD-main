@@ -3,7 +3,6 @@ import {
   Button,
   ButtonGroup,
   Flex,
-  Heading,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,32 +15,19 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { HiInformationCircle } from "react-icons/hi";
+import { FcAbout } from "react-icons/fc";
+
 import request from "../../../services/ApiClient";
 import { decodeUser } from "../../../services/decode-user";
 import { ToastComponent } from "../../../components/Toast";
-import { FcAbout } from "react-icons/fc";
 
 const currentUser = decodeUser();
 
-export const ApproveModal = ({
-  isOpen,
-  onClose,
-  orderNo,
-  setOrderNo,
-  fetchOrderList,
-  fetchOrdersByOrderNo,
-  orderIds,
-  genusData,
-  fetchNotification,
-}) => {
+export const ApproveModal = ({ isOpen, onClose, setOrderNo, fetchOrderList, fetchOrdersByOrderNo, orderIds, genusData, fetchNotification }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
   const submitHandler = () => {
-    console.log(orderIds);
-    console.log(genusData);
-    console.log(currentUser.fullName);
     setIsLoading(true);
     try {
       const res = request
@@ -55,12 +41,7 @@ export const ApproveModal = ({
           })
         )
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Order has been approved.",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Order has been approved.", "success", toast);
           setOrderNo("");
           fetchNotification();
           fetchOrderList();
@@ -69,12 +50,7 @@ export const ApproveModal = ({
           onClose();
         })
         .catch((err) => {
-          ToastComponent(
-            "Success",
-            "Order was not approved.",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Order was not approved.", "success", toast);
           setIsLoading(false);
         });
     } catch (error) {}
@@ -102,24 +78,10 @@ export const ApproveModal = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup size="sm" mt={7}>
-            <Button
-              colorScheme="blue"
-              onClick={submitHandler}
-              isLoading={isLoading}
-              disabled={isLoading}
-              borderRadius="none"
-              fontSize="10px"
-            >
+            <Button colorScheme="blue" onClick={submitHandler} isLoading={isLoading} disabled={isLoading} borderRadius="none" fontSize="10px">
               Yes
             </Button>
-            <Button
-              colorScheme="blackAlpha"
-              onClick={onClose}
-              isLoading={isLoading}
-              disabled={isLoading}
-              borderRadius="none"
-              fontSize="10px"
-            >
+            <Button colorScheme="blackAlpha" onClick={onClose} isLoading={isLoading} disabled={isLoading} borderRadius="none" fontSize="10px">
               No
             </Button>
           </ButtonGroup>
@@ -129,16 +91,7 @@ export const ApproveModal = ({
   );
 };
 
-export const RejectModal = ({
-  isOpen,
-  onClose,
-  orderNo,
-  setOrderNo,
-  fetchOrderList,
-  fetchOrdersByOrderNo,
-  fetchNotification,
-  orderIds,
-}) => {
+export const RejectModal = ({ isOpen, onClose, setOrderNo, fetchOrderList, fetchOrdersByOrderNo, fetchNotification, orderIds }) => {
   const [reason, setReason] = useState("");
   const [reasonData, setReasonData] = useState([]);
 
@@ -177,11 +130,6 @@ export const RejectModal = ({
               rejectedBy: currentUser.fullName,
             };
           })
-          // {
-          //   trasactId: orderNo,
-          //   remarks: reason,
-          //   rejectedBy: currentUser.userName,
-          // }
         )
         .then((res) => {
           ToastComponent("Succes", "Order has been rejected", "success", toast);
@@ -219,15 +167,7 @@ export const RejectModal = ({
               Are you sure you want to reject this order?
             </Text>
             {reasonData.length > 0 ? (
-              <Select
-                size="md"
-                color="black"
-                fontSize="md"
-                onChange={(e) => setReason(e.target.value)}
-                placeholder="Please select a reason"
-                bgColor="#fff8dc"
-                w="70%"
-              >
+              <Select size="md" color="black" fontSize="md" onChange={(e) => setReason(e.target.value)} placeholder="Please select a reason" bgColor="#fff8dc" w="70%">
                 {reasonData?.map((reason, i) => (
                   <option key={i} value={reason.reasonName}>
                     {reason.reasonName}
@@ -242,23 +182,10 @@ export const RejectModal = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup size="md" mt={7}>
-            <Button
-              variant="outline"
-              color="black"
-              isLoading={isLoading}
-              disabled={isLoading}
-              fontSize="md"
-              onClick={onClose}
-            >
+            <Button variant="outline" color="black" isLoading={isLoading} disabled={isLoading} fontSize="md" onClick={onClose}>
               Cancel
             </Button>
-            <Button
-              colorScheme="blue"
-              isDisabled={!reason || isLoading}
-              onClick={submitHandler}
-              isLoading={isLoading}
-              fontSize="md"
-            >
+            <Button colorScheme="blue" isDisabled={!reason || isLoading} onClick={submitHandler} isLoading={isLoading} fontSize="md">
               Submit
             </Button>
           </ButtonGroup>

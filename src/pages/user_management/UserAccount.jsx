@@ -3,13 +3,11 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   Flex,
-  FormLabel,
   HStack,
   Input,
   InputGroup,
@@ -39,7 +37,7 @@ import {
   Image,
   Badge,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AiTwotoneEdit } from "react-icons/ai";
@@ -53,15 +51,7 @@ import { ToastComponent } from "../../components/Toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import axios from "axios";
 
 const UserAccount = () => {
@@ -76,35 +66,23 @@ const UserAccount = () => {
   const [pageTotal, setPageTotal] = useState(undefined);
   const [disableEdit, setDisableEdit] = useState(false);
 
-  console.log("User :", currentUser);
-
   const fetchUserApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `User/GetAllUserWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
-    );
+    const response = await request.get(`User/GetAllUserWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}`, {
+      params: {
+        search: search,
+      },
+    });
 
     return response.data;
   };
 
   //FOR DRAWER
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isEdit,
-    onOpen: onOpenEdit,
-    onClose: onCloseEdit,
-  } = useDisclosure();
 
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -129,8 +107,6 @@ const UserAccount = () => {
       setUsers([]);
     };
   }, [currentPage, pageSize, status, search]);
-
-  // console.log(users);
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -163,12 +139,10 @@ const UserAccount = () => {
       .catch((error) => {
         ToastComponent("Error", error.response.data, "warning", toast);
       });
-    // console.log(routeLabel)
   };
 
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    // console.log(inputValue)
   };
 
   //ADD USER HANDLER---
@@ -192,8 +166,6 @@ const UserAccount = () => {
     setDisableEdit(true);
     setEditData(user);
     onOpen();
-    console.log(user);
-    // onOpenEdit();
   };
 
   useEffect(() => {
@@ -203,27 +175,13 @@ const UserAccount = () => {
   }, [search]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="auto"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="auto" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} w="full">
         <Flex flexDirection="column" gap={1} w="full">
-          <Flex
-            justifyContent="space-between"
-            alignItems="center"
-            borderRadius="md"
-          >
+          <Flex justifyContent="space-between" alignItems="center" borderRadius="md">
             <HStack w="25%" mt={3}>
               <InputGroup size="sm">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<FiSearch bg="black" fontSize="18px" />}
-                />
+                <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
                 <Input
                   borderRadius="lg"
                   fontSize="13px"
@@ -240,10 +198,7 @@ const UserAccount = () => {
 
             <HStack flexDirection="row">
               <Text fontSize="12px">STATUS:</Text>
-              <Select
-                fontSize="12px"
-                onChange={(e) => statusHandler(e.target.value)}
-              >
+              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
@@ -262,15 +217,7 @@ const UserAccount = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  className="inputUpperCase"
-                  size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table className="inputUpperCase" size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
                       <Th h="40px" color="white" fontSize="10px">
@@ -312,12 +259,7 @@ const UserAccount = () => {
 
                         <Td pl={0}>
                           <HStack>
-                            <Button
-                              bg="none"
-                              p={0}
-                              size="sm"
-                              onClick={() => editUserHandler(user)}
-                            >
+                            <Button bg="none" p={0} size="sm" onClick={() => editUserHandler(user)}>
                               <AiTwotoneEdit fontSize="15px" />
                             </Button>
 
@@ -327,19 +269,11 @@ const UserAccount = () => {
                                   <PopoverTrigger>
                                     {user.isActive === true ? (
                                       <Button bg="none" size="md" p={0}>
-                                        <Image
-                                          boxSize="20px"
-                                          src="/images/turnon.png"
-                                          title="active"
-                                        />
+                                        <Image boxSize="20px" src="/images/turnon.png" title="active" />
                                       </Button>
                                     ) : (
                                       <Button bg="none" size="md" p={0}>
-                                        <Image
-                                          boxSize="20px"
-                                          src="/images/turnoff.png"
-                                          title="inactive"
-                                        />
+                                        <Image boxSize="20px" src="/images/turnoff.png" title="inactive" />
                                       </Button>
                                     )}
                                   </PopoverTrigger>
@@ -347,32 +281,15 @@ const UserAccount = () => {
                                     <PopoverContent bg="primary" color="#fff">
                                       <PopoverArrow bg="primary" />
                                       <PopoverCloseButton />
-                                      <PopoverHeader>
-                                        Confirmation!
-                                      </PopoverHeader>
+                                      <PopoverHeader>Confirmation!</PopoverHeader>
                                       <PopoverBody>
                                         <VStack onClick={onClose}>
                                           {user.isActive === true ? (
-                                            <Text>
-                                              Are you sure you want to set this
-                                              user account inactive?
-                                            </Text>
+                                            <Text>Are you sure you want to set this user account inactive?</Text>
                                           ) : (
-                                            <Text>
-                                              Are you sure you want to set this
-                                              user account active?
-                                            </Text>
+                                            <Text>Are you sure you want to set this user account active?</Text>
                                           )}
-                                          <Button
-                                            colorScheme="green"
-                                            size="sm"
-                                            onClick={() =>
-                                              changeStatusHandler(
-                                                user.id,
-                                                user.isActive
-                                              )
-                                            }
-                                          >
+                                          <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(user.id, user.isActive)}>
                                             Yes
                                           </Button>
                                         </VStack>
@@ -400,7 +317,6 @@ const UserAccount = () => {
                 _hover={{ bg: "blue.400", color: "#fff" }}
                 w="auto"
                 leftIcon={<RiAddFill fontSize="20px" />}
-                // borderRadius="none"
                 onClick={addUserHandler}
               >
                 New
@@ -408,41 +324,13 @@ const UserAccount = () => {
 
               {/* PROPS */}
               {isOpen && (
-                <DrawerComponent
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  fetchUserApi={fetchUserApi}
-                  getUserHandler={getUserHandler}
-                  editData={editData}
-                  disableEdit={disableEdit}
-                />
+                <DrawerComponent isOpen={isOpen} onClose={onClose} fetchUserApi={fetchUserApi} getUserHandler={getUserHandler} editData={editData} disableEdit={disableEdit} />
               )}
 
-              {/* PROPS */}
-              {/* {isEdit && (
-                <DrawerComponentEdit
-                  isEdit={isEdit}
-                  onCloseEdit={onCloseEdit}
-                  fetchUserApi={fetchUserApi}
-                  getUserHandler={getUserHandler}
-                  editData={editData}
-                  disableEdit={disableEdit}
-                />
-              )} */}
-
               <Stack>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                    >
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                       {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
@@ -459,12 +347,7 @@ const UserAccount = () => {
                       ))}
                     </PaginationPageGroup>
                     <HStack>
-                      <PaginationNext
-                        bg="primary"
-                        color="white"
-                        p={1}
-                        _hover={{ bg: "btnColor", color: "white" }}
-                      >
+                      <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                         {">>"}
                       </PaginationNext>
                       <Select onChange={handlePageSizeChange} fontSize="md">
@@ -515,18 +398,6 @@ const DrawerComponent = (props) => {
 
   // SEDAR
   const [pickerItems, setPickerItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-
-  const handleCreateItem = (item) => {
-    setPickerItems((curr) => [item]);
-    setSelectedItems((curr) => [item]);
-  };
-
-  const handleSelectedItemsChange = (selectedItems) => {
-    if (selectedItems) {
-      setSelectedItems(selectedItems);
-    }
-  };
 
   const {
     register,
@@ -614,12 +485,7 @@ const DrawerComponent = (props) => {
             onClose(onClose);
           })
           .catch((error) => {
-            ToastComponent(
-              "Update Failed",
-              error.response.data,
-              "warning",
-              toast
-            );
+            ToastComponent("Update Failed", error.response.data, "warning", toast);
           });
       }
     } catch (err) {}
@@ -638,9 +504,7 @@ const DrawerComponent = (props) => {
     setInfo(
       pickerItems
         .filter((item) => {
-          return item?.general_info?.full_id_number_full_name
-            .toLowerCase()
-            .includes(idNumber);
+          return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
         .splice(0, 10)
     );
@@ -658,8 +522,7 @@ const DrawerComponent = (props) => {
         .split(" ")
         .map((i) => i.charAt(0))
         .join("")
-        .toLowerCase() +
-        data?.general_info.last_name.split(" ").join("").toLowerCase()
+        .toLowerCase() + data?.general_info.last_name.split(" ").join("").toLowerCase()
     );
     setValue(
       "formData.password",
@@ -667,8 +530,7 @@ const DrawerComponent = (props) => {
         .split(" ")
         .map((i) => i.charAt(0))
         .join("")
-        .toLowerCase() +
-        data?.general_info.last_name.split(" ").join("").toLowerCase()
+        .toLowerCase() + data?.general_info.last_name.split(" ").join("").toLowerCase()
       // + "1234"
     );
     setShowLoading(false);
@@ -695,9 +557,7 @@ const DrawerComponent = (props) => {
 
   useEffect(() => {
     if (editData.id) {
-      const employeeDetails = pickerItems?.find(
-        (item) => item.general_info.full_id_number === editData.empId
-      );
+      const employeeDetails = pickerItems?.find((item) => item.general_info.full_id_number === editData.empId);
 
       if (employeeDetails) {
         setValue("formData", {
@@ -714,32 +574,19 @@ const DrawerComponent = (props) => {
     }
   }, [pickerItems]);
 
-  // console.log(watch("formData.empId"));
-  // console.log(pickerItems);
-
   return (
     <>
       <Drawer isOpen={isOpen} placement="right" onClose={onCloseDrawer}>
         <DrawerOverlay />
         <form onSubmit={handleSubmit(submitHandler)}>
           <DrawerContent>
-            <DrawerHeader
-              borderBottomWidth="1px"
-              bg="secondary"
-              color="white"
-              fontSize="md"
-            >
+            <DrawerHeader borderBottomWidth="1px" bg="secondary" color="white" fontSize="md">
               User Form
             </DrawerHeader>
             <DrawerBody>
               <Stack spacing={4} mt={4}>
                 <Box>
-                  <Badge
-                    fontWeight="semibold"
-                    fontFamily="revert"
-                    fontSize="sm"
-                    mb={3}
-                  >
+                  <Badge fontWeight="semibold" fontFamily="revert" fontSize="sm" mb={3}>
                     USER DETAILS:
                   </Badge>
 
@@ -758,14 +605,8 @@ const DrawerComponent = (props) => {
                       onChange={(e) => setIdNumber(e.target.value)}
                       onFocus={() => setShowLoading(true)}
                     />
-                    <Box
-                      style={{ position: "relative", width: "100%" }}
-                      onBlur={() => setShowLoading(false)}
-                    >
-                      <div
-                        className="filteredData"
-                        style={{ display: showLoading ? "block" : "none" }}
-                      >
+                    <Box style={{ position: "relative", width: "100%" }} onBlur={() => setShowLoading(false)}>
+                      <div className="filteredData" style={{ display: showLoading ? "block" : "none" }}>
                         {showLoading &&
                           info?.map((item, i) => {
                             return (
@@ -780,9 +621,7 @@ const DrawerComponent = (props) => {
                               </Text>
                             );
                           })}
-                        {showLoading && pickerItems.length <= 0 && (
-                          <div>LOADING...</div>
-                        )}
+                        {showLoading && pickerItems.length <= 0 && <div>LOADING...</div>}
                       </div>
                     </Box>
                   </Box>
@@ -828,12 +667,7 @@ const DrawerComponent = (props) => {
                 </Box>
 
                 <Box>
-                  <Badge
-                    fontWeight="semibold"
-                    fontFamily="revert"
-                    fontSize="sm"
-                    mb={3}
-                  >
+                  <Badge fontWeight="semibold" fontFamily="revert" fontSize="sm" mb={3}>
                     USER PERMISSION:
                   </Badge>
                   <Box pl={2}>
@@ -861,19 +695,9 @@ const DrawerComponent = (props) => {
                       Password:
                     </Text>
                     <InputGroup>
-                      <Input
-                        fontSize="14px"
-                        type={showPassword ? "text" : "password"}
-                        {...register("formData.password")}
-                        placeholder="Please enter Password"
-                        autoComplete="off"
-                      />
+                      <Input fontSize="14px" type={showPassword ? "text" : "password"} {...register("formData.password")} placeholder="Please enter Password" autoComplete="off" />
                       <InputRightElement>
-                        <Button
-                          bg="none"
-                          onClick={() => setShowPassword(!showPassword)}
-                          size="sm"
-                        >
+                        <Button bg="none" onClick={() => setShowPassword(!showPassword)} size="sm">
                           {showPassword ? <VscEye /> : <VscEyeClosed />}
                         </Button>
                       </InputRightElement>
@@ -890,11 +714,7 @@ const DrawerComponent = (props) => {
                       User Role:
                     </Text>
                     {roles.length > 0 ? (
-                      <Select
-                        fontSize="14px"
-                        {...register("formData.userRoleId")}
-                        placeholder="Select Role"
-                      >
+                      <Select fontSize="14px" {...register("formData.userRoleId")} placeholder="Select Role">
                         {roles.map((rol) => (
                           <option key={rol.id} value={rol.id}>
                             {rol.roleName}
@@ -926,7 +746,6 @@ const DrawerComponent = (props) => {
   );
 };
 
-// DRAWER FOR EDIT ACCOUNTS
 // const DrawerComponentEdit = (props) => {
 //   const { isEdit, onCloseEdit, getUserHandler, editData, disableEdit } = props;
 

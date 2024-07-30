@@ -392,34 +392,13 @@
 
 // REJECT ALL CHECK ITEMS-------------------------------------------------------------------------
 import React, { useEffect, useState } from "react";
-import {
-  Badge,
-  Box,
-  Button,
-  ButtonGroup,
-  Checkbox,
-  Flex,
-  HStack,
-  Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Select,
-  Stack,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Badge, Button, ButtonGroup, Checkbox, Flex, HStack, Input, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
+import { GrView } from "react-icons/gr";
+
 import moment from "moment";
 import PageScroll from "../../../utils/PageScroll";
+
 import { ApproveModal, RejectModal, ViewModal } from "./ActionModal";
-import { GrView } from "react-icons/gr";
 
 export const ForApprovalMoveOrder = ({
   setSearch,
@@ -439,35 +418,13 @@ export const ForApprovalMoveOrder = ({
   genusData,
   setGenusData,
 }) => {
-  const TableHead = [
-    "Line",
-    "MIR ID",
-    "Customer Code",
-    "Customer Name",
-    "Total Quantity Order",
-    "Prepared Date",
-    "Rush",
-    "View",
-    "Reject",
-  ];
+  const TableHead = ["Line", "MIR ID", "Customer Code", "Customer Name", "Total Quantity Order", "Prepared Date", "Rush", "View", "Reject"];
 
   const [totalQuantity, setTotalQuantity] = useState("");
 
-  const {
-    isOpen: isView,
-    onClose: closeView,
-    onOpen: openView,
-  } = useDisclosure();
-  const {
-    isOpen: isApprove,
-    onClose: closeApprove,
-    onOpen: openApprove,
-  } = useDisclosure();
-  const {
-    isOpen: isReject,
-    onClose: closeReject,
-    onOpen: openReject,
-  } = useDisclosure();
+  const { isOpen: isView, onClose: closeView, onOpen: openView } = useDisclosure();
+  const { isOpen: isApprove, onClose: closeApprove, onOpen: openApprove } = useDisclosure();
+  const { isOpen: isReject, onClose: closeReject, onOpen: openReject } = useDisclosure();
 
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
@@ -496,17 +453,10 @@ export const ForApprovalMoveOrder = ({
     }
   };
 
-  // console.log(checkedItems);
-  // console.log(genusData);
-
   const childCheckHandler = (e) => {
     // GENUS ETD
     if (e.target.checked) {
-      const item = forApprovalData?.find(
-        (approvalData) => approvalData.mirId === parseInt(e.target.value)
-      );
-
-      // console.log(item);
+      const item = forApprovalData?.find((approvalData) => approvalData.mirId === parseInt(e.target.value));
 
       if (item) {
         const { mirId, order } = item;
@@ -527,25 +477,14 @@ export const ForApprovalMoveOrder = ({
     if (e.target.checked) {
       setCheckedItems([...checkedItems, parseInt(e.target.value)]);
     } else {
-      //GENUS
-      // setGenusData((prevValue) => [
-      //   ...prevValue.filter(
-      //     (item) => item.mir_id.toString() !== e.target.value
-      //   ),
-      // ]);
-
       // ELIXIR
-      const data = checkedItems?.filter(
-        (item) => item !== parseInt(e.target.value)
-      );
+      const data = checkedItems?.filter((item) => item !== parseInt(e.target.value));
       setCheckedItems(data);
     }
   };
 
   useEffect(() => {
     setMirNo(checkedItems);
-
-    // console.log(mirId);
 
     return () => {
       setMirNo([]);
@@ -566,12 +505,7 @@ export const ForApprovalMoveOrder = ({
         <HStack></HStack>
         <HStack w="17%">
           <Text fontSize="13px">Search:</Text>
-          <Input
-            borderColor="gray.400"
-            fontSize="11px"
-            placeholder="MIR Id"
-            onChange={(e) => searchHandler(e.target.value)}
-          />
+          <Input borderColor="gray.400" fontSize="11px" placeholder="MIR Id" onChange={(e) => searchHandler(e.target.value)} />
         </HStack>
       </Flex>
 
@@ -586,21 +520,11 @@ export const ForApprovalMoveOrder = ({
             onClick={() => handleStatusChange(false)}
           >
             Regular Orders
-            {notification?.forApprovalMoveOrderNotRush
-              ?.forapprovalmoveordercountNotRush === 0 ? (
+            {notification?.forApprovalMoveOrderNotRush?.forapprovalmoveordercountNotRush === 0 ? (
               ""
             ) : (
-              <Badge
-                ml={2}
-                fontSize="10px"
-                variant="solid"
-                colorScheme="red"
-                mb={1}
-              >
-                {
-                  notification?.forApprovalMoveOrderNotRush
-                    ?.forapprovalmoveordercountNotRush
-                }
+              <Badge ml={2} fontSize="10px" variant="solid" colorScheme="red" mb={1}>
+                {notification?.forApprovalMoveOrderNotRush?.forapprovalmoveordercountNotRush}
               </Badge>
             )}
           </Button>
@@ -613,41 +537,24 @@ export const ForApprovalMoveOrder = ({
             onClick={() => handleStatusChange(true)}
           >
             Rush Orders
-            {notification?.forApprovalMoveOrder?.forapprovalmoveordercount ===
-            0 ? (
+            {notification?.forApprovalMoveOrder?.forapprovalmoveordercount === 0 ? (
               ""
             ) : (
-              <Badge
-                ml={2}
-                fontSize="10px"
-                variant="solid"
-                colorScheme="red"
-                mb={1}
-              >
+              <Badge ml={2} fontSize="10px" variant="solid" colorScheme="red" mb={1}>
                 {notification?.forApprovalMoveOrder?.forapprovalmoveordercount}
               </Badge>
             )}
           </Button>
         </Flex>
         <PageScroll minHeight="200px" maxHeight="700px">
-          <Text
-            textAlign="center"
-            bgColor="primary"
-            color="white"
-            fontSize="14px"
-          >
+          <Text textAlign="center" bgColor="primary" color="white" fontSize="14px">
             List of Move Order
           </Text>
           <Table size="sm">
             <Thead bgColor="primary" h="40px">
               <Tr>
                 <Th color="white" fontSize="10px">
-                  <Checkbox
-                    onChange={parentCheckHandler}
-                    isChecked={allOrders?.length === checkedItems?.length}
-                    disabled={!allOrders?.length > 0}
-                  />{" "}
-                  Line
+                  <Checkbox onChange={parentCheckHandler} isChecked={allOrders?.length === checkedItems?.length} disabled={!allOrders?.length > 0} /> Line
                 </Th>
                 <Th color="white" fontSize="10px">
                   MIR ID
@@ -673,12 +580,7 @@ export const ForApprovalMoveOrder = ({
               {forApprovalData?.map((item, i) => (
                 <Tr key={i}>
                   <Td fontSize="xs">
-                    <Checkbox
-                      onChange={childCheckHandler}
-                      isChecked={checkedItems.includes(item.mirId)}
-                      value={item.mirId}
-                      color="black"
-                    >
+                    <Checkbox onChange={childCheckHandler} isChecked={checkedItems.includes(item.mirId)} value={item.mirId} color="black">
                       <Text fontSize="xs">{i + 1}</Text>
                     </Checkbox>
                   </Td>
@@ -687,24 +589,9 @@ export const ForApprovalMoveOrder = ({
                   <Td fontSize="xs">{item.customercode}</Td>
                   <Td fontSize="xs">{item.customerName}</Td>
                   <Td fontSize="xs">{item.quantity}</Td>
-                  <Td fontSize="xs">
-                    {moment(item.preparedDate).format("MM/DD/yyyy")}
-                  </Td>
+                  <Td fontSize="xs">{moment(item.preparedDate).format("MM/DD/yyyy")}</Td>
                   <Td>
-                    {/* <Button
-                      size="xs"
-                      fontSize="xs"
-                      colorScheme="facebook"
-                      onClick={() => viewHandler(item.mirId)}
-                    >
-                      View
-                    </Button> */}
-                    <Button
-                      onClick={() => viewHandler(item.mirId)}
-                      bg="none"
-                      size="xs"
-                      borderRadius="none"
-                    >
+                    <Button onClick={() => viewHandler(item.mirId)} bg="none" size="xs" borderRadius="none">
                       <GrView fontSize="20px" />
                     </Button>
                   </Td>
@@ -716,44 +603,20 @@ export const ForApprovalMoveOrder = ({
       </Flex>
 
       <Flex justifyContent="space-between" mt={7}>
-        <Text fontSize="xs">
-          {forApprovalData?.moveorder?.length > 0
-            ? `Showing ${forApprovalData?.moveorder?.length} entries`
-            : "No entries available"}
-        </Text>
+        <Text fontSize="xs">{forApprovalData?.moveorder?.length > 0 ? `Showing ${forApprovalData?.moveorder?.length} entries` : "No entries available"}</Text>
         <Flex>
           <ButtonGroup size="xs">
-            <Button
-              colorScheme="blue"
-              size="sm"
-              px={2}
-              isDisabled={!forApprovalData || checkedItems?.length === 0}
-              onClick={approveModal}
-            >
+            <Button colorScheme="blue" size="sm" px={2} isDisabled={!forApprovalData || checkedItems?.length === 0} onClick={approveModal}>
               <Text fontSize="xs">Approve</Text>
             </Button>
-            <Button
-              colorScheme="red"
-              size="sm"
-              px={2}
-              isDisabled={!forApprovalData || checkedItems?.length === 0}
-              onClick={rejectHandler}
-            >
+            <Button colorScheme="red" size="sm" px={2} isDisabled={!forApprovalData || checkedItems?.length === 0} onClick={rejectHandler}>
               <Text fontSize="xs">Reject</Text>
             </Button>
           </ButtonGroup>
         </Flex>
       </Flex>
 
-      {isView && (
-        <ViewModal
-          status={status}
-          isOpen={isView}
-          onClose={closeView}
-          id={mirId}
-          viewData={viewData}
-        />
-      )}
+      {isView && <ViewModal status={status} isOpen={isView} onClose={closeView} id={mirId} viewData={viewData} />}
       {isApprove && (
         <ApproveModal
           isOpen={isApprove}

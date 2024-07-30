@@ -5,8 +5,6 @@ import {
   ButtonGroup,
   Flex,
   FormLabel,
-  HStack,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,25 +12,24 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   Stack,
   Text,
-  toast,
   useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import { RiQuestionnaireLine } from "react-icons/ri";
+
 import request from "../../services/ApiClient";
 import { ToastComponent } from "../../components/Toast";
 import { decodeUser } from "../../services/decode-user";
+import { Select as AutoComplete } from "chakra-react-select";
+
+import * as yup from "yup";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import { Select as AutoComplete } from "chakra-react-select";
-import { FcInfo } from "react-icons/fc";
 
 const currentUser = decodeUser();
 
@@ -97,7 +94,6 @@ export const CancelApprovedDate = ({ isOpen, onClose, id, setOrderId, fetchAppro
 };
 
 //Save Button
-
 export const SaveButton = ({
   orderId,
   deliveryStatus,
@@ -121,7 +117,6 @@ export const SaveButton = ({
     <Flex w="full" justifyContent="end">
       <Button
         onClick={() => openPlateNumber()}
-        // disabled={!deliveryStatus || !batchNumber}
         title={deliveryStatus ? `Save with delivery status "${deliveryStatus}" and batch number "${batchNumber}"` : "Please select a delivery status and batch number."}
         size="xs"
         colorScheme="blue"
@@ -134,8 +129,6 @@ export const SaveButton = ({
           orderId={orderId}
           isOpen={isPlateNumber}
           onClose={closePlateNumber}
-          // deliveryStatus={deliveryStatus}
-          // batchNumber={batchNumber}
           orderListData={orderListData}
           fetchApprovedMoveOrders={fetchApprovedMoveOrders}
           fetchOrderList={fetchOrderList}
@@ -186,17 +179,8 @@ export const AccountTitleModal = ({
   const [department, setDepartment] = useState([]);
   const [location, setLocation] = useState([]);
 
-  // console.log(
-  //   "movedata",
-  //   moveData?.orders?.find((item) => item.id === orderId)
-  // );
-  // console.log(orderId);
-  // console.log(watch("formData"));
-  // console.log(account);
-
   // FETCH SEDAR EMPLOYEE ID
   const [pickerItems, setPickerItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
 
   const fetchEmployees = async () => {
     try {
@@ -222,7 +206,6 @@ export const AccountTitleModal = ({
         },
       });
       setCompany(res.data.result.companies);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
@@ -235,7 +218,6 @@ export const AccountTitleModal = ({
         },
       });
       setDepartment(res.data.result.departments);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
@@ -248,7 +230,6 @@ export const AccountTitleModal = ({
         },
       });
       setLocation(res.data.result.locations);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
@@ -257,9 +238,8 @@ export const AccountTitleModal = ({
   }, []);
 
   const {
-    register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     setValue,
     watch,
     control,
@@ -272,7 +252,6 @@ export const AccountTitleModal = ({
         companyId: "",
         departmentId: "",
         locationId: "",
-
         preparedBy: currentUser.fullName,
       },
     },
@@ -341,7 +320,6 @@ export const AccountTitleModal = ({
           departmentName: data.formData.departmentId.value.name,
           locationCode: data.formData.locationId.value.code,
           locationName: data.formData.locationId.value.name,
-          // preparedBy: currentUser.fullName,
         };
       });
 
@@ -357,16 +335,12 @@ export const AccountTitleModal = ({
       });
 
       if (result.isConfirmed) {
-        console.log("Submit Data: ", submitArrayBody);
-        console.log("orderListData: ", orderListData);
-        console.log("genusStatus: ", genusStatus);
         setIsLoading(true);
         try {
           const response = request
             .put(`Ordering/AddSavePreparedMoveOrder`, submitArrayBody)
             .then((response) => {
               ToastComponent("Success", "Items prepared successfully.", "success", toast);
-              // fetchMoveOrder();
               setOrderId("");
               setHighlighterId("");
               setItemCode("");
@@ -399,50 +373,7 @@ export const AccountTitleModal = ({
         }
       }
     });
-    // setIsLoading(true);
-    // try {
-    //   const submitArrayBody = moveData?.orders?.map((item) => {
-    //     return {
-    //       orderNo: orderId,
-    //     };
-    //   });
-    //   const response = request
-    //     .put(`Ordering/AddSavePreparedMoveOrder`, submitArrayBody)
-    //     .then((response) => {
-    //       ToastComponent(
-    //         "Success",
-    //         "Items prepared successfully.",
-    //         "success",
-    //         toast
-    //       );
-    //       setOrderId("");
-    //       setHighlighterId("");
-    //       setItemCode("");
-    //       setButtonChanger(false);
-    //       setCurrentPage(currentPage);
-    //       fetchApprovedMoveOrders();
-    //       fetchNotification();
-    //       fetchOrderList();
-    //       setIsLoading(false);
-    //       setCurrentPage(1);
-    //       onClose();
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
-
-  // const emptyField = () => {
-  //   // reset("formData.accountTitleId");
-  //   setSelectedAccount("");
-  //   setValue("formData.accountTitleId", "");
-  //   setValue("formData.empId", "");
-  //   setValue("formData.fullName", "");
-  //   onClose();
-  // };
 
   return (
     <>
@@ -556,10 +487,7 @@ export const AccountTitleModal = ({
               <Button
                 type="submit"
                 isLoading={isLoading}
-                isDisabled={
-                  // !isValid
-                  !watch("formData.companyId") || !watch("formData.departmentId") || !watch("formData.locationId")
-                }
+                isDisabled={!watch("formData.companyId") || !watch("formData.departmentId") || !watch("formData.locationId")}
                 colorScheme="blue"
                 px={4}
               >
@@ -579,7 +507,6 @@ export const AddQuantityConfirmation = ({
   id,
   orderNo,
   itemCode,
-  quantityOrdered,
   fetchOrderList,
   fetchPreparedItems,
   setQuantity,
@@ -587,14 +514,9 @@ export const AddQuantityConfirmation = ({
   warehouseId,
   setWarehouseId,
   quantity,
-  quantityRef,
-  fetchBarcodeDetails,
 }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
-
-  // console.log(quantityRef);
-  // console.log(quantity);
 
   const submitHandler = () => {
     setIsLoading(true);
@@ -630,11 +552,7 @@ export const AddQuantityConfirmation = ({
       <Modal isOpen={isOpen} onClose={() => {}} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>
-            {/* <Flex justifyContent="center">
-              <RiQuestionnaireLine fontSize="35px" />
-            </Flex> */}
-          </ModalHeader>
+          <ModalHeader></ModalHeader>
           <ModalCloseButton onClick={onClose} />
 
           <ModalBody>
@@ -661,7 +579,6 @@ export const AddQuantityConfirmation = ({
 };
 
 //Cancel Prepared
-
 export const CancelConfirmation = ({ isOpen, onClose, id, fetchPreparedItems, fetchOrderList, setCancelId, fetchNotification }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);

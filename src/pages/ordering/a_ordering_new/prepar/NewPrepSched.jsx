@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Box, Flex, Stack, VStack } from "@chakra-ui/react";
+import { Flex, VStack } from "@chakra-ui/react";
+
 import request from "../../../../services/ApiClient";
+import { usePagination } from "@ajna/pagination";
+
 import { ListOfOrders } from "./ListOfOrders";
 import { ListOfMir } from "./ListOfMir";
-import { usePagination } from "@ajna/pagination";
 
 const NewPrepSched = ({ notification, fetchNotification }) => {
   const [selectedMIRIds, setSelectedMIRIds] = useState([]);
@@ -26,14 +28,11 @@ const NewPrepSched = ({ notification, fetchNotification }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchMirListApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Ordering/GetAllListOfMir?PageNumber=${pageNumber}&PageSize=${pageSize}&status=${status}`,
-      {
-        params: {
-          search: search,
-        },
-      }
-    );
+    const response = await request.get(`Ordering/GetAllListOfMir?PageNumber=${pageNumber}&PageSize=${pageSize}&status=${status}`, {
+      params: {
+        search: search,
+      },
+    });
 
     return response.data;
   };
@@ -50,14 +49,7 @@ const NewPrepSched = ({ notification, fetchNotification }) => {
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -125,7 +117,7 @@ const NewPrepSched = ({ notification, fetchNotification }) => {
 
 export default NewPrepSched;
 
-// NEWEST CODES ========================================================
+// OLD CODES ========================================================
 // import React, { useState, useEffect } from "react";
 // import { Box, Flex, Stack, VStack } from "@chakra-ui/react";
 // import request from "../../../../services/ApiClient";

@@ -20,27 +20,16 @@ import {
   Tr,
   useToast,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { ReceivingContext } from "../../../components/context/ReceivingContext";
-import request from "../../../services/ApiClient";
-import { ToastComponent } from "../../../components/Toast";
-import { AiFillMinusCircle } from "react-icons/ai";
-import { IoIosAdd, IoIosSave } from "react-icons/io";
-import { MdDeleteForever } from "react-icons/md";
-import { TiDeleteOutline } from "react-icons/ti";
+import { IoIosSave } from "react-icons/io";
 import { FaMinusCircle } from "react-icons/fa";
-import { GrAdd } from "react-icons/gr";
 import { IoAddSharp } from "react-icons/io5";
 
-const EditAddRejectionModal = ({
-  receivingId,
-  sumQuantity,
-  actualGood,
-  setDisableQuantity,
-  quantity,
-  setQuantity,
-  actualDelivered,
-}) => {
+import React, { useContext, useEffect, useRef, useState } from "react";
+import request from "../../../services/ApiClient";
+import { ReceivingContext } from "../../../components/context/ReceivingContext";
+import { ToastComponent } from "../../../components/Toast";
+
+const EditAddRejectionModal = ({ receivingId, sumQuantity, setDisableQuantity, quantity, setQuantity, actualDelivered }) => {
   const { setSubmitDataTwo, setSumQuantity } = useContext(ReceivingContext);
 
   const [reasons, setReasons] = useState([]);
@@ -50,7 +39,6 @@ const EditAddRejectionModal = ({
   const [errors, setErrors] = useState({});
   const [finalData, setFinalData] = useState([]);
   const [disabled, setDisabled] = useState(true);
-  const [disabledQuantity, setDisabledQuantity] = useState("");
 
   const remarksDisplay = useRef(null);
   const toast = useToast();
@@ -94,12 +82,7 @@ const EditAddRejectionModal = ({
   const quantityHandler = (data) => {
     if (data) {
       if (data + Number(sumQuantity) >= actualDelivered) {
-        ToastComponent(
-          "Warning",
-          "You are providing a value greater than or equal to your Actual Good!",
-          "warning",
-          toast
-        );
+        ToastComponent("Warning", "You are providing a value greater than or equal to your Actual Good!", "warning", toast);
         setQuantity("");
       } else {
         setQuantity(data);
@@ -131,14 +114,8 @@ const EditAddRejectionModal = ({
 
   // HANDLER FOR REJECTION BUTTON
   const addNewRowHandler = () => {
-    // quantityHandler()
     if (finalData.some((data) => data.remarks === remarks)) {
-      ToastComponent(
-        "Error!",
-        "Remarks description already added",
-        "error",
-        toast
-      );
+      ToastComponent("Error!", "Remarks description already added", "error", toast);
       return;
     }
 
@@ -182,12 +159,7 @@ const EditAddRejectionModal = ({
     <Box>
       <Accordion allowToggle defaultIndex={[1]}>
         <AccordionItem>
-          <Flex
-            bg="primary"
-            color="white"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+          <Flex bg="primary" color="white" justifyContent="space-between" alignItems="center">
             <AccordionButton p={1}>
               <Text fontSize="13px" fontWeight="semibold">
                 {" "}
@@ -199,7 +171,6 @@ const EditAddRejectionModal = ({
               colorScheme="red"
               size="xs"
               mr={1}
-              // borderRadius="full"
               borderRadius="none"
               onClick={disabledQuantityReject}
               onChange={(e) => rejectQuantityProvider(e.target.value)}
@@ -217,9 +188,7 @@ const EditAddRejectionModal = ({
                   value={quantity}
                   onChange={(e) => quantityHandler(parseInt(e.target.value))}
                   onWheel={(e) => e.target.blur()}
-                  onKeyDown={(e) =>
-                    ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
-                  }
+                  onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                   onPaste={(e) => e.preventDefault()}
                   autoComplete="off"
                   min="1"
@@ -260,14 +229,7 @@ const EditAddRejectionModal = ({
 
             <Flex justifyContent="space-between">
               <Badge colorScheme="blue"> Total Quantity: {sumQuantity} </Badge>
-              <Button
-                leftIcon={<IoIosSave fontSize="20px" />}
-                size="xs"
-                colorScheme="blue"
-                // border="none"
-                borderRadius="none"
-                onClick={addNewRowHandler}
-              >
+              <Button leftIcon={<IoIosSave fontSize="20px" />} size="xs" colorScheme="blue" borderRadius="none" onClick={addNewRowHandler}>
                 Save Reject
               </Button>
             </Flex>
@@ -293,14 +255,7 @@ const EditAddRejectionModal = ({
                       <Td fontSize="10px">{data.remarksName}</Td>
                       {/* <Td>{data.rawMaterialDescription}</Td> */}
                       <Td>
-                        <Button
-                          p={0}
-                          background="none"
-                          color="secondary"
-                          onClick={() =>
-                            deleteRejectionHandler(data.remarksName)
-                          }
-                        >
+                        <Button p={0} background="none" color="secondary" onClick={() => deleteRejectionHandler(data.remarksName)}>
                           <FaMinusCircle fontSize="17px" color="red" />
                         </Button>
                       </Td>

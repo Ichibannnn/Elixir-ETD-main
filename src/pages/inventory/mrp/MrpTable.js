@@ -139,6 +139,7 @@ export const MrpTable = ({
           <Button
             onClick={handleExport}
             isLoading={loadingExport}
+            // isLoading={fetchingData}
             leftIcon={<BiExport fontSize="20px" />}
             disabled={!sheetData}
             ml={2}

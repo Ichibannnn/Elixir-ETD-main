@@ -1,42 +1,12 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  ButtonGroup,
-  Flex,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-} from "@chakra-ui/react";
-
-import { ApproveModal, RejectModal } from "./ActionModal";
+import React from "react";
+import { Button, ButtonGroup, Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import PageScroll from "../../../utils/PageScroll";
 
-export const ListOfOrders = ({
-  customerOrders,
-  orderNo,
-  setOrderNo,
-  fetchOrderList,
-  fetchOrdersByOrderNo,
-  orderIds,
-  genusData,
-  checkedItems,
-  fetchNotification,
-}) => {
-  const {
-    isOpen: isApprove,
-    onClose: closeApprove,
-    onOpen: openApprove,
-  } = useDisclosure();
-  const {
-    isOpen: isReject,
-    onClose: closeReject,
-    onOpen: openReject,
-  } = useDisclosure();
+import { ApproveModal, RejectModal } from "./ActionModal";
+
+export const ListOfOrders = ({ customerOrders, orderNo, setOrderNo, fetchOrderList, fetchOrdersByOrderNo, orderIds, genusData, checkedItems, fetchNotification }) => {
+  const { isOpen: isApprove, onClose: closeApprove, onOpen: openApprove } = useDisclosure();
+  const { isOpen: isReject, onClose: closeReject, onOpen: openReject } = useDisclosure();
 
   const approveModal = () => {
     openApprove();
@@ -50,22 +20,11 @@ export const ListOfOrders = ({
     <Flex w="full" flexDirection="column">
       <Flex flexDirection="column" className="boxShadow" p={4}>
         <Flex flexDirection="column">
-          <Text
-            textAlign="center"
-            bgColor="primary"
-            color="white"
-            fontSize="13px"
-          >
+          <Text textAlign="center" bgColor="primary" color="white" fontSize="13px">
             LIST OF ORDERS
           </Text>
           <PageScroll minHeight="370px" maxHeight="420px">
-            <Table
-              size="sm"
-              variant="simple"
-              position="sticky"
-              top={0}
-              zIndex={1}
-            >
+            <Table size="sm" variant="simple" position="sticky" top={0} zIndex={1}>
               <Thead bgColor="secondary">
                 <Tr h="30px">
                   <Th color="white" fontSize="11px">
@@ -105,16 +64,8 @@ export const ListOfOrders = ({
                           maximumFractionDigits: 2,
                         })}
                       </Td>
-                      {item.itemRemarks ? (
-                        <Td fontSize="xs">{item.itemRemarks}</Td>
-                      ) : (
-                        <Td fontSize="xs">-</Td>
-                      )}
-                      {item.assetTag ? (
-                        <Td fontSize="xs">{item.assetTag}</Td>
-                      ) : (
-                        <Td fontSize="xs">-</Td>
-                      )}
+                      {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
+                      {item.assetTag ? <Td fontSize="xs">{item.assetTag}</Td> : <Td fontSize="xs">-</Td>}
                     </Tr>
                   ))}
                 </Tbody>
@@ -125,21 +76,10 @@ export const ListOfOrders = ({
       </Flex>
       <Flex justifyContent="end" mt={4}>
         <ButtonGroup size="sm">
-          <Button
-            colorScheme="blue"
-            px={2}
-            isDisabled={!orderNo || checkedItems?.length === 0}
-            onClick={approveModal}
-          >
+          <Button colorScheme="blue" px={2} isDisabled={!orderNo || checkedItems?.length === 0} onClick={approveModal}>
             Approve
           </Button>
-          <Button
-            px={4}
-            isDisabled={!orderNo || checkedItems?.length === 0}
-            onClick={rejectModal}
-            color="white"
-            colorScheme="red"
-          >
+          <Button px={4} isDisabled={!orderNo || checkedItems?.length === 0} onClick={rejectModal} color="white" colorScheme="red">
             Reject
           </Button>
         </ButtonGroup>

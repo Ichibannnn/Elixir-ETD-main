@@ -16,7 +16,6 @@ import {
   useDisclosure,
   Td,
   Button,
-  useToast,
   ModalOverlay,
   Modal,
   ModalContent,
@@ -27,23 +26,17 @@ import {
   Badge,
   Select,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { useEffect } from "react";
 import { TiArrowBack } from "react-icons/ti";
-import PageScroll from "../../utils/PageScroll";
+
+import React, { useState } from "react";
+import { useEffect } from "react";
+
 import request from "../../services/ApiClient";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
 import moment from "moment";
-import { EditModal } from "./warehouse_receiving/EditModal";
+import PageScroll from "../../utils/PageScroll";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+
 import CancelledReturnModal from "./warehouse_receiving/CancelledReturnModal";
 
 const CancelledPO = () => {
@@ -52,36 +45,16 @@ const CancelledPO = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [pageTotal, setPageTotal] = useState(undefined);
-  const toast = useToast();
 
-  // const [viewData, setViewData] = useState([]);
-  // const {
-  //   isOpen: isViewModalOpen,
-  //   onOpen: openViewModal,
-  //   onClose: closeViewModal,
-  // } = useDisclosure();
-  // const {
-  //   isOpen: isEditModalOpen,
-  //   onOpen: openEditModal,
-  //   onClose: closeEditModal,
-  // } = useDisclosure();
-
-  const {
-    isOpen: isReturnModalOpen,
-    onOpen: openReturnModal,
-    onClose: closeReturnModal,
-  } = useDisclosure();
+  const { isOpen: isReturnModalOpen, onOpen: openReturnModal, onClose: closeReturnModal } = useDisclosure();
 
   // FETCH API CANCELLED PO:
   const fetchCancelledPOApi = async (pageNumber, pageSize, search) => {
-    const response = await request.get(
-      `Warehouse/GetAllCancelledPoWithPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`,
-      {
-        params: {
-          search: search,
-        },
-      }
-    );
+    const response = await request.get(`Warehouse/GetAllCancelledPoWithPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`, {
+      params: {
+        search: search,
+      },
+    });
 
     return response.data;
   };
@@ -89,14 +62,7 @@ const CancelledPO = () => {
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -137,12 +103,8 @@ const CancelledPO = () => {
     console.log(inputValue);
   };
 
-  //FOR DRAWER (Drawer / Drawer Tagging)
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   const returnModalHandler = (data) => {
     setEditData(data);
-    // console.log(data);
     openReturnModal();
   };
 
@@ -153,43 +115,9 @@ const CancelledPO = () => {
   }, [search]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="100vh"
-      w="full"
-      borderRadius="md"
-      flexDirection="column"
-      bg="background"
-    >
-      {/* <Flex bg="btnColor" borderRadius="none" w="20%" pl={2}>
-        <Text
-          p={2}
-          fontWeight="semibold"
-          fontSize="12px"
-          color="white"
-          letterSpacing="wider"
-        >
-          CANCELLED PURCHASE ORDER
-        </Text>
-      </Flex> */}
-
-      <Flex
-        w="full"
-        bg="form"
-        h="100%"
-        p={4}
-        borderRadius="md"
-        flexDirection="column"
-      >
-        <Flex
-          w="full"
-          borderRadius="lg"
-          h="5%"
-          position="sticky"
-          justifyContent="space-between"
-          alignItems="center"
-          p={3}
-        >
+    <Flex color="fontColor" h="100vh" w="full" borderRadius="md" flexDirection="column" bg="background">
+      <Flex w="full" bg="form" h="100%" p={4} borderRadius="md" flexDirection="column">
+        <Flex w="full" borderRadius="lg" h="5%" position="sticky" justifyContent="space-between" alignItems="center" p={3}>
           <HStack>
             <Text fontSize="2xl" color="black" fontWeight="semibold">
               Cancelled Purchase Orders
@@ -197,11 +125,7 @@ const CancelledPO = () => {
           </HStack>
           <HStack w="15%" p={2} borderRadius="2xl">
             <InputGroup w="full">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiSearch color="blackAlpha" />}
-                fontSize="sm"
-              />
+              <InputLeftElement pointerEvents="none" children={<FiSearch color="blackAlpha" />} fontSize="sm" />
               <Input
                 color="blackAlpha"
                 type="text"
@@ -217,29 +141,10 @@ const CancelledPO = () => {
           </HStack>
         </Flex>
 
-        <Flex
-          w="full"
-          flexDirection="column"
-          className="boxShadow"
-          borderRadius="xl"
-          h="full"
-          p={4}
-          mt={4}
-          bg="form"
-          gap={2}
-        >
+        <Flex w="full" flexDirection="column" className="boxShadow" borderRadius="xl" h="full" p={4} mt={4} bg="form" gap={2}>
           <Text fontSize="lg" color="black" fontWeight="semibold">
             List of Cancelled PO
           </Text>
-          {/* <Text
-            textAlign="center"
-            bgColor="primary"
-            color="white"
-            fontSize="14px"
-            // fontWeight="semibold"
-          >
-            Cancelled Purchase Orders
-          </Text> */}
           <PageScroll maxHeight="700px">
             {isLoading ? (
               <Stack width="full">
@@ -254,13 +159,7 @@ const CancelledPO = () => {
                 <Skeleton height="20px" />
               </Stack>
             ) : (
-              <Table
-                // size="sm"
-                width="full"
-                border="none"
-                bg="gray.200"
-                variant="striped"
-              >
+              <Table width="full" border="none" bg="gray.200" variant="striped">
                 <Thead bg="primary" position="sticky" top={0}>
                   <Tr h="40px">
                     <Th color="white" fontSize="10px">
@@ -278,18 +177,9 @@ const CancelledPO = () => {
                     <Th color="white" fontSize="10px">
                       Qty Remaining
                     </Th>
-                    {/* <Th color="white" fontSize="9px">
-                      Qty Cancel
-                    </Th>
-                    <Th color="white" fontSize="9px">
-                      Qty Good
-                    </Th> */}
                     <Th color="white" fontSize="10px">
                       Date Cancelled
                     </Th>
-                    {/* <Th color="white" fontSize="9px">
-                      Remarks
-                    </Th> */}
                     <Th color="white" fontSize="10px">
                       Return
                     </Th>
@@ -308,42 +198,13 @@ const CancelledPO = () => {
                           minimumFractionDigits: 2,
                         })}
                       </Td>
-                      <Td fontSize="xs">
-                        {moment(canc.dateCancelled).format("MM/DD/YYYY")}
-                      </Td>
-                      {/* <Td fontSize="11px">{canc.remarks}</Td> */}
+                      <Td fontSize="xs">{moment(canc.dateCancelled).format("MM/DD/YYYY")}</Td>
                       <Td>
                         <Flex>
                           <Box>
-                            <Button
-                              bg="none"
-                              // onClick={() => editRolesHandler(rol)}
-                              onClick={() => returnModalHandler(canc.id)}
-                            >
+                            <Button bg="none" onClick={() => returnModalHandler(canc.id)}>
                               <TiArrowBack />
                             </Button>
-                            {/* <Menu>
-                                  <MenuButton  alignItems="center" justifyContent="center" bg="none">
-                                  <AiOutlineMore fontSize="20px" />
-                                  </MenuButton>
-                                  <MenuList>
-                                    <MenuItem icon={<GrView fontSize="17px"/>} onClick={() => viewModalHandler(pos.poNumber, pos.poDate, pos.prNumber, pos.prDate)}>
-                                      <Text fontSize="15px">
-                                      View
-                                      </Text>
-                                    </MenuItem>
-                                    <MenuItem icon={<FaEdit fontSize="17px"/>} onClick={() => editModalHandler(pos)} >
-                                      <Text fontSize="15px">
-                                        Edit
-                                      </Text>
-                                    </MenuItem>
-                                    <MenuItem icon={<GiCancel fontSize="17px"/>}>
-                                      <Text fontSize="15px" _hover={{ color: "red" }}>
-                                        Cancel
-                                      </Text>
-                                    </MenuItem>
-                                  </MenuList>
-                                </Menu> */}
                           </Box>
                         </Flex>
                       </Td>
@@ -357,25 +218,14 @@ const CancelledPO = () => {
           <Flex justifyContent="space-between">
             <HStack>
               <Badge colorScheme="cyan">
-                <Text color="secondary">
-                  Number of Records: {pO.cancel?.length}
-                </Text>
+                <Text color="secondary">Number of Records: {pO.cancel?.length}</Text>
               </Badge>
             </HStack>
 
             <Stack>
-              <Pagination
-                pagesCount={pagesCount}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-              >
+              <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                 <PaginationContainer>
-                  <PaginationPrevious
-                    bg="primary"
-                    color="white"
-                    p={1}
-                    _hover={{ bg: "btnColor", color: "white" }}
-                  >
+                  <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                     {"<<"}
                   </PaginationPrevious>
                   <PaginationPageGroup ml={1} mr={1}>
@@ -392,19 +242,10 @@ const CancelledPO = () => {
                     ))}
                   </PaginationPageGroup>
                   <HStack>
-                    <PaginationNext
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                    >
+                    <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                       {">>"}
                     </PaginationNext>
-                    <Select
-                      onChange={handlePageSizeChange}
-                      variant="outline"
-                      fontSize="md"
-                    >
+                    <Select onChange={handlePageSizeChange} variant="outline" fontSize="md">
                       <option value={Number(5)}>5</option>
                       <option value={Number(10)}>10</option>
                       <option value={Number(25)}>25</option>
@@ -417,14 +258,7 @@ const CancelledPO = () => {
           </Flex>
 
           <Flex justifyContent="end">
-            {isReturnModalOpen && (
-              <CancelledReturnModal
-                editData={editData}
-                isOpen={isReturnModalOpen}
-                onClose={closeReturnModal}
-                getCancelledPOHandler={getCancelledPOHandler}
-              />
-            )}
+            {isReturnModalOpen && <CancelledReturnModal editData={editData} isOpen={isReturnModalOpen} onClose={closeReturnModal} getCancelledPOHandler={getCancelledPOHandler} />}
           </Flex>
         </Flex>
       </Flex>

@@ -79,7 +79,6 @@ function ApprovedMoPage() {
       printData={printData}
       status={status}
       setStatus={setStatus}
-      //   fetchNotification={fetchNotification}
     />
   );
 }

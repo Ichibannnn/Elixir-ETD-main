@@ -19,8 +19,6 @@ import { ReceivingContext } from "../../../components/context/ReceivingContext";
 import { ToastComponent } from "../../../components/Toast";
 import PrintBarcode from "./PrintBarcode";
 import { useReactToPrint } from "react-to-print";
-import Barcode from "react-barcode";
-import moment from "moment";
 
 const EditModalSave = ({
   sumQuantity,
@@ -44,11 +42,7 @@ const EditModalSave = ({
   lotSection,
   quantity,
   receivingId,
-  isValid,
-  // editData,
 }) => {
-  // console.log("Edit data: ", editData);
-
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -77,11 +71,9 @@ const EditModalSave = ({
           setReceivingDate(receivingDate);
           setIsLoading(false);
           getAvailablePOHandler();
-          // fetchNotification()
           handlePrint();
           openPrintModal();
           onClose();
-          // closeModal();
 
           // take generated id
           const receivingIdWithoutUseContext = res.data.id;
@@ -114,8 +106,6 @@ const EditModalSave = ({
     }
   };
 
-  // console.log(unitPrice);
-
   return (
     <Flex>
       <Button
@@ -123,15 +113,12 @@ const EditModalSave = ({
         onClick={onOpen}
         isDisabled={
           isSubmitDisabled ||
-          // !isValid ||
           !expectedDelivery ||
           !actualDelivered ||
           !unitPrice ||
-          // editData.unitPrice > 0 ||
           !unitPrice === 0 ||
           !siNumber ||
           !receivingDate ||
-          // editData.lotSection === null ||
           !lotSection ||
           disableQuantity < 0 ||
           quantity
@@ -171,7 +158,6 @@ const EditModalSave = ({
       {isPrintModalOpen && (
         <PrintBarcode
           printData={editData}
-          // unitPrice={unitPrice}
           receivingDate={receivingDate}
           lotSection={lotSection}
           actualGood={actualGood}

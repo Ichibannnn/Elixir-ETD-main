@@ -15,129 +15,79 @@ import {
   Tr,
   VStack,
   useDisclosure,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
   Td,
-  Portal,
   Button,
   useToast,
   Icon,
   Menu,
   MenuButton,
   MenuList,
-  MenuGroup,
-  MenuDivider,
   MenuItem,
-  IconButton,
   ModalOverlay,
   Modal,
   ModalContent,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Tfoot,
   ModalFooter,
   Badge,
   Select,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { useEffect } from "react";
 import { FaEdit, FaSort } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import { GrView } from "react-icons/gr";
 import { AiOutlineMore } from "react-icons/ai";
-import { useForm } from "react-hook-form";
-import { AiTwotoneEdit } from "react-icons/ai";
-import { IoReceiptOutline } from "react-icons/io5";
-import { FaSearch } from "react-icons/fa";
-import { MdLibraryAdd } from "react-icons/md";
+import { BsReceiptCutoff } from "react-icons/bs";
+
+import React, { useState } from "react";
+import { useEffect } from "react";
+
 import PageScroll from "../../utils/PageScroll";
 import request from "../../services/ApiClient";
-import { ToastComponent } from "../../components/Toast";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
 import moment from "moment";
+import { decodeUser } from "../../services/decode-user";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+
+import { WarehouseContext } from "../../components/context/WarehouseContext";
 import { EditModal } from "./warehouse_receiving/EditModal";
 import CancelModal from "./warehouse_receiving/CancelModal";
-import { WarehouseContext } from "../../components/context/WarehouseContext";
-import { BsReceiptCutoff } from "react-icons/bs";
-import { BsReceipt } from "react-icons/bs";
 
 const WarehouseReceiving = () => {
   const [pO, setPO] = useState([]);
   const [poId, setPoId] = useState(null);
   const [search, setSearch] = useState("");
-  const toast = useToast();
-  const currentUser = decodeUser();
   const [viewData, setViewData] = useState([]);
   const [editData, setEditData] = useState([]);
   const [actualGood, setActualGood] = useState(0);
-
   const [unitPrice, setUnitPrice] = useState(null);
 
-  const [isLoading, setIsLoading] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
-  const [disableEdit, setDisableEdit] = useState(false);
   const [receivingDate, setReceivingDate] = useState(null);
   const [lotCategory, setLotCategory] = useState("");
   const [disableQuantity, setDisableQuantity] = useState(0);
   const [receivingId, setReceivingId] = useState(null);
 
-  const {
-    isOpen: isViewModalOpen,
-    onOpen: openViewModal,
-    onClose: closeViewModal,
-  } = useDisclosure();
-  const {
-    isOpen: isEditModalOpen,
-    onOpen: openEditModal,
-    onClose: closeEditModal,
-  } = useDisclosure();
-  const {
-    isOpen: isCancelModalOpen,
-    onOpen: openCancelModal,
-    onClose: closeCancelModal,
-  } = useDisclosure();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { isOpen: isViewModalOpen, onOpen: openViewModal, onClose: closeViewModal } = useDisclosure();
+  const { isOpen: isEditModalOpen, onOpen: openEditModal, onClose: closeEditModal } = useDisclosure();
+  const { isOpen: isCancelModalOpen, onOpen: openCancelModal, onClose: closeCancelModal } = useDisclosure();
 
   // FETCH API ROLES:
   const fetchAvailablePOApi = async (pageNumber, pageSize, search) => {
-    const response = await request.get(
-      `Warehouse/GetAllAvailablePoWithPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`,
-      {
-        params: {
-          search: search,
-        },
-      }
-    );
+    const response = await request.get(`Warehouse/GetAllAvailablePoWithPaginationOrig?PageNumber=${pageNumber}&PageSize=${pageSize}`, {
+      params: {
+        search: search,
+      },
+    });
     return response.data;
   };
 
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -163,7 +113,6 @@ const WarehouseReceiving = () => {
       setPageTotal(res.totalCount);
     });
   };
-  // console.log(pO)
 
   useEffect(() => {
     getAvailablePOHandler();
@@ -187,11 +136,8 @@ const WarehouseReceiving = () => {
   const editModalHandler = (data) => {
     setEditData(data);
     setUnitPrice(data.unitPrice);
-    // console.log(editData);
     openEditModal();
   };
-
-  // console.log("Unit Price: ", unitPrice);
 
   const cancelModalHandler = (data) => {
     setPoId(data);
@@ -212,9 +158,7 @@ const WarehouseReceiving = () => {
 
   //Sort by date end line
   function getComparator(poSort) {
-    return poSort === "desc"
-      ? (a, b) => descendingComparator(a, b)
-      : (a, b) => -descendingComparator(a, b);
+    return poSort === "desc" ? (a, b) => descendingComparator(a, b) : (a, b) => -descendingComparator(a, b);
   }
 
   useEffect(() => {
@@ -225,31 +169,9 @@ const WarehouseReceiving = () => {
 
   return (
     <WarehouseContext.Provider value={{ receivingId }}>
-      <Flex
-        color="fontColor"
-        h="100vh"
-        w="full"
-        borderRadius="md"
-        flexDirection="column"
-        bg="gray.300"
-      >
-        <Flex
-          w="full"
-          bg="form"
-          h="100%"
-          p={4}
-          borderRadius="md"
-          flexDirection="column"
-        >
-          <Flex
-            w="full"
-            borderRadius="lg"
-            h="5%"
-            position="sticky"
-            justifyContent="space-between"
-            alignItems="center"
-            p={3}
-          >
+      <Flex color="fontColor" h="100vh" w="full" borderRadius="md" flexDirection="column" bg="gray.300">
+        <Flex w="full" bg="form" h="100%" p={4} borderRadius="md" flexDirection="column">
+          <Flex w="full" borderRadius="lg" h="5%" position="sticky" justifyContent="space-between" alignItems="center" p={3}>
             <HStack>
               <Text fontSize="2xl" color="black" fontWeight="semibold">
                 Purchase Order Summary List
@@ -257,11 +179,7 @@ const WarehouseReceiving = () => {
             </HStack>
             <HStack w="15%" p={2} borderRadius="2xl">
               <InputGroup w="full">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<FiSearch color="blackAlpha" />}
-                  fontSize="sm"
-                />
+                <InputLeftElement pointerEvents="none" children={<FiSearch color="blackAlpha" />} fontSize="sm" />
                 <Input
                   color="blackAlpha"
                   type="text"
@@ -277,17 +195,7 @@ const WarehouseReceiving = () => {
             </HStack>
           </Flex>
 
-          <Flex
-            w="full"
-            flexDirection="column"
-            className="boxShadow"
-            borderRadius="xl"
-            h="full"
-            p={4}
-            mt={4}
-            bg="form"
-            gap={2}
-          >
+          <Flex w="full" flexDirection="column" className="boxShadow" borderRadius="xl" h="full" p={4} mt={4} bg="form" gap={2}>
             <Text fontSize="lg" color="black" fontWeight="semibold">
               List of Receiving Materials
             </Text>
@@ -305,15 +213,7 @@ const WarehouseReceiving = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  // size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                  className="uppercase"
-                >
+                <Table width="full" border="none" boxShadow="md" bg="gray.200" variant="striped" className="uppercase">
                   <Thead bg="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
                       <Th h="40px" color="white" fontSize="10px">
@@ -399,44 +299,19 @@ const WarehouseReceiving = () => {
                           <Flex pl={2}>
                             <Box>
                               <Menu>
-                                <MenuButton
-                                  alignItems="center"
-                                  justifyContent="center"
-                                  bg="none"
-                                >
+                                <MenuButton alignItems="center" justifyContent="center" bg="none">
                                   <AiOutlineMore fontSize="20px" />
                                 </MenuButton>
                                 <MenuList>
-                                  <MenuItem
-                                    icon={<GrView fontSize="17px" />}
-                                    onClick={() =>
-                                      viewModalHandler(
-                                        pos.poNumber,
-                                        pos.poDate,
-                                        pos.prNumber,
-                                        pos.prDate,
-                                        pos.supplier
-                                      )
-                                    }
-                                  >
+                                  <MenuItem icon={<GrView fontSize="17px" />} onClick={() => viewModalHandler(pos.poNumber, pos.poDate, pos.prNumber, pos.prDate, pos.supplier)}>
                                     <Text fontSize="15px">View</Text>
                                   </MenuItem>
-                                  <MenuItem
-                                    icon={
-                                      <FaEdit color="green" fontSize="17px" />
-                                    }
-                                    onClick={() => editModalHandler(pos)}
-                                  >
+                                  <MenuItem icon={<FaEdit color="green" fontSize="17px" />} onClick={() => editModalHandler(pos)}>
                                     <Text fontSize="15px" color="green">
                                       Receive
                                     </Text>
                                   </MenuItem>
-                                  <MenuItem
-                                    icon={
-                                      <GiCancel fontSize="17px" color="red" />
-                                    }
-                                    onClick={() => cancelModalHandler(pos.id)}
-                                  >
+                                  <MenuItem icon={<GiCancel fontSize="17px" color="red" />} onClick={() => cancelModalHandler(pos.id)}>
                                     <Text fontSize="15px" color="red">
                                       Cancel
                                     </Text>
@@ -456,24 +331,13 @@ const WarehouseReceiving = () => {
             <Flex justifyContent="space-between">
               <HStack>
                 <Badge colorScheme="cyan">
-                  <Text color="secondary">
-                    Number of Records: {pO.posummary?.length}
-                  </Text>
+                  <Text color="secondary">Number of Records: {pO.posummary?.length}</Text>
                 </Badge>
               </HStack>
               <Stack mt={2}>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                    >
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                       {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
@@ -490,19 +354,10 @@ const WarehouseReceiving = () => {
                       ))}
                     </PaginationPageGroup>
                     <HStack>
-                      <PaginationNext
-                        bg="primary"
-                        color="white"
-                        p={1}
-                        _hover={{ bg: "btnColor", color: "white" }}
-                      >
+                      <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                         {">>"}
                       </PaginationNext>
-                      <Select
-                        onChange={handlePageSizeChange}
-                        variant="filled"
-                        fontSize="md"
-                      >
+                      <Select onChange={handlePageSizeChange} variant="filled" fontSize="md">
                         <option value={Number(5)}>5</option>
                         <option value={Number(10)}>10</option>
                         <option value={Number(25)}>25</option>
@@ -515,13 +370,7 @@ const WarehouseReceiving = () => {
             </Flex>
 
             <Flex justifyContent="end">
-              {isViewModalOpen && (
-                <ViewModal
-                  isOpen={isViewModalOpen}
-                  onClose={closeViewModal}
-                  viewData={viewData}
-                />
-              )}
+              {isViewModalOpen && <ViewModal isOpen={isViewModalOpen} onClose={closeViewModal} viewData={viewData} />}
 
               {isEditModalOpen && (
                 <EditModal
@@ -544,14 +393,7 @@ const WarehouseReceiving = () => {
                 />
               )}
 
-              {isCancelModalOpen && (
-                <CancelModal
-                  isOpen={isCancelModalOpen}
-                  onClose={closeCancelModal}
-                  poId={poId}
-                  getAvailablePOHandler={getAvailablePOHandler}
-                />
-              )}
+              {isCancelModalOpen && <CancelModal isOpen={isCancelModalOpen} onClose={closeCancelModal} poId={poId} getAvailablePOHandler={getAvailablePOHandler} />}
             </Flex>
           </Flex>
         </Flex>
@@ -575,10 +417,7 @@ const ViewModal = ({ isOpen, onClose, viewData }) => {
     <Flex>
       <Modal size="xl" isOpen={isOpen} onClose={() => {}} isCentered>
         <ModalOverlay />
-        <ModalContent
-        // bg="#D9DFE7"
-        // h="30vh"
-        >
+        <ModalContent>
           <ModalHeader>
             <Flex justifyContent="center">
               <HStack>
@@ -611,58 +450,9 @@ const ViewModal = ({ isOpen, onClose, viewData }) => {
                     </Flex>
                   </Flex>
                 ))}
-
                 <Flex w="full"></Flex>
               </VStack>
             </Box>
-            {/* {!viewData ? (
-              <Stack w="full">
-                <Skeleton h="20px" />
-                <Skeleton h="20px" />
-                <Skeleton h="20px" />
-                <Skeleton h="20px" />
-                <Skeleton h="20px" />
-                <Skeleton h="20px" />
-              </Stack>
-            ) : (
-              <Table variant="striped" size="sm">
-                <Thead bg="primary">
-                  <Tr>
-                    <Th color="white" fontSize="9px">
-                      PO Summary
-                    </Th>
-                    <Th color="white" fontSize="9px">
-                      PO No.
-                    </Th>
-                    <Th color="white" fontSize="9px">
-                      Approved Date
-                    </Th>
-                    <Th color="white" fontSize="9px">
-                      PR No.
-                    </Th>
-                    <Th color="white" fontSize="9px">
-                      PR Date
-                    </Th>
-                    <Th color="white" fontSize="9px">
-                      Supplier Name
-                    </Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr key={viewData.id}>
-                    <Td fontSize="11px">{viewData.poNumber}</Td>
-                    <Td fontSize="11px">
-                      {moment(viewData.poDate).format("MM/DD/YYYY")}
-                    </Td>
-                    <Td fontSize="11px">{viewData.prNumber}</Td>
-                    <Td fontSize="11px">
-                      {moment(viewData.prDate).format("MM/DD/YYYY")}
-                    </Td>
-                    <Td fontSize="11px">{viewData.supplier}</Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            )} */}
           </ModalBody>
           <ModalFooter>
             <Button onClick={onClose} fontSize="11px">

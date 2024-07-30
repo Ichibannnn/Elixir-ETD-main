@@ -1,36 +1,20 @@
-import {
-  Button,
-  Flex,
-  FormLabel,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Select,
-  Stack,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
+import { Flex, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
 
-// import request from '../../../services/ApiClient'
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm, Controller } from "react-hook-form";
+import { Select as AutoComplete } from "chakra-react-select";
+
+import request from "../../../services/ApiClient";
 import moment from "moment";
 import { ToastComponent } from "../../../components/Toast";
 import { decodeUser } from "../../../services/decode-user";
-import EditAddRejectionModal from "./EditAddRejectionModal";
 import { ReceivingContext } from "../../../components/context/ReceivingContext";
-import EditModalSave from "./EditModalSave";
-import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
-import { NumericFormat } from "react-number-format";
-import { Select as AutoComplete } from "chakra-react-select";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+
+import EditAddRejectionModal from "./EditAddRejectionModal";
+import EditModalSave from "./EditModalSave";
 
 const currentUser = decodeUser();
 
@@ -229,7 +213,6 @@ export const EditModal = ({
     siNumber: siNumber,
     totalReject: sumQuantity,
     addedBy: currentUser.fullName,
-    // lotSection: editData.lotSection,
     lotSection: lotSection,
   };
 
@@ -253,17 +236,6 @@ export const EditModal = ({
     }
   };
 
-  console.log("Receiving Date: ", receivingDate);
-
-  const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      backgroundColor: "#ffffe0",
-    }),
-  };
-
-  // console.log("Edit data asdas: ", editData);
-
   useEffect(() => {
     if (editData) {
       setValue("formData.lotCategories", {
@@ -276,9 +248,6 @@ export const EditModal = ({
       setLotSection(editData.lotSection);
     }
   }, [editData]);
-
-  // console.log("Lot section: ", watch("formData.lotCategories"));
-  // console.log("Lot section State: ", lotSection);
 
   return (
     <ReceivingContext.Provider
@@ -475,7 +444,6 @@ export const EditModal = ({
                         name="formData.lotCategories"
                         render={({ field }) => (
                           <AutoComplete
-                            // className="react-select-layout"
                             className="chakra-react-select"
                             classNamePrefix="chakra-react-select"
                             variant="filled"
@@ -498,19 +466,6 @@ export const EditModal = ({
                         )}
                       />
                     </FormLabel>
-
-                    {/* <FormLabel w="100%" fontSize="12px">
-                      Lot Section
-                      <Input
-                        {...register("displayData.lotSection")}
-                        disabled={true}
-                        readOnly={true}
-                        _disabled={{ color: editData.lotSection === null ? "red" : "black" }}
-                        fontSize="13px"
-                        size="sm"
-                        bg="gray.300"
-                      />
-                    </FormLabel> */}
                   </Flex>
                 </Stack>
 
@@ -535,7 +490,6 @@ export const EditModal = ({
                 sumQuantity={sumQuantity}
                 po_ReceivingId={submitDataOne.poSummaryId}
                 submitDataOne={submitDataOne}
-                // submitUnitPriceNull={submitUnitPriceNull}
                 submitDataTwo={submitDataTwo}
                 submitDataThree={submitDataThree}
                 expectedDelivery={expectedDelivery}
@@ -554,7 +508,6 @@ export const EditModal = ({
                 disableQuantity={disableQuantity}
                 receivingId={receivingId}
                 setReceivingId={setReceivingId}
-                // isValid={isValid}
               />
             </ModalFooter>
           </ModalContent>

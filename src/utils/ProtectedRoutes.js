@@ -1,15 +1,10 @@
-import React from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
-
-
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoutes = () => {
-let auth = sessionStorage.getItem("userToken")
-// let userToken =  {'token':false}
+  let auth = sessionStorage.getItem("userToken");
 
-  return (
-    auth ? <Outlet /> : <Navigate to="/login"/>
-  )
-}
+  return auth ? <Outlet /> : <Navigate to="/login" />;
+};
 
-export default ProtectedRoutes
+export default ProtectedRoutes;

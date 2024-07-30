@@ -1,6 +1,5 @@
 import {
   Badge,
-  Box,
   Button,
   Flex,
   HStack,
@@ -20,14 +19,16 @@ import {
   Td,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
 import { FiSearch } from "react-icons/fi";
+
+import React, { useEffect, useState } from "react";
 import PageScroll from "../../../utils/PageScroll";
-import { ToastComponent } from "../../../components/Toast";
-import Swal from "sweetalert2";
 import request from "../../../services/ApiClient";
 import moment from "moment";
+import Swal from "sweetalert2";
+import { ToastComponent } from "../../../components/Toast";
+
 import OrdersConfirmation from "./OrdersConfirmation";
 
 export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, fromDate, toDate, fetchNotification }) => {
@@ -37,7 +38,8 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // console.log("Genus Orders:", genusOrders);
+  const dateVar = new Date();
+  const minDate = moment(dateVar.setDate(dateVar.getDate() - 5)).format("yyyy-MM-DD");
 
   // ARRAY FOR THE LIST DATA
   const resultArray = genusOrders?.result?.map((item) =>
@@ -75,12 +77,6 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
       };
     })
   );
-
-  console.log("From genus: ", genusOrders);
-
-  const dateVar = new Date();
-  const startDate = moment(dateVar).format("yyyy-MM-DD");
-  const minDate = moment(dateVar.setDate(dateVar.getDate() - 5)).format("yyyy-MM-DD");
 
   // SYNC ORDER BUTTON
   const syncHandler = () => {
@@ -146,14 +142,12 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
             .then((res) => {
               ToastComponent("Success", "Orders Synced!", "success", toast);
               fetchNotification();
-              // onClose();
               setIsLoading(false);
             })
             .catch((err) => {
               setIsLoading(false);
               setErrorData(err.response.data);
               if (err.response.data) {
-                // onClose();
                 onOpen();
               }
             });
@@ -196,30 +190,14 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
   }, [genusOrders]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="100vh"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-      // boxShadow="md"
-    >
+    <Flex color="fontColor" h="100vh" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} flexDirection="column">
         <Flex justifyContent="center">
           <HStack>
             <Badge fontSize="xs" colorScheme="blue" variant="solid">
               From:
             </Badge>
-            <Input
-              onChange={(date) => setFromDate(date.target.value)}
-              defaultValue={fromDate}
-              min={minDate}
-              // size="sm"
-              type="date"
-              fontSize="11px"
-              fontWeight="semibold"
-            />
+            <Input onChange={(date) => setFromDate(date.target.value)} defaultValue={fromDate} min={minDate} type="date" fontSize="11px" fontWeight="semibold" />
             <Badge fontSize="xs" colorScheme="blue" variant="solid">
               To:
             </Badge>
@@ -227,7 +205,6 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
               onChange={(date) => setToDate(date.target.value)}
               defaultValue={moment(new Date()).format("yyyy-MM-DD")}
               min={fromDate}
-              // size="sm"
               type="date"
               fontSize="11px"
               fontWeight="semibold"
@@ -271,12 +248,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
 
             <Flex p={4}>
               <VStack alignItems="center" w="100%" mt={-8}>
-                <PageScroll
-                  minHeight="640px"
-                  maxHeight="720px"
-                  // minWidth="500px"
-                  maxWidth="full"
-                >
+                <PageScroll minHeight="640px" maxHeight="720px" maxWidth="full">
                   {fetchingData ? (
                     <Stack width="full">
                       <Skeleton height="20px" />
@@ -293,20 +265,9 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
                       <Skeleton height="20px" />
                     </Stack>
                   ) : (
-                    <Table
-                      size="sm"
-                      width="full"
-                      // height="100%"
-                      border="none"
-                      boxShadow="md"
-                      bg="gray.200"
-                      variant="striped"
-                    >
+                    <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                       <Thead bg="secondary" position="sticky" top={0} zIndex={1}>
                         <Tr>
-                          {/* <Th color="#D6D6D6" fontSize="10px">
-                            ID
-                          </Th> */}
                           <Th color="#D6D6D6" fontSize="10px">
                             MIR ID
                           </Th>
@@ -360,17 +321,10 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
                             const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
 
                             return val?.customer_name?.toLowerCase().match(newKeyword, "*");
-                            //   ||
-                            // val?.orders?.some((order) =>
-                            //   order?.material_name
-                            //     ?.toLowerCase()
-                            //     .match(newKeyword, "*")
-                            // )
                           })
                           ?.map((order, i) =>
                             order.orders?.map((sub, i) => (
                               <Tr key={i}>
-                                {/* <Td fontSize="12px">{sub.id}</Td> */}
                                 <Td fontSize="12px">{sub.transaction_id}</Td>
                                 <Td fontSize="12px">{moment(order.date_ordered).format("yyyy-MM-DD")}</Td>
                                 <Td fontSize="12px">{moment(order.date_needed).format("yyyy-MM-DD")}</Td>

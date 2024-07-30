@@ -25,16 +25,15 @@ import {
   Box,
   ModalOverlay,
 } from "@chakra-ui/react";
-// import apiClient from '../../../services/apiClient'
-// import { ToastComponent } from '../../../components/Toast'
-// import PageScrollReusable from '../../../components/PageScroll-Reusable'
-import moment from "moment";
-// import { PrintModal } from '../approvedmo/Action-Modals'
+
 import { useReactToPrint } from "react-to-print";
-import Barcode from "react-barcode";
 import { decodeUser } from "../../../services/decode-user";
-import PageScroll from "../../../utils/PageScroll";
+
+import moment from "moment";
 import request from "../../../services/ApiClient";
+import Barcode from "react-barcode";
+import PageScroll from "../../../utils/PageScroll";
+
 import { ToastComponent } from "../../../components/Toast";
 import { PrintModal } from "../approvedmo/ActionModal";
 
@@ -42,17 +41,6 @@ const currentUser = decodeUser();
 
 // VIEW MODAL----------------------------
 export const ViewModal = ({ isOpen, onClose, viewData, status }) => {
-  const TableHeads = [
-    "Line",
-    "Barcode",
-    "Item Code",
-    "Item Description",
-    "Quantity",
-    "Unit Cost",
-    "Total Cost",
-    "Remarks",
-  ];
-
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="5xl">
       <ModalOverlay />
@@ -64,7 +52,6 @@ export const ViewModal = ({ isOpen, onClose, viewData, status }) => {
             </Text>
           </Flex>
         </ModalHeader>
-        {/* <ModalCloseButton color="white" onClick={onClose} /> */}
 
         <ModalBody mb={5}>
           <Flex justifyContent="space-between" mt={4}>
@@ -87,12 +74,9 @@ export const ViewModal = ({ isOpen, onClose, viewData, status }) => {
                 </Text>
                 <Text fontSize="xs">{viewData[0]?.customerName}</Text>
               </HStack>
-              {status === false ? (
-                ""
-              ) : (
-                <Text fontSize="xs">Reason: {viewData[0]?.rush}</Text>
-              )}
+              {status === false ? "" : <Text fontSize="xs">Reason: {viewData[0]?.rush}</Text>}
             </VStack>
+
             <VStack alignItems="start" spacing={1}>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
@@ -154,9 +138,6 @@ export const ViewModal = ({ isOpen, onClose, viewData, status }) => {
                     <Th color="white" fontSize="10px">
                       Line
                     </Th>
-                    {/* <Th color="white" fontSize="10px">
-                      MIR ID
-                    </Th> */}
                     <Th color="white" fontSize="10px">
                       Item Code
                     </Th>
@@ -169,9 +150,6 @@ export const ViewModal = ({ isOpen, onClose, viewData, status }) => {
                     <Th color="white" fontSize="10px">
                       Unit Cost
                     </Th>
-                    {/* <Th color="white" fontSize="10px">
-                      Total Cost
-                    </Th> */}
                     <Th color="white" fontSize="10px">
                       Item Remarks
                     </Th>
@@ -222,15 +200,7 @@ export const ViewModal = ({ isOpen, onClose, viewData, status }) => {
 };
 
 // REJECT MODAL------------------------------
-export const RejectModal = ({
-  isOpen,
-  onClose,
-  id,
-  fetchForApprovalMO,
-  fetchNotification,
-  mirNo,
-  orderNo,
-}) => {
+export const RejectModal = ({ isOpen, onClose, fetchForApprovalMO, fetchNotification, mirNo }) => {
   const [reasonSubmit, setReasonSubmit] = useState("");
   const [reasons, setReasons] = useState([]);
   const toast = useToast();
@@ -275,24 +245,14 @@ export const RejectModal = ({
           // }
         )
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Move order has been rejected",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Move order has been rejected", "success", toast);
           fetchNotification();
           fetchForApprovalMO();
           setIsLoading(false);
           onClose();
         })
         .catch((err) => {
-          ToastComponent(
-            "Error",
-            "Move order was not rejected",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Move order was not rejected", "error", toast);
           setIsLoading(false);
         });
     } catch (error) {}
@@ -313,12 +273,7 @@ export const RejectModal = ({
           <VStack justifyContent="center">
             <Text>Are you sure you want to reject this move order?</Text>
             {reasons?.length > 0 ? (
-              <Select
-                onChange={(e) => setReasonSubmit(e.target.value)}
-                w="70%"
-                placeholder="Please select a reason"
-                fontSize="sm"
-              >
+              <Select onChange={(e) => setReasonSubmit(e.target.value)} w="70%" placeholder="Please select a reason" fontSize="sm">
                 {reasons?.map((reason, i) => (
                   <option key={i} value={reason.reasonName}>
                     {reason.reasonName}
@@ -333,21 +288,10 @@ export const RejectModal = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup size="sm" mt={7}>
-            <Button
-              onClick={submitHandler}
-              isDisabled={!reasonSubmit || isLoading}
-              isLoading={isLoading}
-              colorScheme="blue"
-            >
+            <Button onClick={submitHandler} isDisabled={!reasonSubmit || isLoading} isLoading={isLoading} colorScheme="blue">
               Yes
             </Button>
-            <Button
-              onClick={onClose}
-              disabled={isLoading}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-            >
+            <Button onClick={onClose} disabled={isLoading} isLoading={isLoading} color="black" variant="outline">
               No
             </Button>
           </ButtonGroup>
@@ -358,18 +302,7 @@ export const RejectModal = ({
 };
 
 // APPROVE MOVE ORDER ----------------------------
-export const ApproveModal = ({
-  isOpen,
-  onClose,
-  orderNo,
-  fetchForApprovalMO,
-  printData,
-  fetchNotification,
-  totalQuantity,
-  mirNo,
-  setCheckedItems,
-  genusData,
-}) => {
+export const ApproveModal = ({ isOpen, onClose, orderNo, fetchForApprovalMO, printData, fetchNotification, totalQuantity, mirNo, setCheckedItems }) => {
   // const currentUser = decodeUser();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -382,16 +315,9 @@ export const ApproveModal = ({
   const dateToday = new Date();
 
   const toast = useToast();
-  const {
-    isOpen: isPrint,
-    onClose: closePrint,
-    onOpen: openPrint,
-  } = useDisclosure();
+  const { isOpen: isPrint, onClose: closePrint, onOpen: openPrint } = useDisclosure();
 
   const submitHandler = () => {
-    console.log(mirNo);
-    console.log("Submit Data: ", genusData);
-    // console.log(currentUser.fullName);
     setIsLoading(true);
     try {
       const res = request
@@ -400,19 +326,12 @@ export const ApproveModal = ({
           mirNo?.map((item) => {
             return {
               orderNo: item,
-              // preparedBy: currentUser.fullName,
             };
           })
         )
         .then((res) => {
           //GENUS SUBMIT DATA
-
-          ToastComponent(
-            "Success",
-            "Move order has been approved",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Move order has been approved", "success", toast);
           fetchNotification();
           fetchForApprovalMO();
           onClose();
@@ -429,20 +348,12 @@ export const ApproveModal = ({
               .then((res) => {
                 setIsLoading(false);
                 setCheckedItems([]);
-
-                // handlePrint();
-                // openPrint();
               })
               .catch((err) => {});
           } catch (error) {}
         })
         .catch((item) => {
-          ToastComponent(
-            "Error",
-            "Move order was not approved",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Move order was not approved", "error", toast);
           setIsLoading(false);
         });
     } catch (error) {}
@@ -468,23 +379,10 @@ export const ApproveModal = ({
 
           <ModalFooter justifyContent="center">
             <ButtonGroup size="sm" mt={7}>
-              <Button
-                onClick={submitHandler}
-                isLoading={isLoading}
-                isDisabled={isLoading}
-                colorScheme="blue"
-                fontSize="13px"
-              >
+              <Button onClick={submitHandler} isLoading={isLoading} isDisabled={isLoading} colorScheme="blue" fontSize="13px">
                 Yes
               </Button>
-              <Button
-                onClick={onClose}
-                isLoading={isLoading}
-                disabled={isLoading}
-                fontSize="13px"
-                color="black"
-                variant="outline"
-              >
+              <Button onClick={onClose} isLoading={isLoading} disabled={isLoading} fontSize="13px" color="black" variant="outline">
                 No
               </Button>
             </ButtonGroup>
@@ -757,18 +655,11 @@ export const ApproveModal = ({
             </Flex> */}
 
             {/* MO Slip */}
-            <Flex
-              w="full"
-              mt={2}
-              p={5}
-              flexDirection="column"
-              ref={componentRef}
-            >
+            <Flex w="full" mt={2} p={5} flexDirection="column" ref={componentRef}>
               <Flex spacing={0} justifyContent="start" flexDirection="column">
                 <Image src="/images/RDF Logo.png" w="13%" ml={3} />
                 <Text fontSize="8px" ml={2}>
-                  Purok 6, Brgy. Lara, City of San Fernando, Pampanga,
-                  Philippines
+                  Purok 6, Brgy. Lara, City of San Fernando, Pampanga, Philippines
                 </Text>
               </Flex>
 
@@ -783,9 +674,8 @@ export const ApproveModal = ({
                   <Text>Order ID: {orderNo && orderNo}</Text>
                   <Text>Unit: {`Warehouse`}</Text>
                   <Text>Customer: {printData[0]?.customerName}</Text>
-                  {/* <Text>Address: {printData[0]?.address}</Text> */}
-                  {/* <Text>Batch Number: {printData[0]?.batchNo}</Text> */}
                 </Flex>
+
                 <Flex flexDirection="column">
                   <Barcode width={3} height={50} value={Number(orderNo)} />
                   <Text>Date: {moment(dateToday).format("MM/DD/yyyy")}</Text>
@@ -800,9 +690,9 @@ export const ApproveModal = ({
                     <Th color="white">UOM</Th>
                     <Th color="white">QUANTITY</Th>
                     <Th color="white">ACTUAL QTY RECEIVED</Th>
-                    {/* <Th color="white">EXPIRATION DATE</Th> */}
                   </Tr>
                 </Thead>
+
                 <Tbody>
                   {printData?.map((item, i) => (
                     <Tr borderX="1px" borderBottom="1px" key={i}>
@@ -811,38 +701,27 @@ export const ApproveModal = ({
                       <Td>{item.uom}</Td>
                       <Td>{item.quantity}</Td>
                       <Td></Td>
-                      {/* <Td>{moment(item.expiration).format("MM/DD/yyyy")}</Td> */}
                     </Tr>
                   ))}
                 </Tbody>
               </Table>
 
-              {/* <Flex justifyContent="start" mb={3}>
-                <Text>Total Quantity: {totalQuantity && totalQuantity}</Text>
-              </Flex> */}
-
               <Flex justifyContent="space-between" mb={5} mt={2}>
                 <HStack>
                   <Text>Delivery Status:</Text>
                   <Text textDecoration="underline">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     {"Pick-Up"}
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   </Text>
                 </HStack>
+
                 <VStack spacing={0}>
                   <HStack>
                     <Text>Checked By:</Text>
                     <Text textDecoration="underline">
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </Text>
                   </HStack>
@@ -854,12 +733,8 @@ export const ApproveModal = ({
                   <HStack>
                     <Text>Prepared By:</Text>
                     <Text textDecoration="underline">
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </Text>
                   </HStack>
@@ -869,12 +744,8 @@ export const ApproveModal = ({
                   <HStack>
                     <Text>Received By:</Text>
                     <Text textDecoration="underline">
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </Text>
                   </HStack>

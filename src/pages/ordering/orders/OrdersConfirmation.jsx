@@ -23,24 +23,23 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import moment from "moment";
-import React from "react";
 import { RiFileList3Fill } from "react-icons/ri";
-import Swal from "sweetalert2";
-import PageScrollImport from "../../../components/PageScrollImport";
-import { ToastComponent } from "../../../components/Toast";
-import request from "../../../services/ApiClient";
-import PageScroll from "../../../utils/PageScroll";
 import { TiWarning } from "react-icons/ti";
 
-const OrdersConfirmation = ({ isOpen, onOpen, onClose, errorData, setErrorData, isLoading, setIsLoading, fetchNotification }) => {
-  const toast = useToast();
+import React from "react";
+import moment from "moment";
+import request from "../../../services/ApiClient";
+import Swal from "sweetalert2";
+import { ToastComponent } from "../../../components/Toast";
 
-  // console.log("Error Data: ", errorData);
+import PageScrollImport from "../../../components/PageScrollImport";
+import PageScroll from "../../../utils/PageScroll";
+
+const OrdersConfirmation = ({ isOpen, onClose, errorData, setErrorData, isLoading, setIsLoading }) => {
+  const toast = useToast();
 
   const duplicateList = errorData?.duplicateList?.map((list) => {
     return {
@@ -279,8 +278,6 @@ const OrdersConfirmation = ({ isOpen, onOpen, onClose, errorData, setErrorData, 
       dateApproved: list?.dateApproved,
     };
   });
-
-  console.log("Error Result Array: ", resultArray);
 
   const validationAvailableToSync = () => {
     Swal.fire({

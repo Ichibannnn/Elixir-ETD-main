@@ -84,7 +84,6 @@ export const ListOfMaterials = ({
   // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log(inputValue);
   };
 
   // ARRAY FOR THE LIST DATA OF SUPPLIERS
@@ -183,9 +182,7 @@ export const ListOfMaterials = ({
   }, [elixirMaterials]);
 
   const editBufferHandler = (mats) => {
-    // console.log(mats);
     setEditData(mats);
-    // console.log("Edit Data: ", editData);
     openEdit();
   };
 
@@ -259,15 +256,7 @@ export const ListOfMaterials = ({
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  //   width="full"
-                  // height="100%"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table size="sm" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="secondary" position="sticky" top={0} zIndex={1}>
                     <Tr h="30px">
                       <Th color="#D6D6D6" fontSize="10px">
@@ -351,10 +340,7 @@ export const ListOfMaterials = ({
         <Flex justifyContent="space-between">
           <HStack>
             <Badge colorScheme="cyan">
-              <Text color="secondary">
-                {!keyword ? `Number of records: ${ordersCount} ` : `Number of records from ${keyword}: ${filteredLength.length}`}
-                {/* Number of Records: {elixirSuppliers?.supplier?.length} */}
-              </Text>
+              <Text color="secondary">{!keyword ? `Number of records: ${ordersCount} ` : `Number of records from ${keyword}: ${filteredLength.length}`}</Text>
             </Badge>
           </HStack>
           <HStack>
@@ -520,8 +506,6 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
       });
     }
   }, [editData]);
-
-  console.log("Watch Lot Section: ", watch("formData.lotSectionId"));
 
   return (
     <>

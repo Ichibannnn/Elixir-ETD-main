@@ -1,47 +1,10 @@
-import React, { useState, useContext, useRef } from "react";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-  useDisclosure,
-  useToast,
-  VStack,
-  Image,
-  Heading,
-} from "@chakra-ui/react";
+import React, { useRef } from "react";
+import { Box, Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, VStack, Image } from "@chakra-ui/react";
 import moment from "moment";
-import PageScrollImport from "../../../components/PageScrollImport";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
-import { WarehouseContext } from "../../../components/context/WarehouseContext";
-import { ReceivingContext } from "../../../components/context/ReceivingContext";
 
-const PrintBarcode = ({
-  printData,
-  receivingDate,
-  lotSection,
-  actualGood,
-  sumQuantity,
-  isOpen,
-  onClose,
-  itemCode,
-  actualDelivered,
-  closeModal,
-  receivingId,
-  siNumber,
-  unitPrice,
-}) => {
-  // const { receivingId } = useContext(ReceivingContext);
-
+const PrintBarcode = ({ printData, receivingDate, lotSection, sumQuantity, isOpen, onClose, actualDelivered, closeModal, receivingId, siNumber, unitPrice }) => {
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -54,7 +17,6 @@ const PrintBarcode = ({
     "PO Number": printData.poNumber,
     Date: moment().format("MM/DD/YYYY, h:mm:ss a"),
     "Receiving Date": moment(receivingDate).format("MM/DD/YYYY"),
-    // "Receiving Id": receivingId,
     "Item Code": printData.itemCode,
     "Item Description": printData.itemDescription,
     UOM: printData.uom,
@@ -70,8 +32,6 @@ const PrintBarcode = ({
     "Lot Section": lotSection,
     "SI Number": siNumber,
   };
-
-  // console.log(displayData)
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="sm">

@@ -22,11 +22,13 @@ import {
 } from "@chakra-ui/react";
 import { Pagination, PaginationContainer, PaginationNext, PaginationPage, PaginationPageGroup, PaginationPrevious } from "@ajna/pagination";
 import { FaSort } from "react-icons/fa";
-import moment from "moment";
-import { CancelApprovedDate } from "./ActionModal";
-import PageScroll from "../../utils/PageScroll";
 import { GoArrowSmallRight } from "react-icons/go";
 import { FiSearch } from "react-icons/fi";
+
+import moment from "moment";
+import PageScroll from "../../utils/PageScroll";
+
+import { CancelApprovedDate } from "./ActionModal";
 
 export const ListofApprovedDate = ({
   moveData,
@@ -81,13 +83,6 @@ export const ListofApprovedDate = ({
       fetchApprovedMoveOrders();
     }
   }, [lengthIndicator]);
-
-  //Auto select index 0
-  // useEffect(() => {
-  //   // setOrderId(moveData[0]?.id);
-  //   // console.log(moveData[0]?.id);
-  //   // console.log(orderId);
-  // }, [moveData, orderId]);
 
   //Sort by date start line
   const [order, setOrder] = useState("asc");

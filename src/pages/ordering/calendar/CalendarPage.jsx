@@ -3,9 +3,7 @@ import request from "../../../services/ApiClient";
 import { CalendarList } from "./CalendarList";
 
 const fetchForMoveOrderApi = async (status) => {
-  const res = await request.get(
-    `Ordering/GetAllApprovedOrdersForCalendar?status=${status}`
-  );
+  const res = await request.get(`Ordering/GetAllApprovedOrdersForCalendar?status=${status}`);
   return res.data;
 };
 
@@ -27,9 +25,7 @@ const CalendarPage = () => {
     };
   }, [status]);
 
-  return (
-    <CalendarList forMOData={forMOData} status={status} setStatus={setStatus} />
-  );
+  return <CalendarList forMOData={forMOData} status={status} setStatus={setStatus} />;
 };
 
 export default CalendarPage;

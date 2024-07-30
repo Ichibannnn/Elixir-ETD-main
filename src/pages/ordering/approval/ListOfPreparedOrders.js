@@ -1,46 +1,16 @@
-import React, { useEffect, useState } from "react";
-import {
-  Badge,
-  Button,
-  Checkbox,
-  Flex,
-  HStack,
-  Select,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import { Badge, Button, Checkbox, Flex, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 
 import moment from "moment";
 import PageScroll from "../../../utils/PageScroll";
 
-export const ListOfPreparedOrders = ({
-  orders,
-  orderNo,
-  setOrderNo,
-  customerOrders,
-  status,
-  setStatus,
-  orderIds,
-  setOrderIds,
-  checkedItems,
-  setCheckedItems,
-  notification,
-  fetchNotification,
-  genusData,
-  setGenusData,
-}) => {
+export const ListOfPreparedOrders = ({ orders, orderNo, setOrderNo, status, setStatus, setOrderIds, checkedItems, setCheckedItems, notification, genusData, setGenusData }) => {
   const orderNoHandler = (mirId) => {
     if (mirId) {
       setOrderNo(mirId);
     } else {
       setOrderNo("");
     }
-    // console.log(orderNo);
   };
 
   //Auto select index 0
@@ -53,8 +23,6 @@ export const ListOfPreparedOrders = ({
   const parentCheckHandler = (e) => {
     if (e.target.checked) {
       setCheckedItems(allOrders);
-
-      // console.log(orders);
 
       const genusAllOrders = orders?.map((item) => ({
         mir_id: item.mirId,
@@ -70,15 +38,11 @@ export const ListOfPreparedOrders = ({
       setGenusData([]);
     }
   };
-  // console.log(checkedItems);
-  // console.log(genusData);
 
   const childCheckHandler = (e) => {
     //GENUS
     if (e.target.checked) {
-      const item = orders.find(
-        (order) => order.mirId === parseInt(e.target.value)
-      );
+      const item = orders.find((order) => order.mirId === parseInt(e.target.value));
 
       if (item) {
         const { mirId, order } = item;
@@ -97,16 +61,10 @@ export const ListOfPreparedOrders = ({
       setCheckedItems([...checkedItems, parseInt(e.target.value)]);
     } else {
       //GENUS
-      setGenusData((prevValue) => [
-        ...prevValue.filter(
-          (item) => item.mir_id.toString() !== e.target.value
-        ),
-      ]);
+      setGenusData((prevValue) => [...prevValue.filter((item) => item.mir_id.toString() !== e.target.value)]);
 
       //ELIXIR
-      const data = checkedItems?.filter(
-        (item) => item !== parseInt(e.target.value)
-      );
+      const data = checkedItems?.filter((item) => item !== parseInt(e.target.value));
       setCheckedItems(data);
     }
   };
@@ -121,64 +79,29 @@ export const ListOfPreparedOrders = ({
   return (
     <Flex w="100%" flexDirection="column" className="boxShadow" p={4}>
       <Flex direction="row" justifyContent="left">
-        <Button
-          size="xs"
-          fontSize="xs"
-          borderRadius="none"
-          colorScheme={!status ? "blue" : "gray"}
-          variant={!status ? "solid" : "outline"}
-          onClick={() => setStatus(false)}
-        >
+        <Button size="xs" fontSize="xs" borderRadius="none" colorScheme={!status ? "blue" : "gray"} variant={!status ? "solid" : "outline"} onClick={() => setStatus(false)}>
           Regular Orders
-          {notification?.orderingApprovalNotRush
-            ?.orderingapprovalcountNotRush === 0 ? (
+          {notification?.orderingApprovalNotRush?.orderingapprovalcountNotRush === 0 ? (
             ""
           ) : (
-            <Badge
-              ml={2}
-              fontSize="10px"
-              variant="solid"
-              colorScheme="red"
-              mb={1}
-            >
-              {
-                notification?.orderingApprovalNotRush
-                  ?.orderingapprovalcountNotRush
-              }
+            <Badge ml={2} fontSize="10px" variant="solid" colorScheme="red" mb={1}>
+              {notification?.orderingApprovalNotRush?.orderingapprovalcountNotRush}
             </Badge>
           )}
         </Button>
-        <Button
-          size="xs"
-          fontSize="xs"
-          borderRadius="none"
-          colorScheme={status ? "blue" : "gray"}
-          variant={status ? "solid" : "outline"}
-          onClick={() => setStatus(true)}
-        >
+        <Button size="xs" fontSize="xs" borderRadius="none" colorScheme={status ? "blue" : "gray"} variant={status ? "solid" : "outline"} onClick={() => setStatus(true)}>
           Rush Orders
           {notification?.orderingApproval?.orderingapprovalcount === 0 ? (
             ""
           ) : (
-            <Badge
-              ml={2}
-              fontSize="10px"
-              variant="solid"
-              colorScheme="red"
-              mb={1}
-            >
+            <Badge ml={2} fontSize="10px" variant="solid" colorScheme="red" mb={1}>
               {notification?.orderingApproval?.orderingapprovalcount}
             </Badge>
           )}
         </Button>
       </Flex>
       <Flex flexDirection="column">
-        <Text
-          textAlign="center"
-          bgColor="primary"
-          color="white"
-          fontSize="13px"
-        >
+        <Text textAlign="center" bgColor="primary" color="white" fontSize="13px">
           LIST OF PREPARED DATE
         </Text>
         <PageScroll minHeight="270px" maxHeight="380px">
@@ -187,15 +110,7 @@ export const ListOfPreparedOrders = ({
               <Thead bgColor="secondary" position="sticky" top={0} zIndex={1}>
                 <Tr h="30px">
                   <Th color="white" fontSize="11px">
-                    <Checkbox
-                      size="lg"
-                      onChange={parentCheckHandler}
-                      isChecked={
-                        allOrders?.length === checkedItems?.length
-                        // genusData?.length
-                      }
-                      disabled={!allOrders?.length > 0}
-                    />{" "}
+                    <Checkbox size="lg" onChange={parentCheckHandler} isChecked={allOrders?.length === checkedItems?.length} disabled={!allOrders?.length > 0} />
                     Line
                   </Th>
                   <Th color="white" fontSize="11px">
@@ -228,10 +143,7 @@ export const ListOfPreparedOrders = ({
                     <Checkbox
                       size="lg"
                       onChange={parentCheckHandler}
-                      isChecked={
-                        allOrders?.length === checkedItems?.length &&
-                        genusData?.length
-                      }
+                      isChecked={allOrders?.length === checkedItems?.length && genusData?.length}
                       disabled={!allOrders?.length > 0}
                     />{" "}
                     Line
@@ -267,20 +179,9 @@ export const ListOfPreparedOrders = ({
             {status === false ? (
               <Tbody>
                 {orders?.map((item, i) => (
-                  <Tr
-                    onClick={() => orderNoHandler(item.mirId)}
-                    bgColor={orderNo === item.mirId ? "blue.100" : "none"}
-                    key={i}
-                    cursor="pointer"
-                  >
+                  <Tr onClick={() => orderNoHandler(item.mirId)} bgColor={orderNo === item.mirId ? "blue.100" : "none"} key={i} cursor="pointer">
                     <Td fontSize="xs">
-                      <Checkbox
-                        size="lg"
-                        onChange={childCheckHandler}
-                        isChecked={checkedItems.includes(item.mirId)}
-                        value={item.mirId}
-                        color="black"
-                      >
+                      <Checkbox size="lg" onChange={childCheckHandler} isChecked={checkedItems.includes(item.mirId)} value={item.mirId} color="black">
                         <Text fontSize="xs">{i + 1}</Text>
                       </Checkbox>
                     </Td>
@@ -293,34 +194,18 @@ export const ListOfPreparedOrders = ({
                         maximumFractionDigits: 2,
                       })}
                     </Td>
-                    <Td fontSize="xs">
-                      {moment(item.orderDate).format("MM/DD/yyyy")}
-                    </Td>
-                    <Td fontSize="xs">
-                      {moment(item.dateNeeded).format("MM/DD/yyyy")}
-                    </Td>
-                    <Td fontSize="xs">
-                      {moment(item.preparedDate).format("MM/DD/yyyy")}
-                    </Td>
+                    <Td fontSize="xs">{moment(item.orderDate).format("MM/DD/yyyy")}</Td>
+                    <Td fontSize="xs">{moment(item.dateNeeded).format("MM/DD/yyyy")}</Td>
+                    <Td fontSize="xs">{moment(item.preparedDate).format("MM/DD/yyyy")}</Td>
                   </Tr>
                 ))}
               </Tbody>
             ) : (
               <Tbody>
                 {orders?.map((item, i) => (
-                  <Tr
-                    onClick={() => orderNoHandler(item.mirId)}
-                    bgColor={orderNo === item.mirId ? "blue.100" : "none"}
-                    key={i}
-                    cursor="pointer"
-                  >
+                  <Tr onClick={() => orderNoHandler(item.mirId)} bgColor={orderNo === item.mirId ? "blue.100" : "none"} key={i} cursor="pointer">
                     <Td fontSize="xs">
-                      <Checkbox
-                        onChange={childCheckHandler}
-                        isChecked={checkedItems.includes(item.mirId)}
-                        value={item.mirId}
-                        color="black"
-                      >
+                      <Checkbox onChange={childCheckHandler} isChecked={checkedItems.includes(item.mirId)} value={item.mirId} color="black">
                         <Text fontSize="xs">{i + 1}</Text>
                       </Checkbox>
                     </Td>
@@ -328,9 +213,7 @@ export const ListOfPreparedOrders = ({
                     <Td fontSize="xs">{item.customerCode}</Td>
                     <Td fontSize="xs">{item.customerName} </Td>
                     <Td fontSize="xs">{item.totalOrders}</Td>
-                    <Td fontSize="xs">
-                      {moment(item.preparedDate).format("MM/DD/yyyy")}
-                    </Td>
+                    <Td fontSize="xs">{moment(item.preparedDate).format("MM/DD/yyyy")}</Td>
                     <Td fontSize="xs">{item.rush}</Td>
                   </Tr>
                 ))}
@@ -343,6 +226,7 @@ export const ListOfPreparedOrders = ({
   );
 };
 
+// OLD CODES
 // import React, { useEffect } from "react";
 // import {
 //   Badge,
