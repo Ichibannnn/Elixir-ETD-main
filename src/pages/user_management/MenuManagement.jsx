@@ -1,9 +1,11 @@
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
@@ -37,27 +39,18 @@ import {
   Portal,
   Image,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
 import { RiAddFill } from "react-icons/ri";
-import PageScroll from "../../utils/PageScroll";
-import request from "../../services/ApiClient";
-import { ToastComponent } from "../../components/Toast";
-import { yupResolver } from "@hookform/resolvers/yup";
+
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import request from "../../services/ApiClient";
 import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { ToastComponent } from "../../components/Toast";
+import PageScroll from "../../utils/PageScroll";
+
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
 const MenuManagement = () => {
   const [mainMenu, setMainMenu] = useState([]);
@@ -71,28 +64,17 @@ const MenuManagement = () => {
   const [pageTotal, setPageTotal] = useState(undefined);
   const [disableEdit, setDisableEdit] = useState(false);
 
-  // console.log(mainMenu)
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // FETCH API ROLES:
   const fetchMainMenuApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Module/GetAllMainMenuPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
-    );
+    const response = await request.get(`Module/GetAllMainMenuPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
     return response.data;
   };
 
-  //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -110,15 +92,12 @@ const MenuManagement = () => {
     setPageSize(pageSize);
   };
 
-  //STATUS
   const statusHandler = (data) => {
     setStatus(data);
   };
 
   const changeStatusHandler = (id, isActive) => {
     let routeLabel;
-    // console.log(id)
-    // console.log(isActive)
     if (isActive) {
       routeLabel = "InActiveMenu";
     } else {
@@ -138,7 +117,6 @@ const MenuManagement = () => {
     // console.log(routeLabel)
   };
 
-  //SHOW MAIN MENU DATA----
   const getMainMenuHandler = () => {
     fetchMainMenuApi(currentPage, pageSize, status, search).then((res) => {
       setIsLoading(false);
@@ -155,13 +133,10 @@ const MenuManagement = () => {
     };
   }, [currentPage, pageSize, status, search]);
 
-  // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    // console.log(inputValue)
   };
 
-  //ADD MAIN MENU HANDLER---
   const addMainMenuHandler = () => {
     setEditData({
       id: "",
@@ -174,15 +149,11 @@ const MenuManagement = () => {
     setDisableEdit(false);
   };
 
-  //EDIT ROLE--
   const editMainMenuHandler = (mod) => {
     setDisableEdit(true);
     setEditData(mod);
     onOpen();
   };
-
-  //FOR DRAWER (Drawer / Drawer Tagging)
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     if (search) {
@@ -191,23 +162,13 @@ const MenuManagement = () => {
   }, [search]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="full"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} w="full">
         <Flex flexDirection="column" gap={1} w="full">
           <Flex justifyContent="space-between" alignItems="center">
             <HStack w="25%" mt={3}>
               <InputGroup size="sm">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<FiSearch bg="black" fontSize="18px" />}
-                />
+                <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
                 <Input
                   borderRadius="lg"
                   fontSize="13px"
@@ -224,10 +185,7 @@ const MenuManagement = () => {
 
             <HStack flexDirection="row">
               <Text fontSize="12px">STATUS:</Text>
-              <Select
-                fontSize="12px"
-                onChange={(e) => statusHandler(e.target.value)}
-              >
+              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
@@ -246,14 +204,7 @@ const MenuManagement = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
                       <Th h="40px" color="white" fontSize="10px">
@@ -284,12 +235,7 @@ const MenuManagement = () => {
                         <Td pl={0}>
                           <Flex>
                             <HStack>
-                              <Button
-                                bg="none"
-                                p={0}
-                                size="sm"
-                                onClick={() => editMainMenuHandler(mod)}
-                              >
+                              <Button bg="none" p={0} size="sm" onClick={() => editMainMenuHandler(mod)}>
                                 <AiTwotoneEdit fontSize="15px" />
                               </Button>
 
@@ -299,19 +245,11 @@ const MenuManagement = () => {
                                     <PopoverTrigger>
                                       {mod.isActive === true ? (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnon.png"
-                                            title="active"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnon.png" title="active" />
                                         </Button>
                                       ) : (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnoff.png"
-                                            title="inactive"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnoff.png" title="inactive" />
                                         </Button>
                                       )}
                                     </PopoverTrigger>
@@ -319,32 +257,15 @@ const MenuManagement = () => {
                                       <PopoverContent bg="primary" color="#fff">
                                         <PopoverArrow bg="primary" />
                                         <PopoverCloseButton />
-                                        <PopoverHeader>
-                                          Confirmation!
-                                        </PopoverHeader>
+                                        <PopoverHeader>Confirmation!</PopoverHeader>
                                         <PopoverBody>
                                           <VStack onClick={onClose}>
                                             {mod.isActive === true ? (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this main menu inactive?
-                                              </Text>
+                                              <Text>Are you sure you want to set this main menu inactive?</Text>
                                             ) : (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this main menu active?
-                                              </Text>
+                                              <Text>Are you sure you want to set this main menu active?</Text>
                                             )}
-                                            <Button
-                                              colorScheme="green"
-                                              size="sm"
-                                              onClick={() =>
-                                                changeStatusHandler(
-                                                  mod.id,
-                                                  mod.isActive
-                                                )
-                                              }
-                                            >
+                                            <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(mod.id, mod.isActive)}>
                                               Yes
                                             </Button>
                                           </VStack>
@@ -392,18 +313,9 @@ const MenuManagement = () => {
               )}
 
               <Stack>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                    >
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                       {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
@@ -420,12 +332,7 @@ const MenuManagement = () => {
                       ))}
                     </PaginationPageGroup>
 
-                    <PaginationNext
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                    >
+                    <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                       {">>"}
                     </PaginationNext>
                     <Select
@@ -500,12 +407,7 @@ const DrawerComponent = (props) => {
         const res = await request
           .post("Module/AddNewMainMenu", data.formData)
           .then((res) => {
-            ToastComponent(
-              "Success",
-              "New Main Menu created!",
-              "success",
-              toast
-            );
+            ToastComponent("Success", "New Main Menu created!", "success", toast);
             getMainMenuHandler();
             onClose();
           })
@@ -522,12 +424,7 @@ const DrawerComponent = (props) => {
             onClose(onClose);
           })
           .catch((error) => {
-            ToastComponent(
-              "Update Failed",
-              error.response.data,
-              "warning",
-              toast
-            );
+            ToastComponent("Update Failed", error.response.data, "warning", toast);
           });
       }
     } catch (err) {}
@@ -562,23 +459,14 @@ const DrawerComponent = (props) => {
               <Stack spacing="7px">
                 <Box>
                   <FormLabel>Main Menu:</FormLabel>
-                  <Input
-                    {...register("formData.moduleName")}
-                    placeholder="Please enter Main Menu name"
-                    autoComplete="off"
-                    autoFocus
-                  />
+                  <Input {...register("formData.moduleName")} placeholder="Please enter Main Menu name" autoComplete="off" autoFocus />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.moduleName?.message}
                   </Text>
                 </Box>
                 <Box>
                   <FormLabel>Main Menu Path:</FormLabel>
-                  <Input
-                    {...register("formData.menuPath")}
-                    placeholder="Please enter Main Menu name"
-                    autoComplete="off"
-                  />
+                  <Input {...register("formData.menuPath")} placeholder="Please enter Main Menu name" autoComplete="off" />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.menuPath?.message}
                   </Text>

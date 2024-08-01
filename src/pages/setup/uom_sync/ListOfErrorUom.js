@@ -6,7 +6,6 @@ import {
   AccordionPanel,
   Badge,
   Box,
-  Button,
   Flex,
   Modal,
   ModalBody,
@@ -22,7 +21,6 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -35,19 +33,8 @@ import request from "../../../services/ApiClient";
 import PageScrollImport from "../../../components/PageScrollImport";
 import PageScroll from "../../../utils/PageScroll";
 
-export const ListOfErrorUom = ({
-  isOpen,
-  onOpen,
-  onClose,
-  errorData,
-  setErrorData,
-  isLoading,
-  setIsLoading,
-  fetchElixirUom,
-}) => {
+export const ListOfErrorUom = ({ isOpen, onOpen, onClose, errorData, setErrorData, setIsLoading }) => {
   const toast = useToast();
-
-  //   console.log("Validations: ", errorData);
 
   const duplicateList = errorData?.duplicateList?.map((list) => {
     return {
@@ -167,10 +154,7 @@ export const ListOfErrorUom = ({
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="4xl">
       <ModalOverlay />
-      <ModalContent
-        color="white"
-        bg="linear-gradient(rgba(0, 0, 0, 0.850),rgba(0, 0, 0, 3))"
-      >
+      <ModalContent color="white" bg="linear-gradient(rgba(0, 0, 0, 0.850),rgba(0, 0, 0, 3))">
         <ModalHeader>
           <Flex justifyContent="left">
             <Text fontSize="11px" color="white">
@@ -187,15 +171,8 @@ export const ListOfErrorUom = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Available for syncing{" "}
-                        <Badge color="green">{filteredUom?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Available for syncing <Badge color="green">{filteredUom?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -245,9 +222,7 @@ export const ListOfErrorUom = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no available lists on this file
-                            </Text>
+                            <Text color="white">There are no available lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -263,15 +238,8 @@ export const ListOfErrorUom = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Available Updates{" "}
-                        <Badge color="green">{availableUpdate?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Available Updates <Badge color="green">{availableUpdate?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -321,9 +289,7 @@ export const ListOfErrorUom = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no update lists on this file
-                            </Text>
+                            <Text color="white">There are no update lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -339,15 +305,8 @@ export const ListOfErrorUom = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Duplicated Lists{" "}
-                        <Badge color="red">{duplicateList?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Duplicated Lists <Badge color="red">{duplicateList?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -397,9 +356,7 @@ export const ListOfErrorUom = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -415,15 +372,8 @@ export const ListOfErrorUom = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Empty Item Description{" "}
-                        <Badge color="red">{uomCodeEmpty?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Empty Item Description <Badge color="red">{uomCodeEmpty?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -473,9 +423,7 @@ export const ListOfErrorUom = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no record for empty UOM description.
-                            </Text>
+                            <Text color="white">There are no record for empty UOM description.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -491,15 +439,8 @@ export const ListOfErrorUom = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Check empty UOM description{" "}
-                        <Badge color="red">{uomDescriptionEmpty?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Check empty UOM description <Badge color="red">{uomDescriptionEmpty?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -549,9 +490,7 @@ export const ListOfErrorUom = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no records for UOM description not exist
-                            </Text>
+                            <Text color="white">There are no records for UOM description not exist</Text>
                           </VStack>
                         </Flex>
                       )}

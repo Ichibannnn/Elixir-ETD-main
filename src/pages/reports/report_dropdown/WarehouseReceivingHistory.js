@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text, Box } from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, Button, HStack, Text } from "@chakra-ui/react";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
-import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
-import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export const WarehouseReceivingHistory = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
+export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, search }) => {
   const [warehouseData, setWarehouseData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
-  const [pageTotal, setPageTotal] = useState(undefined);
 
   const [displayedData, setDisplayedData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -28,8 +25,6 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, sample, setSheetDa
 
   const fetchWarehouseReceivingHistory = () => {
     fetchWarehouseReceivingHistoryApi(dateFrom, dateTo, search).then((res) => {
-      // console.log("Res", res);
-
       setWarehouseData(res);
       setSheetData(
         res?.inventory?.map((item, i) => {
@@ -83,8 +78,6 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, sample, setSheetDa
       setDisplayedData([]);
     };
   }, [dateFrom, dateTo, search]);
-
-  // console.log("Display data: ", displayedData);
 
   return (
     <Flex w="full" flexDirection="column">

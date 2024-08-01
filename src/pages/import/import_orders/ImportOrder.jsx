@@ -1,41 +1,20 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Input, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { BiImport } from "react-icons/bi";
-import { MdOutlineError } from "react-icons/md";
+
 import * as XLSX from "xlsx";
-import DateConverter from "../../../components/DateConverter";
 import moment from "moment";
-import request from "../../../services/ApiClient";
-import PageScrollImport from "../../../components/PageScrollImport";
-import { ToastComponent } from "../../../components/Toast";
-import ErrorList from "../ErrorList";
-import OrdersConfirmation from "../../ordering/orders/OrdersConfirmation";
-import { json } from "react-router-dom";
 import Swal from "sweetalert2";
+import request from "../../../services/ApiClient";
+import { ToastComponent } from "../../../components/Toast";
+
+import DateConverter from "../../../components/DateConverter";
+import PageScrollImport from "../../../components/PageScrollImport";
+import OrdersConfirmation from "../../ordering/orders/OrdersConfirmation";
 
 const parseDate = (dateString) => {
   // Add any other date formats you expect in the Excel file here
-  const formats = [
-    "YYYY-MM-DD",
-    "MM/DD/YYYY",
-    "M/D/YYYY",
-    "M/DD/YYYY",
-    "MM/D/YYYY",
-  ];
+  const formats = ["YYYY-MM-DD", "MM/DD/YYYY", "M/D/YYYY", "M/DD/YYYY", "MM/D/YYYY"];
   const parsedDate = moment(dateString, formats, true);
   return parsedDate.isValid() ? parsedDate.format("YYYY-MM-DD") : null;
 };
@@ -46,16 +25,13 @@ const ImportOrder = ({ fetchNotification }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [sheetOptions, setSheetOptions] = useState([]);
-  const toast = useToast();
-
-  const fileClear = useRef();
 
   const [errorData, setErrorData] = useState([]);
-  const {
-    isOpen: isError,
-    onOpen: openError,
-    onClose: closeError,
-  } = useDisclosure();
+
+  const toast = useToast();
+  const fileClear = useRef();
+
+  const { isOpen: isError, onOpen: openError, onClose: closeError } = useDisclosure();
 
   const fileRenderer = (jsonData) => {
     jsonData.forEach((row) => {
@@ -68,7 +44,6 @@ const ImportOrder = ({ fetchNotification }) => {
       });
     });
     setExcelData(jsonData);
-    console.log(jsonData);
   };
 
   const fileHandler = async (e) => {
@@ -99,7 +74,6 @@ const ImportOrder = ({ fetchNotification }) => {
       customercode: item?.customer_code,
       customerName: item?.customer_name,
       customerType: item?.customer_type,
-      // department: item?.department,
       orderNo: item?.order_no,
       orderDate: moment(newOrderDate).format("yyyy-MM-DD"),
       dateNeeded: moment(newDateNeeded).format("yyyy-MM-DD"),
@@ -121,8 +95,6 @@ const ImportOrder = ({ fetchNotification }) => {
       fullName: item?.full_name,
     };
   });
-
-  // console.log("Result Array: ", resultArray);
 
   const submitFile = (resultArray) => {
     Swal.fire({
@@ -150,7 +122,6 @@ const ImportOrder = ({ fetchNotification }) => {
                 `Ordering/AddNewOrders`,
                 resultArray.map((item) => ({
                   trasactId: item?.trasactId,
-                  // department: item?.department,
                   customercode: item?.customercode,
                   customerName: item?.customerName,
                   customerType: item?.customerType,
@@ -185,19 +156,14 @@ const ImportOrder = ({ fetchNotification }) => {
               .catch((err) => {
                 setIsLoading(false);
                 setErrorData(err.response.data);
-                // console.log("Result Array: ", resultArray);
+
                 if (err.response.data) {
                   openError();
                 }
               });
           } catch (error) {}
         } else {
-          ToastComponent(
-            "Error!",
-            "No data provided, please check your import",
-            "error",
-            toast
-          );
+          ToastComponent("Error!", "No data provided, please check your import", "error", toast);
         }
       }
     });
@@ -209,12 +175,7 @@ const ImportOrder = ({ fetchNotification }) => {
   useEffect(() => {
     // Check if any value in resultArray's any is a letter
     const hasLetterValue = resultArray.some(
-      (ed) =>
-        isNaN(ed.quantityOrdered) ||
-        isNaN(ed.trasactId) ||
-        isNaN(ed.customercode) ||
-        !parseDate(ed.orderDate) ||
-        !parseDate(ed.dateNeeded)
+      (ed) => isNaN(ed.quantityOrdered) || isNaN(ed.trasactId) || isNaN(ed.customercode) || !parseDate(ed.orderDate) || !parseDate(ed.dateNeeded)
     );
     console.log(hasLetterValue);
     console.log(resultArray);
@@ -247,14 +208,8 @@ const ImportOrder = ({ fetchNotification }) => {
           </Button>
         </Box>
       </Flex>
-      <Flex
-        w="100%"
-        h="full"
-        p={2}
-        mt={-4}
-        flexDirection="column"
-        justifyContent="space-between"
-      >
+
+      <Flex w="100%" h="full" p={2} mt={-4} flexDirection="column" justifyContent="space-between">
         <Flex w="full" h="full">
           <PageScrollImport maxHeight="840px">
             <Table variant="striped" size="sm">
@@ -272,9 +227,6 @@ const ImportOrder = ({ fetchNotification }) => {
                   <Th h="40px" color="white" fontSize="10px">
                     Date Needed
                   </Th>
-                  {/* <Th h="40px" color="white" fontSize="10px">
-                    Department
-                  </Th> */}
                   <Th h="40px" color="white" fontSize="10px">
                     Customer Code
                   </Th>
@@ -311,22 +263,13 @@ const ImportOrder = ({ fetchNotification }) => {
                             maximumFractionDigits: 2,
                           })
                         : `${ed.trasactId} is not a number`}
-                      {/* {ed.trasactId ? (
-                        ed.trasactId
-                      ) : (
-                        <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
-                        </Text>
-                      )} */}
                     </Td>
                     <Td fontSize="xs">
                       {ed.orderDate ? (
                         moment(ed.orderDate).format("yyyy-MM-DD")
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
+                          Data missing. Please make sure correct excel file for Import Order is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -335,43 +278,23 @@ const ImportOrder = ({ fetchNotification }) => {
                         moment(ed.dateNeeded).format("yyyy-MM-DD")
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
+                          Data missing. Please make sure correct excel file for Import Order is uploaded.
                         </Text>
                       )}
                     </Td>
-                    {/* <Td fontSize="xs">
-                      {ed.department ? (
-                        ed.department
-                      ) : (
-                        <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
-                        </Text>
-                      )}
-                    </Td> */}
                     <Td fontSize="xs">
                       {!isNaN(ed.customercode)
                         ? ed.customercode.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                           })
                         : `${ed.customercode} is not a number`}
-                      {/* {ed.customercode ? (
-                        ed.customercode
-                      ) : (
-                        <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
-                        </Text>
-                      )} */}
                     </Td>
                     <Td fontSize="xs">
                       {ed.customerName ? (
                         ed.customerName
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
+                          Data missing. Please make sure correct excel file for Import Order is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -380,8 +303,7 @@ const ImportOrder = ({ fetchNotification }) => {
                         ed.customerType
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
+                          Data missing. Please make sure correct excel file for Import Order is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -390,8 +312,7 @@ const ImportOrder = ({ fetchNotification }) => {
                         ed.category
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
+                          Data missing. Please make sure correct excel file for Import Order is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -400,8 +321,7 @@ const ImportOrder = ({ fetchNotification }) => {
                         ed.itemCode
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
+                          Data missing. Please make sure correct excel file for Import Order is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -410,8 +330,7 @@ const ImportOrder = ({ fetchNotification }) => {
                         ed.itemdDescription
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
+                          Data missing. Please make sure correct excel file for Import Order is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -420,8 +339,7 @@ const ImportOrder = ({ fetchNotification }) => {
                         ed.uom
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Import Order is uploaded.
+                          Data missing. Please make sure correct excel file for Import Order is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -440,26 +358,10 @@ const ImportOrder = ({ fetchNotification }) => {
         </Flex>
 
         <Flex p={2} bg="primary" w="100%">
-          <Input
-            ref={fileClear}
-            color="white"
-            type="file"
-            w="25%"
-            size="25px"
-            fontSize="13px"
-            onChange={(e) => fileHandler(e.target.files)}
-          />
+          <Input ref={fileClear} color="white" type="file" w="25%" size="25px" fontSize="13px" onChange={(e) => fileHandler(e.target.files)} />
         </Flex>
       </Flex>
-      {isError && (
-        <OrdersConfirmation
-          isOpen={isError}
-          onClose={closeError}
-          errorData={errorData}
-          setIsLoading={setIsLoading}
-          fetchNotification={fetchNotification}
-        />
-      )}
+      {isError && <OrdersConfirmation isOpen={isError} onClose={closeError} errorData={errorData} setIsLoading={setIsLoading} fetchNotification={fetchNotification} />}
     </Flex>
   );
 };

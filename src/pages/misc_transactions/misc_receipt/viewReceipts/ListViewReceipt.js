@@ -1,58 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Flex,
-  HStack,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Select,
-  Stack,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
+import { Button, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
-import {
-  Pagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
-import PageScroll from "../../../../utils/PageScroll";
 import { ViewModal } from "./ActionModalViewing";
 import { GrView } from "react-icons/gr";
 
-export const ListViewReceipt = ({
-  receiptData,
-  setCurrentPage,
-  setPageSize,
-  setStatus,
-  search,
-  setSearch,
-  pagesCount,
-  currentPage,
-  pages,
-  fetchReceipts,
-}) => {
+import { Pagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+import PageScroll from "../../../../utils/PageScroll";
+
+export const ListViewReceipt = ({ receiptData, setCurrentPage, setPageSize, search, setSearch, pagesCount, currentPage, pages }) => {
   const [statusBody, setStatusBody] = useState({
     id: "",
     status: "",
   });
 
-  const {
-    isOpen: isView,
-    onClose: closeView,
-    onOpen: openView,
-  } = useDisclosure();
+  const { isOpen: isView, onClose: closeView, onOpen: openView } = useDisclosure();
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -68,7 +29,6 @@ export const ListViewReceipt = ({
   };
 
   const viewHandler = (id, status) => {
-    console.log(id, status);
     if (id) {
       setStatusBody({
         id: id,
@@ -93,29 +53,14 @@ export const ListViewReceipt = ({
     <Flex justifyContent="center" flexDirection="column" w="full">
       <Flex justifyContent="space-between">
         <InputGroup w="15%">
-          <InputLeftElement
-            pointerEvents="none"
-            children={<FaSearch color="gray.300" />}
-          />
-          <Input
-            fontSize="xs"
-            onChange={(e) => searchHandler(e.target.value)}
-            type="text"
-            placeholder="Search"
-            focusBorderColor="accent"
-          />
+          <InputLeftElement pointerEvents="none" children={<FaSearch color="gray.300" />} />
+          <Input fontSize="xs" onChange={(e) => searchHandler(e.target.value)} type="text" placeholder="Search" focusBorderColor="accent" />
         </InputGroup>
       </Flex>
 
       <Flex mt={5}>
         <PageScroll minHeight="250px" maxHeight="601px">
-          <Text
-            textAlign="center"
-            bgColor="primary"
-            color="white"
-            fontSize="14px"
-            // fontWeight="semibold"
-          >
+          <Text textAlign="center" bgColor="primary" color="white" fontSize="14px">
             List of Miscellaneous Receipts
           </Text>
           <Table size="sm" variant="striped">
@@ -145,7 +90,6 @@ export const ListViewReceipt = ({
                 <Th h="40px" color="white" fontSize="11px">
                   View
                 </Th>
-                {/* <Th color='white'>Change status</Th> */}
               </Tr>
             </Thead>
             <Tbody>
@@ -164,15 +108,7 @@ export const ListViewReceipt = ({
                   <Td fontSize="sm">{receipts.transactionDate}</Td>
                   <Td fontSize="sm">{receipts.preparedBy}</Td>
                   <Td fontSize="sm">
-                    <Button
-                      onClick={() =>
-                        viewHandler(receipts.id, receipts.isActive)
-                      }
-                      // colorScheme="blue"
-                      bg="none"
-                      size="xs"
-                      // borderRadius="none"
-                    >
+                    <Button onClick={() => viewHandler(receipts.id, receipts.isActive)} bg="none" size="xs">
                       {/* View */}
                       <GrView fontSize="24px" />
                     </Button>
@@ -186,46 +122,21 @@ export const ListViewReceipt = ({
 
       <Flex mt={5} justifyContent="end">
         <Stack>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
+          <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
             <PaginationContainer>
-              <PaginationPrevious
-                bg="secondary"
-                color="white"
-                p={1}
-                _hover={{ bg: "accent", color: "white" }}
-              >
+              <PaginationPrevious bg="secondary" color="white" p={1} _hover={{ bg: "accent", color: "white" }}>
                 {"<<"}
               </PaginationPrevious>
               <PaginationPageGroup ml={1} mr={1}>
                 {pages.map((page) => (
-                  <PaginationPage
-                    _hover={{ bg: "accent", color: "white" }}
-                    p={3}
-                    bg="secondary"
-                    color="white"
-                    key={`pagination_page_${page}`}
-                    page={page}
-                  />
+                  <PaginationPage _hover={{ bg: "accent", color: "white" }} p={3} bg="secondary" color="white" key={`pagination_page_${page}`} page={page} />
                 ))}
               </PaginationPageGroup>
               <HStack>
-                <PaginationNext
-                  bg="secondary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "accent", color: "white" }}
-                >
+                <PaginationNext bg="secondary" color="white" p={1} _hover={{ bg: "accent", color: "white" }}>
                   {">>"}
                 </PaginationNext>
-                <Select
-                  onChange={handlePageSizeChange}
-                  variant="filled"
-                  fontSize="md"
-                >
+                <Select onChange={handlePageSizeChange} variant="filled" fontSize="md">
                   <option value={Number(5)}>5</option>
                   <option value={Number(10)}>10</option>
                   <option value={Number(25)}>25</option>
@@ -237,13 +148,7 @@ export const ListViewReceipt = ({
         </Stack>
       </Flex>
 
-      {isView && (
-        <ViewModal
-          isOpen={isView}
-          onClose={closeView}
-          statusBody={statusBody}
-        />
-      )}
+      {isView && <ViewModal isOpen={isView} onClose={closeView} statusBody={statusBody} />}
     </Flex>
   );
 };

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Flex, HStack, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
-import PageScroll from "../../../utils/PageScroll";
+import { FaSort } from "react-icons/fa";
+
 import moment from "moment";
-// import { ViewModal } from './Action-Modals-Transact'
 import { decodeUser } from "../../../services/decode-user";
-import { ViewModal } from "./ActionModalTransact";
-import { FaShippingFast, FaSort } from "react-icons/fa";
+import PageScroll from "../../../utils/PageScroll";
 import InfiniteScroll from "react-infinite-scroll-component";
+
+import { ViewModal } from "./ActionModalTransact";
 
 const currentUser = decodeUser();
 
@@ -24,7 +25,7 @@ export const ListMoveOrder = ({
 }) => {
   const { isOpen: isView, onClose: closeView, onOpen: openView } = useDisclosure();
 
-  const viewHandler = ({ mirId, deliveryStatus, customerName, customerCode }) => {
+  const viewHandler = ({ mirId, customerName, customerCode }) => {
     // Add delivery status for condition
     if (mirId && customerName && customerCode) {
       setMoveOrderInformation({
@@ -44,11 +45,9 @@ export const ListMoveOrder = ({
     }
   };
 
-  // const moveOrderData = moveOrderList?.filter(item => item.stockOnHand >= item.quantityOrder)
   const submitData = moveOrderList?.map((item) => {
     return {
       orderNo: item.mirId,
-      // farmType: item.farmType,
       customerName: item.customerName,
       customerCode: item.customerCode,
       orderNoPKey: item.orderNoPKey,
@@ -56,7 +55,6 @@ export const ListMoveOrder = ({
       preparedBy: currentUser?.fullName,
     };
   });
-  // console.log(moveOrderData)
 
   const parentCheckHandler = (e) => {
     if (e.target.checked) {
@@ -67,18 +65,16 @@ export const ListMoveOrder = ({
     console.log(checkedItems);
   };
 
-  // console.log(moveOrderList)
   const childCheckHandler = (e) => {
     const data = JSON.parse(e.target.value);
     let valueSubmit = {
       orderNo: data.mirId,
-      // farmType: data.farmType,
       customerName: data.customerName,
       customerCode: data.customerCode,
-      // orderNoPKey: data.orderNoPKey,
       isApprove: data.isApproved,
       preparedBy: currentUser?.fullName,
     };
+
     if (e.target.checked) {
       setCheckedItems([...checkedItems, valueSubmit]);
     } else {
@@ -104,8 +100,6 @@ export const ListMoveOrder = ({
   function getComparator(order) {
     return order === "desc" ? (a, b) => descendingComparator(a, b) : (a, b) => -descendingComparator(a, b);
   }
-
-  // console.log("Displayed Data: ", displayedData);
 
   return (
     <>
@@ -167,13 +161,13 @@ export const ListMoveOrder = ({
                     </Th>
                   </Tr>
                 </Thead>
+
                 <Tbody>
                   {displayedData?.sort(getComparator(preparedSort)).map((list, i) => (
                     <Tr key={i} cursor="pointer">
                       <Td>
                         <Checkbox
                           size="sm"
-                          // onChange={() => childCheckHandler(list)}
                           onChange={childCheckHandler}
                           isChecked={checkedItems.some((item) => item.orderNo === list.mirId)}
                           value={JSON.stringify(list)}
@@ -195,12 +189,7 @@ export const ListMoveOrder = ({
                       </Td>
                       <Td fontSize="xs">{moment(list.preparedDate).format("MM/DD/yyyy")}</Td>
                       <Td fontSize="xs">
-                        <Button
-                          size="xs"
-                          colorScheme="blue"
-                          // borderRadius="none"
-                          onClick={() => viewHandler(list)}
-                        >
+                        <Button size="xs" colorScheme="blue" onClick={() => viewHandler(list)}>
                           View
                         </Button>
                       </Td>

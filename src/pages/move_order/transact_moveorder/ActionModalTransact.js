@@ -21,27 +21,15 @@ import {
   Tr,
   ModalOverlay,
 } from "@chakra-ui/react";
-import PageScroll from "../../../utils/PageScroll";
-import request from "../../../services/ApiClient";
-import { decodeUser } from "../../../services/decode-user";
-import { ToastComponent } from "../../../components/Toast";
+
 import axios from "axios";
+import request from "../../../services/ApiClient";
+import PageScroll from "../../../utils/PageScroll";
+
+import { ToastComponent } from "../../../components/Toast";
 
 export const ViewModal = ({ isOpen, onClose, moveOrderInformation, moveOrderViewTable }) => {
-  const TableHead = [
-    "Line",
-    "Order Date",
-    "Item Code",
-    "Item Description",
-    "UOM",
-    "Quantity",
-    // "Unit Cost",
-    // "Total Cost",
-    "Item Remarks",
-    "Asset Tag",
-  ];
-
-  console.log("Orders: ", moveOrderViewTable);
+  const TableHead = ["Line", "Order Date", "Item Code", "Item Description", "UOM", "Quantity", "Item Remarks", "Asset Tag"];
 
   return (
     <>
@@ -55,7 +43,9 @@ export const ViewModal = ({ isOpen, onClose, moveOrderInformation, moveOrderView
               </Text>
             </Flex>
           </ModalHeader>
+
           <ModalCloseButton color="white" onClick={onClose} />
+
           <ModalBody mb={5}>
             <Flex justifyContent="space-between">
               <VStack alignItems="start" spacing={1} mt={4}>
@@ -72,12 +62,14 @@ export const ViewModal = ({ isOpen, onClose, moveOrderInformation, moveOrderView
                   </Text>
                   <Text fontSize="sm"> {moveOrderInformation.deliveryStatus}</Text>
                 </HStack>
+
                 <HStack>
                   <Text fontSize="sm" fontWeight="semibold">
                     Customer Code:
                   </Text>
                   <Text fontSize="sm">{moveOrderInformation.customerCode}</Text>
                 </HStack>
+
                 <HStack>
                   <Text fontSize="sm" fontWeight="semibold">
                     Customer Name:
@@ -85,6 +77,7 @@ export const ViewModal = ({ isOpen, onClose, moveOrderInformation, moveOrderView
                   <Text fontSize="sm">{moveOrderInformation.customerName}</Text>
                 </HStack>
               </VStack>
+
               <VStack alignItems="start" spacing={-1}></VStack>
               <VStack alignItems="start" spacing={-1}></VStack>
             </Flex>
@@ -116,18 +109,6 @@ export const ViewModal = ({ isOpen, onClose, moveOrderInformation, moveOrderView
                               minimumFractionDigits: 2,
                             })}
                           </Td>
-                          {/* <Td fontSize="sm">
-                            {list.unitCost.toLocaleString(undefined, {
-                              maximumFractionDigits: 2,
-                              minimumFractionDigits: 2,
-                            })}
-                          </Td>
-                          <Td fontSize="sm">
-                            {list.totalCost.toLocaleString(undefined, {
-                              maximumFractionDigits: 2,
-                              minimumFractionDigits: 2,
-                            })}
-                          </Td> */}
                           {list.itemRemarks ? <Td fontSize="sm">{list.itemRemarks}</Td> : <Td fontSize="sm">-</Td>}
                           {list.assetTag ? <Td fontSize="sm">{list.assetTag}</Td> : <Td fontSize="sm">-</Td>}
                         </Tr>
@@ -171,9 +152,6 @@ export const TransactConfirmation = ({
       };
     });
 
-    // console.log("Submit Data: ", checkedItems);
-    // console.log("Orders: ", moveOrderViewTable);
-
     const genusStatus = checkedItems?.map((item) => {
       return {
         mir_id: item.orderNo,
@@ -184,8 +162,6 @@ export const TransactConfirmation = ({
         })),
       };
     });
-
-    // console.log("genusStatus: ", genusStatus);
 
     setIsLoading(true);
     try {
@@ -203,7 +179,6 @@ export const TransactConfirmation = ({
         .catch((err) => {
           ToastComponent("Error", "Transaction failed", "error", toast);
           setIsLoading(false);
-          console.log(err);
         });
     } catch (error) {}
 
@@ -215,7 +190,6 @@ export const TransactConfirmation = ({
         },
       });
     } catch (error) {
-      console.log(error);
       ToastComponent("Error", "Genus ETD update status failed", "error", toast);
     }
   };

@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text } from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, Button, Text } from "@chakra-ui/react";
+import moment from "moment";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
-import moment from "moment";
-import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export const MoveOrderHistory = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
+export const MoveOrderHistory = ({ dateFrom, dateTo, setSheetData, search }) => {
   const [moData, setMoData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
-  const [pageTotal, setPageTotal] = useState(undefined);
 
   const [displayedData, setDisplayedData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -28,7 +26,6 @@ export const MoveOrderHistory = ({ dateFrom, dateTo, sample, setSheetData, searc
 
   const fetchMoveOrderHistory = () => {
     fetchMoveOrderHistoryApi(dateFrom, dateTo, search).then((res) => {
-      // console.log("Res", res);
       setMoData(res);
       setSheetData(
         res?.inventory?.map((item, i) => {
@@ -90,9 +87,6 @@ export const MoveOrderHistory = ({ dateFrom, dateTo, sample, setSheetData, searc
       setDisplayedData([]);
     };
   }, [dateFrom, dateTo, search]);
-
-  console.log("Displayed Data", displayedData);
-  console.log("MO Data", moData);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -277,6 +271,7 @@ export const MoveOrderHistory = ({ dateFrom, dateTo, sample, setSheetData, searc
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {moData?.inventory?.length}
         </Text>
+
         <Button size="xs" colorScheme="blue" onClick={() => setButtonChanger(!buttonChanger)}>
           {buttonChanger ? `>>>>` : `<<<<`}
         </Button>

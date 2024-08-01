@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Flex, HStack, VStack } from "@chakra-ui/react";
-import { usePagination } from "@ajna/pagination";
+
 import request from "../../../services/ApiClient";
+import { usePagination } from "@ajna/pagination";
+
 import { MaterialsInformation } from "./MaterialsInformation";
 import { ListOfReceipts } from "./ListOfReceipts";
 import { ActionButtons } from "./ActionButtons";
@@ -18,6 +20,7 @@ const fetchSuppliersApi = async () => {
 // };
 
 // New API
+
 const fetchMaterialsApi = async () => {
   const res = await request.get(`Miscellaneous/MiscReceiptItemList`);
   return res.data;
@@ -40,7 +43,6 @@ const fetchTransactApi = async () => {
 };
 
 const MiscReceiptPage = () => {
-  const supplierRef = useRef();
   const remarksRef = useRef();
 
   const [suppliers, setSuppliers] = useState([]);
@@ -63,6 +65,7 @@ const MiscReceiptPage = () => {
     supplierCode: "",
     supplierName: "",
   });
+
   const [rawMatsInfo, setRawMatsInfo] = useState({
     itemCode: "",
     itemDescription: "",
@@ -90,7 +93,6 @@ const MiscReceiptPage = () => {
   //Raw Mats Fetching
   const fetchMaterials = () => {
     fetchMaterialsApi().then((res) => {
-      console.log("Response: ", res);
       setMaterials(res);
     });
   };
@@ -138,6 +140,7 @@ const MiscReceiptPage = () => {
   const [pageTotal, setPageTotal] = useState(undefined);
   const [status, setStatus] = useState(true);
   const [search, setSearch] = useState("");
+
   const outerLimit = 2;
   const innerLimit = 2;
   const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
@@ -148,6 +151,7 @@ const MiscReceiptPage = () => {
     },
     initialState: { currentPage: 1, pageSize: 5 },
   });
+
   const fetchReceipts = () => {
     fetchReceiptsApi(currentPage, pageSize, search, status).then((res) => {
       setReceiptData(res);
@@ -166,6 +170,19 @@ const MiscReceiptPage = () => {
       fetchSuppliers();
       fetchMaterials();
       fetchUOMs();
+    }
+  }, [navigation]);
+
+  //When navigating view receipt
+  useEffect(() => {
+    if (navigation === 2) {
+      setSupplierData({
+        supplierCode: "",
+        supplierName: "",
+      });
+      setTransactionDate("");
+      setDetails("");
+      setListDataTempo([]);
     }
   }, [navigation]);
 
@@ -200,13 +217,7 @@ const MiscReceiptPage = () => {
         </HStack>
       </Flex>
 
-      <VStack
-        h={listDataTempo === 0 ? "87vh" : "auto"}
-        w="full"
-        p={6}
-        bg="form"
-        // className="boxShadow"
-      >
+      <VStack h={listDataTempo === 0 ? "87vh" : "auto"} w="full" p={6} bg="form">
         {navigation === 1 ? (
           <>
             <MaterialsInformation
@@ -214,22 +225,20 @@ const MiscReceiptPage = () => {
               setRawMatsInfo={setRawMatsInfo}
               details={details}
               setDetails={setDetails}
-              listDataTempo={listDataTempo}
               setListDataTempo={setListDataTempo}
               suppliers={suppliers}
               materials={materials}
-              uoms={uoms}
               setSelectorId={setSelectorId}
               supplierData={supplierData}
               setSupplierData={setSupplierData}
-              supplierRef={supplierRef}
               remarks={remarks}
               setRemarks={setRemarks}
               remarksRef={remarksRef}
               transactionType={transactionType}
-              setTransactionType={setTransactionType}
               transactionDate={transactionDate}
               setTransactionDate={setTransactionDate}
+              //For resetting the misc receipt section~~~
+              navigation={navigation}
             />
             {listDataTempo.length > 0 ? (
               <>
@@ -240,7 +249,6 @@ const MiscReceiptPage = () => {
                   setEditableData={setEditableData}
                   setRowIndex={setRowIndex}
                   setTotalQuantity={setTotalQuantity}
-                  remarks={remarks}
                 />
                 <ActionButtons
                   listDataTempo={listDataTempo}
@@ -248,9 +256,7 @@ const MiscReceiptPage = () => {
                   totalQuantity={totalQuantity}
                   supplierData={supplierData}
                   setSupplierData={setSupplierData}
-                  editableData={editableData}
                   selectorId={selectorId}
-                  supplierRef={supplierRef}
                   setDetails={setDetails}
                   setRawMatsInfo={setRawMatsInfo}
                   //cancel key
@@ -272,13 +278,11 @@ const MiscReceiptPage = () => {
               receiptData={receiptData}
               setCurrentPage={setCurrentPage}
               setPageSize={setPageSize}
-              setStatus={setStatus}
               search={search}
               setSearch={setSearch}
               pagesCount={pagesCount}
               currentPage={currentPage}
               pages={pages}
-              fetchReceipts={fetchReceipts}
             />
           </>
         ) : (

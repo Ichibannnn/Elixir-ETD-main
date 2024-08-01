@@ -43,7 +43,6 @@ export const BorrowedInformation = ({
   details,
   setDetails,
   customerRef,
-  customers,
   rawMats,
   uoms,
   barcodeNo,
@@ -130,8 +129,6 @@ export const BorrowedInformation = ({
     reset();
   };
 
-  console.log("Employee Data: ", employeeData);
-
   const detailHandler = (data) => {
     if (data) {
       setDetails(data);
@@ -186,8 +183,6 @@ export const BorrowedInformation = ({
       </Flex>
     );
   }
-
-  // console.log("Employee Data: ", employeeData);
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">

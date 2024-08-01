@@ -48,11 +48,11 @@ import PageScroll from "../../utils/PageScroll";
 import request from "../../services/ApiClient";
 import { ToastComponent } from "../../components/Toast";
 
-import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { decodeUser } from "../../services/decode-user";
 import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
-import axios from "axios";
 
 const UserAccount = () => {
   const [users, setUsers] = useState([]);
@@ -404,7 +404,6 @@ const DrawerComponent = (props) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -497,10 +496,6 @@ const DrawerComponent = (props) => {
   const [showLoading, setShowLoading] = useState(false);
 
   useEffect(() => {
-    // console.log(pickerItems.filter(item=> {
-    //   return item?.label.toLowerCase().includes(idNumber)
-    // }).splice(0,10))
-
     setInfo(
       pickerItems
         .filter((item) => {

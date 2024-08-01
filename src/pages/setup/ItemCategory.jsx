@@ -1,3 +1,71 @@
+import React, { useEffect, useState } from "react";
+import request from "../../services/ApiClient";
+import axios from "axios";
+import { ListOfItemCategory } from "./itemcategory_new/ListOfItemCategory";
+
+const fetchGenusApi = async () => {
+  const res = await axios.get(`http://genus-aio.rdfmis.ph/etd/backend/public/api/category?status=active&paginate=0`, {
+    headers: {
+      Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+    },
+  });
+  return res.data;
+};
+
+// FETCH API ELIXIR API:
+const fetchElixirApi = async () => {
+  const response = await request.get(`Material/GetAllItemCategoryWithPaginationOrig/true?PageNumber=1&PageSize=10000`);
+
+  return response.data;
+};
+
+const ItemCategory = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [genusItemCategory, setGenusItemCategory] = useState([]);
+  const [elixirItemCategory, setElixirItemCategory] = useState([]);
+  const [search, setSearch] = useState("");
+
+  // GET GENUS SUPPLIERS
+  const fetchGenusItemCategory = () => {
+    fetchGenusApi().then((res) => {
+      setGenusItemCategory(res);
+      setIsLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    fetchGenusItemCategory();
+
+    return () => {
+      setGenusItemCategory([]);
+    };
+  }, []);
+
+  // GET ELIXIR SUPPLIERS
+  const fetchElixirItemCategory = () => {
+    fetchElixirApi().then((res) => {
+      setElixirItemCategory(res);
+      setIsLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    fetchElixirItemCategory();
+
+    return () => {
+      setElixirItemCategory([]);
+    };
+  }, []);
+
+  return (
+    <ListOfItemCategory genusItemCategory={genusItemCategory} fetchingData={isLoading} fetchElixirItemCategory={fetchElixirItemCategory} elixirItemCategory={elixirItemCategory} />
+  );
+};
+
+export default ItemCategory;
+
+// OLD CODE
 // import {
 //   Box,
 //   Button,
@@ -628,118 +696,3 @@
 //     </>
 //   );
 // };
-
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Badge,
-  Box,
-  Button,
-  Flex,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  useToast,
-  VStack,
-} from "@chakra-ui/react";
-import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { RiFileList3Fill } from "react-icons/ri";
-import Swal from "sweetalert2";
-import { ToastComponent } from "../../components/Toast";
-import PageScroll from "../../utils/PageScroll";
-import request from "../../services/ApiClient";
-import axios from "axios";
-import { ListOfItemCategory } from "./itemcategory_new/ListOfItemCategory";
-
-const fetchGenusApi = async () => {
-  // const fromDateFormatted = moment(fromDate).format("yyyy-MM-DD");
-  // const toDateFormatted = moment(toDate).format("yyyy-MM-DD");
-  const res = await axios.get(
-    `http://genus-aio.rdfmis.ph/etd/backend/public/api/category?status=active&paginate=0`,
-    {
-      headers: {
-        Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-      },
-    }
-  );
-  return res.data;
-};
-
-// FETCH API ELIXIR API:
-const fetchElixirApi = async () => {
-  const response = await request.get(
-    `Material/GetAllItemCategoryWithPaginationOrig/true?PageNumber=1&PageSize=10000`
-  );
-
-  return response.data;
-};
-
-const ItemCategory = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [genusItemCategory, setGenusItemCategory] = useState([]);
-  const [elixirItemCategory, setElixirItemCategory] = useState([]);
-  const [search, setSearch] = useState("");
-
-  // GET GENUS SUPPLIERS
-  const fetchGenusItemCategory = () => {
-    fetchGenusApi().then((res) => {
-      setGenusItemCategory(res);
-      setIsLoading(false);
-    });
-  };
-
-  useEffect(() => {
-    fetchGenusItemCategory();
-
-    return () => {
-      setGenusItemCategory([]);
-    };
-  }, []);
-
-  // GET ELIXIR SUPPLIERS
-  const fetchElixirItemCategory = () => {
-    fetchElixirApi().then((res) => {
-      setElixirItemCategory(res);
-      setIsLoading(false);
-    });
-  };
-
-  useEffect(() => {
-    fetchElixirItemCategory();
-
-    return () => {
-      setElixirItemCategory([]);
-    };
-  }, []);
-
-  return (
-    <ListOfItemCategory
-      fetchElixirItemCategory={fetchElixirItemCategory}
-      elixirItemCategory={elixirItemCategory}
-      setElixirItemCategory={setElixirItemCategory}
-      genusItemCategory={genusItemCategory}
-      setGenusItemCategory={setGenusItemCategory}
-      search={search}
-      fetchingData={isLoading}
-    />
-  );
-};
-
-export default ItemCategory;

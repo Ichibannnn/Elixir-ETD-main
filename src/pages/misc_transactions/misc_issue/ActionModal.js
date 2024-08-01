@@ -41,28 +41,21 @@ export const AddConfirmation = ({
   isOpen,
   onClose,
   closeAddModal,
-  transactionDate,
   details,
-  setDetails,
   rawMatsInfo,
   setRawMatsInfo,
-  customerRef,
   warehouseId,
-  setSelectorId,
   setWarehouseId,
-  fetchActiveMiscIssues,
   customerData,
-  setCustomerData,
   remarks,
-  setRemarks,
-  remarksRef,
+  transactionDate,
   unitCost,
   setUnitCost,
-  fetchRawMats,
   chargingAccountTitle,
   chargingCoa,
-  coaData,
   setCoaData,
+  fetchActiveMiscIssues,
+  fetchRawMats,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -126,9 +119,6 @@ export const AddConfirmation = ({
     } catch (error) {}
   };
 
-  // console.log(rawMatsInfo)
-  // console.log(customerData)
-
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
       <ModalOverlay />
@@ -148,29 +138,10 @@ export const AddConfirmation = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup>
-            <Button
-              size="sm"
-              onClick={submitHandler}
-              isLoading={isLoading}
-              colorScheme="blue"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button size="sm" onClick={submitHandler} isLoading={isLoading} colorScheme="blue" height="28px" width="100px" borderRadius="none" fontSize="xs">
               Yes
             </Button>
-            <Button
-              size="sm"
-              onClick={onClose}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button size="sm" onClick={onClose} isLoading={isLoading} color="black" variant="outline" height="28px" width="100px" borderRadius="none" fontSize="xs">
               No
             </Button>
           </ButtonGroup>
@@ -180,15 +151,7 @@ export const AddConfirmation = ({
   );
 };
 
-export const CancelConfirmation = ({
-  isOpen,
-  onClose,
-  selectorId,
-  setSelectorId,
-  fetchActiveMiscIssues,
-  fetchBarcodeNo,
-  fetchRawMats,
-}) => {
+export const CancelConfirmation = ({ isOpen, onClose, selectorId, setSelectorId, fetchActiveMiscIssues, fetchBarcodeNo, fetchRawMats }) => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -196,16 +159,9 @@ export const CancelConfirmation = ({
     setIsLoading(true);
     try {
       const res = request
-        .put(`Miscellaneous/CancelItemCodeInMiscellaneousIssue`, [
-          { id: selectorId },
-        ])
+        .put(`Miscellaneous/CancelItemCodeInMiscellaneousIssue`, [{ id: selectorId }])
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Item has been cancelled",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Item has been cancelled", "success", toast);
           fetchActiveMiscIssues();
           fetchRawMats();
           fetchBarcodeNo();
@@ -220,18 +176,12 @@ export const CancelConfirmation = ({
     } catch (error) {}
   };
 
-  console.log(selectorId);
-
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
       <ModalOverlay />
       <ModalContent pt={10} pb={5}>
         <ModalHeader>
-          <Flex
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="center"
-          >
+          <Flex justifyContent="center" alignItems="center" flexDirection="center">
             <FaExclamationTriangle color="red" fontSize="90px" />
           </Flex>
         </ModalHeader>
@@ -258,17 +208,7 @@ export const CancelConfirmation = ({
             >
               Yes
             </Button>
-            <Button
-              size="sm"
-              onClick={onClose}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button size="sm" onClick={onClose} isLoading={isLoading} color="black" variant="outline" height="28px" width="100px" borderRadius="none" fontSize="xs">
               No
             </Button>
           </ButtonGroup>
@@ -282,10 +222,7 @@ const schema = yup.object().shape({
   formData: yup.object().shape({
     orderId: yup.string(),
     companyId: yup.object().required().typeError("Company Name is required"),
-    departmentId: yup
-      .object()
-      .required()
-      .typeError("Department Category is required"),
+    departmentId: yup.object().required().typeError("Department Category is required"),
     locationId: yup.object().required().typeError("Location Name is required"),
     accountId: yup.object().required().typeError("Account Name is required"),
     empId: yup.object().nullable(),
@@ -297,27 +234,23 @@ export const SaveConfirmation = ({
   isOpen,
   onClose,
   totalQuantity,
+  setTotalQuantity,
   details,
   setDetails,
   customerData,
   setCustomerData,
-  setTotalQuantity,
   miscData,
-  fetchActiveMiscIssues,
   isLoading,
   setIsLoading,
-  customerRef,
   setRawMatsInfo,
   setHideButton,
   remarks,
-  setRemarks,
   remarksRef,
   transactionDate,
   setTransactionDate,
+  fetchActiveMiscIssues,
   fetchRawMats,
   coaData,
-  setCoaData,
-  customers,
 }) => {
   const toast = useToast();
   const [company, setCompany] = useState([]);
@@ -326,11 +259,9 @@ export const SaveConfirmation = ({
   const [account, setAccount] = useState([]);
 
   const [selectedAccount, setSelectedAccount] = useState("");
-  const [disableFullName, setDisableFullName] = useState(true);
 
   // SEDAR
   const [pickerItems, setPickerItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
 
   const fetchEmployees = async () => {
     try {
@@ -350,48 +281,35 @@ export const SaveConfirmation = ({
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setCompany(res.data.result.companies);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
   // FETCH DEPT API
   const fetchDepartmentApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setDepartment(res.data.result.departments);
-      // console.log(res.data.result.departments);
     } catch (error) {}
   };
 
   // FETCH Loc API
   const fetchLocationApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setLocation(res.data.result.locations);
     } catch (error) {}
   };
@@ -399,34 +317,23 @@ export const SaveConfirmation = ({
   // FETCH ACcount API
   const fetchAccountApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setAccount(res.data.result.account_titles);
     } catch (error) {}
   };
 
   useEffect(() => {
-    fetchLocationApi().then(() =>
-      fetchDepartmentApi().then(() => fetchCompanyApi())
-    );
+    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
     fetchAccountApi();
   }, []);
 
   const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
+    formState: {},
     setValue,
-    reset,
-    watch,
-    control,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -446,18 +353,7 @@ export const SaveConfirmation = ({
     },
   });
 
-  // const defaultValues = { customers: [] };
-
-  // const resetHandler = () => {
-  //   reset(defaultValues);
-  // };
-
   const saveSubmitHandler = () => {
-    // console.log(coaData);
-
-    console.log("Customers: ", customerData);
-    console.log("COA DATA: ", coaData);
-
     if (totalQuantity > 0) {
       setIsLoading(true);
       try {
@@ -476,10 +372,6 @@ export const SaveConfirmation = ({
             departmentName: coaData[0]?.departmentName,
             locationCode: coaData[0]?.locationCode,
             locationName: coaData[0]?.locationName,
-            // accountCode: coaData?.departmentCode,
-            // accountTitles: data.formData.accountId.value.name,
-            // empId: data.formData.empId?.value.full_id_number,
-            // fullName: data.formData.fullName,
             addedBy: currentUser.fullName,
           })
           .then((res) => {
@@ -494,49 +386,34 @@ export const SaveConfirmation = ({
                 };
               });
               try {
-                const res = request
-                  .put(`Miscellaneous/UpdateMiscellaneousIssuePKey`, arrayofId)
-                  .then((res) => {
-                    fetchActiveMiscIssues();
-                    ToastComponent(
-                      "Success",
-                      "Information saved",
-                      "success",
-                      toast
-                    );
-                    onClose();
-                    fetchRawMats();
-                    setCustomerData({
-                      customerCode: "",
-                      customerName: "",
-                    });
-                    setTotalQuantity("");
-                    setTransactionDate("");
-                    // customerRef.current.value = "";
-                    remarksRef.current.value = "";
-                    setDetails("");
-                    setRawMatsInfo({
-                      itemCode: "",
-                      itemDescription: "",
-                      customerName: "",
-                      uom: "",
-                      quantity: "",
-                    });
-                    setIsLoading(false);
-                    setHideButton(false);
+                const res = request.put(`Miscellaneous/UpdateMiscellaneousIssuePKey`, arrayofId).then((res) => {
+                  fetchActiveMiscIssues();
+                  ToastComponent("Success", "Information saved", "success", toast);
+                  onClose();
+                  fetchRawMats();
+                  setCustomerData({
+                    customerCode: "",
+                    customerName: "",
                   });
-              } catch (error) {
-                console.log(error);
-              }
+                  setTotalQuantity("");
+                  setTransactionDate("");
+                  remarksRef.current.value = "";
+                  setDetails("");
+                  setRawMatsInfo({
+                    itemCode: "",
+                    itemDescription: "",
+                    customerName: "",
+                    uom: "",
+                    quantity: "",
+                  });
+                  setIsLoading(false);
+                  setHideButton(false);
+                });
+              } catch (error) {}
             }
           })
           .catch((err) => {
-            ToastComponent(
-              "Error",
-              "Information was not saved",
-              "error",
-              toast
-            );
+            ToastComponent("Error", "Information was not saved", "error", toast);
             setIsLoading(false);
           });
       } catch (error) {}
@@ -564,15 +441,12 @@ export const SaveConfirmation = ({
 
   const [idNumber, setIdNumber] = useState();
   const [info, setInfo] = useState();
-  const [showLoading, setShowLoading] = useState(false);
 
   useEffect(() => {
     setInfo(
       pickerItems
         .filter((item) => {
-          return item?.general_info?.full_id_number_full_name
-            .toLowerCase()
-            .includes(idNumber);
+          return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
         .splice(0, 50)
     );
@@ -581,6 +455,7 @@ export const SaveConfirmation = ({
   }, [idNumber]);
 
   return (
+    //OLD MODAL ~~~~
     // <Modal isOpen={isOpen} onClose={() => {}} isCentered size="2xl">
     //   <ModalOverlay />
     //   <form onSubmit={handleSubmit(saveSubmitHandler)}>
@@ -795,6 +670,7 @@ export const SaveConfirmation = ({
     //     </ModalContent>
     //   </form>
     // </Modal>
+
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
       <ModalOverlay />
       <ModalContent pt={10} pb={5}>
@@ -826,17 +702,7 @@ export const SaveConfirmation = ({
             >
               Yes
             </Button>
-            <Button
-              size="sm"
-              onClick={closeHandler}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button size="sm" onClick={closeHandler} isLoading={isLoading} color="black" variant="outline" height="28px" width="100px" borderRadius="none" fontSize="xs">
               No
             </Button>
           </ButtonGroup>
@@ -867,21 +733,18 @@ export const AllCancelConfirmation = ({
 
   const allCancelSubmitHandler = () => {
     setIsLoading(true);
+
     const allId = miscData.map((item) => {
       return {
         id: item.id,
       };
     });
+
     try {
       const res = request
         .put(`Miscellaneous/CancelItemCodeInMiscellaneousIssue`, allId)
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Items has been cancelled",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Items has been cancelled", "success", toast);
           fetchActiveMiscIssues();
           fetchRawMats();
           customerRef.current.value = "";
@@ -905,6 +768,8 @@ export const AllCancelConfirmation = ({
           onClose();
         })
         .catch((err) => {
+          console.log("error: ", err);
+
           ToastComponent("Error", "Item was not cancelled", "error", toast);
           setIsLoading(false);
         });
@@ -916,11 +781,7 @@ export const AllCancelConfirmation = ({
       <ModalOverlay />
       <ModalContent color="black" pt={10} pb={5}>
         <ModalHeader>
-          <Flex
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="center"
-          >
+          <Flex justifyContent="center" alignItems="center" flexDirection="center">
             <FaExclamationTriangle color="red" fontSize="90px" />
           </Flex>
         </ModalHeader>
@@ -934,28 +795,10 @@ export const AllCancelConfirmation = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup>
-            <Button
-              onClick={allCancelSubmitHandler}
-              isLoading={isLoading}
-              disabled={isLoading}
-              colorScheme="red"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button onClick={allCancelSubmitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="red" height="28px" width="100px" borderRadius="none" fontSize="xs">
               Yes
             </Button>
-            <Button
-              onClick={onClose}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button onClick={onClose} isLoading={isLoading} color="black" variant="outline" height="28px" width="100px" borderRadius="none" fontSize="xs">
               No
             </Button>
           </ButtonGroup>

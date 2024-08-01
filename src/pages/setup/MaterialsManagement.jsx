@@ -5,27 +5,21 @@ import { ListOfMaterials } from "./materials_sync/ListOfMaterials";
 import { usePagination } from "@ajna/pagination";
 
 const fetchGenusApi = async () => {
-  const res = await axios.get(
-    `http://genus-aio.rdfmis.ph/etd/backend/public/api/material?status=active&paginate=0`,
-    {
-      headers: {
-        Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-      },
-    }
-  );
+  const res = await axios.get(`http://genus-aio.rdfmis.ph/etd/backend/public/api/material?status=active&paginate=0`, {
+    headers: {
+      Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+    },
+  });
   return res.data;
 };
 
 // FETCH API ELIXIR API:
 const fetchElixirApi = async (pageNumber, pageSize, search) => {
-  const response = await request.get(
-    `Material/GetAllMaterialWithPaginationOrig/true?PageNumber=${pageNumber}&PageSize=${pageSize}`,
-    {
-      params: {
-        search: search
-      }
-    }
-  );
+  const response = await request.get(`Material/GetAllMaterialWithPaginationOrig/true?PageNumber=${pageNumber}&PageSize=${pageSize}`, {
+    params: {
+      search: search,
+    },
+  });
 
   return response.data;
 };
@@ -41,14 +35,7 @@ const ItemCategory = () => {
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,

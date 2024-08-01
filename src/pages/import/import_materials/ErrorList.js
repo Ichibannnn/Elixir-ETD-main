@@ -27,33 +27,18 @@ import {
   HStack,
   useToast,
 } from "@chakra-ui/react";
-import moment from "moment";
-// import PageScrollModalErrorList from "../../components/PageScrollModalErrorList";
-import PageScrollModalErrorList from "../../../components/PageScrollModalErrorList";
-// import PageScrollImportModal from "../../components/PageScrollImportModal";
-import PageScrollImportModal from "../../../components/PageScrollImportModal";
 import { RiFileList3Fill } from "react-icons/ri";
-import { TiWarning } from "react-icons/ti";
+
 import Swal from "sweetalert2";
 import request from "../../../services/ApiClient";
-import { ToastComponent } from "../../../components/Toast";
-import PageScroll from "../../../utils/PageScroll";
 import { decodeUser } from "../../../services/decode-user";
-import DateConverter from "../../../components/DateConverter";
 
-export const ErrorList = ({
-  isOpen,
-  onClose,
-  errorData,
-  setErrorData,
-  setErrorOpener,
-  errorOpener,
-  isLoading,
-  setIsLoading,
-  setIsDisabled,
-  setExcelData,
-  excelData,
-}) => {
+import { ToastComponent } from "../../../components/Toast";
+import PageScrollModalErrorList from "../../../components/PageScrollModalErrorList";
+import PageScrollImportModal from "../../../components/PageScrollImportModal";
+import PageScroll from "../../../utils/PageScroll";
+
+export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOpener, errorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData, excelData }) => {
   const currentUser = decodeUser();
 
   const toast = useToast();
@@ -145,18 +130,17 @@ export const ErrorList = ({
     };
   });
 
-  const itemDescriptionAlreadyExist =
-    errorData?.itemDescriptionAlreadyExist?.map((list) => {
-      return {
-        itemCode: list.itemCode,
-        itemDescription: list.itemDescription,
-        accountPName: list.accountPName,
-        itemCategoryName: list.itemCategoryName,
-        uomCode: list.uomCode,
-        bufferLevel: list.bufferLevel,
-        addedBy: currentUser.fullName,
-      };
-    });
+  const itemDescriptionAlreadyExist = errorData?.itemDescriptionAlreadyExist?.map((list) => {
+    return {
+      itemCode: list.itemCode,
+      itemDescription: list.itemDescription,
+      accountPName: list.accountPName,
+      itemCategoryName: list.itemCategoryName,
+      uomCode: list.uomCode,
+      bufferLevel: list.bufferLevel,
+      addedBy: currentUser.fullName,
+    };
+  });
 
   const itemDescriptionNull = errorData?.itemDescriptionNull?.map((list) => {
     return {
@@ -206,12 +190,7 @@ export const ErrorList = ({
               .post("Material/AddNewImportMaterials", available)
               .then((res) => {
                 onClose();
-                ToastComponent(
-                  "Success!",
-                  "Materials Imported",
-                  "success",
-                  toast
-                );
+                ToastComponent("Success!", "Materials Imported", "success", toast);
                 setIsLoading(false);
                 setIsDisabled(false);
                 clearExcelFile.current.value = "";
@@ -224,20 +203,10 @@ export const ErrorList = ({
                 clearExcelFile.current.value = "";
               });
           } catch (err) {
-            ToastComponent(
-              "Error!",
-              "Wrong excel format imported for PO",
-              "error",
-              toast
-            );
+            ToastComponent("Error!", "Wrong excel format imported for PO", "error", toast);
           }
         } else {
-          ToastComponent(
-            "Error!",
-            "No data provided, please check your import",
-            "error",
-            toast
-          );
+          ToastComponent("Error!", "No data provided, please check your import", "error", toast);
         }
       }
     });
@@ -249,9 +218,7 @@ export const ErrorList = ({
       <ModalContent color="white" bg="primary">
         <ModalHeader>
           <Flex justifyContent="left">
-            <Text fontSize="11px">
-              Error: File was not imported due to the following reasons:
-            </Text>
+            <Text fontSize="11px">Error: File was not imported due to the following reasons:</Text>
           </Flex>
         </ModalHeader>
         <ModalCloseButton onClick={onClose} />
@@ -264,15 +231,8 @@ export const ErrorList = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton fontWeight="semibold" border="1px">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                        color="green"
-                      >
-                        Available for syncing{" "}
-                        <Badge color="green">{available?.length}</Badge>
+                      <Box flex="1" textAlign="left" fontSize="13px" fontWeight="semibold" color="green">
+                        Available for syncing <Badge color="green">{available?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -340,22 +300,14 @@ export const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
                     </PageScroll>
                     {available ? (
                       <Flex justifyContent="end">
-                        <Button
-                          onClick={() => submitAvailablePOHandler()}
-                          size="sm"
-                          _hover={{ bgColor: "accent", color: "white" }}
-                          colorScheme="blue"
-                          isLoading={isLoading}
-                        >
+                        <Button onClick={() => submitAvailablePOHandler()} size="sm" _hover={{ bgColor: "accent", color: "white" }} colorScheme="blue" isLoading={isLoading}>
                           Sync
                         </Button>
                       </Flex>
@@ -368,22 +320,12 @@ export const ErrorList = ({
                 ""
               )}
 
-              {/* Duplicated ---------------*/}
+              {/* Duplicated */}
               {duplicate?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
                         Duplicated Lists {""}
                         <Badge color="red">{duplicate?.length}</Badge>
                       </Box>
@@ -453,9 +395,7 @@ export const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -470,18 +410,8 @@ export const ErrorList = ({
               {itemCategoryName?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
                         Item Category does not exist {""}
                         <Badge color="red">{itemCategoryName?.length}</Badge>
                       </Box>
@@ -551,10 +481,7 @@ export const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no lists with unregistered item
-                              category.
-                            </Text>
+                            <Text color="white">There are no lists with unregistered item category.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -569,20 +496,9 @@ export const ErrorList = ({
               {accountTitle?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
-                        Account Title per Item does not exist{" "}
-                        <Badge color="red">{accountTitle?.length}</Badge>
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
+                        Account Title per Item does not exist <Badge color="red">{accountTitle?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -650,10 +566,7 @@ export const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no lists with unregistered item sub
-                              category.
-                            </Text>
+                            <Text color="white">There are no lists with unregistered item sub category.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -668,20 +581,9 @@ export const ErrorList = ({
               {uom?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
-                        UOM does not exist{" "}
-                        <Badge color="danger">{uom?.length}</Badge>
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
+                        UOM does not exist <Badge color="danger">{uom?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -749,9 +651,7 @@ export const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no lists with unregistered UOM.
-                            </Text>
+                            <Text color="white">There are no lists with unregistered UOM.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -766,20 +666,9 @@ export const ErrorList = ({
               {item_code_null?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
-                        Item Code has an empty cell{" "}
-                        <Badge color="danger">{item_code_null?.length}</Badge>
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
+                        Item Code has an empty cell <Badge color="danger">{item_code_null?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -847,9 +736,7 @@ export const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              Check if any fields of Item Code is empty.
-                            </Text>
+                            <Text color="white">Check if any fields of Item Code is empty.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -863,20 +750,9 @@ export const ErrorList = ({
               {item_code_exist?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
-                        Item Code is already exist{" "}
-                        <Badge color="danger">{item_code_exist?.length}</Badge>
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
+                        Item Code is already exist <Badge color="danger">{item_code_exist?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -944,9 +820,7 @@ export const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              Check the field of Item code if existing.
-                            </Text>
+                            <Text color="white">Check the field of Item code if existing.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -960,20 +834,9 @@ export const ErrorList = ({
               {item_desc_null?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
-                        Item Code has an empty cell{" "}
-                        <Badge color="danger">{item_desc_null?.length}</Badge>
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
+                        Item Code has an empty cell <Badge color="danger">{item_desc_null?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -1041,9 +904,7 @@ export const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              Check if any fields of Item Description is empty
-                            </Text>
+                            <Text color="white">Check if any fields of Item Description is empty</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -1057,20 +918,9 @@ export const ErrorList = ({
               {item_desc_exist?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
-                        Item Description is already exist{" "}
-                        <Badge color="danger">{item_desc_exist?.length}</Badge>
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
+                        Item Description is already exist <Badge color="danger">{item_desc_exist?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -1138,9 +988,7 @@ export const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              Check item Description if existing.
-                            </Text>
+                            <Text color="white">Check item Description if existing.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -1153,10 +1001,7 @@ export const ErrorList = ({
             </Accordion>
 
             <HStack mt={20} textAlign="center" fontWeight="semibold">
-              {/* <TiWarning color='red' /> */}
-              <Text fontSize="9px">
-                Disclaimer: There were no Material imported.
-              </Text>
+              <Text fontSize="9px">Disclaimer: There were no Material imported.</Text>
             </HStack>
           </ModalBody>
         </PageScrollImportModal>

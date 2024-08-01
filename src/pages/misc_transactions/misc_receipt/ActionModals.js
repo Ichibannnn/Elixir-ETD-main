@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  Box,
   Button,
   ButtonGroup,
   Flex,
-  FormLabel,
-  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,23 +10,17 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
-  Stack,
   Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { BsPatchQuestionFill } from "react-icons/bs";
+import { FaExclamationTriangle } from "react-icons/fa";
+import { FcInfo } from "react-icons/fc";
+
 import request from "../../../services/ApiClient";
 import { decodeUser } from "../../../services/decode-user";
 import { ToastComponent } from "../../../components/Toast";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import axios from "axios";
-import { Controller, useForm } from "react-hook-form";
-import Swal from "sweetalert2";
-import { FcInfo } from "react-icons/fc";
-import { FaExclamationTriangle } from "react-icons/fa";
 
 const currentUser = decodeUser();
 
@@ -38,23 +29,17 @@ export const AddConfirmation = ({
   onClose,
   closeAddModal,
   details,
-  setDetails,
   rawMatsInfo,
   setRawMatsInfo,
-  listDataTempo,
   setListDataTempo,
-  supplierRef,
   setSelectorId,
   remarks,
   transactionDate,
   supplierData,
   chargingAccountTitle,
   chargingCoa,
-  resetCOA,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  // console.log(chargingAccountTitle);
 
   const addItemHandler = () => {
     setIsLoading(true);
@@ -97,8 +82,6 @@ export const AddConfirmation = ({
     setIsLoading(false);
     onClose();
     closeAddModal();
-
-    // console.log("Charging Coa :", addToArray);
   };
 
   return (
@@ -120,27 +103,10 @@ export const AddConfirmation = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup>
-            <Button
-              onClick={addItemHandler}
-              isLoading={isLoading}
-              colorScheme="blue"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button onClick={addItemHandler} isLoading={isLoading} colorScheme="blue" height="28px" width="100px" borderRadius="none" fontSize="xs">
               Yes
             </Button>
-            <Button
-              onClick={onClose}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button onClick={onClose} isLoading={isLoading} color="black" variant="outline" height="28px" width="100px" borderRadius="none" fontSize="xs">
               No
             </Button>
           </ButtonGroup>
@@ -150,19 +116,6 @@ export const AddConfirmation = ({
   );
 };
 
-// const schema = yup.object().shape({
-//   formData: yup.object().shape({
-//     orderId: yup.string(),
-//     companyId: yup.number().required().typeError("Company Name is required"),
-//     departmentId: yup
-//       .number()
-//       .required()
-//       .typeError("Department Category is required"),
-//     locationId: yup.number().required().typeError("Location Name is required"),
-//     accountId: yup.number().required().typeError("Account Name is required"),
-//   }),
-// });
-
 export const SaveConfirmation = ({
   isOpen,
   onClose,
@@ -171,7 +124,6 @@ export const SaveConfirmation = ({
   supplierData,
   setSupplierData,
   totalQuantity,
-  supplierRef,
   setDetails,
   setRawMatsInfo,
   remarks,
@@ -179,7 +131,6 @@ export const SaveConfirmation = ({
   remarksRef,
   transactionDate,
   setTransactionDate,
-  setChargingInfo,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -293,7 +244,7 @@ export const SaveConfirmation = ({
 
   // console.log(listDataTempo);
 
-  const saveSubmitHandler = (data) => {
+  const saveSubmitHandler = () => {
     const firstSubmit = {
       supplierCode: supplierData.supplierCode,
       supplier: supplierData.supplierName,
@@ -310,8 +261,6 @@ export const SaveConfirmation = ({
       locationName: listDataTempo[0]?.chargingLocationName,
       addedBy: currentUser.fullName,
     };
-
-    console.log("first submit :", firstSubmit);
 
     if (totalQuantity > 0) {
       setIsLoading(true);
@@ -344,19 +293,9 @@ export const SaveConfirmation = ({
                 };
               });
               try {
-                const res = request.post(
-                  `Miscellaneous/AddNewMiscellaneousReceiptInWarehouse`,
-                  submitArray
-                );
-                ToastComponent(
-                  "Success",
-                  "Information saved",
-                  "success",
-                  toast
-                );
+                const res = request.post(`Miscellaneous/AddNewMiscellaneousReceiptInWarehouse`, submitArray);
+                ToastComponent("Success", "Information saved", "success", toast);
                 setListDataTempo([]);
-                // console.log(listDataTempo);
-                // supplierRef.current.value = "";
                 remarksRef.current.value = "";
                 setTransactionDate("");
                 setDetails("");
@@ -373,7 +312,6 @@ export const SaveConfirmation = ({
                   unitPrice: "",
                 });
                 setIsLoading(false);
-                // setInterval(window.location.reload(false), 1000);
                 onClose();
               } catch (error) {
                 console.log(error);
@@ -382,12 +320,7 @@ export const SaveConfirmation = ({
             }
           })
           .catch((err) => {
-            ToastComponent(
-              "Error",
-              "Information was not saved",
-              "error",
-              toast
-            );
+            ToastComponent("Error", "Information was not saved", "error", toast);
             setIsLoading(false);
           });
       } catch (error) {}
@@ -395,6 +328,7 @@ export const SaveConfirmation = ({
   };
 
   return (
+    // OLD MODAL ~~~
     // <Modal isOpen={isOpen} onClose={() => {}} isCentered size="2xl">
     //   <ModalOverlay />
     //   <form onSubmit={handleSubmit(saveSubmitHandler)}>
@@ -567,6 +501,7 @@ export const SaveConfirmation = ({
     //     </ModalContent>
     //   </form>
     // </Modal>
+
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
       <ModalOverlay />
       <ModalContent color="black" pt={10} pb={5}>
@@ -585,28 +520,10 @@ export const SaveConfirmation = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup>
-            <Button
-              onClick={saveSubmitHandler}
-              isLoading={isLoading}
-              disabled={isLoading}
-              colorScheme="blue"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button onClick={saveSubmitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="blue" height="28px" width="100px" borderRadius="none" fontSize="xs">
               Yes
             </Button>
-            <Button
-              onClick={onClose}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button onClick={onClose} isLoading={isLoading} color="black" variant="outline" height="28px" width="100px" borderRadius="none" fontSize="xs">
               No
             </Button>
           </ButtonGroup>
@@ -616,14 +533,7 @@ export const SaveConfirmation = ({
   );
 };
 
-export const CancelConfirmation = ({
-  isOpen,
-  onClose,
-  selectorId,
-  rowIndex,
-  setListDataTempo,
-  listDataTempo,
-}) => {
+export const CancelConfirmation = ({ isOpen, onClose, rowIndex, setListDataTempo, listDataTempo }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const cancelSubmitHandler = () => {
@@ -643,11 +553,7 @@ export const CancelConfirmation = ({
       <ModalOverlay />
       <ModalContent bgColor="white" color="black" pt={10} pb={5}>
         <ModalHeader>
-          <Flex
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="center"
-          >
+          <Flex justifyContent="center" alignItems="center" flexDirection="center">
             <FaExclamationTriangle color="red" fontSize="90px" />
           </Flex>
         </ModalHeader>
@@ -661,28 +567,10 @@ export const CancelConfirmation = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup>
-            <Button
-              onClick={cancelSubmitHandler}
-              isLoading={isLoading}
-              disabled={isLoading}
-              colorScheme="red"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button onClick={cancelSubmitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="red" height="28px" width="100px" borderRadius="none" fontSize="xs">
               Yes
             </Button>
-            <Button
-              onClick={onClose}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button onClick={onClose} isLoading={isLoading} color="black" variant="outline" height="28px" width="100px" borderRadius="none" fontSize="xs">
               No
             </Button>
           </ButtonGroup>
@@ -693,95 +581,67 @@ export const CancelConfirmation = ({
 };
 
 // Frontend Edit Process
+// export const EditModal = ({ isOpen, onClose, selectorId, rowIndex, setListDataTempo, listDataTempo }) => {
+//   const [isLoading, setIsLoading] = useState(false);
+//   const { isOpen: isEditConfirm, onClose: closeEditConfirm, onOpen: openEditConfirm } = useDisclosure();
 
-export const EditModal = ({
-  isOpen,
-  onClose,
-  selectorId,
-  rowIndex,
-  setListDataTempo,
-  listDataTempo,
-}) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const {
-    isOpen: isEditConfirm,
-    onClose: closeEditConfirm,
-    onOpen: openEditConfirm,
-  } = useDisclosure();
+//   const editHandler = () => {
+//     openEditConfirm();
+//   };
 
-  const editHandler = () => {
-    openEditConfirm();
-  };
+//   return (
+//     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="4xl">
+//       <ModalContent>
+//         <ModalHeader></ModalHeader>
+//         <ModalCloseButton onClick={onClose} />
 
-  return (
-    <Modal isOpen={isOpen} onClose={() => {}} isCentered size="4xl">
-      <ModalContent>
-        <ModalHeader></ModalHeader>
-        <ModalCloseButton onClick={onClose} />
+//         <ModalBody></ModalBody>
 
-        <ModalBody></ModalBody>
+//         <ModalFooter>
+//           <ButtonGroup>
+//             <Button onClick={editHandler} isLoading={isLoading} disabled={isLoading} colorScheme="blue">
+//               Update
+//             </Button>
+//             <Button onClick={onClose} isLoading={isLoading} colorScheme="blackAlpha">
+//               No
+//             </Button>
+//           </ButtonGroup>
+//         </ModalFooter>
+//       </ModalContent>
+//       {isEditConfirm && (
+//         <EditConfirmation
+//           isOpen={isEditConfirm}
+//           onClose={closeEditConfirm}
+//           closeEditModal={onClose}
+//           selectorId={selectorId}
+//           rowIndex={rowIndex}
+//           setListDataTempo={setListDataTempo}
+//           listDataTempo={listDataTempo}
+//         />
+//       )}
+//     </Modal>
+//   );
+// };
 
-        <ModalFooter>
-          <ButtonGroup>
-            <Button
-              onClick={editHandler}
-              isLoading={isLoading}
-              disabled={isLoading}
-              colorScheme="blue"
-            >
-              Update
-            </Button>
-            <Button
-              onClick={onClose}
-              isLoading={isLoading}
-              colorScheme="blackAlpha"
-            >
-              No
-            </Button>
-          </ButtonGroup>
-        </ModalFooter>
-      </ModalContent>
-      {isEditConfirm && (
-        <EditConfirmation
-          isOpen={isEditConfirm}
-          onClose={closeEditConfirm}
-          closeEditModal={onClose}
-          selectorId={selectorId}
-          rowIndex={rowIndex}
-          setListDataTempo={setListDataTempo}
-          listDataTempo={listDataTempo}
-        />
-      )}
-    </Modal>
-  );
-};
+// export const EditConfirmation = ({ isOpen, onClose }) => {
+//   return (
+//     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
+//       <ModalContent bgColor="secondary" color="white" pt={10} pb={5}>
+//         <ModalHeader>
+//           <Flex justifyContent="center">
+//             <BsPatchQuestionFill fontSize="50px" />
+//           </Flex>
+//         </ModalHeader>
+//         <ModalCloseButton onClick={onClose} />
 
-export const EditConfirmation = ({
-  isOpen,
-  onClose,
-  selectorId,
-  rowIndex,
-  setListDataTempo,
-  listDataTempo,
-}) => {
-  return (
-    <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
-      <ModalContent bgColor="secondary" color="white" pt={10} pb={5}>
-        <ModalHeader>
-          <Flex justifyContent="center">
-            <BsPatchQuestionFill fontSize="50px" />
-          </Flex>
-        </ModalHeader>
-        <ModalCloseButton onClick={onClose} />
+//         <ModalBody mb={5}>
+//           <Text textAlign="center" fontSize="lg">
+//             Are you sure you want to update this information?
+//           </Text>
+//         </ModalBody>
 
-        <ModalBody mb={5}>
-          <Text textAlign="center" fontSize="lg">
-            Are you sure you want to update this information?
-          </Text>
-        </ModalBody>
-
-        <ModalFooter></ModalFooter>
-      </ModalContent>
-    </Modal>
-  );
-};
+//         <ModalFooter></ModalFooter>
+//       </ModalContent>
+//     </Modal>
+//   );
+// };

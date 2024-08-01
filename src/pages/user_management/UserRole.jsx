@@ -1,9 +1,10 @@
+import React, { useState } from "react";
+import { useEffect } from "react";
 import {
   Box,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
@@ -37,28 +38,21 @@ import {
   Portal,
   Image,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { FaUserTag } from "react-icons/fa";
 import { RiAddFill } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
-import PageScroll from "../../utils/PageScroll";
-import request from "../../services/ApiClient";
-import { ToastComponent } from "../../components/Toast";
-import { yupResolver } from "@hookform/resolvers/yup";
+
 import * as yup from "yup";
+import request from "../../services/ApiClient";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { ToastComponent } from "../../components/Toast";
+import PageScroll from "../../utils/PageScroll";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+
 import DrawerTaggingComponent from "./DrawerTaggingComponent";
 
 const UserRole = () => {
@@ -75,9 +69,7 @@ const UserRole = () => {
 
   // FETCH API ROLES:
   const fetchRolesApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Role/GetAllRoleWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
-    );
+    const response = await request.get(`Role/GetAllRoleWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
     return response.data;
   };
@@ -85,14 +77,7 @@ const UserRole = () => {
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -155,7 +140,6 @@ const UserRole = () => {
   // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    // console.log(inputValue)
   };
 
   //ADD ROLE HANDLER---
@@ -168,7 +152,6 @@ const UserRole = () => {
     });
     onOpen();
     setDisableEdit(false);
-    // reset()
   };
 
   //EDIT ROLE--
@@ -176,22 +159,18 @@ const UserRole = () => {
     setDisableEdit(true);
     setEditData(role);
     onOpen();
-    // console.log(role.roleName)
   };
 
   //FOR DRAWER (Drawer / Drawer Tagging)
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isDrawerTaggingOpen,
-    onOpen: openDrawerTagging,
-    onClose: closeDrawerTagging,
-  } = useDisclosure();
+  const { isOpen: isDrawerTaggingOpen, onOpen: openDrawerTagging, onClose: closeDrawerTagging } = useDisclosure();
 
   //MODULE TAGGING
   const [taggingParameter, setTaggingParameter] = useState({
     roleId: "",
     roleName: "",
   });
+
   const moduleTaggingHandler = (id, roleName) => {
     setTaggingParameter({ roleId: id, roleName: roleName });
     openDrawerTagging();
@@ -204,23 +183,13 @@ const UserRole = () => {
   }, [search]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="full"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} w="full">
         <Flex flexDirection="column" gap={1} w="full">
           <Flex justifyContent="space-between" alignItems="center">
             <HStack w="25%" mt={3}>
               <InputGroup size="sm">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<FiSearch bg="black" fontSize="18px" />}
-                />
+                <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
                 <Input
                   borderRadius="lg"
                   fontSize="13px"
@@ -237,10 +206,7 @@ const UserRole = () => {
 
             <HStack flexDirection="row">
               <Text fontSize="12px">STATUS:</Text>
-              <Select
-                fontSize="12px"
-                onChange={(e) => statusHandler(e.target.value)}
-              >
+              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
@@ -259,24 +225,8 @@ const UserRole = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                  className="inputUpperCase"
-                >
-                  <Thead
-                    // position="sticky"
-                    // zIndex="docked"
-                    // top={0}
-                    bgColor="primary"
-                    position="sticky"
-                    top={0}
-                    zIndex={1}
-                  >
+                <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped" className="inputUpperCase">
+                  <Thead bgColor="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
                       <Th h="40px" color="white" fontSize="11px">
                         ID
@@ -298,6 +248,7 @@ const UserRole = () => {
                       </Th>
                     </Tr>
                   </Thead>
+
                   <Tbody>
                     {roles.role?.map((rol, i) => (
                       <Tr key={i}>
@@ -309,12 +260,7 @@ const UserRole = () => {
                         <Td pl={0}>
                           <Flex>
                             <HStack>
-                              <Button
-                                bg="none"
-                                p={0}
-                                size="sm"
-                                onClick={() => editRolesHandler(rol)}
-                              >
+                              <Button bg="none" p={0} size="sm" onClick={() => editRolesHandler(rol)}>
                                 <AiTwotoneEdit fontSize="15px" />
                               </Button>
 
@@ -324,19 +270,11 @@ const UserRole = () => {
                                     <PopoverTrigger>
                                       {rol.isActive === true ? (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnon.png"
-                                            title="active"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnon.png" title="active" />
                                         </Button>
                                       ) : (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnoff.png"
-                                            title="inactive"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnoff.png" title="inactive" />
                                         </Button>
                                       )}
                                     </PopoverTrigger>
@@ -344,32 +282,15 @@ const UserRole = () => {
                                       <PopoverContent bg="primary" color="#fff">
                                         <PopoverArrow bg="primary" />
                                         <PopoverCloseButton />
-                                        <PopoverHeader>
-                                          Confirmation!
-                                        </PopoverHeader>
+                                        <PopoverHeader>Confirmation!</PopoverHeader>
                                         <PopoverBody>
                                           <VStack onClick={onClose}>
                                             {rol.isActive === true ? (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this role inactive?
-                                              </Text>
+                                              <Text>Are you sure you want to set this role inactive?</Text>
                                             ) : (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this role active?
-                                              </Text>
+                                              <Text>Are you sure you want to set this role active?</Text>
                                             )}
-                                            <Button
-                                              colorScheme="green"
-                                              size="sm"
-                                              onClick={() =>
-                                                changeStatusHandler(
-                                                  rol.id,
-                                                  rol.isActive
-                                                )
-                                              }
-                                            >
+                                            <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(rol.id, rol.isActive)}>
                                               Yes
                                             </Button>
                                           </VStack>
@@ -383,12 +304,7 @@ const UserRole = () => {
                           </Flex>
                         </Td>
                         <Td>
-                          <Button
-                            bg="none"
-                            onClick={() =>
-                              moduleTaggingHandler(rol.id, rol.roleName)
-                            }
-                          >
+                          <Button bg="none" onClick={() => moduleTaggingHandler(rol.id, rol.roleName)}>
                             <FaUserTag />
                           </Button>
                         </Td>
@@ -415,14 +331,7 @@ const UserRole = () => {
 
               {/* PROPS */}
               {isOpen && (
-                <DrawerComponent
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  fetchRolesApi={fetchRolesApi}
-                  getRolesHandler={getRolesHandler}
-                  editData={editData}
-                  disableEdit={disableEdit}
-                />
+                <DrawerComponent isOpen={isOpen} onClose={onClose} fetchRolesApi={fetchRolesApi} getRolesHandler={getRolesHandler} editData={editData} disableEdit={disableEdit} />
               )}
 
               {isDrawerTaggingOpen && (
@@ -434,23 +343,13 @@ const UserRole = () => {
                   getRolesHandler={getRolesHandler}
                   editData={editData}
                   disableEdit={disableEdit}
-                  // reset={reset}
                 />
               )}
 
               <Stack>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                    >
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                       {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
@@ -466,20 +365,12 @@ const UserRole = () => {
                         />
                       ))}
                     </PaginationPageGroup>
+
                     <HStack>
-                      <PaginationNext
-                        bg="primary"
-                        color="white"
-                        p={1}
-                        _hover={{ bg: "btnColor", color: "white" }}
-                      >
+                      <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                         {">>"}
                       </PaginationNext>
-                      <Select
-                        onChange={handlePageSizeChange}
-                        variant="outline"
-                        fontSize="md"
-                      >
+                      <Select onChange={handlePageSizeChange} variant="outline" fontSize="md">
                         <option value={Number(5)}>5</option>
                         <option value={Number(10)}>10</option>
                         <option value={Number(25)}>25</option>
@@ -560,12 +451,7 @@ const DrawerComponent = (props) => {
             onClose(onClose);
           })
           .catch((error) => {
-            ToastComponent(
-              "Update Failed",
-              error.response.data,
-              "warning",
-              toast
-            );
+            ToastComponent("Update Failed", error.response.data, "warning", toast);
           });
       }
     } catch (err) {}
@@ -599,12 +485,7 @@ const DrawerComponent = (props) => {
               <Stack spacing="7px">
                 <Box>
                   <FormLabel>User Role:</FormLabel>
-                  <Input
-                    {...register("formData.roleName")}
-                    placeholder="Please enter User Role"
-                    autoComplete="off"
-                    autoFocus
-                  />
+                  <Input {...register("formData.roleName")} placeholder="Please enter User Role" autoComplete="off" autoFocus />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.roleName?.message}
                   </Text>

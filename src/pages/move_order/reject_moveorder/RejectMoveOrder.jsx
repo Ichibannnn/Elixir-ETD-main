@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { usePagination } from "@ajna/pagination";
 import request from "../../../services/ApiClient";
+import { usePagination } from "@ajna/pagination";
+
 import { RejectMo } from "./RejectMo";
 
 const fetchRejectedMOApi = async (pageNumber, pageSize, search, status) => {
-  const res = await request.get(
-    `Ordering/RejectedMoveOrderPaginationOrig?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&status=${status}`
-  );
+  const res = await request.get(`Ordering/RejectedMoveOrderPaginationOrig?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&status=${status}`);
   return res.data;
 };
 
@@ -19,14 +18,7 @@ const RejectMoveOrder = () => {
 
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -63,7 +55,6 @@ const RejectMoveOrder = () => {
       fetchRejectedMO={fetchRejectedMO}
       status={status}
       setStatus={setStatus}
-      // fetchNotification={fetchNotification}
     />
   );
 };

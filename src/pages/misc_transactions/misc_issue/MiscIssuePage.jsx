@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Flex, HStack, useDisclosure, VStack } from "@chakra-ui/react";
+import { Button, Flex, HStack, VStack } from "@chakra-ui/react";
+
 import request from "../../../services/ApiClient";
+
 import { MaterialsInformation } from "./MaterialsInformation";
 import { ListOfIssue } from "./ListOfIssue";
 import { ActionButton } from "./ActionButton";
@@ -10,10 +12,9 @@ const fetchCustomersApi = async () => {
   const res = await request.get(`Customer/GetAllActiveCustomers`);
   return res.data;
 };
+
 const fetchRawMatsApi = async () => {
-  const res = await request.get(
-    `Miscellaneous/GetAvailableStocksForIssueNoParameters`
-  );
+  const res = await request.get(`Miscellaneous/GetAvailableStocksForIssueNoParameters`);
   return res.data;
 };
 
@@ -23,23 +24,15 @@ const fetchTransactApi = async () => {
 };
 
 const fetchBarcodeNoApi = async (itemCode) => {
-  const res = await request.get(
-    `Miscellaneous/GetAllAvailableStocksForMIsssue`,
-    {
-      params: {
-        itemcode: itemCode,
-      },
-    }
-  );
+  const res = await request.get(`Miscellaneous/GetAllAvailableStocksForMIsssue`, {
+    params: {
+      itemcode: itemCode,
+    },
+  });
   return res.data;
 };
 
-const MiscIssuePage = ({
-  miscData,
-  fetchActiveMiscIssues,
-  navigation,
-  setNavigation,
-}) => {
+const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigation, setNavigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const customerRef = useRef();
@@ -147,6 +140,19 @@ const MiscIssuePage = ({
     }
   }, [navigation]);
 
+  //When navigating view issue
+  useEffect(() => {
+    if (navigation === 2) {
+      setCustomerData({
+        customerCode: "",
+        customerName: "",
+      });
+      setTransactionDate("");
+      setDetails("");
+      setMiscData([]);
+    }
+  }, [navigation]);
+
   return (
     <Flex px={5} pt={5} pb={0} w="full" flexDirection="column" bg="form">
       <Flex w="full" justifyContent="space-between">
@@ -163,6 +169,7 @@ const MiscIssuePage = ({
           >
             Add Issue
           </Button>
+
           <Button
             bgColor={navigation === 2 ? "primary" : ""}
             color={navigation === 2 ? "white" : ""}
@@ -182,28 +189,24 @@ const MiscIssuePage = ({
         {navigation === 1 ? (
           <>
             <MaterialsInformation
-              coaData={coaData}
               setCoaData={setCoaData}
               rawMatsInfo={rawMatsInfo}
               setRawMatsInfo={setRawMatsInfo}
               details={details}
               setDetails={setDetails}
               customers={customers}
+              remarksRef={remarksRef}
               transactions={transactions}
-              setTransactions={setTransactions}
               rawMats={rawMats}
               barcodeNo={barcodeNo}
-              setSelectorId={setSelectorId}
               warehouseId={warehouseId}
               setWarehouseId={setWarehouseId}
               fetchActiveMiscIssues={fetchActiveMiscIssues}
               fetchRawMats={fetchRawMats}
-              setCustomerData={setCustomerData}
               customerData={customerData}
-              customerRef={customerRef}
+              setCustomerData={setCustomerData}
               remarks={remarks}
               setRemarks={setRemarks}
-              remarksRef={remarksRef}
               transactionDate={transactionDate}
               setTransactionDate={setTransactionDate}
               unitCost={unitCost}
@@ -212,43 +215,36 @@ const MiscIssuePage = ({
             {miscData?.length > 0 ? (
               <>
                 <ListOfIssue
+                  miscData={miscData}
                   selectorId={selectorId}
                   setSelectorId={setSelectorId}
                   setTotalQuantity={setTotalQuantity}
-                  miscData={miscData}
                   fetchActiveMiscIssues={fetchActiveMiscIssues}
                   fetchBarcodeNo={fetchBarcodeNo}
-                  remarks={remarks}
-                  unitCost={unitCost}
                   fetchRawMats={fetchRawMats}
                 />
                 <ActionButton
                   coaData={coaData}
-                  setCoaData={setCoaData}
-                  setIsLoading={setIsLoading}
                   isLoading={isLoading}
+                  setIsLoading={setIsLoading}
                   totalQuantity={totalQuantity}
                   setTotalQuantity={setTotalQuantity}
-                  customers={customers}
                   customerData={customerData}
                   setCustomerData={setCustomerData}
                   details={details}
                   setDetails={setDetails}
-                  selectorId={selectorId}
                   setSelectorId={setSelectorId}
                   miscData={miscData}
-                  fetchActiveMiscIssues={fetchActiveMiscIssues}
                   customerRef={customerRef}
                   setRawMatsInfo={setRawMatsInfo}
-                  //warehouse Id
                   warehouseId={warehouseId}
                   fetchBarcodeNo={fetchBarcodeNo}
                   remarks={remarks}
                   setRemarks={setRemarks}
                   remarksRef={remarksRef}
-                  // transDate={transDate}
                   transactionDate={transactionDate}
                   setTransactionDate={setTransactionDate}
+                  fetchActiveMiscIssues={fetchActiveMiscIssues}
                   fetchRawMats={fetchRawMats}
                 />
               </>

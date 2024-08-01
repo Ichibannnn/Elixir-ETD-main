@@ -3,7 +3,6 @@ import {
   Button,
   ButtonGroup,
   Flex,
-  Heading,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,18 +15,16 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { BsQuestionOctagonFill } from "react-icons/bs";
+
 import request from "../../../services/ApiClient";
 import { ToastComponent } from "../../../components/Toast";
-import { decodeUser } from "../../../services/decode-user";
 
 const ReturnModal = ({ isOpen, onClose, orderNo, fetchRejectedMO }) => {
   const [reasonSubmit, setReasonSubmit] = useState("");
-
   const [reasons, setReasons] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
-  const [isLoading, setIsLoading] = useState(false);
 
   const fetchReasonsApi = async () => {
     const res = await request.get(`Reason/GetAllActiveReasons`);
@@ -57,24 +54,14 @@ const ReturnModal = ({ isOpen, onClose, orderNo, fetchRejectedMO }) => {
           remarks: reasonSubmit,
         })
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Move order has been returned",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Move order has been returned", "success", toast);
           // fetchNotification()
           fetchRejectedMO();
           setIsLoading(false);
           onClose();
         })
         .catch((err) => {
-          ToastComponent(
-            "Error",
-            "Move order was not rejected",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Move order was not rejected", "error", toast);
           setIsLoading(false);
         });
     } catch (error) {}
@@ -93,16 +80,9 @@ const ReturnModal = ({ isOpen, onClose, orderNo, fetchRejectedMO }) => {
 
         <ModalBody>
           <VStack justifyContent="center">
-            <Text fontSize="sm">
-              Are you sure you want to return this move order?
-            </Text>
+            <Text fontSize="sm">Are you sure you want to return this move order?</Text>
             {reasons?.length > 0 ? (
-              <Select
-                fontSize="md"
-                onChange={(e) => setReasonSubmit(e.target.value)}
-                w="70%"
-                placeholder="Please select a reason"
-              >
+              <Select fontSize="md" onChange={(e) => setReasonSubmit(e.target.value)} w="70%" placeholder="Please select a reason">
                 {reasons?.map((reason, i) => (
                   <option key={i} value={reason.reasonName}>
                     {reason.reasonName}
@@ -117,21 +97,10 @@ const ReturnModal = ({ isOpen, onClose, orderNo, fetchRejectedMO }) => {
 
         <ModalFooter justifyContent="center">
           <ButtonGroup size="sm" mt={7}>
-            <Button
-              onClick={submitHandler}
-              isDisabled={!reasonSubmit || isLoading}
-              isLoading={isLoading}
-              colorScheme="blue"
-            >
+            <Button onClick={submitHandler} isDisabled={!reasonSubmit || isLoading} isLoading={isLoading} colorScheme="blue">
               Yes
             </Button>
-            <Button
-              onClick={onClose}
-              disabled={isLoading}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-            >
+            <Button onClick={onClose} disabled={isLoading} isLoading={isLoading} color="black" variant="outline">
               No
             </Button>
           </ButtonGroup>

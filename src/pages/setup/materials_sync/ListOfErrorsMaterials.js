@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Accordion,
   AccordionButton,
@@ -6,7 +7,6 @@ import {
   AccordionPanel,
   Badge,
   Box,
-  Button,
   Flex,
   Modal,
   ModalBody,
@@ -22,29 +22,20 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import moment from "moment";
-import React from "react";
 import { RiFileList3Fill } from "react-icons/ri";
+
 import Swal from "sweetalert2";
-import { ToastComponent } from "../../../components/Toast";
+import moment from "moment";
 import request from "../../../services/ApiClient";
+
+import { ToastComponent } from "../../../components/Toast";
 import PageScroll from "../../../utils/PageScroll";
 import PageScrollImport from "../../../components/PageScrollImport";
 
-export const ListOfErrorsMaterials = ({
-  isOpen,
-  onOpen,
-  onClose,
-  errorData,
-  setErrorData,
-  isLoading,
-  setIsLoading,
-  fetchElixirMaterials,
-}) => {
+export const ListOfErrorsMaterials = ({ isOpen, onOpen, onClose, errorData, setErrorData, setIsLoading, fetchElixirMaterials }) => {
   const toast = useToast();
 
   const duplicateList = errorData?.duplicateList?.map((list) => {
@@ -199,10 +190,7 @@ export const ListOfErrorsMaterials = ({
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="4xl">
       <ModalOverlay />
-      <ModalContent
-        color="white"
-        bg="linear-gradient(rgba(0, 0, 0, 0.850),rgba(0, 0, 0, 3))"
-      >
+      <ModalContent color="white" bg="linear-gradient(rgba(0, 0, 0, 0.850),rgba(0, 0, 0, 3))">
         <ModalHeader>
           <Flex justifyContent="left">
             <Text fontSize="11px" color="white">
@@ -210,7 +198,9 @@ export const ListOfErrorsMaterials = ({
             </Text>
           </Flex>
         </ModalHeader>
+
         <ModalCloseButton onClick={onClose} />
+
         <PageScroll>
           <ModalBody>
             <Accordion allowToggle>
@@ -219,15 +209,8 @@ export const ListOfErrorsMaterials = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Available for syncing{" "}
-                        <Badge color="green">{filteredMaterials?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Available for syncing <Badge color="green">{filteredMaterials?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -289,9 +272,7 @@ export const ListOfErrorsMaterials = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no available lists on this file
-                            </Text>
+                            <Text color="white">There are no available lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -338,15 +319,8 @@ export const ListOfErrorsMaterials = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Available Updates{" "}
-                        <Badge color="green">{availableUpdate?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Available Updates <Badge color="green">{availableUpdate?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -408,9 +382,7 @@ export const ListOfErrorsMaterials = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no update lists on this file
-                            </Text>
+                            <Text color="white">There are no update lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -426,15 +398,8 @@ export const ListOfErrorsMaterials = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Duplicated Lists{" "}
-                        <Badge color="red">{duplicateList?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Duplicated Lists <Badge color="red">{duplicateList?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -496,9 +461,7 @@ export const ListOfErrorsMaterials = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -514,17 +477,8 @@ export const ListOfErrorsMaterials = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Empty Item Description{" "}
-                        <Badge color="red">
-                          {itemDescriptionEmpty?.length}
-                        </Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Empty Item Description <Badge color="red">{itemDescriptionEmpty?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -586,9 +540,7 @@ export const ListOfErrorsMaterials = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no records for empty item descriptions.
-                            </Text>
+                            <Text color="white">There are no records for empty item descriptions.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -604,17 +556,8 @@ export const ListOfErrorsMaterials = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Item Category does not exist{" "}
-                        <Badge color="red">
-                          {itemCategoryNotExist?.length}
-                        </Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Item Category does not exist <Badge color="red">{itemCategoryNotExist?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -676,9 +619,7 @@ export const ListOfErrorsMaterials = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no records for item category not exist
-                            </Text>
+                            <Text color="white">There are no records for item category not exist</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -694,15 +635,8 @@ export const ListOfErrorsMaterials = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        UOM does not exist{" "}
-                        <Badge color="red">{uomNotExist?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        UOM does not exist <Badge color="red">{uomNotExist?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -764,9 +698,7 @@ export const ListOfErrorsMaterials = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no record for uom not exist.
-                            </Text>
+                            <Text color="white">There are no record for uom not exist.</Text>
                           </VStack>
                         </Flex>
                       )}

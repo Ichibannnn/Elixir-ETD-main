@@ -1,122 +1,59 @@
 import React, { useState } from "react";
 import { Button, ButtonGroup, Flex, useDisclosure } from "@chakra-ui/react";
-import {
-  AccountTitleModal,
-  AllCancelConfirmation,
-  SaveConfirmation,
-} from "./ActionModal";
-// import { AllCancelConfirmation, SaveConfirmation } from './Action-Modal'
+
+import { AllCancelConfirmation, SaveConfirmation } from "./ActionModal";
 
 export const ActionButton = ({
-  selectorId,
-  setSelectorId,
+  coaData,
+  isLoading,
+  setIsLoading,
   totalQuantity,
+  setTotalQuantity,
   customerData,
   setCustomerData,
   details,
-  rawMatsInfo,
-  warehouseId,
-  miscData,
-  setTotalQuantity,
-  fetchActiveMiscIssues,
-  isLoading,
-  setIsLoading,
-  customerRef,
   setDetails,
+  setSelectorId,
+  miscData,
+  customerRef,
   setRawMatsInfo,
+  warehouseId,
   fetchBarcodeNo,
   remarks,
   setRemarks,
   remarksRef,
   transactionDate,
   setTransactionDate,
+  fetchActiveMiscIssues,
   fetchRawMats,
-  coaData,
-  setCoaData,
-  customers,
 }) => {
   const [hideButton, setHideButton] = useState(false);
 
-  const {
-    isOpen: isSave,
-    onClose: closeSave,
-    onOpen: openSave,
-  } = useDisclosure();
+  const { isOpen: isSave, onClose: closeSave, onOpen: openSave } = useDisclosure();
+  const { isOpen: allIsCancel, onClose: allCloseCancel, onOpen: openAllCancel } = useDisclosure();
+
   const saveHandler = () => {
     setHideButton(true);
     openSave();
   };
 
-  const {
-    isOpen: allIsCancel,
-    onClose: allCloseCancel,
-    onOpen: openAllCancel,
-  } = useDisclosure();
   const cancelHandler = () => {
     openAllCancel();
-  };
-
-  // Open COA Modal
-  const {
-    isOpen: isCoaModal,
-    onClose: closeCoaModal,
-    onOpen: openCoaModal,
-  } = useDisclosure();
-  const coaHandler = () => {
-    openCoaModal();
   };
 
   return (
     <>
       <Flex w="full" justifyContent="end">
         <ButtonGroup size="xs">
-          <Button
-            onClick={saveHandler}
-            isDisabled={miscData.length === 0 || isLoading || hideButton}
-            isLoading={isLoading}
-            colorScheme="blue"
-            borderRadius="none"
-            width="100px"
-          >
+          <Button onClick={saveHandler} isDisabled={miscData.length === 0 || isLoading || hideButton} isLoading={isLoading} colorScheme="blue" borderRadius="none" width="100px">
             Save
           </Button>
-          <Button
-            // color="black"
-            colorScheme="red"
-            borderRadius="none"
-            width="100px"
-            px={3}
-            onClick={cancelHandler}
-          >
+
+          <Button colorScheme="red" borderRadius="none" width="100px" px={3} onClick={cancelHandler}>
             Cancel All
           </Button>
         </ButtonGroup>
       </Flex>
-
-      {/* 
-      {isCoaModal && (
-        <AccountTitleModal
-          isOpen={isCoaModal}
-          onClose={closeCoaModal}
-          totalQuantity={totalQuantity}
-          setTotalQuantity={setTotalQuantity}
-          customerData={customerData}
-          details={details}
-          miscData={miscData}
-          fetchActiveMiscIssues={fetchActiveMiscIssues}
-          warehouseId={warehouseId}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-          customerRef={customerRef}
-          setDetails={setDetails}
-          rawMatsInfo={rawMatsInfo}
-          setRawMatsInfo={setRawMatsInfo}
-          setHideButton={setHideButton}
-          remarks={remarks}
-          setRemarks={setRemarks}
-          remarksRef={remarksRef}
-        />
-      )} */}
 
       {isSave && (
         <SaveConfirmation
@@ -124,28 +61,23 @@ export const ActionButton = ({
           onClose={closeSave}
           totalQuantity={totalQuantity}
           setTotalQuantity={setTotalQuantity}
-          customers={customers}
+          details={details}
+          setDetails={setDetails}
           customerData={customerData}
           setCustomerData={setCustomerData}
           miscData={miscData}
-          fetchActiveMiscIssues={fetchActiveMiscIssues}
           warehouseId={warehouseId}
           isLoading={isLoading}
           setIsLoading={setIsLoading}
-          customerRef={customerRef}
-          details={details}
-          setDetails={setDetails}
-          rawMatsInfo={rawMatsInfo}
           setRawMatsInfo={setRawMatsInfo}
           setHideButton={setHideButton}
           remarks={remarks}
-          setRemarks={setRemarks}
           remarksRef={remarksRef}
           transactionDate={transactionDate}
           setTransactionDate={setTransactionDate}
+          fetchActiveMiscIssues={fetchActiveMiscIssues}
           fetchRawMats={fetchRawMats}
           coaData={coaData}
-          setCoaData={setCoaData}
         />
       )}
 

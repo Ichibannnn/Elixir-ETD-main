@@ -1,36 +1,16 @@
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Input,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  VStack,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
 import React, { useRef, useState, useEffect } from "react";
+import { Box, Button, Flex, Input, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { BiImport } from "react-icons/bi";
 import { MdOutlineError } from "react-icons/md";
+
 import * as XLSX from "xlsx";
-import { ToastComponent } from "../../../components/Toast";
-import DateConverter from "../../../components/DateConverter";
-import request from "../../../services/ApiClient";
-import { decodeUser } from "../../../services/decode-user";
 import Swal from "sweetalert2";
+import request from "../../../services/ApiClient";
+
+import { decodeUser } from "../../../services/decode-user";
+import { ToastComponent } from "../../../components/Toast";
 import PageScroll from "../../../utils/PageScroll";
+
 import { ErrorList } from "./ErrorList";
 
 const currentUser = decodeUser();
@@ -45,13 +25,8 @@ const ImportMaterials = () => {
   const [errorOpener, setErrorOpener] = useState(false);
   const [errorData, setErrorData] = useState([]);
   const toast = useToast();
-  const [bufferLevel, setBufferLevel] = useState("");
 
-  const {
-    isOpen: isErrorOpen,
-    onOpen: onErrorOpen,
-    onClose: onErrorClose,
-  } = useDisclosure();
+  const { isOpen: isErrorOpen, onOpen: onErrorOpen, onClose: onErrorClose } = useDisclosure();
   const clearExcelFile = useRef();
 
   // EXCEL DATA TRIM TO LOWERCASE
@@ -86,9 +61,7 @@ const ImportMaterials = () => {
     const jsonData = XLSX.utils.sheet_to_json(initialWorkSheet);
 
     // Check for empty cells in the data
-    const isEmptyCellPresent = jsonData.some((row) =>
-      Object.values(row).some((value) => value === "")
-    );
+    const isEmptyCellPresent = jsonData.some((row) => Object.values(row).some((value) => value === ""));
 
     fileRender(jsonData);
 
@@ -112,10 +85,7 @@ const ImportMaterials = () => {
     };
   });
 
-  // console.log(resultArray);
-
   const submitExcelHandler = (resultArray) => {
-    console.log(resultArray);
     Swal.fire({
       title: "Confirmation!",
       text: "Are you sure you want to import this material list?",
@@ -155,20 +125,10 @@ const ImportMaterials = () => {
                   }
                 });
             } catch (err) {
-              ToastComponent(
-                "Error!",
-                "Wrong excel format imported for materials",
-                "error",
-                toast
-              );
+              ToastComponent("Error!", "Wrong excel format imported for materials", "error", toast);
             }
           } else {
-            ToastComponent(
-              "Error!",
-              "No data provided, please check your import",
-              "error",
-              toast
-            );
+            ToastComponent("Error!", "No data provided, please check your import", "error", toast);
           }
         }
       }
@@ -180,12 +140,7 @@ const ImportMaterials = () => {
 
   useEffect(() => {
     // Check if any value in resultArray's bufferLevel is a letter
-    const hasLetterValue = resultArray.some(
-      (eData) =>
-        isNaN(eData.bufferLevel) ||
-        eData.bufferLevel === "" ||
-        eData.itemCode === ""
-    );
+    const hasLetterValue = resultArray.some((eData) => isNaN(eData.bufferLevel) || eData.bufferLevel === "" || eData.itemCode === "");
     setBufferError(hasLetterValue);
     setIsDisabled(hasLetterValue || resultArray.length === 0); // Disable if there's any letter value or if resultArray is empty
 
@@ -237,14 +192,7 @@ const ImportMaterials = () => {
         </Box>
       </Flex>
 
-      <Flex
-        w="100%"
-        h="full"
-        p={2}
-        mt={-4}
-        flexDirection="column"
-        justifyContent="space-between"
-      >
+      <Flex w="100%" h="full" p={2} mt={-4} flexDirection="column" justifyContent="space-between">
         <Flex w="full" h="full">
           <PageScroll maxHeight="840px">
             <Table variant="striped" size="sm">
@@ -273,22 +221,15 @@ const ImportMaterials = () => {
                   </Th>
                 </Tr>
               </Thead>
+
               <Tbody>
                 {resultArray?.map((eData, i) => (
                   <Tr key={i}>
                     <Td fontSize="xs">{i + 1}</Td>
-                    <Td fontSize="xs">
-                      {eData.itemCode ? eData.itemCode : null}
-                    </Td>
-                    <Td fontSize="xs">
-                      {eData.itemDescription ? eData.itemDescription : ""}
-                    </Td>
-                    <Td fontSize="xs">
-                      {eData.itemCategoryName ? eData.itemCategoryName : ""}
-                    </Td>
-                    <Td fontSize="xs">
-                      {eData.accountPName ? eData.accountPName : ""}
-                    </Td>
+                    <Td fontSize="xs">{eData.itemCode ? eData.itemCode : null}</Td>
+                    <Td fontSize="xs">{eData.itemDescription ? eData.itemDescription : ""}</Td>
+                    <Td fontSize="xs">{eData.itemCategoryName ? eData.itemCategoryName : ""}</Td>
+                    <Td fontSize="xs">{eData.accountPName ? eData.accountPName : ""}</Td>
                     <Td fontSize="xs">{eData.uomCode ? eData.uomCode : ""}</Td>
                     <Td fontSize="xs">
                       <Text>
@@ -306,15 +247,7 @@ const ImportMaterials = () => {
           </PageScroll>
         </Flex>
         <Flex p={2} bg="primary" w="100%">
-          <Input
-            ref={clearExcelFile}
-            color="white"
-            type="file"
-            w="25%"
-            size="25px"
-            fontSize="13px"
-            onChange={(e) => fileHandler(e.target.files)}
-          />
+          <Input ref={clearExcelFile} color="white" type="file" w="25%" size="25px" fontSize="13px" onChange={(e) => fileHandler(e.target.files)} />
         </Flex>
       </Flex>
 
@@ -324,7 +257,6 @@ const ImportMaterials = () => {
           onClose={onErrorClose}
           onOpen={onErrorOpen}
           errorData={errorData}
-          setErrorData={setErrorData}
           setErrorOpener={setErrorOpener}
           errorOpener={errorOpener}
           isLoading={isLoading}

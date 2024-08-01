@@ -27,33 +27,18 @@ import {
   HStack,
   useToast,
 } from "@chakra-ui/react";
+import { RiFileList3Fill } from "react-icons/ri";
+
 import moment from "moment";
+import request from "../../services/ApiClient";
+import Swal from "sweetalert2";
+import { ToastComponent } from "../../components/Toast";
+
 import PageScrollModalErrorList from "../../components/PageScrollModalErrorList";
 import PageScrollImportModal from "../../components/PageScrollImportModal";
-import { RiFileList3Fill } from "react-icons/ri";
-import { TiWarning } from "react-icons/ti";
-import Swal from "sweetalert2";
-import request from "../../services/ApiClient";
-import { ToastComponent } from "../../components/Toast";
 import PageScroll from "../../utils/PageScroll";
-import { decodeUser } from "../../services/decode-user";
-// import DateConverter from "../../components/DateConverter";
 
-const currentUser = decodeUser();
-
-const ErrorList = ({
-  isOpen,
-  onClose,
-  errorData,
-  setErrorData,
-  setErrorOpener,
-  errorOpener,
-  isLoading,
-  setIsLoading,
-  setIsDisabled,
-  setExcelData,
-  excelData,
-}) => {
+const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData, excelData }) => {
   const toast = useToast();
   const clearExcelFile = useRef();
 
@@ -108,24 +93,22 @@ const ErrorList = ({
     };
   });
 
-  const itemdescriptionNotExist = errorData?.itemdescriptionNotExist?.map(
-    (list) => {
-      return {
-        pR_Number: list.pR_Number,
-        pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
-        pO_Number: list.pO_Number,
-        pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
-        item_Code: list.itemCode,
-        item_Description: list.itemDescription,
-        ordered: list.ordered,
-        delivered: list.delivered,
-        billed: list.billed,
-        uom: list.uom,
-        unitPrice: list.unitPrice,
-        vendorName: list.vendorName,
-      };
-    }
-  );
+  const itemdescriptionNotExist = errorData?.itemdescriptionNotExist?.map((list) => {
+    return {
+      pR_Number: list.pR_Number,
+      pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
+      pO_Number: list.pO_Number,
+      pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
+      item_Code: list.itemCode,
+      item_Description: list.itemDescription,
+      ordered: list.ordered,
+      delivered: list.delivered,
+      billed: list.billed,
+      uom: list.uom,
+      unitPrice: list.unitPrice,
+      vendorName: list.vendorName,
+    };
+  });
 
   const supplierNotExistData = errorData?.supplierNotExist?.map((list) => {
     return {
@@ -161,24 +144,22 @@ const ErrorList = ({
     };
   });
 
-  const materialInformationData = errorData?.itemcodeanduomNotExist?.map(
-    (list) => {
-      return {
-        pR_Number: list.pR_Number,
-        pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
-        pO_Number: list.pO_Number,
-        pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
-        item_Code: list.itemCode,
-        item_Description: list.itemDescription,
-        ordered: list.ordered,
-        delivered: list.delivered,
-        billed: list.billed,
-        uom: list.uom,
-        unitPrice: list.unitPrice,
-        vendorName: list.vendorName,
-      };
-    }
-  );
+  const materialInformationData = errorData?.itemcodeanduomNotExist?.map((list) => {
+    return {
+      pR_Number: list.pR_Number,
+      pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
+      pO_Number: list.pO_Number,
+      pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
+      item_Code: list.itemCode,
+      item_Description: list.itemDescription,
+      ordered: list.ordered,
+      delivered: list.delivered,
+      billed: list.billed,
+      uom: list.uom,
+      unitPrice: list.unitPrice,
+      vendorName: list.vendorName,
+    };
+  });
 
   const available = availableImportData;
   const duplicate = duplicateListData;
@@ -187,27 +168,6 @@ const ErrorList = ({
   const supplier = supplierNotExistData;
   const uom = uomCodeNotExistData;
   const materialInfo = materialInformationData;
-
-  // const resultArray = excelData.map((item) => {
-  //     let newPrData = DateConverter(item.pr_date);
-  //     let newPoDate = DateConverter(item.po_date);
-
-  //     return {
-  //       pR_Number: item.pr_number,
-  //       pR_Date: moment(newPrData).format("YYYY-MM-DD"),
-  //       pO_Number: item.po_number,
-  //       pO_Date: moment(newPoDate).format("YYYY-MM-DD"),
-  //       itemCode: item.item_code,
-  //       itemDescription: item.item_description,
-  //       ordered: item.qty_ordered,
-  //       delivered: item.qty_delivered,
-  //       billed: item.qty_billed,
-  //       uom: item.uom,
-  //       unitPrice: item.unit_price,
-  //       vendorName: item.supplier_name,
-  //       addedBy: currentUser.username,
-  //     };
-  //   });
 
   const submitAvailablePOHandler = () => {
     Swal.fire({
@@ -246,33 +206,12 @@ const ErrorList = ({
                 setIsLoading(false);
                 setErrorOpener(false);
                 clearExcelFile.current.value = "";
-                // ToastComponent(
-                //   "Error",
-                //   "Import Failed, Please check your fields.",
-                //   "error",
-                //   toast
-                // );
-                // setErrorData(err.response.data);
-                // if (err.response.data) {
-                //   setErrorOpener(true);
-                // //   onErrorOpen();
-                // }
               });
           } catch (err) {
-            ToastComponent(
-              "Error!",
-              "Wrong excel format imported for PO",
-              "error",
-              toast
-            );
+            ToastComponent("Error!", "Wrong excel format imported for PO", "error", toast);
           }
         } else {
-          ToastComponent(
-            "Error!",
-            "No data provided, please check your import",
-            "error",
-            toast
-          );
+          ToastComponent("Error!", "No data provided, please check your import", "error", toast);
         }
       }
     });
@@ -284,9 +223,7 @@ const ErrorList = ({
       <ModalContent color="white" bg="primary">
         <ModalHeader>
           <Flex justifyContent="left">
-            <Text fontSize="11px">
-              Error: File was not imported due to the following reasons:
-            </Text>
+            <Text fontSize="11px">Error: File was not imported due to the following reasons:</Text>
           </Flex>
         </ModalHeader>
         <ModalCloseButton onClick={onClose} />
@@ -299,15 +236,8 @@ const ErrorList = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton fontWeight="semibold" border="1px">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                        color="green"
-                      >
-                        Available for syncing{" "}
-                        <Badge color="green">{available?.length}</Badge>
+                      <Box flex="1" textAlign="left" fontSize="13px" fontWeight="semibold" color="green">
+                        Available for syncing <Badge color="green">{available?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -405,22 +335,14 @@ const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
                     </PageScroll>
                     {available ? (
                       <Flex justifyContent="end">
-                        <Button
-                          onClick={() => submitAvailablePOHandler()}
-                          size="sm"
-                          _hover={{ bgColor: "accent", color: "white" }}
-                          colorScheme="blue"
-                          isLoading={isLoading}
-                        >
+                        <Button onClick={() => submitAvailablePOHandler()} size="sm" _hover={{ bgColor: "accent", color: "white" }} colorScheme="blue" isLoading={isLoading}>
                           Sync
                         </Button>
                       </Flex>
@@ -437,11 +359,7 @@ const ErrorList = ({
               {duplicate?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
                       <Box
                         flex="1"
                         textAlign="left"
@@ -577,9 +495,7 @@ const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -594,18 +510,8 @@ const ErrorList = ({
               {itemCodes?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="black" fontWeight="semibold" fontSize="13px">
                         Item Code does not exist {""}
                         <Badge color="red">{itemCodes?.length}</Badge>{" "}
                       </Box>
@@ -677,9 +583,7 @@ const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no lists with unregistered item code.
-                            </Text>
+                            <Text color="white">There are no lists with unregistered item code.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -694,18 +598,8 @@ const ErrorList = ({
               {supplier?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="black" fontWeight="semibold" fontSize="13px">
                         Supplier does not exist
                         <Badge color="red">{supplier?.length}</Badge>{" "}
                       </Box>
@@ -753,9 +647,7 @@ const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no lists with unregistered suppliers.
-                            </Text>
+                            <Text color="white">There are no lists with unregistered suppliers.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -770,20 +662,9 @@ const ErrorList = ({
               {uom?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
-                        UOM does not exist{" "}
-                        <Badge color="red">{uom?.length}</Badge>
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="black" fontWeight="semibold" fontSize="13px">
+                        UOM does not exist <Badge color="red">{uom?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -845,9 +726,7 @@ const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no lists with unregistered UOM.
-                            </Text>
+                            <Text color="white">There are no lists with unregistered UOM.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -862,20 +741,9 @@ const ErrorList = ({
               {itemDescription?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
-                        Item description does not exist{" "}
-                        <Badge color="red">{itemDescription?.length}</Badge>
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="black" fontWeight="semibold" fontSize="13px">
+                        Item description does not exist <Badge color="red">{itemDescription?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -973,10 +841,7 @@ const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no lists with unregistered item
-                              description.
-                            </Text>
+                            <Text color="white">There are no lists with unregistered item description.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -991,20 +856,9 @@ const ErrorList = ({
               {materialInfo?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
-                        Item code and UOM does not match{" "}
-                        <Badge color="red">{materialInfo?.length}</Badge>
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="black" fontWeight="semibold" fontSize="13px">
+                        Item code and UOM does not match <Badge color="red">{materialInfo?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -1102,9 +956,7 @@ const ErrorList = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              Kindly check the material information.
-                            </Text>
+                            <Text color="white">Kindly check the material information.</Text>
                           </VStack>
                         </Flex>
                       )}

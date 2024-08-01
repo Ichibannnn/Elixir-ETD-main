@@ -1,37 +1,15 @@
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Input,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  VStack,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
-import { BiImport } from "react-icons/bi";
+import React, { useRef, useState } from "react";
+import { Box, Button, Flex, Input, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { MdOutlineError } from "react-icons/md";
+import { BiImport } from "react-icons/bi";
+
 import * as XLSX from "xlsx";
-import { ToastComponent } from "../../../components/Toast";
-import DateConverter from "../../../components/DateConverter";
+import Swal from "sweetalert2";
 import request from "../../../services/ApiClient";
 import { decodeUser } from "../../../services/decode-user";
-import moment from "moment";
-import Swal from "sweetalert2";
 import PageScroll from "../../../utils/PageScroll";
+import { ToastComponent } from "../../../components/Toast";
+
 import { ErrorListUsers } from "./ErrorListUsers";
 
 const currentUser = decodeUser();
@@ -47,13 +25,9 @@ const ImportUsers = () => {
   const [errorData, setErrorData] = useState([]);
   const toast = useToast();
 
-  const {
-    isOpen: isErrorOpen,
-    onOpen: onErrorOpen,
-    onClose: onErrorClose,
-  } = useDisclosure();
+  const { isOpen: isErrorOpen, onOpen: onErrorOpen, onClose: onErrorClose } = useDisclosure();
+
   const clearExcelFile = useRef();
-  // const cancelRef = useRef()
 
   // EXCEL DATA TRIM TO LOWERCASE
   const fileRender = (jsonData) => {
@@ -139,12 +113,7 @@ const ImportUsers = () => {
               const res = request
                 .post("User/AddNewUsersImport", resultArray)
                 .then((res) => {
-                  ToastComponent(
-                    "Success!",
-                    "Users Imported",
-                    "success",
-                    toast
-                  );
+                  ToastComponent("Success!", "Users Imported", "success", toast);
                   setIsLoading(false);
                   setIsDisabled(false);
                   clearExcelFile.current.value = "";
@@ -152,7 +121,6 @@ const ImportUsers = () => {
                 })
                 .catch((err) => {
                   setIsLoading(false);
-                  // ToastComponent("Error", "Import Failed, Please check your fields.", "error", toast)
                   setErrorData(err.response.data);
                   if (err.response.data) {
                     setErrorOpener(true);
@@ -160,20 +128,10 @@ const ImportUsers = () => {
                   }
                 });
             } catch (err) {
-              ToastComponent(
-                "Error!",
-                "Wrong excel format imported for Users",
-                "error",
-                toast
-              );
+              ToastComponent("Error!", "Wrong excel format imported for Users", "error", toast);
             }
           } else {
-            ToastComponent(
-              "Error!",
-              "No data provided, please check your import",
-              "error",
-              toast
-            );
+            ToastComponent("Error!", "No data provided, please check your import", "error", toast);
           }
         }
       }
@@ -195,9 +153,7 @@ const ImportUsers = () => {
               type="submit"
               isLoading={isLoading}
               isDisabled={isDisabled}
-              // h="25px"
               w="170px"
-              // _hover={{ color: 'white', bgColor: 'accent' }}
               leftIcon={<MdOutlineError fontSize="19px" />}
               borderRadius="none"
               colorScheme="red"
@@ -224,14 +180,7 @@ const ImportUsers = () => {
         </Box>
       </Flex>
 
-      <Flex
-        w="100%"
-        h="full"
-        p={2}
-        mt={-4}
-        flexDirection="column"
-        justifyContent="space-between"
-      >
+      <Flex w="100%" h="full" p={2} mt={-4} flexDirection="column" justifyContent="space-between">
         <Flex w="full" h="full">
           <PageScroll maxHeight="840px">
             <Table variant="striped" size="sm">
@@ -263,8 +212,7 @@ const ImportUsers = () => {
                         eData.empId
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Employee Id is uploaded.
+                          Data missing. Please make sure correct excel file for Employee Id is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -273,8 +221,7 @@ const ImportUsers = () => {
                         eData.fullName
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Full Name is uploaded.
+                          Data missing. Please make sure correct excel file for Full Name is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -283,8 +230,7 @@ const ImportUsers = () => {
                         eData.department
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          Department is uploaded.
+                          Data missing. Please make sure correct excel file for Department is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -293,8 +239,7 @@ const ImportUsers = () => {
                         eData.userRoleName
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          User Role is uploaded.
+                          Data missing. Please make sure correct excel file for User Role is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -305,15 +250,7 @@ const ImportUsers = () => {
           </PageScroll>
         </Flex>
         <Flex p={2} bg="primary" w="100%">
-          <Input
-            ref={clearExcelFile}
-            color="white"
-            type="file"
-            w="25%"
-            size="25px"
-            fontSize="13px"
-            onChange={(e) => fileHandler(e.target.files)}
-          />
+          <Input ref={clearExcelFile} color="white" type="file" w="25%" size="25px" fontSize="13px" onChange={(e) => fileHandler(e.target.files)} />
         </Flex>
       </Flex>
 

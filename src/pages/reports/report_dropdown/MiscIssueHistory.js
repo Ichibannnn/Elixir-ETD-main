@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text, Box } from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, Button, Text } from "@chakra-ui/react";
+import moment from "moment";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
-import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
-import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export const MiscIssueHistory = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
+export const MiscIssueHistory = ({ dateFrom, dateTo, setSheetData, search }) => {
   const [miscIssueData, setMiscIssueData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
 
@@ -184,6 +183,7 @@ export const MiscIssueHistory = ({ dateFrom, dateTo, sample, setSheetData, searc
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {miscIssueData?.inventory?.length}
         </Text>
+
         <Button size="xs" colorScheme="blue" onClick={() => setButtonChanger(!buttonChanger)}>
           {buttonChanger ? `>>>>` : `<<<<`}
         </Button>

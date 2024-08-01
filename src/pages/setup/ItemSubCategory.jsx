@@ -1,9 +1,11 @@
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
@@ -37,28 +39,18 @@ import {
   Portal,
   Image,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { AiTwotoneEdit } from "react-icons/ai";
-import { GiChoice } from "react-icons/gi";
-import { FiSearch } from "react-icons/fi";
 import { RiAddFill } from "react-icons/ri";
-import PageScroll from "../../utils/PageScroll";
-import request from "../../services/ApiClient";
-import { ToastComponent } from "../../components/Toast";
-import { yupResolver } from "@hookform/resolvers/yup";
+
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import request from "../../services/ApiClient";
 import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { ToastComponent } from "../../components/Toast";
+
+import PageScroll from "../../utils/PageScroll";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+import { FiSearch } from "react-icons/fi";
 
 const ItemSubCategory = () => {
   const [accountTitle, setAccountTitle] = useState([]);
@@ -72,26 +64,17 @@ const ItemSubCategory = () => {
   const [pageTotal, setPageTotal] = useState(undefined);
   const [disableEdit, setDisableEdit] = useState(false);
 
-  // FETCH API SUB CATEGORY:
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const fetchAccountTitleApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Material/GetAllAccountTitlesPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
-    );
+    const response = await request.get(`Material/GetAllAccountTitlesPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
     return response.data;
   };
 
-  //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -109,15 +92,12 @@ const ItemSubCategory = () => {
     setPageSize(pageSize);
   };
 
-  //STATUS
   const statusHandler = (data) => {
     setStatus(data);
-    console.log(data);
   };
 
   const changeStatusHandler = (id, isActive) => {
     let routeLabel;
-    // console.log(subcategoryId);
     console.log(isActive);
     if (isActive) {
       routeLabel = "InActiveAccountTitles";
@@ -136,7 +116,6 @@ const ItemSubCategory = () => {
       });
   };
 
-  //SHOW SUB CATEGORY DATA----
   const getAccountTitle = () => {
     fetchAccountTitleApi(currentPage, pageSize, status, search).then((res) => {
       setIsLoading(false);
@@ -153,18 +132,14 @@ const ItemSubCategory = () => {
     };
   }, [currentPage, pageSize, status, search]);
 
-  // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    // console.log(inputValue)
   };
 
-  //ADD SUB CATEGORY HANDLER---
   const addSubCategoryHandler = () => {
     setEditData({
       id: "",
       itemCategoryId: "",
-      // subcategoryName: "",
       addedBy: currentUser.fullName,
       modifiedBy: "",
     });
@@ -172,34 +147,20 @@ const ItemSubCategory = () => {
     setDisableEdit(false);
   };
 
-  //EDIT SUB CATEGORY--
   const editSubCategoryHandler = (accTitle) => {
     setDisableEdit(true);
     setEditData(accTitle);
     onOpen();
   };
 
-  //FOR DRAWER (Drawer / Drawer Tagging)
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
-    <Flex
-      color="fontColor"
-      h="full"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} w="full">
         <Flex flexDirection="column" gap={1} w="full">
           <Flex justifyContent="space-between" alignItems="center">
             <HStack w="25%" mt={3}>
               <InputGroup size="sm">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<FiSearch bg="black" fontSize="18px" />}
-                />
+                <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
                 <Input
                   borderRadius="lg"
                   fontSize="13px"
@@ -216,10 +177,8 @@ const ItemSubCategory = () => {
 
             <HStack flexDirection="row">
               <Text fontSize="12px">STATUS:</Text>
-              <Select
-                fontSize="12px"
-                onChange={(e) => statusHandler(e.target.value)}
-              >
+
+              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
@@ -228,15 +187,10 @@ const ItemSubCategory = () => {
 
           <Flex w="full" flexDirection="column" gap={2}>
             <PageScroll maxHeight="750px">
-              <Text
-                textAlign="center"
-                bgColor="primary"
-                color="white"
-                fontSize="14px"
-                // fontWeight="semibold"
-              >
+              <Text textAlign="center" bgColor="primary" color="white" fontSize="14px">
                 List of Account Title (Per Item)
               </Text>
+
               {isLoading ? (
                 <Stack width="full">
                   <Skeleton height="20px" />
@@ -247,15 +201,7 @@ const ItemSubCategory = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  className="inputUpperCase"
-                  size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table className="inputUpperCase" size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
                       <Th h="40px" color="white" fontSize="10px">
@@ -278,6 +224,7 @@ const ItemSubCategory = () => {
                       </Th>
                     </Tr>
                   </Thead>
+
                   <Tbody>
                     {accountTitle?.category?.map((accTitle, i) => (
                       <Tr key={i}>
@@ -290,11 +237,7 @@ const ItemSubCategory = () => {
                         <Td pl={0}>
                           <Flex>
                             <HStack>
-                              <Button
-                                bg="none"
-                                size="sm"
-                                onClick={() => editSubCategoryHandler(accTitle)}
-                              >
+                              <Button bg="none" size="sm" onClick={() => editSubCategoryHandler(accTitle)}>
                                 <AiTwotoneEdit fontSize="15px" />
                               </Button>
 
@@ -304,19 +247,11 @@ const ItemSubCategory = () => {
                                     <PopoverTrigger>
                                       {accTitle.isActive === true ? (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnon.png"
-                                            title="active"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnon.png" title="active" />
                                         </Button>
                                       ) : (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnoff.png"
-                                            title="inactive"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnoff.png" title="inactive" />
                                         </Button>
                                       )}
                                     </PopoverTrigger>
@@ -324,32 +259,15 @@ const ItemSubCategory = () => {
                                       <PopoverContent bg="primary" color="#fff">
                                         <PopoverArrow bg="primary" />
                                         <PopoverCloseButton />
-                                        <PopoverHeader>
-                                          Confirmation!
-                                        </PopoverHeader>
+                                        <PopoverHeader>Confirmation!</PopoverHeader>
                                         <PopoverBody>
                                           <VStack onClick={onClose}>
                                             {accTitle.isActive === true ? (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this Item Category inactive?
-                                              </Text>
+                                              <Text>Are you sure you want to set this Item Category inactive?</Text>
                                             ) : (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this Item Category active?
-                                              </Text>
+                                              <Text>Are you sure you want to set this Item Category active?</Text>
                                             )}
-                                            <Button
-                                              colorScheme="green"
-                                              size="sm"
-                                              onClick={() =>
-                                                changeStatusHandler(
-                                                  accTitle.id,
-                                                  accTitle.isActive
-                                                )
-                                              }
-                                            >
+                                            <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(accTitle.id, accTitle.isActive)}>
                                               Yes
                                             </Button>
                                           </VStack>
@@ -378,37 +296,17 @@ const ItemSubCategory = () => {
                 _hover={{ bg: "blue.400", color: "#fff" }}
                 w="auto"
                 leftIcon={<RiAddFill fontSize="20px" />}
-                // borderRadius="none"
                 onClick={addSubCategoryHandler}
               >
                 New
               </Button>
 
-              {/* PROPS */}
-              {isOpen && (
-                <DrawerComponent
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  fetchAccountTitleApi={fetchAccountTitleApi}
-                  getAccountTitle={getAccountTitle}
-                  editData={editData}
-                  disableEdit={disableEdit}
-                />
-              )}
+              {isOpen && <DrawerComponent isOpen={isOpen} onClose={onClose} fetchAccountTitleApi={fetchAccountTitleApi} getAccountTitle={getAccountTitle} editData={editData} />}
 
               <Stack>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                    >
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                       {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
@@ -425,19 +323,10 @@ const ItemSubCategory = () => {
                       ))}
                     </PaginationPageGroup>
                     <HStack>
-                      <PaginationNext
-                        bg="primary"
-                        color="white"
-                        p={1}
-                        _hover={{ bg: "btnColor", color: "white" }}
-                      >
+                      <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                         {">>"}
                       </PaginationNext>
-                      <Select
-                        onChange={handlePageSizeChange}
-                        variant="outline"
-                        fontSize="md"
-                      >
+                      <Select onChange={handlePageSizeChange} variant="outline" fontSize="md">
                         <option value={Number(5)}>5</option>
                         <option value={Number(10)}>10</option>
                         <option value={Number(25)}>25</option>
@@ -460,14 +349,8 @@ export default ItemSubCategory;
 const schema = yup.object().shape({
   formData: yup.object().shape({
     id: yup.string(),
-    itemCategoryId: yup
-      .string()
-      .uppercase()
-      .required("Item Category name is required"),
-    accountPName: yup
-      .string()
-      .uppercase()
-      .required("Sub Category name is required"),
+    itemCategoryId: yup.string().uppercase().required("Item Category name is required"),
+    accountPName: yup.string().uppercase().required("Sub Category name is required"),
     addedBy: yup.string().uppercase(),
   }),
 });
@@ -475,7 +358,7 @@ const schema = yup.object().shape({
 const currentUser = decodeUser();
 
 const DrawerComponent = (props) => {
-  const { isOpen, onClose, getAccountTitle, editData, disableEdit } = props;
+  const { isOpen, onClose, getAccountTitle, editData } = props;
   const [category, setCategory] = useState([]);
   const toast = useToast();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -524,12 +407,7 @@ const DrawerComponent = (props) => {
         const res = await request
           .post("Material/AddNewAccountTitles", data.formData)
           .then((res) => {
-            ToastComponent(
-              "Success",
-              "New Account Title per item created!",
-              "success",
-              toast
-            );
+            ToastComponent("Success", "New Account Title per item created!", "success", toast);
             getAccountTitle();
             onClose();
           })
@@ -541,22 +419,12 @@ const DrawerComponent = (props) => {
         const res = await request
           .put(`Material/UpdateAccountTitles`, data.formData)
           .then((res) => {
-            ToastComponent(
-              "Success",
-              "Account title per item Updated",
-              "success",
-              toast
-            );
+            ToastComponent("Success", "Account title per item Updated", "success", toast);
             getAccountTitle();
             onClose(onClose);
           })
           .catch((error) => {
-            ToastComponent(
-              "Update Failed",
-              error.response.data,
-              "warning",
-              toast
-            );
+            ToastComponent("Update Failed", error.response.data, "warning", toast);
           });
       }
     } catch (err) {}
@@ -578,30 +446,20 @@ const DrawerComponent = (props) => {
     console.log(editData);
   }, [editData]);
 
-  // console.log(watch('formData'))
-
   return (
     <>
       <Drawer isOpen={isOpen} placement="right" onClose={onCloseDrawer}>
         <DrawerOverlay />
         <form onSubmit={handleSubmit(submitHandler)}>
           <DrawerContent>
-            <DrawerHeader borderBottomWidth="1px">
-              Account Title Form
-            </DrawerHeader>
-            {/* <DrawerCloseButton /> */}
+            <DrawerHeader borderBottomWidth="1px">Account Title Form</DrawerHeader>
+
             <DrawerBody>
               <Stack spacing="7px">
                 <Box>
                   <FormLabel>Category Name:</FormLabel>
                   {category.length > 0 ? (
-                    <Select
-                      color="black"
-                      {...register("formData.itemCategoryId")}
-                      placeholder="Select Category"
-                      fontSize="md"
-                      autoFocus
-                    >
+                    <Select color="black" {...register("formData.itemCategoryId")} placeholder="Select Category" fontSize="md" autoFocus>
                       {category.map((cat) => (
                         <option key={cat.id} value={cat.id}>
                           {cat.itemCategoryName}
@@ -618,18 +476,14 @@ const DrawerComponent = (props) => {
 
                 <Box>
                   <FormLabel>Account Title (Per Item):</FormLabel>
-                  <Input
-                    {...register("formData.accountPName")}
-                    // placeholder="Please enter Sub Category name"
-                    autoComplete="off"
-                    autoFocus
-                  />
+                  <Input {...register("formData.accountPName")} autoComplete="off" autoFocus />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.accountPName?.message}
                   </Text>
                 </Box>
               </Stack>
             </DrawerBody>
+
             <DrawerFooter borderTopWidth="1px">
               <Button variant="outline" mr={3} onClick={onClose}>
                 Cancel

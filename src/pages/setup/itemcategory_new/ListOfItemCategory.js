@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from "react";
 import {
   Badge,
-  Box,
   Button,
   Flex,
   HStack,
@@ -20,23 +20,19 @@ import {
   Td,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
 import { FiSearch } from "react-icons/fi";
-import PageScroll from "../../../utils/PageScroll";
-import { ToastComponent } from "../../../components/Toast";
+
+import moment from "moment";
 import Swal from "sweetalert2";
 import request from "../../../services/ApiClient";
-import moment from "moment";
+
 import { decodeUser } from "../../../services/decode-user";
+import { ToastComponent } from "../../../components/Toast";
+import PageScroll from "../../../utils/PageScroll";
 import { ListOfErrorItemCategory } from "./ListOfError";
 
-export const ListOfItemCategory = ({
-  genusItemCategory,
-  fetchingData,
-  fetchElixirItemCategory,
-  elixirItemCategory,
-}) => {
+export const ListOfItemCategory = ({ genusItemCategory, fetchingData, fetchElixirItemCategory, elixirItemCategory }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [errorData, setErrorData] = useState([]);
@@ -97,15 +93,12 @@ export const ListOfItemCategory = ({
             .then((res) => {
               ToastComponent("Success", "Orders Synced!", "success", toast);
               fetchElixirItemCategory();
-              // fetchNotification();
-              // onClose();
               setIsLoading(false);
             })
             .catch((err) => {
               setIsLoading(false);
               setErrorData(err.response.data);
               if (err.response.data) {
-                // onClose();
                 onOpen();
               }
             });
@@ -131,23 +124,12 @@ export const ListOfItemCategory = ({
   }, [elixirItemCategory]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="auto"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="auto" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} flexDirection="column">
         <Flex justifyContent="space-between" w="100%" p={4} mt={-3}>
           <HStack>
-            {/* <Text>Search</Text> */}
             <InputGroup size="sm">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiSearch bg="black" fontSize="18px" />}
-              />
+              <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
               <Input
                 w="230px"
                 fontSize="13px"
@@ -160,9 +142,6 @@ export const ListOfItemCategory = ({
                 _hover={{ borderColor: "gray.400" }}
               />
             </InputGroup>
-            {/* <Text>
-                  
-                </Text> */}
           </HStack>
 
           <HStack>
@@ -170,7 +149,6 @@ export const ListOfItemCategory = ({
               colorScheme="blue"
               size="sm"
               fontSize="13px"
-              // borderRadius="none"
               isLoading={isLoading}
               disabled={isLoading}
               leftIcon={<TiArrowSync fontSize="19px" />}
@@ -208,15 +186,7 @@ export const ListOfItemCategory = ({
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  //   width="full"
-                  // height="100%"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table size="sm" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="secondary" position="sticky" top={0}>
                     <Tr h="30px">
                       <Th color="#D6D6D6" fontSize="10px">
@@ -239,25 +209,19 @@ export const ListOfItemCategory = ({
                       </Th>
                     </Tr>
                   </Thead>
+
                   <Tbody>
                     {elixirItemCategory?.category
                       ?.filter((val) => {
-                        const newKeyword = new RegExp(
-                          `${keyword.toLowerCase()}`
-                        );
-                        return val?.itemCategoryName
-                          ?.toLowerCase()
-                          .match(newKeyword, "*");
+                        const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
+                        return val?.itemCategoryName?.toLowerCase().match(newKeyword, "*");
                       })
                       ?.map((cat, i) => (
                         <Tr key={i}>
                           <Td fontSize="12px">{i + 1}</Td>
                           <Td fontSize="12px">{cat.id}</Td>
-                          {/* <Td fontSize="12px" pl="100px"></Td> */}
                           <Td fontSize="12px">{cat.itemCategoryName}</Td>
-                          <Td fontSize="12px">
-                            {moment(cat.dateAdded).format("yyyy/MM/DD")}
-                          </Td>
+                          <Td fontSize="12px">{moment(cat.dateAdded).format("yyyy/MM/DD")}</Td>
                           <Td fontSize="12px">{cat.modifyBy}</Td>
                           <Td fontSize="12px">{cat.syncStatus}</Td>
                         </Tr>
@@ -272,12 +236,7 @@ export const ListOfItemCategory = ({
         <Flex justifyContent="space-between">
           <HStack>
             <Badge colorScheme="cyan">
-              <Text color="secondary">
-                {!keyword
-                  ? `Number of records: ${ordersCount} `
-                  : `Number of records from ${keyword}: ${filteredLength.length}`}
-                {/* Number of Records: {elixirSuppliers?.supplier?.length} */}
-              </Text>
+              <Text color="secondary">{!keyword ? `Number of records: ${ordersCount} ` : `Number of records from ${keyword}: ${filteredLength.length}`}</Text>
             </Badge>
           </HStack>
           <HStack>
@@ -289,28 +248,14 @@ export const ListOfItemCategory = ({
                 ""
               ) : (
                 <Text color="primary" fontSize="12px">
-                  {moment(elixirItemCategory?.category?.syncDate).format(
-                    "MM/DD/yyyy"
-                  )}
+                  {moment(elixirItemCategory?.category?.syncDate).format("MM/DD/yyyy")}
                 </Text>
               )}
             </Badge>
           </HStack>
-          {/* <Text fontSize="12px">Sync Date: "11/11/23"</Text> */}
         </Flex>
 
-        {isOpen && (
-          <ListOfErrorItemCategory
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            errorData={errorData}
-            setErrorData={setErrorData}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-            fetchElixirItemCategory={fetchElixirItemCategory}
-          />
-        )}
+        {isOpen && <ListOfErrorItemCategory isOpen={isOpen} onOpen={onOpen} onClose={onClose} errorData={errorData} setErrorData={setErrorData} setIsLoading={setIsLoading} />}
       </Flex>
     </Flex>
   );

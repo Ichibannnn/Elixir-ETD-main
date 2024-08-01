@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text } from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, Button, HStack, Text } from "@chakra-ui/react";
+import moment from "moment";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
-import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
+export const ServedUnservedReports = ({ dateFrom, dateTo, setSheetData, search }) => {
   const [servedUnservedData, setServedUnservedData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
-  const [pageTotal, setPageTotal] = useState(undefined);
 
   const [displayedData, setDisplayedData] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -27,10 +26,8 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
 
   const fetchServedUnservedReport = () => {
     fetchServedUnservedReportApi(dateFrom, dateTo, search).then((res) => {
-      console.log("Res", res);
       setServedUnservedData(res);
       setSheetData(res);
-      // setSheetData(res?.inventory?.map((item) => {}));
 
       setDisplayedData(res.slice(0, itemsPerPage));
       setHasMore(res?.length > itemsPerPage);
@@ -53,8 +50,6 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
       setDisplayedData([]);
     };
   }, [dateFrom, dateTo, search]);
-
-  // console.log("Display Data: ", displayedData);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -247,6 +242,7 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, sample, setSheetData, 
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {servedUnservedData?.length}
         </Text>
+
         <Button size="md" colorScheme="blue" onClick={() => setButtonChanger(!buttonChanger)}>
           {buttonChanger ? `>>>>` : `<<<<`}
         </Button>

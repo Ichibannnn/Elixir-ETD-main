@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text, Box } from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, Button, Text } from "@chakra-ui/react";
 import request from "../../../services/ApiClient";
-import PageScroll from "../../../utils/PageScroll";
 import moment from "moment";
-import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
+import PageScroll from "../../../utils/PageScroll";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export const MiscReceiptHistory = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
+export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) => {
   const [miscReceiptData, setMiscReceiptData] = useState([]);
   const [buttonChanger, setButtonChanger] = useState(true);
 

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Button, Flex, HStack, Input, Select, Text, useDisclosure, VStack } from "@chakra-ui/react";
-import { ListMoveOrder } from "./ListMoveOrder";
+
 import request from "../../../services/ApiClient";
-// import { TransactConfirmation } from './transactmoveorder/Action-Modals-Transact';
 import moment from "moment";
+
+import { ListMoveOrder } from "./ListMoveOrder";
 import { TransactConfirmation } from "./ActionModalTransact";
 
 //Move Order List
-
 const fetchMoveOrderListApi = async (status) => {
   const res = await request.get(`Ordering/GetTotalListForMoveOrder?status=${status}`);
   return res.data;
@@ -89,12 +89,7 @@ const TransactMoveOrderPage = ({ fetchNotification }) => {
 
   return (
     <>
-      <Flex
-        w="full"
-        // justifyContent="space-between"
-        flexDirection="column"
-        bg="form"
-      >
+      <Flex w="full" flexDirection="column" bg="form">
         <Flex justifyContent="space-between" w="full">
           <HStack justifyContent="space-between" mt={5} pl={5}>
             <Text fontSize="xs">Status:</Text>
@@ -134,21 +129,16 @@ const TransactMoveOrderPage = ({ fetchNotification }) => {
             status={status}
           />
         </VStack>
+
         {!status && (
           <HStack justifyContent="end" mr={10} mb={3}>
-            <Button
-              onClick={() => openTransact()}
-              title={!deliveryDate ? "Please select a delivery date first" : ""}
-              isDisabled={!deliveryDate}
-              size="sm"
-              colorScheme="blue"
-              // borderRadius="none"
-            >
+            <Button onClick={() => openTransact()} title={!deliveryDate ? "Please select a delivery date first" : ""} isDisabled={!deliveryDate} size="sm" colorScheme="blue">
               Transact
             </Button>
           </HStack>
         )}
       </Flex>
+
       {isTransact && (
         <TransactConfirmation
           isOpen={isTransact}

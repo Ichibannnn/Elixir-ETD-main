@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text } from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
+import moment from "moment";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
-import moment from "moment";
-import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export const CancelledOrders = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
-  const [buttonChanger, setButtonChanger] = useState(true);
+export const CancelledOrders = ({ dateFrom, dateTo, setSheetData, search }) => {
   const [cancelledData, setCancelledData] = useState([]);
 
   const [displayedData, setDisplayedData] = useState([]);

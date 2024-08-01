@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
-import moment from "moment/moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
@@ -29,7 +28,6 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
           return {
             "Item Code": item.itemCode,
             "Item Description": item.itemDescription,
-            // "Item Category": item.itemCategory,
             Receiving: item.totalReceiving.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
@@ -89,8 +87,6 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
     };
     // }, [dateFrom, dateTo])
   }, [dateTo, search]);
-
-  // console.log("Display Data: ", displayedData);
 
   return (
     <Flex w="full" flexDirection="column">

@@ -1,52 +1,13 @@
 import React, { useEffect } from "react";
-import {
-  Button,
-  Flex,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, Flex, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
+import { RiDeleteBack2Fill } from "react-icons/ri";
 import PageScroll from "../../../utils/PageScroll";
 import { CancelConfirmation } from "./ActionModal";
-import { GiCancel } from "react-icons/gi";
-import { MdCancel, MdCancelScheduleSend } from "react-icons/md";
-import { RiDeleteBack2Fill, RiDeleteBinFill } from "react-icons/ri";
-// import { CancelConfirmation } from './Action-Modal'
 
-export const ListOfIssue = ({
-  miscData,
-  selectorId,
-  setSelectorId,
-  setTotalQuantity,
-  fetchActiveMiscIssues,
-  fetchBarcodeNo,
-  remarks,
-  fetchRawMats,
-}) => {
-  const TableHead = [
-    "Line",
-    "ID",
-    "Item Code",
-    "Item Description",
-    "UOM",
-    "Quantity",
-    "Unit Cost",
-    "Account Title",
-    "Employee Information",
-    "Cancel",
-  ];
+export const ListOfIssue = ({ miscData, selectorId, setSelectorId, setTotalQuantity, fetchActiveMiscIssues, fetchBarcodeNo, fetchRawMats }) => {
+  const TableHead = ["Line", "ID", "Item Code", "Item Description", "UOM", "Quantity", "Unit Cost", "Account Title", "Employee Information", "Cancel"];
 
-  const {
-    isOpen: isCancel,
-    onClose: closeCancel,
-    onOpen: openCancel,
-  } = useDisclosure();
+  const { isOpen: isCancel, onClose: closeCancel, onOpen: openCancel } = useDisclosure();
   const cancelHandler = (id) => {
     if (id) {
       setSelectorId(id);
@@ -67,15 +28,7 @@ export const ListOfIssue = ({
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
       <VStack justifyContent="center" w="full" spacing={-1}>
-        <Text
-          bgColor="primary"
-          w="full"
-          color="white"
-          textAlign="center"
-          fontSize="sm"
-          py={1}
-          h="30px"
-        >
+        <Text bgColor="primary" w="full" color="white" textAlign="center" fontSize="sm" py={1} h="30px">
           List of Issue
         </Text>
         <Flex justifyContent="center" w="full">
@@ -90,6 +43,7 @@ export const ListOfIssue = ({
                   ))}
                 </Tr>
               </Thead>
+
               <Tbody>
                 {miscData?.map((item, i) => (
                   <Tr key={i}>
@@ -118,13 +72,7 @@ export const ListOfIssue = ({
                     )}
 
                     <Td fontSize="xs">
-                      <Button
-                        title="Cancel"
-                        onClick={() => cancelHandler(item.id)}
-                        size="xs"
-                        // colorScheme="red"
-                        bg="none"
-                      >
+                      <Button title="Cancel" onClick={() => cancelHandler(item.id)} size="xs" bg="none">
                         {/* Cancel */}
                         <RiDeleteBack2Fill fontSize="26px" color="#E53E3E" />
                       </Button>

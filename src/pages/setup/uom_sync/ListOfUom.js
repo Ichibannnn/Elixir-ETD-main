@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from "react";
 import {
   Badge,
-  Box,
   Button,
   Flex,
   HStack,
@@ -20,24 +20,19 @@ import {
   Td,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
 import { FiSearch } from "react-icons/fi";
-import PageScroll from "../../../utils/PageScroll";
-import { ToastComponent } from "../../../components/Toast";
+
+import moment from "moment";
 import Swal from "sweetalert2";
 import request from "../../../services/ApiClient";
-import moment from "moment";
 import { decodeUser } from "../../../services/decode-user";
+
+import PageScroll from "../../../utils/PageScroll";
+import { ToastComponent } from "../../../components/Toast";
 import { ListOfErrorUom } from "./ListOfErrorUom";
 
-export const ListOfUom = ({
-  genusUom,
-  fetchingData,
-  fetchElixirUom,
-  elixirUom,
-  setElixirUom,
-}) => {
+export const ListOfUom = ({ genusUom, fetchingData, fetchElixirUom, elixirUom }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [errorData, setErrorData] = useState([]);
@@ -59,8 +54,6 @@ export const ListOfUom = ({
       syncDate: moment(new Date()).format("yyyy-MM-DD"),
     };
   });
-
-  // console.log("Genus Response: ", genusUom);
 
   // SYNC ORDER BUTTON
   const syncHandler = () => {
@@ -137,23 +130,13 @@ export const ListOfUom = ({
   }, [elixirUom]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="auto"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="auto" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} flexDirection="column">
         <Flex justifyContent="space-between" w="100%" p={4} mt={-3}>
           <HStack>
             {/* <Text>Search</Text> */}
             <InputGroup size="sm">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiSearch bg="black" fontSize="18px" />}
-              />
+              <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
               <Input
                 w="230px"
                 fontSize="13px"
@@ -166,9 +149,6 @@ export const ListOfUom = ({
                 _hover={{ borderColor: "gray.400" }}
               />
             </InputGroup>
-            {/* <Text>
-                
-              </Text> */}
           </HStack>
 
           <HStack>
@@ -176,7 +156,6 @@ export const ListOfUom = ({
               colorScheme="blue"
               size="sm"
               fontSize="13px"
-              // borderRadius="none"
               isLoading={isLoading}
               disabled={isLoading}
               leftIcon={<TiArrowSync fontSize="19px" />}
@@ -214,15 +193,7 @@ export const ListOfUom = ({
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  //   width="full"
-                  // height="100%"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table size="sm" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="secondary" position="sticky" top={0}>
                     <Tr h="30px">
                       <Th color="#D6D6D6" fontSize="10px">
@@ -248,26 +219,20 @@ export const ListOfUom = ({
                       </Th>
                     </Tr>
                   </Thead>
+
                   <Tbody>
                     {elixirUom?.uom
                       ?.filter((val) => {
-                        const newKeyword = new RegExp(
-                          `${keyword.toLowerCase()}`
-                        );
-                        return val?.uomDescription
-                          ?.toLowerCase()
-                          .match(newKeyword, "*");
+                        const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
+                        return val?.uomDescription?.toLowerCase().match(newKeyword, "*");
                       })
                       ?.map((uom, i) => (
                         <Tr key={i}>
                           <Td fontSize="12px">{i + 1}</Td>
                           <Td fontSize="12px">{uom.id}</Td>
-                          {/* <Td fontSize="12px" pl="100px"></Td> */}
                           <Td fontSize="12px">{uom.uomCode}</Td>
                           <Td fontSize="12px">{uom.uomDescription}</Td>
-                          <Td fontSize="12px">
-                            {moment(uom.dateAdded).format("yyyy/MM/DD")}
-                          </Td>
+                          <Td fontSize="12px">{moment(uom.dateAdded).format("yyyy/MM/DD")}</Td>
                           <Td fontSize="12px">{uom.addedBy}</Td>
                           <Td fontSize="12px">{uom.syncStatus}</Td>
                         </Tr>
@@ -282,12 +247,7 @@ export const ListOfUom = ({
         <Flex justifyContent="space-between">
           <HStack>
             <Badge colorScheme="cyan">
-              <Text color="secondary">
-                {!keyword
-                  ? `Number of records: ${ordersCount} `
-                  : `Number of records from ${keyword}: ${filteredLength.length}`}
-                {/* Number of Records: {elixirSuppliers?.supplier?.length} */}
-              </Text>
+              <Text color="secondary">{!keyword ? `Number of records: ${ordersCount} ` : `Number of records from ${keyword}: ${filteredLength.length}`}</Text>
             </Badge>
           </HStack>
           <HStack>
@@ -304,22 +264,9 @@ export const ListOfUom = ({
               )}
             </Badge>
           </HStack>
-          {/* <Text fontSize="12px">Sync Date: "11/11/23"</Text> */}
         </Flex>
 
-        {isOpen && (
-          <ListOfErrorUom
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            // resultArray={resultArray}
-            errorData={errorData}
-            setErrorData={setErrorData}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-            fetchElixirUom={fetchElixirUom}
-          />
-        )}
+        {isOpen && <ListOfErrorUom isOpen={isOpen} onOpen={onOpen} onClose={onClose} errorData={errorData} setErrorData={setErrorData} setIsLoading={setIsLoading} />}
       </Flex>
     </Flex>
   );

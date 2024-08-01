@@ -29,6 +29,7 @@ import { ListOrders } from "./ListOrders";
 // };
 
 // LOCAL HOST
+
 const fetchGenusApi = async (fromDate, toDate) => {
   const fromDateFormatted = moment(fromDate).format("yyyy-MM-DD");
   const toDateFormatted = moment(toDate).format("yyyy-MM-DD");

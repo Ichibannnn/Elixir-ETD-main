@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -7,7 +7,6 @@ import {
   HStack,
   Input,
   InputGroup,
-  InputLeftElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -21,20 +20,18 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-// import { useLocation } from 'react-router-dom'
-// import { AddConfirmation } from './Action-Modals'
-import moment from "moment";
-import request from "../../../services/ApiClient";
 import { AddConfirmation } from "./ActionModals";
-import { Select as AutoComplete } from "chakra-react-select";
+import { RiAddFill } from "react-icons/ri";
 
-import { yupResolver } from "@hookform/resolvers/yup";
+import moment from "moment";
+import { Select as AutoComplete } from "chakra-react-select";
+import { decodeUser } from "../../../services/decode-user";
+import { NumericFormat } from "react-number-format";
+
 import * as yup from "yup";
 import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import { decodeUser } from "../../../services/decode-user";
-import { RiAddFill } from "react-icons/ri";
-import { NumericFormat } from "react-number-format";
 
 const currentUser = decodeUser();
 
@@ -44,35 +41,26 @@ const schema = yup.object().shape({
     companyId: yup.object().required().typeError("Company Name is required"),
     departmentId: yup.object().required().typeError("Department Category is required"),
     locationId: yup.object().required().typeError("Location Name is required"),
-    // accountId: yup.object().required().typeError("Account Name is required"),
-    // empId: yup.object().nullable(),
-    // fullName: yup.string(),
   }),
 });
 
 export const MaterialsInformation = ({
   rawMatsInfo,
   setRawMatsInfo,
-  listDataTempo,
-  setListDataTempo,
   details,
   setDetails,
+  setListDataTempo,
   suppliers,
   materials,
-  uoms,
   setSelectorId,
   supplierData,
   setSupplierData,
-  supplierRef,
   remarks,
   setRemarks,
   remarksRef,
+  transactionType,
   transactionDate,
   setTransactionDate,
-  transactionType,
-  setTransactionType,
-  chargingInfo,
-  setChargingInfo,
 }) => {
   // COA
   const [company, setCompany] = useState([]);
@@ -122,8 +110,6 @@ export const MaterialsInformation = ({
   }, []);
 
   const {
-    register,
-    handleSubmit,
     formState: { errors, isValid },
     setValue,
     reset,
@@ -157,12 +143,7 @@ export const MaterialsInformation = ({
   };
 
   const supplierHandler = (data) => {
-    // console.log("Data: ", data);
-    // console.log("Supplier Name: ", data.value.supplierName);
     if (data) {
-      // const newData = JSON.stringify(data);
-      // const supplierCode = newData.supplierCode;
-      // const supplierName = newData.supplierName;
       setSupplierData({
         supplierCode: data.value.supplierCode,
         supplierName: data.value.supplierName,
@@ -197,8 +178,6 @@ export const MaterialsInformation = ({
     }
   }, [supplierData]);
 
-  // console.log("Materials: ", materials);
-
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
       <Box bgColor="primary" w="full" pl={2} h="20px" alignItems="center">
@@ -229,29 +208,33 @@ export const MaterialsInformation = ({
                 Supplier Code:{" "}
               </Text>
 
-              <Controller
-                control={control}
-                name="formData.suppliers"
-                render={({ field }) => (
-                  <AutoComplete
-                    className="react-select-layout"
-                    ref={field.ref}
-                    value={field.value}
-                    size="sm"
-                    placeholder="Select Supplier"
-                    onChange={(e) => {
-                      field.onChange(e);
-                      supplierHandler(e);
-                    }}
-                    options={suppliers?.map((item) => {
-                      return {
-                        label: `${item.supplierCode} - ${item.supplierName}`,
-                        value: item,
-                      };
-                    })}
-                  />
-                )}
-              />
+              {suppliers?.length > 0 ? (
+                <Controller
+                  control={control}
+                  name="formData.suppliers"
+                  render={({ field }) => (
+                    <AutoComplete
+                      className="react-select-layout"
+                      ref={field.ref}
+                      value={field.value}
+                      size="sm"
+                      placeholder="Select Supplier"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        supplierHandler(e);
+                      }}
+                      options={suppliers?.map((item) => {
+                        return {
+                          label: `${item.supplierCode} - ${item.supplierName}`,
+                          value: item,
+                        };
+                      })}
+                    />
+                  )}
+                />
+              ) : (
+                <Spinner thickness="4px" emptyColor="gray.200" color="blue.500" size="md" />
+              )}
             </HStack>
 
             {/* Supplier Name */}
@@ -304,7 +287,6 @@ export const MaterialsInformation = ({
                 w="full"
                 onChange={(e) => setTransactionDate(e.target.value)}
                 value={transactionDate}
-                // defaultValue={moment(new Date()).format("yyyy-MM-DD")}
                 max={moment(new Date()).format("yyyy-MM-DD")}
                 // bgColor="#fff8dc"
                 py={1.5}
@@ -464,26 +446,18 @@ export const MaterialsInformation = ({
 
       {isModal && (
         <RawMatsInfoModal
-          rawMatsInfo={rawMatsInfo}
-          setRawMatsInfo={setRawMatsInfo}
-          listDataTempo={listDataTempo}
-          setListDataTempo={setListDataTempo}
-          chargingInfo={chargingInfo}
-          setChargingInfo={setChargingInfo}
-          details={details}
-          setDetails={setDetails}
-          supplierRef={supplierRef}
-          materials={materials}
-          uoms={uoms}
-          setSelectorId={setSelectorId}
           isOpen={isModal}
           onClose={closeModal}
+          details={details}
+          rawMatsInfo={rawMatsInfo}
+          setRawMatsInfo={setRawMatsInfo}
+          setListDataTempo={setListDataTempo}
+          materials={materials}
+          setSelectorId={setSelectorId}
           remarks={remarks}
           transactionDate={transactionDate}
-          setTransactionDate={setTransactionDate}
           supplierData={supplierData}
           chargingCoa={watch("formData")}
-          resetCOA={reset}
         />
       )}
     </Flex>
@@ -494,22 +468,15 @@ export const RawMatsInfoModal = ({
   isOpen,
   onClose,
   details,
-  setDetails,
   rawMatsInfo,
   setRawMatsInfo,
-  listDataTempo,
   setListDataTempo,
-  chargingInfo,
-  setChargingInfo,
-  supplierRef,
   materials,
   setSelectorId,
   remarks,
   transactionDate,
-  setTransactionDate,
   supplierData,
   chargingCoa,
-  resetCOA,
 }) => {
   const { isOpen: isAdd, onClose: closeAdd, onOpen: openAdd } = useDisclosure();
   const openAddConfirmation = () => {
@@ -531,7 +498,6 @@ export const RawMatsInfoModal = ({
 
   // SEDAR
   const [pickerItems, setPickerItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
 
   const fetchEmployees = async () => {
     try {
@@ -601,7 +567,6 @@ export const RawMatsInfoModal = ({
 
   const [idNumber, setIdNumber] = useState();
   const [info, setInfo] = useState();
-  const [showLoading, setShowLoading] = useState(false);
 
   useEffect(() => {
     setInfo(
@@ -616,10 +581,7 @@ export const RawMatsInfoModal = ({
   }, [idNumber]);
 
   const itemCodeHandler = (data) => {
-    console.log("Data: ", data);
-
     if (data) {
-      // const newData = JSON.parse(data);
       const itemCode = data.value.itemCode;
       const itemDescription = data.value.itemDescription;
       const uomCode = data.value.uomCode;
@@ -645,15 +607,8 @@ export const RawMatsInfoModal = ({
     }
   };
 
-  // console.log("rawMatsInfo: ", rawMatsInfo);
-
   const newDate = new Date();
   const minDate = moment(newDate).format("yyyy-MM-DD");
-
-  // console.log("Raw Mats :", rawMatsInfo);
-  // console.log("Account title :", watch("formData"));
-
-  // console.log("Materials: ", materials);
 
   const closeHandler = () => {
     setRawMatsInfo({
@@ -687,31 +642,36 @@ export const RawMatsInfoModal = ({
                   <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
                     Item Code:{" "}
                   </Text>
-                  <Controller
-                    control={control}
-                    name="formData.materials"
-                    render={({ field }) => (
-                      <AutoComplete
-                        className="react-select-layout"
-                        ref={field.ref}
-                        value={field.value}
-                        size="sm"
-                        placeholder="Select Item Code"
-                        onChange={(e) => {
-                          console.log("E: ", e);
 
-                          field.onChange(e);
-                          itemCodeHandler(e);
-                        }}
-                        options={materials?.map((item) => {
-                          return {
-                            label: `${item.itemCode}`,
-                            value: item,
-                          };
-                        })}
-                      />
-                    )}
-                  />
+                  {materials?.length > 0 ? (
+                    <Controller
+                      control={control}
+                      name="formData.materials"
+                      render={({ field }) => (
+                        <AutoComplete
+                          className="react-select-layout"
+                          ref={field.ref}
+                          value={field.value}
+                          size="sm"
+                          placeholder="Select Item Code"
+                          onChange={(e) => {
+                            console.log("E: ", e);
+
+                            field.onChange(e);
+                            itemCodeHandler(e);
+                          }}
+                          options={materials?.map((item) => {
+                            return {
+                              label: `${item.itemCode}`,
+                              value: item,
+                            };
+                          })}
+                        />
+                      )}
+                    />
+                  ) : (
+                    <Spinner thickness="4px" emptyColor="gray.200" color="blue.500" size="md" />
+                  )}
                 </HStack>
 
                 {/* Item Description */}
@@ -756,7 +716,6 @@ export const RawMatsInfoModal = ({
                       }
                       onWheel={(e) => e.target.blur()}
                       onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
-                      // onPaste={(e) => e.preventDefault()}
                       min="0"
                       w="full"
                       placeholder="Enter Unit Cost"
@@ -788,7 +747,6 @@ export const RawMatsInfoModal = ({
                     }
                     onWheel={(e) => e.target.blur()}
                     onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
-                    // onPaste={(e) => e.preventDefault()}
                     min="1"
                     placeholder="Enter Quantity"
                     border="1px"
@@ -881,7 +839,6 @@ export const RawMatsInfoModal = ({
                       </Text>
                       <Box w="full">
                         <Input
-                          // className="react-select-layout"
                           fontSize="sm"
                           {...register("formData.fullName")}
                           disabled={disableFullName}
@@ -902,9 +859,6 @@ export const RawMatsInfoModal = ({
                   </>
                 )}
               </VStack>
-
-              {/* <VStack alignItems="start" w="full" mx={5}>
-              </VStack> */}
             </Flex>
           </ModalBody>
           <ModalFooter>
@@ -932,28 +886,22 @@ export const RawMatsInfoModal = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       {isAdd && (
         <AddConfirmation
           isOpen={isAdd}
           onClose={closeAdd}
           closeAddModal={onClose}
           details={details}
-          setDetails={setDetails}
           rawMatsInfo={rawMatsInfo}
           setRawMatsInfo={setRawMatsInfo}
-          listDataTempo={listDataTempo}
           setListDataTempo={setListDataTempo}
-          chargingInfo={chargingInfo}
-          setChargingInfo={setChargingInfo}
-          supplierRef={supplierRef}
           setSelectorId={setSelectorId}
           remarks={remarks}
           transactionDate={transactionDate}
-          setTransactionDate={setTransactionDate}
           supplierData={supplierData}
           chargingAccountTitle={watch("formData")}
           chargingCoa={chargingCoa}
-          resetCOA={resetCOA}
         />
       )}
     </>

@@ -6,24 +6,17 @@ import { ListOfSuppliers } from "./ListOfSuppliers";
 import { usePagination } from "@ajna/pagination";
 
 const fetchGenusApi = async () => {
-  // const fromDateFormatted = moment(fromDate).format("yyyy-MM-DD");
-  // const toDateFormatted = moment(toDate).format("yyyy-MM-DD");
-  const res = await axios.get(
-    `http://10.10.2.76:8000/api/dropdown/suppliers?status=1&paginate=0&api_for=vladimir`,
-    {
-      headers: {
-        Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-      },
-    }
-  );
+  const res = await axios.get(`http://10.10.2.76:8000/api/dropdown/suppliers?status=1&paginate=0&api_for=vladimir`, {
+    headers: {
+      Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+    },
+  });
   return res.data;
 };
 
 // FETCH API ELIXIR API:
 const fetchElixirApi = async (pageNumber, pageSize, search) => {
-  const response = await request.get(
-    `Supplier/GetAllSupplierithPaginationOrig/true?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
-  );
+  const response = await request.get(`Supplier/GetAllSupplierithPaginationOrig/true?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
   return response.data;
 };
@@ -39,14 +32,7 @@ const SupplierNew = () => {
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -88,20 +74,15 @@ const SupplierNew = () => {
     };
   }, [currentPage, pageSize, search]);
 
-  // console.log(elixirSuppliers);
-
   return (
     <ListOfSuppliers
       fetchElixirSuppliers={fetchElixirSuppliers}
       elixirSuppliers={elixirSuppliers}
-      setElixirSuppliers={setElixirSuppliers}
       genusSupplier={genusSupplier}
-      setGenusSupplier={setGenusSupplier}
       fetchingData={isLoading}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}
       pagesCount={pagesCount}
-      pageSize={pageSize}
       setPageSize={setPageSize}
       pages={pages}
       search={search}

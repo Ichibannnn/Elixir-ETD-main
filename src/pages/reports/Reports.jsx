@@ -1,21 +1,23 @@
 import React, { useState } from "react";
-import moment from "moment";
-import * as XLSX from "xlsx";
-import { Badge, Button, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Skeleton, Text } from "@chakra-ui/react";
-import { WarehouseReceivingHistory } from "./report_dropdown/WarehouseReceivingHistory";
-import { MoveOrderHistory } from "./report_dropdown/MoveOrderHistory";
-import { MiscIssueHistory } from "./report_dropdown/MiscIssueHistory";
-import { MiscReceiptHistory } from "./report_dropdown/MiscReceiptHistory";
-import { TransactedMOHistory } from "./report_dropdown/TransactedMOHistory";
-import { CancelledOrders } from "./report_dropdown/CancelledOrders";
-import { InventoryMovement } from "./report_dropdown/InventoryMovement";
-import { BorrowedMatsHistory } from "./report_dropdown/BorrowedMatsHistory";
-import { ReturnedQuantityTransaction } from "./report_dropdown/ReturnedQuantityTransaction";
+import { Badge, Button, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Text } from "@chakra-ui/react";
 import { FiSearch } from "react-icons/fi";
 import { BiExport } from "react-icons/bi";
-import { ConsolidatedReportsFinance } from "./report_dropdown/ConsolidatedReportsFinance";
+
+import * as XLSX from "xlsx";
+import moment from "moment";
 import request from "../../services/ApiClient";
+
+import { WarehouseReceivingHistory } from "./report_dropdown/WarehouseReceivingHistory";
+import { MoveOrderHistory } from "./report_dropdown/MoveOrderHistory";
+import { TransactedMOHistory } from "./report_dropdown/TransactedMOHistory";
 import { ServedUnservedReports } from "./report_dropdown/ServedUnservedReports";
+import { MiscReceiptHistory } from "./report_dropdown/MiscReceiptHistory";
+import { MiscIssueHistory } from "./report_dropdown/MiscIssueHistory";
+import { BorrowedMatsHistory } from "./report_dropdown/BorrowedMatsHistory";
+import { ReturnedQuantityTransaction } from "./report_dropdown/ReturnedQuantityTransaction";
+import { CancelledOrders } from "./report_dropdown/CancelledOrders";
+import { ConsolidatedReportsFinance } from "./report_dropdown/ConsolidatedReportsFinance";
+import { InventoryMovement } from "./report_dropdown/InventoryMovement";
 
 const Reports = () => {
   const [dateFrom, setDateFrom] = useState(moment(new Date()).format("yyyy-MM-DD"));
@@ -34,8 +36,6 @@ const Reports = () => {
       setSheetData([]);
     }
   };
-
-  console.log("Date From: ", dateFrom);
 
   const handleExport = async () => {
     if (sample === 10) {
@@ -114,11 +114,13 @@ const Reports = () => {
                 Report Details
               </Text>
             </HStack>
+
             {/* Dropdown value  */}
             <Flex justifyContent="space-around" flexDirection="row" gap={2}>
               <Flex alignItems="center">
                 <Badge>Report Name:</Badge>
               </Flex>
+
               <HStack>
                 <Select onChange={(e) => navigationHandler(Number(e.target.value))} placeholder=" " bgColor="#fff8dc" w="full" fontSize="xs">
                   <option value={1}>Warehouse Receiving History</option>
@@ -135,6 +137,7 @@ const Reports = () => {
                 </Select>
               </HStack>
             </Flex>
+
             <Flex justifyContent="center" alignItems="end">
               <Button onClick={handleExport} isLoading={isLoading} isDisabled={sheetData?.length === 0 || !sample} size="sm" leftIcon={<BiExport fontSize="20px" />} bg="none">
                 <Text fontSize="xs">Export</Text>
@@ -189,27 +192,27 @@ const Reports = () => {
             </Flex>
 
             {sample === 1 ? (
-              <WarehouseReceivingHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <WarehouseReceivingHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 2 ? (
-              <MoveOrderHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <MoveOrderHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 3 ? (
-              <TransactedMOHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <TransactedMOHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 4 ? (
-              <ServedUnservedReports search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} isLoading={isLoading} />
+              <ServedUnservedReports search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} isLoading={isLoading} />
             ) : sample === 5 ? (
-              <MiscReceiptHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <MiscReceiptHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 6 ? (
-              <MiscIssueHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <MiscIssueHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 7 ? (
-              <BorrowedMatsHistory search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <BorrowedMatsHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 8 ? (
-              <ReturnedQuantityTransaction search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <ReturnedQuantityTransaction search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 9 ? (
-              <CancelledOrders search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <CancelledOrders search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 10 ? (
-              <ConsolidatedReportsFinance search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} isLoading={isLoading} />
+              <ConsolidatedReportsFinance search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} isLoading={isLoading} />
             ) : sample === 11 ? (
-              <InventoryMovement search={search} dateFrom={dateFrom} dateTo={dateTo} sample={sample} setSheetData={setSheetData} />
+              <InventoryMovement search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : (
               ""
             )}

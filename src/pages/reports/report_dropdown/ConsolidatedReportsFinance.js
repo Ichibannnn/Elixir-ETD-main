@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Button, HStack, Select, Stack, Text } from "@chakra-ui/react";
+import { Flex, Table, Tbody, Td, Th, Thead, Tr, Button, Text } from "@chakra-ui/react";
+import moment from "moment";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
-import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, sample, setSheetData, search }) => {
+export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, setSheetData, search }) => {
   const [buttonChanger, setButtonChanger] = useState(true);
   const [consolidatedData, setConsolidatedData] = useState([]);
 
@@ -47,8 +47,6 @@ export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, sample, setSheetD
       setDisplayedData([]);
     };
   }, [dateFrom, dateTo, search]);
-
-  // console.log("Consolidated: ", consolidatedData);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -220,6 +218,7 @@ export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, sample, setSheetD
         <Text fontSize="xs" fontWeight="semibold">
           Total Records: {consolidatedData?.length}
         </Text>
+
         <Button size="md" colorScheme="blue" onClick={() => setButtonChanger(!buttonChanger)}>
           {buttonChanger ? `>>>>` : `<<<<`}
         </Button>

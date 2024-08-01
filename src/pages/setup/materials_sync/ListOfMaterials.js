@@ -27,6 +27,7 @@ import {
   Drawer,
   DrawerContent,
   Select,
+  Spinner,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
@@ -38,14 +39,12 @@ import request from "../../../services/ApiClient";
 import moment from "moment";
 import { decodeUser } from "../../../services/decode-user";
 import { ListOfErrorsMaterials } from "./ListOfErrorsMaterials";
-import { GrView } from "react-icons/gr";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { Pagination, PaginationContainer, PaginationNext, PaginationPage, PaginationPageGroup, PaginationPrevious } from "@ajna/pagination";
 import { Select as AutoComplete } from "chakra-react-select";
-import { RiToolsFill } from "react-icons/ri";
 import { FaTools } from "react-icons/fa";
 
 export const ListOfMaterials = ({
@@ -122,7 +121,6 @@ export const ListOfMaterials = ({
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("Result Array: ", resultArray);
         try {
           setIsLoading(true);
           const res = request
@@ -147,17 +145,13 @@ export const ListOfMaterials = ({
             .then((res) => {
               ToastComponent("Success", "Materials Synced!", "success", toast);
               fetchElixirMaterials();
-              // fetchNotification();
-              // onClose();
               setIsLoading(false);
             })
             .catch((err) => {
               setIsLoading(false);
               setErrorData(err.response.data);
               if (err.response.data) {
-                // onClose();
                 onOpen();
-                console.log("Error Data: ", err.response.data);
               }
             });
         } catch (error) {}
@@ -214,18 +208,21 @@ export const ListOfMaterials = ({
           </HStack>
 
           <HStack>
-            <Button
-              colorScheme="blue"
-              size="sm"
-              fontSize="13px"
-              // borderRadius="none"
-              isLoading={isLoading}
-              disabled={isLoading}
-              leftIcon={<TiArrowSync fontSize="19px" />}
-              onClick={() => syncHandler()}
-            >
-              Sync
-            </Button>
+            {genusMaterials?.result?.length ? (
+              <Button
+                colorScheme="blue"
+                size="sm"
+                fontSize="13px"
+                isLoading={isLoading}
+                disabled={isLoading}
+                leftIcon={<TiArrowSync fontSize="19px" />}
+                onClick={() => syncHandler()}
+              >
+                Sync
+              </Button>
+            ) : (
+              <Spinner size="md" emptyColor="gray.200" color="blue.500" />
+            )}
           </HStack>
         </Flex>
 
@@ -393,7 +390,6 @@ export const ListOfMaterials = ({
             onClose={onClose}
             errorData={errorData}
             setErrorData={setErrorData}
-            isLoading={isLoading}
             setIsLoading={setIsLoading}
             fetchElixirMaterials={fetchElixirMaterials}
           />
@@ -559,10 +555,6 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
                       />
                     )}
                   />
-
-                  {/* <Text color="red" fontSize="xs">
-                    {errors.formData?.companyId?.message}
-                  </Text> */}
                 </Box>
 
                 <Box>

@@ -65,13 +65,12 @@ import CalendarPage from "./pages/ordering/calendar/CalendarPage";
 // MOVE ORDER
 import MoveOrder from "./pages/inventory/MoveOrder";
 import ForApprovalMo from "./pages/move_order/forapprovalmo/ForApprovalMo";
-
-// last stop
 import ApprovedMoPage from "./pages/move_order/approvedmo/ApprovedMoPage";
 import RejectMoveOrder from "./pages/move_order/reject_moveorder/RejectMoveOrder";
 import TransactMoveOrderPage from "./pages/move_order/transact_moveorder/TransactMoveOrderPage";
 
 // MISCELLANEOUS
+
 import MiscReceiptPage from "./pages/misc_transactions/misc_receipt/MiscReceiptPage";
 import MiscIssuePage from "./pages/misc_transactions/misc_issue/MiscIssuePage";
 
@@ -106,6 +105,7 @@ import UserRole from "./pages/user_management/UserRole";
 import ModuleManagement from "./pages/user_management/ModuleManagement";
 import MenuManagement from "./pages/user_management/MenuManagement";
 
+// last stop
 // SETUP
 import UomManagement from "./pages/setup/UomManagement";
 import ItemCategory from "./pages/setup/ItemCategory";
@@ -344,7 +344,13 @@ const App = () => {
                 path="/miscellaneous/misc-issue"
                 element={
                   user ? (
-                    <MiscIssuePage miscData={miscData} fetchActiveMiscIssues={fetchActiveMiscIssues} navigation={navigation} setNavigation={setNavigation} />
+                    <MiscIssuePage
+                      miscData={miscData}
+                      setMiscData={setMiscData}
+                      fetchActiveMiscIssues={fetchActiveMiscIssues}
+                      navigation={navigation}
+                      setNavigation={setNavigation}
+                    />
                   ) : (
                     <Navigate to="/login" />
                   )

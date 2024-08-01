@@ -27,12 +27,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import "../../../styles/Tracking.css";
-import { useReactToPrint } from "react-to-print";
-import Barcode from "react-barcode";
+
 import moment from "moment";
 import request from "../../../services/ApiClient";
-import { decodeUser } from "../../../services/decode-user";
 import PageScroll from "../../../utils/PageScroll";
+
+import Barcode from "react-barcode";
+import { useReactToPrint } from "react-to-print";
+import { decodeUser } from "../../../services/decode-user";
 import { ToastComponent } from "../../../components/Toast";
 
 const currentUser = decodeUser();
@@ -1015,7 +1017,6 @@ export const TrackModal = ({ isOpen, onClose, trackData, trackList }) => {
                       {item.assetTag ? <Td fontSize="11px">{item.assetTag}</Td> : <Td fontSize="11px">-</Td>}
 
                       {item.rush ? <Td fontSize="11px">{item.rush}</Td> : <Td fontSize="11px">-</Td>}
-                      {/* <Td>{moment(item.expiration).format("MM/DD/yyyy")}</Td> */}
                     </Tr>
                   ))}
                 </Tbody>
@@ -1037,7 +1038,7 @@ export const TrackModal = ({ isOpen, onClose, trackData, trackList }) => {
 };
 
 //REJECT APPROVED MO --------------------------------
-export const RejectModal = ({ isOpen, onClose, id, fetchApprovedMO, fetchNotification }) => {
+export const RejectModal = ({ isOpen, onClose, id, fetchApprovedMO }) => {
   const [reasonSubmit, setReasonSubmit] = useState("");
 
   const [reasons, setReasons] = useState([]);
@@ -1076,7 +1077,6 @@ export const RejectModal = ({ isOpen, onClose, id, fetchApprovedMO, fetchNotific
         })
         .then((res) => {
           ToastComponent("Success", "Move order has been rejected", "success", toast);
-          // fetchNotification()
           fetchApprovedMO();
           setIsLoading(false);
           onClose();

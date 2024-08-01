@@ -16,16 +16,13 @@ import {
   Th,
   Thead,
   Tr,
-  useToast,
   VStack,
   ModalOverlay,
   HStack,
 } from "@chakra-ui/react";
-import { BsQuestionOctagonFill } from "react-icons/bs";
 import request from "../../../../services/ApiClient";
-import { ToastComponent } from "../../../../components/Toast";
-import PageScroll from "../../../../utils/PageScroll";
 import moment from "moment";
+import PageScroll from "../../../../utils/PageScroll";
 import { useReactToPrint } from "react-to-print";
 
 export const ViewModal = ({ isOpen, onClose, statusBody }) => {
@@ -39,9 +36,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
 
   const id = statusBody.id;
   const fetchReceiptDetailsApi = async (id) => {
-    const res = await request.get(
-      `Miscellaneous/GetAllDetailsFromWarehouseByMReceipt?id=${id}`
-    );
+    const res = await request.get(`Miscellaneous/GetAllDetailsFromWarehouseByMReceipt?id=${id}`);
     return res.data;
   };
 
@@ -54,8 +49,6 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
   useEffect(() => {
     fetchReceiptDetails();
   }, [id]);
-
-  console.log(receiptDetailsData);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="6xl" isCentered>
@@ -83,29 +76,20 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                 <Text fontSize="12px" fontWeight="semibold">
                   Transaction Date:
                 </Text>
-                <Text fontSize="12px">
-                  {" "}
-                  {moment(receiptDetailsData[0]?.preparedDate).format(
-                    "yyyy-MM-DD"
-                  )}
-                </Text>
+                <Text fontSize="12px"> {moment(receiptDetailsData[0]?.preparedDate).format("yyyy-MM-DD")}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="12px" fontWeight="semibold">
                   Supplier Code:
                 </Text>
-                <Text fontSize="12px">
-                  {receiptDetailsData[0]?.supplierCode}
-                </Text>
+                <Text fontSize="12px">{receiptDetailsData[0]?.supplierCode}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="12px" fontWeight="semibold">
                   Supplier Name:
                 </Text>
-                <Text fontSize="12px">
-                  {receiptDetailsData[0]?.supplierName}
-                </Text>
+                <Text fontSize="12px">{receiptDetailsData[0]?.supplierName}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="12px" fontWeight="semibold">
@@ -127,8 +111,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                   Company:
                 </Text>
                 <Text fontSize="12px">
-                  {receiptDetailsData[0]?.companyCode} -{" "}
-                  {receiptDetailsData[0]?.companyName}
+                  {receiptDetailsData[0]?.companyCode} - {receiptDetailsData[0]?.companyName}
                 </Text>
               </HStack>
               <HStack>
@@ -136,8 +119,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                   Department:
                 </Text>
                 <Text fontSize="12px">
-                  {receiptDetailsData[0]?.departmentCode} -{" "}
-                  {receiptDetailsData[0]?.departmentName}
+                  {receiptDetailsData[0]?.departmentCode} - {receiptDetailsData[0]?.departmentName}
                 </Text>
               </HStack>
               <HStack>
@@ -145,8 +127,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                   Location:
                 </Text>
                 <Text fontSize="12px">
-                  {receiptDetailsData[0]?.locationCode} -{" "}
-                  {receiptDetailsData[0]?.locationName}
+                  {receiptDetailsData[0]?.locationCode} - {receiptDetailsData[0]?.locationName}
                 </Text>
               </HStack>
             </VStack>
@@ -154,13 +135,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
           <VStack justifyContent="center" mt={3}>
             <PageScroll minHeight="320px" maxHeight="321px">
               <Table size="sm" bg="gray.100">
-                <Thead
-                  bgColor="secondary"
-                  h="30px"
-                  position="sticky"
-                  top={0}
-                  zIndex={1}
-                >
+                <Thead bgColor="secondary" h="30px" position="sticky" top={0} zIndex={1}>
                   <Tr>
                     <Th color="white" fontSize="xs">
                       Item Code
@@ -192,13 +167,10 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                       <Td fontSize="xs">{receiptdetails.itemDescription}</Td>
                       <Td fontSize="xs">{receiptdetails.uom}</Td>
                       <Td fontSize="xs">
-                        {receiptdetails.totalQuantity.toLocaleString(
-                          undefined,
-                          {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          }
-                        )}
+                        {receiptdetails.totalQuantity.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </Td>
                       <Td fontSize="xs">
                         {receiptdetails.unitCost.toLocaleString(undefined, {
@@ -207,8 +179,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                         })}
                       </Td>
                       <Td fontSize="xs">
-                        {receiptdetails.accountCode} -{" "}
-                        {receiptdetails.accountTitles}
+                        {receiptdetails.accountCode} - {receiptdetails.accountTitles}
                       </Td>
                       {receiptdetails.empId && receiptdetails.fullName ? (
                         <Td fontSize="xs">
@@ -224,32 +195,6 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
             </PageScroll>
 
             <Flex justifyContent="space-between" mt={5} w="full">
-              {/* <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
-                  Transaction ID:
-                </Text>
-                <Text textDecoration="underline" fontSize="xs">
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {receiptDetailsData[0]?.id}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </Text>
-              </HStack> */}
-
-              {/* <HStack>
-                <Text fontSize="xs" fontWeight="semibold">
-                  Transaction Date:
-                </Text>
-                <Text textDecoration="underline" fontSize="xs">
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {moment(receiptDetailsData[0]?.preparedDate).format(
-                    "yyyy-MM-DD"
-                  )}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </Text>
-              </HStack> */}
-
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Transacted By:
@@ -257,8 +202,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {receiptDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>

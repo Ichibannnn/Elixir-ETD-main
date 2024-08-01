@@ -1,38 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Flex, HStack, useDisclosure, VStack } from "@chakra-ui/react";
+import { Flex, VStack } from "@chakra-ui/react";
+
 import request from "../../../../services/ApiClient";
+import { decodeUser } from "../../../../services/decode-user";
+
 import { BorrowedInformation } from "../../BorrowedInformation";
 import { ListOfBorrowed } from "../../ListOfBorrowed";
 import { ActionButton } from "../../ActionButton";
-import { decodeUser } from "../../../../services/decode-user";
 
 const fetchRawMatsApi = async () => {
-  const res = await request.get(
-    `Borrowed/GetAvailableStocksForBorrowedIssueNoParameters`
-  );
+  const res = await request.get(`Borrowed/GetAvailableStocksForBorrowedIssueNoParameters`);
   return res.data;
 };
 
 const fetchBarcodeNoApi = async (itemCode) => {
-  const res = await request.get(
-    `Borrowed/GetAllAvailableStocksForBorrowedIsssue`,
-    {
-      params: {
-        itemcode: itemCode,
-      },
-    }
-  );
+  const res = await request.get(`Borrowed/GetAllAvailableStocksForBorrowedIsssue`, {
+    params: {
+      itemcode: itemCode,
+    },
+  });
   return res.data;
 };
 
 const currentUser = decodeUser();
 
-const AddBorrowedMaterials = ({
-  borrowedData,
-  fetchActiveBorrowed,
-  borrowedNav,
-  setBorrowedNav,
-}) => {
+const AddBorrowedMaterials = ({ borrowedData, fetchActiveBorrowed, borrowedNav, setBorrowedNav }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const customerRef = useRef();
@@ -113,12 +105,7 @@ const AddBorrowedMaterials = ({
     <Flex px={5} pt={5} pb={0} w="full" flexDirection="column" bg="form">
       <Flex w="full" justifyContent="space-between"></Flex>
 
-      <VStack
-        w="full"
-        p={5}
-        spacing={10}
-        height={borrowedData?.length === 0 ? "90vh" : "auto"}
-      >
+      <VStack w="full" p={5} spacing={10} height={borrowedData?.length === 0 ? "90vh" : "auto"}>
         {borrowedNav === 1 ? (
           <>
             <BorrowedInformation
@@ -128,7 +115,6 @@ const AddBorrowedMaterials = ({
               setRawMatsInfo={setRawMatsInfo}
               details={details}
               setDetails={setDetails}
-              customers={customers}
               rawMats={rawMats}
               barcodeNo={barcodeNo}
               setSelectorId={setSelectorId}

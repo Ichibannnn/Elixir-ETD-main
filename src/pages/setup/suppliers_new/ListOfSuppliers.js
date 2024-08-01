@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from "react";
 import {
   Badge,
-  Box,
   Button,
   Flex,
   HStack,
@@ -21,32 +21,25 @@ import {
   useToast,
   Select,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
-import PageScrollImport from "../../../components/PageScrollImport";
 import { FiSearch } from "react-icons/fi";
-import PageScroll from "../../../utils/PageScroll";
-import { ToastComponent } from "../../../components/Toast";
+
 import Swal from "sweetalert2";
-import request from "../../../services/ApiClient";
 import moment from "moment";
-import { ListOfErrors } from "./ListOfErrors";
+import request from "../../../services/ApiClient";
 import { decodeUser } from "../../../services/decode-user";
-import {
-  Pagination,
-  PaginationContainer,
-  PaginationNext,
-  PaginationPage,
-  PaginationPageGroup,
-  PaginationPrevious,
-} from "@ajna/pagination";
-// import OrdersConfirmation from "./OrdersConfirmation";
+import { ToastComponent } from "../../../components/Toast";
+
+import PageScroll from "../../../utils/PageScroll";
+import { Pagination, PaginationContainer, PaginationNext, PaginationPage, PaginationPageGroup, PaginationPrevious } from "@ajna/pagination";
+
+import { ListOfErrors } from "./ListOfErrors";
 
 export const ListOfSuppliers = ({
-  genusSupplier,
-  fetchingData,
   fetchElixirSuppliers,
   elixirSuppliers,
+  genusSupplier,
+  fetchingData,
   currentPage,
   setCurrentPage,
   pagesCount,
@@ -60,8 +53,9 @@ export const ListOfSuppliers = ({
   const [errorData, setErrorData] = useState([]);
 
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const currentUser = decodeUser();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -72,7 +66,6 @@ export const ListOfSuppliers = ({
     setPageSize(pageSize);
   };
 
-  // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
     console.log("Input: ", inputValue);
@@ -84,7 +77,6 @@ export const ListOfSuppliers = ({
     }
   }, [search]);
 
-  // ARRAY FOR THE LIST DATA OF SUPPLIERS
   const resultArray = genusSupplier?.result?.suppliers?.map((item) => {
     return {
       supplier_No: item?.id,
@@ -98,7 +90,6 @@ export const ListOfSuppliers = ({
     };
   });
 
-  // SYNC ORDER BUTTON
   const syncHandler = () => {
     Swal.fire({
       title: "Confirmation!",
@@ -178,42 +169,13 @@ export const ListOfSuppliers = ({
   }, [search]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="auto"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="auto" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} flexDirection="column">
         <Flex justifyContent="space-between" w="100%" p={4} mt={-3}>
-          {/* <HStack>
-            <InputGroup size="sm">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiSearch bg="black" fontSize="18px" />}
-              />
-              <Input
-                w="230px"
-                fontSize="13px"
-                size="sm"
-                type="text"
-                placeholder="Search: Supplier Name"
-                onChange={(e) => setKeyword(e.target.value)}
-                disabled={isLoading}
-                borderColor="gray.200"
-                _hover={{ borderColor: "gray.400" }}
-              />
-            </InputGroup>
-          </HStack> */}
-
           <HStack w="25%" mt={3}>
             <InputGroup size="sm">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiSearch bg="black" fontSize="18px" />}
-              />
+              <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
+
               <Input
                 borderRadius="lg"
                 fontSize="13px"
@@ -233,7 +195,6 @@ export const ListOfSuppliers = ({
               colorScheme="blue"
               size="sm"
               fontSize="13px"
-              // borderRadius="none"
               isLoading={isLoading}
               disabled={isLoading}
               leftIcon={<TiArrowSync fontSize="19px" />}
@@ -271,15 +232,7 @@ export const ListOfSuppliers = ({
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  //   width="full"
-                  // height="100%"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table size="sm" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="secondary" position="sticky" top={0}>
                     <Tr h="30px">
                       <Th color="#D6D6D6" fontSize="10px">
@@ -288,9 +241,6 @@ export const ListOfSuppliers = ({
                       <Th color="#D6D6D6" fontSize="10px">
                         Supplier No.
                       </Th>
-                      {/* <Th color="#D6D6D6" fontSize="10px" pl="100px">
-                               
-                              </Th> */}
                       <Th color="#D6D6D6" fontSize="10px">
                         Supplier Code
                       </Th>
@@ -308,26 +258,20 @@ export const ListOfSuppliers = ({
                       </Th>
                     </Tr>
                   </Thead>
+
                   <Tbody>
                     {elixirSuppliers?.supplier
                       ?.filter((val) => {
-                        const newKeyword = new RegExp(
-                          `${keyword.toLowerCase()}`
-                        );
-                        return val?.supplierName
-                          ?.toLowerCase()
-                          .match(newKeyword, "*");
+                        const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
+                        return val?.supplierName?.toLowerCase().match(newKeyword, "*");
                       })
                       ?.map((supp, i) => (
                         <Tr key={i}>
                           <Td fontSize="12px">{i + 1}</Td>
                           <Td fontSize="12px">{supp.id}</Td>
-                          {/* <Td fontSize="12px" pl="100px"></Td> */}
                           <Td fontSize="12px">{supp.supplierCode}</Td>
                           <Td fontSize="12px">{supp.supplierName}</Td>
-                          <Td fontSize="12px">
-                            {moment(supp.dateAdded).format("yyyy/MM/DD")}
-                          </Td>
+                          <Td fontSize="12px">{moment(supp.dateAdded).format("yyyy/MM/DD")}</Td>
                           <Td fontSize="12px">{supp.modifyBy}</Td>
                           <Td fontSize="12px">{supp.syncStatus}</Td>
                         </Tr>
@@ -342,39 +286,23 @@ export const ListOfSuppliers = ({
         <Flex justifyContent="space-between">
           <HStack>
             <Badge colorScheme="cyan">
-              <Text color="secondary">
-                {!keyword
-                  ? `Number of records: ${ordersCount} `
-                  : `Number of records from ${keyword}: ${filteredLength.length}`}
-                {/* Number of Records: {elixirSuppliers?.supplier?.length} */}
-              </Text>
+              <Text color="secondary">{!keyword ? `Number of records: ${ordersCount} ` : `Number of records from ${keyword}: ${filteredLength.length}`}</Text>
             </Badge>
           </HStack>
           <HStack>
             <Badge colorScheme="cyan">
               <Text color="primary" fontSize="12px">
                 <Text color="primary" fontSize="12px">
-                  {`Sync Date: ${moment(
-                    elixirSuppliers?.supplier?.syncDate
-                  ).format("MM/DD/yyyy")}`}
+                  {`Sync Date: ${moment(elixirSuppliers?.supplier?.syncDate).format("MM/DD/yyyy")}`}
                 </Text>
               </Text>
             </Badge>
           </HStack>
 
           <Stack>
-            <Pagination
-              pagesCount={pagesCount}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-            >
+            <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
               <PaginationContainer>
-                <PaginationPrevious
-                  bg="primary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "btnColor", color: "white" }}
-                >
+                <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                   {"<<"}
                 </PaginationPrevious>
                 <PaginationPageGroup ml={1} mr={1}>
@@ -391,19 +319,10 @@ export const ListOfSuppliers = ({
                   ))}
                 </PaginationPageGroup>
                 <HStack>
-                  <PaginationNext
-                    bg="primary"
-                    color="white"
-                    p={1}
-                    _hover={{ bg: "btnColor", color: "white" }}
-                  >
+                  <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                     {">>"}
                   </PaginationNext>
-                  <Select
-                    onChange={handlePageSizeChange}
-                    variant="outline"
-                    fontSize="md"
-                  >
+                  <Select onChange={handlePageSizeChange} variant="outline" fontSize="md">
                     <option value={Number(100)}>100</option>
                     <option value={Number(500)}>500</option>
                     <option value={Number(1000)}>1000</option>
@@ -416,16 +335,7 @@ export const ListOfSuppliers = ({
         </Flex>
 
         {isOpen && (
-          <ListOfErrors
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            resultArray={resultArray}
-            errorData={errorData}
-            setErrorData={setErrorData}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-          />
+          <ListOfErrors isOpen={isOpen} onOpen={onOpen} onClose={onClose} errorData={errorData} setErrorData={setErrorData} isLoading={isLoading} setIsLoading={setIsLoading} />
         )}
       </Flex>
     </Flex>

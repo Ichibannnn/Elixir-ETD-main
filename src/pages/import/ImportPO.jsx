@@ -1,29 +1,17 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
+import { Box, Button, Flex, Input, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { BiImport } from "react-icons/bi";
 import { MdOutlineError } from "react-icons/md";
+
 import * as XLSX from "xlsx";
-import { ToastComponent } from "../../components/Toast";
-import DateConverter from "../../components/DateConverter";
-import request from "../../services/ApiClient";
-import { decodeUser } from "../../services/decode-user";
 import moment from "moment/moment";
-import ErrorList from "./ErrorList";
+import request from "../../services/ApiClient";
+import DateConverter from "../../components/DateConverter";
+import { decodeUser } from "../../services/decode-user";
+import { ToastComponent } from "../../components/Toast";
 import Swal from "sweetalert2";
+
+import ErrorList from "./ErrorList";
 import PageScroll from "../../utils/PageScroll";
 
 const currentUser = decodeUser();
@@ -39,11 +27,7 @@ const ImportPO = () => {
   const [errorData, setErrorData] = useState([]);
   const toast = useToast();
 
-  const {
-    isOpen: isErrorOpen,
-    onOpen: onErrorOpen,
-    onClose: onErrorClose,
-  } = useDisclosure();
+  const { isOpen: isErrorOpen, onOpen: onErrorOpen, onClose: onErrorClose } = useDisclosure();
   const clearExcelFile = useRef();
 
   // EXCEL DATA TRIM TO LOWERCASE
@@ -87,7 +71,6 @@ const ImportPO = () => {
       setIsDisabled(false);
     } else {
       setIsDisabled(true);
-      // ToastComponent("Error!", "Please check empty fields", "error", toast);
     }
   };
 
@@ -134,17 +117,10 @@ const ImportPO = () => {
           if (resultArray.length > 0) {
             console.log(resultArray);
 
-            const hasZeroUnitCost = resultArray.some(
-              (eData) => eData.unitPrice <= 0
-            );
+            const hasZeroUnitCost = resultArray.some((eData) => eData.unitPrice <= 0);
 
             if (hasZeroUnitCost) {
-              ToastComponent(
-                "Warning!",
-                "Unit Cost cannot be zero value",
-                "warning",
-                toast
-              );
+              ToastComponent("Warning!", "Unit Cost cannot be zero value", "warning", toast);
             } else {
               try {
                 setIsLoading(true);
@@ -159,7 +135,6 @@ const ImportPO = () => {
                   })
                   .catch((err) => {
                     setIsLoading(false);
-                    // ToastComponent("Error", "Import Failed, Please check your fields.", "error", toast)
                     setErrorData(err.response.data);
                     if (err.response.data) {
                       setErrorOpener(true);
@@ -167,21 +142,11 @@ const ImportPO = () => {
                     }
                   });
               } catch (err) {
-                ToastComponent(
-                  "Error!",
-                  "Wrong excel format imported for PO",
-                  "error",
-                  toast
-                );
+                ToastComponent("Error!", "Wrong excel format imported for PO", "error", toast);
               }
             }
           } else {
-            ToastComponent(
-              "Error!",
-              "No data provided, please check your import",
-              "error",
-              toast
-            );
+            ToastComponent("Error!", "No data provided, please check your import", "error", toast);
           }
         }
       }
@@ -197,14 +162,7 @@ const ImportPO = () => {
 
   useEffect(() => {
     // Check if any value in resultArray's any is a letter
-    const hasLetterValue = resultArray.some(
-      (eData) =>
-        isNaN(eData.ordered) ||
-        isNaN(eData.delivered) ||
-        isNaN(eData.delivered) ||
-        isNaN(eData.billed) ||
-        isNaN(eData.unitPrice)
-    );
+    const hasLetterValue = resultArray.some((eData) => isNaN(eData.ordered) || isNaN(eData.delivered) || isNaN(eData.delivered) || isNaN(eData.billed) || isNaN(eData.unitPrice));
     setBufferError(hasLetterValue);
     setIsDisabled(hasLetterValue || resultArray.length === 0); // Disable if there's any letter value or if resultArray is empty
 
@@ -252,14 +210,7 @@ const ImportPO = () => {
         </Box>
       </Flex>
 
-      <Flex
-        w="100%"
-        h="full"
-        p={2}
-        mt={-4}
-        flexDirection="column"
-        justifyContent="space-between"
-      >
+      <Flex w="100%" h="full" p={2} mt={-4} flexDirection="column" justifyContent="space-between">
         <Flex w="full" h="full">
           <PageScroll maxHeight="840px">
             <Table variant="striped" size="sm">
@@ -315,8 +266,7 @@ const ImportPO = () => {
                         eData.pR_Number
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          PO is uploaded.
+                          Data missing. Please make sure correct excel file for PO is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -325,8 +275,7 @@ const ImportPO = () => {
                         eData.pR_Date
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          PO Date is uploaded.
+                          Data missing. Please make sure correct excel file for PO Date is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -335,8 +284,7 @@ const ImportPO = () => {
                         eData.pO_Number
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          PO is uploaded.
+                          Data missing. Please make sure correct excel file for PO is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -345,8 +293,7 @@ const ImportPO = () => {
                         eData.pO_Date
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          PO is uploaded.
+                          Data missing. Please make sure correct excel file for PO is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -355,8 +302,7 @@ const ImportPO = () => {
                         eData.itemCode
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          PO is uploaded.
+                          Data missing. Please make sure correct excel file for PO is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -365,8 +311,7 @@ const ImportPO = () => {
                         eData.itemDescription
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          PO is uploaded.
+                          Data missing. Please make sure correct excel file for PO is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -396,8 +341,7 @@ const ImportPO = () => {
                         eData.uom
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          PO is uploaded.
+                          Data missing. Please make sure correct excel file for PO is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -414,8 +358,7 @@ const ImportPO = () => {
                         eData.vendorName
                       ) : (
                         <Text fontWeight="semibold" color="danger">
-                          Data missing. Please make sure correct excel file for
-                          PO is uploaded.
+                          Data missing. Please make sure correct excel file for PO is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -426,15 +369,7 @@ const ImportPO = () => {
           </PageScroll>
         </Flex>
         <Flex p={2} bg="primary" w="100%">
-          <Input
-            ref={clearExcelFile}
-            color="white"
-            type="file"
-            w="25%"
-            size="25px"
-            fontSize="13px"
-            onChange={(e) => fileHandler(e.target.files)}
-          />
+          <Input ref={clearExcelFile} color="white" type="file" w="25%" size="25px" fontSize="13px" onChange={(e) => fileHandler(e.target.files)} />
         </Flex>
       </Flex>
 

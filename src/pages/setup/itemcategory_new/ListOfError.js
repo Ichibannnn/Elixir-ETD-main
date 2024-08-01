@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Accordion,
   AccordionButton,
@@ -6,7 +7,6 @@ import {
   AccordionPanel,
   Badge,
   Box,
-  Button,
   Flex,
   Modal,
   ModalBody,
@@ -22,29 +22,18 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import moment from "moment";
-import React from "react";
 import { RiFileList3Fill } from "react-icons/ri";
+
 import Swal from "sweetalert2";
-import { ToastComponent } from "../../../components/Toast";
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
 import PageScrollImport from "../../../components/PageScrollImport";
+import { ToastComponent } from "../../../components/Toast";
 
-export const ListOfErrorItemCategory = ({
-  isOpen,
-  onOpen,
-  onClose,
-  errorData,
-  setErrorData,
-  isLoading,
-  setIsLoading,
-  fetchElixirItemCategory,
-}) => {
+export const ListOfErrorItemCategory = ({ isOpen, onOpen, onClose, errorData, setErrorData, setIsLoading }) => {
   const toast = useToast();
 
   console.log(errorData);
@@ -121,12 +110,7 @@ export const ListOfErrorItemCategory = ({
               })
             )
             .then((res) => {
-              ToastComponent(
-                "Success",
-                "Item Category Synced!",
-                "success",
-                toast
-              );
+              ToastComponent("Success", "Item Category Synced!", "success", toast);
               onClose();
               setIsLoading(false);
             })
@@ -146,10 +130,7 @@ export const ListOfErrorItemCategory = ({
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="4xl">
       <ModalOverlay />
-      <ModalContent
-        color="white"
-        bg="linear-gradient(rgba(0, 0, 0, 0.850),rgba(0, 0, 0, 3))"
-      >
+      <ModalContent color="white" bg="linear-gradient(rgba(0, 0, 0, 0.850),rgba(0, 0, 0, 3))">
         <ModalHeader>
           <Flex justifyContent="left">
             <Text fontSize="11px" color="white">
@@ -157,7 +138,9 @@ export const ListOfErrorItemCategory = ({
             </Text>
           </Flex>
         </ModalHeader>
+
         <ModalCloseButton onClick={onClose} />
+
         <PageScroll>
           <ModalBody>
             <Accordion allowToggle>
@@ -166,17 +149,8 @@ export const ListOfErrorItemCategory = ({
                 <AccordionItem bgColor="blue.200">
                   <Flex>
                     <AccordionButton fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Available for syncing{" "}
-                        <Badge color="green">
-                          {filteredItemCategory?.length}
-                        </Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Available for syncing <Badge color="green">{filteredItemCategory?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -220,9 +194,7 @@ export const ListOfErrorItemCategory = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -253,15 +225,8 @@ export const ListOfErrorItemCategory = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Available Updates{" "}
-                        <Badge color="green">{availableUpdate?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Available Updates <Badge color="green">{availableUpdate?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -305,9 +270,7 @@ export const ListOfErrorItemCategory = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no update lists on this file
-                            </Text>
+                            <Text color="white">There are no update lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -323,15 +286,8 @@ export const ListOfErrorItemCategory = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Duplicated Lists{" "}
-                        <Badge color="red">{duplicateList?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Duplicated Lists <Badge color="red">{duplicateList?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -375,9 +331,7 @@ export const ListOfErrorItemCategory = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -393,15 +347,8 @@ export const ListOfErrorItemCategory = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Duplicated Lists{" "}
-                        <Badge color="red">{itemCategoryEmpty?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Duplicated Lists <Badge color="red">{itemCategoryEmpty?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -445,9 +392,7 @@ export const ListOfErrorItemCategory = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no record for Item Category.
-                            </Text>
+                            <Text color="white">There are no record for Item Category.</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -459,6 +404,7 @@ export const ListOfErrorItemCategory = ({
               )}
             </Accordion>
           </ModalBody>
+
           <ModalFooter></ModalFooter>
         </PageScroll>
       </ModalContent>
