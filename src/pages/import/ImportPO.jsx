@@ -95,6 +95,8 @@ const ImportPO = () => {
     };
   });
 
+  console.log("Excel Array: ", excelData);
+
   const submitExcelHandler = (resultArray) => {
     Swal.fire({
       title: "Confirmation!",

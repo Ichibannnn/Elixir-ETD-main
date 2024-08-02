@@ -747,7 +747,6 @@ export const AllCancelConfirmation = ({
           ToastComponent("Success", "Items has been cancelled", "success", toast);
           fetchActiveMiscIssues();
           fetchRawMats();
-          customerRef.current.value = "";
           setTransactionDate("");
           setDetails("");
           setCustomerData({
@@ -768,8 +767,6 @@ export const AllCancelConfirmation = ({
           onClose();
         })
         .catch((err) => {
-          console.log("error: ", err);
-
           ToastComponent("Error", "Item was not cancelled", "error", toast);
           setIsLoading(false);
         });

@@ -97,8 +97,6 @@ const MrpPage = () => {
   //   setSearch(value);
   // }, 300);
 
-  // OLD CODE ~~~~~
-
   const fetchMRP = () => {
     setIsLoading(true);
     fetchMRPApi(currentPage, pageSize, search).then((res) => {

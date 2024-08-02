@@ -87,15 +87,12 @@ const CustomerNew = () => {
 
   return (
     <ListOfCustomers
-      fetchElixirCustomers={fetchElixirCustomers}
-      elixirCustomers={elixirCustomers}
-      setElixirCustomers={setElixirCustomers}
       genusCustomers={genusCustomers}
       fistoDepartments={fistoDepartments}
       fistoLocations={fistoLocations}
-      setGenusCustomers={setGenusCustomers}
-      search={search}
       fetchingData={isLoading}
+      elixirCustomers={elixirCustomers}
+      fetchElixirCustomers={fetchElixirCustomers}
     />
   );
 };

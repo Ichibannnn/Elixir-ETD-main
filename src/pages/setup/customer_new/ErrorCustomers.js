@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Accordion,
   AccordionButton,
@@ -22,29 +23,19 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import moment from "moment";
-import React from "react";
 import { RiFileList3Fill } from "react-icons/ri";
+
+import request from "../../../services/ApiClient";
 import Swal from "sweetalert2";
+
+import PageScroll from "../../../utils/PageScroll";
 import PageScrollImport from "../../../components/PageScrollImport";
 import { ToastComponent } from "../../../components/Toast";
-import request from "../../../services/ApiClient";
-import PageScroll from "../../../utils/PageScroll";
 
-export const ErrorCustomers = ({
-  isOpen,
-  onOpen,
-  onClose,
-  errorData,
-  setErrorData,
-  isLoading,
-  setIsLoading,
-  resultArrayNew,
-}) => {
+export const ErrorCustomers = ({ isOpen, onOpen, onClose, errorData, setErrorData, isLoading, setIsLoading, resultArrayNew }) => {
   const toast = useToast();
 
   const duplicateList = errorData?.duplicateList?.map((list) => {
@@ -52,12 +43,6 @@ export const ErrorCustomers = ({
       customer_No: list?.customer_No,
       customerCode: list?.customerCode,
       customerName: list?.customerName,
-      // companyCode: list?.companyCode,
-      // companyName: list?.companyName,
-      // departmentCode: list?.departmentCode,
-      // departmentName: list?.departmentName,
-      // locationCode: list?.locationCode,
-      // locationName: list?.locationName,
     };
   });
 
@@ -66,12 +51,6 @@ export const ErrorCustomers = ({
       customer_No: list?.customer_No,
       customerCode: list?.customerCode,
       customerName: list?.customerName,
-      // companyCode: list?.companyCode,
-      // companyName: list?.companyName,
-      // departmentCode: list?.departmentCode,
-      // departmentName: list?.departmentName,
-      // locationCode: list?.locationCode,
-      // locationName: list?.locationName,
     };
   });
 
@@ -81,11 +60,6 @@ export const ErrorCustomers = ({
       customerCode: list?.customerCode,
       customerName: list?.customerName,
       companyCode: list?.companyCode,
-      // companyName: list?.companyName,
-      // departmentCode: list?.departmentCode,
-      // departmentName: list?.departmentName,
-      // locationCode: list?.locationCode,
-      // locationName: list?.locationName,
     };
   });
 
@@ -113,12 +87,6 @@ export const ErrorCustomers = ({
                   customer_No: item?.customer_No,
                   customerCode: item?.customerCode,
                   customerName: item?.customerName,
-                  // companyCode: item?.companyCode,
-                  // companyName: item?.companyName,
-                  // departmentCode: item?.departmentCode,
-                  // departmentName: item?.departmentName,
-                  // locationCode: item?.locationCode,
-                  // locationName: item?.locationName,
                 };
               })
             )
@@ -143,10 +111,7 @@ export const ErrorCustomers = ({
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="4xl">
       <ModalOverlay />
-      <ModalContent
-        color="white"
-        bg="linear-gradient(rgba(0, 0, 0, 0.850),rgba(0, 0, 0, 3))"
-      >
+      <ModalContent color="white" bg="linear-gradient(rgba(0, 0, 0, 0.850),rgba(0, 0, 0, 3))">
         <ModalHeader>
           <Flex justifyContent="left">
             <Text fontSize="11px" color="white">
@@ -154,7 +119,9 @@ export const ErrorCustomers = ({
             </Text>
           </Flex>
         </ModalHeader>
+
         <ModalCloseButton onClick={onClose} />
+
         <PageScroll>
           <ModalBody>
             <Accordion allowToggle>
@@ -163,15 +130,8 @@ export const ErrorCustomers = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Duplicated Lists{" "}
-                        <Badge color="red">{duplicateList?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Duplicated Lists <Badge color="red">{duplicateList?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -230,9 +190,7 @@ export const ErrorCustomers = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -248,15 +206,8 @@ export const ErrorCustomers = ({
                 <AccordionItem bgColor="blue.200">
                   <Flex>
                     <AccordionButton fontWeight="semibold">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="black"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                      >
-                        Available for syncing{" "}
-                        <Badge color="green">{filteredOrders?.length}</Badge>
+                      <Box flex="1" textAlign="left" color="black" fontSize="13px" fontWeight="semibold">
+                        Available for syncing <Badge color="green">{filteredOrders?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -283,9 +234,6 @@ export const ErrorCustomers = ({
                               <Th color="white" fontSize="9px">
                                 Customer Name
                               </Th>
-                              {/* <Th color="white" fontSize="9px">
-                                Company
-                              </Th> */}
                             </Tr>
                           </Thead>
 
@@ -304,9 +252,6 @@ export const ErrorCustomers = ({
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.customerName}
                                 </Td>
-                                {/* <Td color="gray.600" fontSize="11px">
-                                  {d?.companyName}
-                                </Td> */}
                               </Tr>
                             ))}
                           </Tbody>
@@ -315,22 +260,14 @@ export const ErrorCustomers = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
                     </PageScroll>
                     {filteredOrders ? (
                       <Flex justifyContent="end">
-                        <Button
-                          onClick={() => validationAvailableToSync()}
-                          size="sm"
-                          _hover={{ bgColor: "accent", color: "white" }}
-                          colorScheme="blue"
-                          isLoading={isLoading}
-                        >
+                        <Button onClick={() => validationAvailableToSync()} size="sm" _hover={{ bgColor: "accent", color: "white" }} colorScheme="blue" isLoading={isLoading}>
                           Sync
                         </Button>
                       </Flex>

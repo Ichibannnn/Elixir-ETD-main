@@ -1,3 +1,6 @@
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -37,28 +40,17 @@ import {
   Portal,
   Image,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { AiTwotoneEdit } from "react-icons/ai";
-import { GiChoice } from "react-icons/gi";
 import { FiSearch } from "react-icons/fi";
 import { RiAddFill } from "react-icons/ri";
-import PageScroll from "../../utils/PageScroll";
-import request from "../../services/ApiClient";
-import { ToastComponent } from "../../components/Toast";
-import { yupResolver } from "@hookform/resolvers/yup";
+
 import * as yup from "yup";
+import request from "../../services/ApiClient";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { ToastComponent } from "../../components/Toast";
+import PageScroll from "../../utils/PageScroll";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
 const CustomerType = () => {
   const [customerType, setCustomerType] = useState([]);
@@ -72,26 +64,17 @@ const CustomerType = () => {
   const [pageTotal, setPageTotal] = useState(undefined);
   const [disableEdit, setDisableEdit] = useState(false);
 
-  // FETCH API CUSTOMER TYPE:
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const fetchCustomerTypeApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Customer/GetAllCustomerTypeWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
-    );
+    const response = await request.get(`Customer/GetAllCustomerTypeWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
     return response.data;
   };
 
-  //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -109,15 +92,12 @@ const CustomerType = () => {
     setPageSize(pageSize);
   };
 
-  //STATUS
   const statusHandler = (data) => {
     setStatus(data);
   };
 
   const changeStatusHandler = (id, isActive) => {
     let routeLabel;
-    // console.log(id)
-    // console.log(isActive)
     if (isActive) {
       routeLabel = "InActiveCustomerType";
     } else {
@@ -135,7 +115,6 @@ const CustomerType = () => {
       });
   };
 
-  //SHOW ITEM CATEGORY DATA----
   const getCustomerTypeHandler = () => {
     fetchCustomerTypeApi(currentPage, pageSize, status, search).then((res) => {
       setIsLoading(false);
@@ -152,13 +131,10 @@ const CustomerType = () => {
     };
   }, [currentPage, pageSize, status, search]);
 
-  // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    // console.log(inputValue)
   };
 
-  //ADD CUSTOMER TYPE HANDLER---
   const addCustomerTypeHandler = () => {
     setEditData({
       id: "",
@@ -170,36 +146,20 @@ const CustomerType = () => {
     setDisableEdit(false);
   };
 
-  //EDIT ITEM CATEGORY--
   const editCustomerTypeHandler = (type) => {
     setDisableEdit(true);
     setEditData(type);
     onOpen();
-    // console.log(mod.mainMenu)
   };
 
-  //FOR DRAWER (Drawer / Drawer Tagging)
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
-    <Flex
-      color="fontColor"
-      h="full"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-      boxShadow="md"
-    >
+    <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form" boxShadow="md">
       <Flex p={2} w="full">
         <Flex flexDirection="column" gap={1} w="full">
           <Flex justifyContent="space-between" alignItems="center">
             <HStack w="25%" mt={3}>
               <InputGroup size="sm">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<FiSearch bg="black" fontSize="18px" />}
-                />
+                <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
                 <Input
                   borderRadius="lg"
                   fontSize="13px"
@@ -216,10 +176,7 @@ const CustomerType = () => {
 
             <HStack flexDirection="row">
               <Text fontSize="12px">STATUS:</Text>
-              <Select
-                fontSize="12px"
-                onChange={(e) => statusHandler(e.target.value)}
-              >
+              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
@@ -238,14 +195,7 @@ const CustomerType = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="secondary">
                     <Tr fontSize="15px">
                       <Th color="#D6D6D6" fontSize="10px">
@@ -265,6 +215,7 @@ const CustomerType = () => {
                       </Th>
                     </Tr>
                   </Thead>
+
                   <Tbody>
                     {customerType?.type?.map((custType, i) => (
                       <Tr key={i}>
@@ -276,14 +227,7 @@ const CustomerType = () => {
                         <Td pl={0}>
                           <Flex>
                             <HStack>
-                              <Button
-                                bg="none"
-                                p={0}
-                                size="sm"
-                                onClick={() =>
-                                  editCustomerTypeHandler(custType)
-                                }
-                              >
+                              <Button bg="none" p={0} size="sm" onClick={() => editCustomerTypeHandler(custType)}>
                                 <AiTwotoneEdit fontSize="15px" />
                               </Button>
 
@@ -293,19 +237,11 @@ const CustomerType = () => {
                                     <PopoverTrigger>
                                       {custType.isActive === true ? (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnon.png"
-                                            title="active"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnon.png" title="active" />
                                         </Button>
                                       ) : (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnoff.png"
-                                            title="inactive"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnoff.png" title="inactive" />
                                         </Button>
                                       )}
                                     </PopoverTrigger>
@@ -313,32 +249,15 @@ const CustomerType = () => {
                                       <PopoverContent bg="primary" color="#fff">
                                         <PopoverArrow bg="primary" />
                                         <PopoverCloseButton />
-                                        <PopoverHeader>
-                                          Confirmation!
-                                        </PopoverHeader>
+                                        <PopoverHeader>Confirmation!</PopoverHeader>
                                         <PopoverBody>
                                           <VStack onClick={onClose}>
                                             {custType.isActive === true ? (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this Item Category inactive?
-                                              </Text>
+                                              <Text>Are you sure you want to set this Item Category inactive?</Text>
                                             ) : (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this Item Category active?
-                                              </Text>
+                                              <Text>Are you sure you want to set this Item Category active?</Text>
                                             )}
-                                            <Button
-                                              colorScheme="green"
-                                              size="sm"
-                                              onClick={() =>
-                                                changeStatusHandler(
-                                                  custType.id,
-                                                  custType.isActive
-                                                )
-                                              }
-                                            >
+                                            <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(custType.id, custType.isActive)}>
                                               Yes
                                             </Button>
                                           </VStack>
@@ -373,7 +292,6 @@ const CustomerType = () => {
                 New Customer Type
               </Button>
 
-              {/* PROPS */}
               {isOpen && (
                 <DrawerComponent
                   isOpen={isOpen}
@@ -386,19 +304,9 @@ const CustomerType = () => {
               )}
 
               <Stack>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                      size="sm"
-                    >
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }} size="sm">
                       {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
@@ -416,23 +324,10 @@ const CustomerType = () => {
                       ))}
                     </PaginationPageGroup>
                     <HStack>
-                      <PaginationNext
-                        bg="primary"
-                        color="white"
-                        p={1}
-                        _hover={{ bg: "btnColor", color: "white" }}
-                        size="sm"
-                        mb={2}
-                      >
+                      <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }} size="sm" mb={2}>
                         {">>"}
                       </PaginationNext>
-                      <Select
-                        onChange={handlePageSizeChange}
-                        bg="#FFFFFF"
-                        // size="sm"
-                        mb={2}
-                        variant="outline"
-                      >
+                      <Select onChange={handlePageSizeChange} bg="#FFFFFF" mb={2} variant="outline">
                         <option value={Number(5)}>5</option>
                         <option value={Number(10)}>10</option>
                         <option value={Number(25)}>25</option>
@@ -463,8 +358,7 @@ const schema = yup.object().shape({
 const currentUser = decodeUser();
 
 const DrawerComponent = (props) => {
-  const { isOpen, onClose, getCustomerTypeHandler, editData, disableEdit } =
-    props;
+  const { isOpen, onClose, getCustomerTypeHandler, editData, disableEdit } = props;
   const toast = useToast();
 
   const {
@@ -472,7 +366,6 @@ const DrawerComponent = (props) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -493,12 +386,7 @@ const DrawerComponent = (props) => {
         const res = await request
           .post("Customer/AddNewCustomerType", data.formData)
           .then((res) => {
-            ToastComponent(
-              "Success",
-              "New Customer Type created!",
-              "success",
-              toast
-            );
+            ToastComponent("Success", "New Customer Type created!", "success", toast);
             getCustomerTypeHandler();
             onClose();
           })
@@ -510,22 +398,12 @@ const DrawerComponent = (props) => {
         const res = await request
           .put(`Customer/UpdateCustomerType`, data.formData)
           .then((res) => {
-            ToastComponent(
-              "Success",
-              "Category Type Updated",
-              "success",
-              toast
-            );
+            ToastComponent("Success", "Category Type Updated", "success", toast);
             getCustomerTypeHandler();
             onClose(onClose);
           })
           .catch((error) => {
-            ToastComponent(
-              "Update Failed",
-              error.response.data,
-              "warning",
-              toast
-            );
+            ToastComponent("Update Failed", error.response.data, "warning", toast);
           });
       }
     } catch (err) {}
@@ -545,34 +423,26 @@ const DrawerComponent = (props) => {
     }
   }, [editData]);
 
-  // console.log(watch('formData'))
-
   return (
     <>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <form onSubmit={handleSubmit(submitHandler)}>
           <DrawerContent>
-            <DrawerHeader borderBottomWidth="1px">
-              Customer Type Form
-            </DrawerHeader>
+            <DrawerHeader borderBottomWidth="1px">Customer Type Form</DrawerHeader>
             <DrawerCloseButton />
             <DrawerBody>
               <Stack spacing="7px">
                 <Box>
                   <FormLabel>Category Type:</FormLabel>
-                  <Input
-                    {...register("formData.customerName")}
-                    placeholder="Please enter Category name"
-                    autoComplete="off"
-                    autoFocus
-                  />
+                  <Input {...register("formData.customerName")} placeholder="Please enter Category name" autoComplete="off" autoFocus />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.customerName?.message}
                   </Text>
                 </Box>
               </Stack>
             </DrawerBody>
+
             <DrawerFooter borderTopWidth="1px">
               <Button variant="outline" mr={3} onClick={onClose}>
                 Cancel

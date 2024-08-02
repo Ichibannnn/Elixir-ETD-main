@@ -105,13 +105,13 @@ import UserRole from "./pages/user_management/UserRole";
 import ModuleManagement from "./pages/user_management/ModuleManagement";
 import MenuManagement from "./pages/user_management/MenuManagement";
 
-// last stop
 // SETUP
 import UomManagement from "./pages/setup/UomManagement";
 import ItemCategory from "./pages/setup/ItemCategory";
 import ItemSubCategory from "./pages/setup/ItemSubCategory";
 import MaterialsManagement from "./pages/setup/MaterialsManagement";
 import SupplierNew from "./pages/setup/suppliers_new/SupplierNew";
+// last stop
 import CustomerNew from "./pages/setup/customer_new/CustomerNew";
 import CustomerType from "./pages/setup/CustomerType";
 import LotManagement from "./pages/setup/LotManagement";

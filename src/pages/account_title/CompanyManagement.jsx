@@ -1,3 +1,6 @@
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -35,190 +38,146 @@ import {
   PopoverCloseButton,
   VStack,
   Portal,
-} from '@chakra-ui/react'
-import React, { useState } from 'react'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { AiTwotoneEdit } from 'react-icons/ai'
-import { GiChoice } from 'react-icons/gi'
-import { FaSearch, FaUsers } from 'react-icons/fa'
-import { FiSearch } from 'react-icons/fi'
-import { RiAddFill } from 'react-icons/ri'
-import PageScroll from '../../utils/PageScroll'
-import request from '../../services/ApiClient'
-import { ToastComponent } from '../../components/Toast'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-import { decodeUser } from '../../services/decode-user'
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from '@ajna/pagination'
+} from "@chakra-ui/react";
+import { AiTwotoneEdit } from "react-icons/ai";
+import { GiChoice } from "react-icons/gi";
+import { FiSearch } from "react-icons/fi";
+import { RiAddFill } from "react-icons/ri";
+
+import * as yup from "yup";
+import request from "../../services/ApiClient";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { decodeUser } from "../../services/decode-user";
+import { ToastComponent } from "../../components/Toast";
+import PageScroll from "../../utils/PageScroll";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
 const CompanyManagement = () => {
-  const [company, setCompany] = useState([])
-  const [editData, setEditData] = useState([])
-  const [status, setStatus] = useState(true)
-  const [search, setSearch] = useState('')
-  const toast = useToast()
-  const currentUser = decodeUser()
+  const [company, setCompany] = useState([]);
+  const [editData, setEditData] = useState([]);
+  const [status, setStatus] = useState(true);
+  const [search, setSearch] = useState("");
+  const toast = useToast();
+  const currentUser = decodeUser();
 
-  const [isLoading, setIsLoading] = useState(true)
-  const [pageTotal, setPageTotal] = useState(undefined)
-  const [disableEdit, setDisableEdit] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [pageTotal, setPageTotal] = useState(undefined);
+  const [disableEdit, setDisableEdit] = useState(false);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const fetchCompanyApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Company/GetAllCompanyWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`,
-    )
+    const response = await request.get(`Company/GetAllCompanyWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
-    return response.data
-  }
+    return response.data;
+  };
 
-  //PAGINATION
-  const outerLimit = 2
-  const innerLimit = 2
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const outerLimit = 2;
+  const innerLimit = 2;
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
       inner: innerLimit,
     },
     initialState: { currentPage: 1, pageSize: 5 },
-  })
+  });
 
   const handlePageChange = (nextPage) => {
-    setCurrentPage(nextPage)
-  }
+    setCurrentPage(nextPage);
+  };
 
   const handlePageSizeChange = (e) => {
-    const pageSize = Number(e.target.value)
-    setPageSize(pageSize)
-  }
+    const pageSize = Number(e.target.value);
+    setPageSize(pageSize);
+  };
 
-  //STATUS
   const statusHandler = (data) => {
-    setStatus(data)
-  }
+    setStatus(data);
+  };
 
   const changeStatusHandler = (id, isActive) => {
-    let routeLabel
-    // console.log(id)
-    // console.log(isActive)
+    let routeLabel;
     if (isActive) {
-      routeLabel = 'InActiveCompany'
+      routeLabel = "InActiveCompany";
     } else {
-      routeLabel = 'ActivateCompany'
+      routeLabel = "ActivateCompany";
     }
 
     request
       .put(`Company/${routeLabel}`, { id: id })
       .then((res) => {
-        ToastComponent('Success', 'Status updated', 'success', toast)
-        getCompanyHandler()
+        ToastComponent("Success", "Status updated", "success", toast);
+        getCompanyHandler();
       })
       .catch((err) => {
-        console.log(err)
-      })
-  }
+        console.log(err);
+      });
+  };
 
-  //SHOW MAIN MENU DATA----
   const getCompanyHandler = () => {
     fetchCompanyApi(currentPage, pageSize, status, search).then((res) => {
-      setIsLoading(false)
-      setCompany(res)
-      setPageTotal(res.totalCount)
-    })
-  }
+      setIsLoading(false);
+      setCompany(res);
+      setPageTotal(res.totalCount);
+    });
+  };
 
   useEffect(() => {
-    getCompanyHandler()
+    getCompanyHandler();
 
     return () => {
-      setCompany([])
-    }
-  }, [currentPage, pageSize, status, search])
+      setCompany([]);
+    };
+  }, [currentPage, pageSize, status, search]);
 
-  // SEARCH
   const searchHandler = (inputValue) => {
-    setSearch(inputValue)
-    // console.log(inputValue)
-  }
+    setSearch(inputValue);
+  };
 
-  //ADD MAIN MENU HANDLER---
   const addCompanyHandler = () => {
     setEditData({
-      id: '',
-      companyCode: '',
-      companyName: '',
+      id: "",
+      companyCode: "",
+      companyName: "",
       addedBy: currentUser.userName,
-      modifiedBy: '',
-    })
-    onOpen()
-    setDisableEdit(false)
-  }
+      modifiedBy: "",
+    });
+    onOpen();
+    setDisableEdit(false);
+  };
 
-  //EDIT ROLE--
   const editCompanyHandler = (company) => {
-    setDisableEdit(true)
-    setEditData(company)
-    onOpen()
-  }
-
-  //FOR DRAWER (Drawer / Drawer Tagging)
-  const { isOpen, onOpen, onClose } = useDisclosure()
+    setDisableEdit(true);
+    setEditData(company);
+    onOpen();
+  };
 
   return (
-    <Flex
-      color="fontColor"
-      h="full"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-      boxShadow="md"
-    >
+    <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form" boxShadow="md">
       <Flex p={2} w="full">
         <Flex flexDirection="column" gap={1} w="full">
           <Flex justifyContent="space-between" alignItems="center">
             <HStack w="25%" mt={3}>
-                <InputGroup size="sm">
-                  <InputLeftElement
-                    pointerEvents="none"
-                    children={<FiSearch bg="black" fontSize="18px" />}
-                  />
-                  <Input
-                    borderRadius="lg"
-                    fontSize="13px"
-                    type="text"
-                    border="1px"
-                    bg="#E9EBEC"
-                    placeholder="Search Company Name"
-                    borderColor="gray.400"
-                    _hover={{ borderColor: 'gray.400' }}
-                    onChange={(e) => searchHandler(e.target.value)}
-                  />
-                </InputGroup>
-              </HStack>
+              <InputGroup size="sm">
+                <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
+                <Input
+                  borderRadius="lg"
+                  fontSize="13px"
+                  type="text"
+                  border="1px"
+                  bg="#E9EBEC"
+                  placeholder="Search Company Name"
+                  borderColor="gray.400"
+                  _hover={{ borderColor: "gray.400" }}
+                  onChange={(e) => searchHandler(e.target.value)}
+                />
+              </InputGroup>
+            </HStack>
 
             <HStack flexDirection="row">
               <Text fontSize="12px">STATUS:</Text>
-              <Select
-                fontSize="12px"
-                onChange={(e) => statusHandler(e.target.value)}
-              >
+              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
@@ -237,14 +196,7 @@ const CompanyManagement = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="secondary">
                     <Tr fontSize="15px">
                       <Th color="#D6D6D6" fontSize="10px">
@@ -279,10 +231,7 @@ const CompanyManagement = () => {
                         <Td pl={0}>
                           <Flex>
                             <HStack>
-                              <Button
-                                bg="none"
-                                onClick={() => editCompanyHandler(comp)}
-                              >
+                              <Button bg="none" onClick={() => editCompanyHandler(comp)}>
                                 <AiTwotoneEdit />
                               </Button>
 
@@ -298,32 +247,15 @@ const CompanyManagement = () => {
                                       <PopoverContent bg="primary" color="#fff">
                                         <PopoverArrow bg="primary" />
                                         <PopoverCloseButton />
-                                        <PopoverHeader>
-                                          Confirmation!
-                                        </PopoverHeader>
+                                        <PopoverHeader>Confirmation!</PopoverHeader>
                                         <PopoverBody>
                                           <VStack onClick={onClose}>
                                             {comp.isActive === true ? (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this company inactive?
-                                              </Text>
+                                              <Text>Are you sure you want to set this company inactive?</Text>
                                             ) : (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this company active?
-                                              </Text>
+                                              <Text>Are you sure you want to set this company active?</Text>
                                             )}
-                                            <Button
-                                              colorScheme="green"
-                                              size="sm"
-                                              onClick={() =>
-                                                changeStatusHandler(
-                                                  comp.id,
-                                                  comp.isActive,
-                                                )
-                                              }
-                                            >
+                                            <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(comp.id, comp.isActive)}>
                                               Yes
                                             </Button>
                                           </VStack>
@@ -349,7 +281,7 @@ const CompanyManagement = () => {
                 colorScheme="blue"
                 fontSize="13px"
                 fontWeight="normal"
-                _hover={{ bg: 'blue.400', color: '#fff' }}
+                _hover={{ bg: "blue.400", color: "#fff" }}
                 w="auto"
                 leftIcon={<RiAddFill fontSize="20px" />}
                 borderRadius="none"
@@ -358,39 +290,19 @@ const CompanyManagement = () => {
                 New Company
               </Button>
 
-              {/* PROPS */}
-              {isOpen && (
-                <DrawerComponent
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  fetchCompanyApi={fetchCompanyApi}
-                  getCompanyHandler={getCompanyHandler}
-                  editData={editData}
-                  disableEdit={disableEdit}
-                />
-              )}
+              {isOpen && <DrawerComponent isOpen={isOpen} onClose={onClose} getCompanyHandler={getCompanyHandler} editData={editData} disableEdit={disableEdit} />}
 
               <Stack>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: 'btnColor', color: 'white' }}
-                      size="sm"
-                    >
-                      {'<<'}
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }} size="sm">
+                      {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
                       {pages.map((page) => (
                         <PaginationPage
-                          _hover={{ bg: 'btnColor', color: 'white' }}
-                          _focus={{ bg: 'btnColor' }}
+                          _hover={{ bg: "btnColor", color: "white" }}
+                          _focus={{ bg: "btnColor" }}
                           p={3}
                           bg="primary"
                           color="white"
@@ -401,15 +313,8 @@ const CompanyManagement = () => {
                       ))}
                     </PaginationPageGroup>
                     <HStack>
-                      <PaginationNext
-                        bg="primary"
-                        color="white"
-                        p={1}
-                        _hover={{ bg: 'btnColor', color: 'white' }}
-                        size="sm"
-                        mb={2}
-                      >
-                        {'>>'}
+                      <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }} size="sm" mb={2}>
+                        {">>"}
                       </PaginationNext>
                       <Select
                         onChange={handlePageSizeChange}
@@ -432,103 +337,88 @@ const CompanyManagement = () => {
         </Flex>
       </Flex>
     </Flex>
-  )
-}
+  );
+};
 
-export default CompanyManagement
+export default CompanyManagement;
 
 const schema = yup.object().shape({
   formData: yup.object().shape({
     id: yup.string(),
-    companyCode: yup.string().required('Company Code is required'),
-    companyName: yup.string().required('Company Name is required'),
+    companyCode: yup.string().required("Company Code is required"),
+    companyName: yup.string().required("Company Name is required"),
   }),
-})
+});
 
-const currentUser = decodeUser()
+const currentUser = decodeUser();
 
 const DrawerComponent = (props) => {
-  const { isOpen, onClose, getCompanyHandler, editData, disableEdit } = props
-  const toast = useToast()
+  const { isOpen, onClose, getCompanyHandler, editData, disableEdit } = props;
+  const toast = useToast();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     setValue,
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
       formData: {
-        id: '',
-        companyCode: '',
-        companyName: '',
+        id: "",
+        companyCode: "",
+        companyName: "",
         addedBy: currentUser?.userName,
-        modifiedBy: '',
+        modifiedBy: "",
       },
     },
-  })
+  });
 
   const submitHandler = async (data) => {
     try {
-      if (data.formData.id === '') {
-        delete data.formData['id']
+      if (data.formData.id === "") {
+        delete data.formData["id"];
         const res = await request
-          .post('Company/AddNewCompany', data.formData)
+          .post("Company/AddNewCompany", data.formData)
           .then((res) => {
-            ToastComponent(
-              'Success',
-              'New company created!',
-              'success',
-              toast,
-            )
-            getCompanyHandler()
-            onClose()
+            ToastComponent("Success", "New company created!", "success", toast);
+            getCompanyHandler();
+            onClose();
           })
           .catch((err) => {
-            ToastComponent('Error', err.response.data, 'error', toast)
-            data.formData.id = ''
-          })
+            ToastComponent("Error", err.response.data, "error", toast);
+            data.formData.id = "";
+          });
       } else {
         const res = await request
           .put(`Company/UpdateCompany`, data.formData)
           .then((res) => {
-            ToastComponent('Success', 'Company Updated', 'success', toast)
-            getCompanyHandler()
-            onClose(onClose)
+            ToastComponent("Success", "Company Updated", "success", toast);
+            getCompanyHandler();
+            onClose(onClose);
           })
           .catch((error) => {
-            ToastComponent(
-              'Update Failed',
-              error.response.data,
-              'warning',
-              toast,
-            )
-          })
+            ToastComponent("Update Failed", error.response.data, "warning", toast);
+          });
       }
     } catch (err) {}
-  }
-
-  // console.log(editData)
+  };
 
   useEffect(() => {
     if (editData.id) {
       setValue(
-        'formData',
+        "formData",
         {
           id: editData.id,
           companyCode: editData?.companyCode,
           companyName: editData?.companyName,
           modifiedBy: currentUser.userName,
         },
-        { shouldValidate: true },
-      )
+        { shouldValidate: true }
+      );
     }
-  }, [editData])
-
-  // console.log(watch('formData.id'))
+  }, [editData]);
 
   return (
     <>
@@ -543,14 +433,14 @@ const DrawerComponent = (props) => {
                 <Box>
                   <FormLabel>Company Code:</FormLabel>
                   <Input
-                    {...register('formData.companyCode')}
+                    {...register("formData.companyCode")}
                     placeholder="Please enter Company Code"
                     autoComplete="off"
                     autoFocus
                     disabled={disableEdit}
                     readOnly={disableEdit}
-                    _disabled={{ color: 'black' }}
-                    bgColor={disableEdit && 'gray.300'}
+                    _disabled={{ color: "black" }}
+                    bgColor={disableEdit && "gray.300"}
                   />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.companyCode?.message}
@@ -559,17 +449,14 @@ const DrawerComponent = (props) => {
 
                 <Box>
                   <FormLabel>Company Name:</FormLabel>
-                  <Input
-                    {...register('formData.companyName')}
-                    placeholder="Please enter Company Name"
-                    autoComplete="off"
-                  />
+                  <Input {...register("formData.companyName")} placeholder="Please enter Company Name" autoComplete="off" />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.companyName?.message}
                   </Text>
                 </Box>
               </Stack>
             </DrawerBody>
+
             <DrawerFooter borderTopWidth="1px">
               <Button variant="outline" mr={3} onClick={onClose}>
                 Cancel
@@ -582,5 +469,5 @@ const DrawerComponent = (props) => {
         </form>
       </Drawer>
     </>
-  )
-}
+  );
+};

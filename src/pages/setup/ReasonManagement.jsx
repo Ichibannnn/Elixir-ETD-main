@@ -3,7 +3,6 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
@@ -50,17 +49,7 @@ import { ToastComponent } from "../../components/Toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
-
-const NoDataFound = "../../assets/img/nodata.svg";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
 const ReasonManagement = () => {
   const [reasons, setReasons] = useState([]);
@@ -74,26 +63,15 @@ const ReasonManagement = () => {
   const [pageTotal, setPageTotal] = useState(undefined);
   const [disableEdit, setDisableEdit] = useState(false);
 
-  // FETCH API REASON:
   const fetchReasonApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Reason/GetAllReasonWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
-    );
+    const response = await request.get(`Reason/GetAllReasonWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
     return response.data;
   };
 
-  //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -111,7 +89,6 @@ const ReasonManagement = () => {
     setPageSize(pageSize);
   };
 
-  //STATUS
   const statusHandler = (data) => {
     setStatus(data);
   };
@@ -136,7 +113,6 @@ const ReasonManagement = () => {
     console.log(routeLabel);
   };
 
-  //SHOW REASON DATA----
   const getReasonHandler = () => {
     setIsLoading(true);
     fetchReasonApi(currentPage, pageSize, status, search).then((res) => {
@@ -154,13 +130,11 @@ const ReasonManagement = () => {
     };
   }, [currentPage, pageSize, status, search]);
 
-  // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
     console.log(inputValue);
   };
 
-  //ADD REASON HANDLER---
   const addReasonHandler = () => {
     setEditData({
       id: "",
@@ -173,14 +147,12 @@ const ReasonManagement = () => {
     setDisableEdit(false);
   };
 
-  //EDIT REASON--
   const editReasonHandler = (reason) => {
     setDisableEdit(true);
     setEditData(reason);
     onOpen();
   };
 
-  //FOR DRAWER
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -190,23 +162,13 @@ const ReasonManagement = () => {
   }, [search]);
 
   return (
-    <Flex
-      color="fontColor"
-      h="full"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} w="full">
         <Flex flexDirection="column" gap={1} w="full">
           <Flex justifyContent="space-between" alignItems="center">
             <HStack w="25%" mt={3}>
               <InputGroup size="sm">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<FiSearch bg="black" fontSize="18px" />}
-                />
+                <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
                 <Input
                   borderRadius="lg"
                   fontSize="13px"
@@ -223,10 +185,7 @@ const ReasonManagement = () => {
 
             <HStack flexDirection="row">
               <Text fontSize="12px">STATUS:</Text>
-              <Select
-                fontSize="12px"
-                onChange={(e) => statusHandler(e.target.value)}
-              >
+              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
@@ -235,15 +194,10 @@ const ReasonManagement = () => {
 
           <Flex w="full" flexDirection="column" gap={2}>
             <PageScroll maxHeight="750px">
-              <Text
-                textAlign="center"
-                bgColor="primary"
-                color="white"
-                fontSize="14px"
-                // fontWeight="semibold"
-              >
+              <Text textAlign="center" bgColor="primary" color="white" fontSize="14px">
                 List of Reasons
               </Text>
+
               {isLoading ? (
                 <Stack width="full">
                   <Skeleton height="20px" />
@@ -254,15 +208,7 @@ const ReasonManagement = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                  className="inputUpperCase"
-                >
+                <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped" className="inputUpperCase">
                   <Thead bg="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
                       <Th h="40px" color="white" fontSize="10px">
@@ -297,12 +243,7 @@ const ReasonManagement = () => {
                         <Td pl={0}>
                           <Flex>
                             <HStack>
-                              <Button
-                                bg="none"
-                                p={0}
-                                size="sm"
-                                onClick={() => editReasonHandler(rs)}
-                              >
+                              <Button bg="none" p={0} size="sm" onClick={() => editReasonHandler(rs)}>
                                 <AiTwotoneEdit />
                               </Button>
 
@@ -312,19 +253,11 @@ const ReasonManagement = () => {
                                     <PopoverTrigger>
                                       {rs.isActive === true ? (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnon.png"
-                                            title="active"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnon.png" title="active" />
                                         </Button>
                                       ) : (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnoff.png"
-                                            title="inactive"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnoff.png" title="inactive" />
                                         </Button>
                                       )}
                                     </PopoverTrigger>
@@ -332,32 +265,15 @@ const ReasonManagement = () => {
                                       <PopoverContent bg="primary" color="#fff">
                                         <PopoverArrow bg="primary" />
                                         <PopoverCloseButton />
-                                        <PopoverHeader>
-                                          Confirmation!
-                                        </PopoverHeader>
+                                        <PopoverHeader>Confirmation!</PopoverHeader>
                                         <PopoverBody>
                                           <VStack onClick={onClose}>
                                             {rs.isActive === true ? (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this module inactive?
-                                              </Text>
+                                              <Text>Are you sure you want to set this module inactive?</Text>
                                             ) : (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this module active?
-                                              </Text>
+                                              <Text>Are you sure you want to set this module active?</Text>
                                             )}
-                                            <Button
-                                              colorScheme="green"
-                                              size="sm"
-                                              onClick={() =>
-                                                changeStatusHandler(
-                                                  rs.id,
-                                                  rs.isActive
-                                                )
-                                              }
-                                            >
+                                            <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(rs.id, rs.isActive)}>
                                               Yes
                                             </Button>
                                           </VStack>
@@ -386,37 +302,17 @@ const ReasonManagement = () => {
                 _hover={{ bg: "blue.400", color: "#fff" }}
                 w="auto"
                 leftIcon={<RiAddFill fontSize="19px" />}
-                // borderRadius="none"
                 onClick={addReasonHandler}
               >
                 New
               </Button>
 
-              {/* PROPS */}
-              {isOpen && (
-                <DrawerComponent
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  fetchReasonApi={fetchReasonApi}
-                  getReasonHandler={getReasonHandler}
-                  editData={editData}
-                  disableEdit={disableEdit}
-                />
-              )}
+              {isOpen && <DrawerComponent isOpen={isOpen} onClose={onClose} getReasonHandler={getReasonHandler} editData={editData} disableEdit={disableEdit} />}
 
               <Stack>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                    >
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                       {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
@@ -433,19 +329,10 @@ const ReasonManagement = () => {
                       ))}
                     </PaginationPageGroup>
                     <HStack>
-                      <PaginationNext
-                        bg="primary"
-                        color="white"
-                        p={1}
-                        _hover={{ bg: "btnColor", color: "white" }}
-                      >
+                      <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }}>
                         {">>"}
                       </PaginationNext>
-                      <Select
-                        onChange={handlePageSizeChange}
-                        variant="outline"
-                        fontSize="md"
-                      >
+                      <Select onChange={handlePageSizeChange} variant="outline" fontSize="md">
                         <option value={Number(5)}>5</option>
                         <option value={Number(10)}>10</option>
                         <option value={Number(25)}>25</option>
@@ -492,7 +379,6 @@ const DrawerComponent = (props) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -506,7 +392,6 @@ const DrawerComponent = (props) => {
     },
   });
 
-  // FETCH MAIN MENU
   const fetchMenu = async () => {
     try {
       const res = await request.get("Module/GetAllActiveMainMenu");
@@ -544,12 +429,7 @@ const DrawerComponent = (props) => {
             onClose();
           })
           .catch((error) => {
-            ToastComponent(
-              "Update Failed",
-              error.response.data,
-              "warning",
-              toast
-            );
+            ToastComponent("Update Failed", error.response.data, "warning", toast);
           });
       }
     } catch (err) {}
@@ -569,8 +449,6 @@ const DrawerComponent = (props) => {
     }
   }, [editData]);
 
-  console.log(watch("formData.id"));
-
   return (
     <>
       <Drawer isOpen={isOpen} placement="right" onClose={onCloseDrawer}>
@@ -584,11 +462,7 @@ const DrawerComponent = (props) => {
                   <FormLabel>Main Menu:</FormLabel>
 
                   {menu.length > 0 ? (
-                    <Select
-                      fontSize="md"
-                      {...register("formData.mainMenuId")}
-                      placeholder="Select Main Menu"
-                    >
+                    <Select fontSize="md" {...register("formData.mainMenuId")} placeholder="Select Main Menu">
                       {menu.map((mods) => (
                         <option key={mods.id} value={mods.id}>
                           {mods.mainMenu}
@@ -605,17 +479,14 @@ const DrawerComponent = (props) => {
 
                 <Box>
                   <FormLabel>Reason:</FormLabel>
-                  <Input
-                    {...register("formData.reasonName")}
-                    placeholder="Please enter Reason name"
-                    autoComplete="off"
-                  />
+                  <Input {...register("formData.reasonName")} placeholder="Please enter Reason name" autoComplete="off" />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.reasonName?.message}
                   </Text>
                 </Box>
               </Stack>
             </DrawerBody>
+
             <DrawerFooter borderTopWidth="1px">
               <Button variant="outline" mr={3} onClick={onClose}>
                 Cancel

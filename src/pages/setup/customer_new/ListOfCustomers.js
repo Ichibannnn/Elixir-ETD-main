@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from "react";
 import {
   Badge,
-  Box,
   Button,
   Flex,
   HStack,
@@ -20,28 +20,19 @@ import {
   Td,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
-import PageScrollImport from "../../../components/PageScrollImport";
 import { FiSearch } from "react-icons/fi";
-import PageScroll from "../../../utils/PageScroll";
-import { ToastComponent } from "../../../components/Toast";
+
+import moment from "moment";
 import Swal from "sweetalert2";
 import request from "../../../services/ApiClient";
-import moment from "moment";
+
+import PageScroll from "../../../utils/PageScroll";
+import { ToastComponent } from "../../../components/Toast";
 import { ErrorCustomers } from "./ErrorCustomers";
 import { decodeUser } from "../../../services/decode-user";
-// import OrdersConfirmation from "./OrdersConfirmation";
 
-export const ListOfCustomers = ({
-  genusCustomers,
-  fistoDepartments,
-  fistoLocations,
-  fetchingData,
-  elixirCustomers,
-  fetchElixirCustomers,
-  search,
-}) => {
+export const ListOfCustomers = ({ genusCustomers, fistoDepartments, fistoLocations, fetchingData, elixirCustomers, fetchElixirCustomers }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [errorData, setErrorData] = useState([]);
@@ -49,28 +40,6 @@ export const ListOfCustomers = ({
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentUser = decodeUser();
-
-  // ARRAY FOR THE LIST DATA OF SUPPLIERS
-  // const resultArray = genusCustomers?.result?.map((item) => {
-  //   return {
-  //     customer_No: item?.id,
-  //     customerCode: item?.account_code,
-  //     customerName: item?.account_name,
-  //     customerType: item?.account_type,
-  //     companyCode: item?.company_code,
-  //     companyName: item?.company,
-  //     departmentCode: item?.department_code,
-  //     departmentName: item?.department,
-  //     locationCode: item?.location_code,
-  //     locationName: item?.location,
-  //     // companyCode: item?.company_code,
-  //     // companyName: item?.company,
-  //     // departmentCode: item?.department_code,
-  //     // departmentName: item?.department,
-  //     // locationCode: item?.location_code,
-  //     // locationName: item?.location,
-  //   };
-  // });
 
   const resultArrayNew = genusCustomers?.result
     ?.filter((item) => item.scope_order?.length) // kukunin nya yung mga customer na my scope for ordering
@@ -92,12 +61,8 @@ export const ListOfCustomers = ({
         customerCode: item.location_code,
         customerName:
           item.customer_type === "online"
-            ? fistoDepartments.result.departments?.find(
-                (customer) => customer.code === item.location_code
-              )?.name
-            : fistoLocations.result.locations?.find(
-                (customer) => customer.code === item.location_code
-              )?.name,
+            ? fistoDepartments.result.departments?.find((customer) => customer.code === item.location_code)?.name
+            : fistoLocations.result.locations?.find((customer) => customer.code === item.location_code)?.name,
         customerType: item.customer_type,
         dateAdded: moment(new Date()).format("yyyy-MM-DD"),
         addedBy: currentUser.fullName,
@@ -106,9 +71,7 @@ export const ListOfCustomers = ({
       };
     }) // format
     ?.reduce((a, item) => {
-      const isExist = a.some(
-        (customer) => customer.customer_No === item.customer_No
-      );
+      const isExist = a.some((customer) => customer.customer_No === item.customer_No);
 
       if (isExist) {
         return a;
@@ -116,8 +79,6 @@ export const ListOfCustomers = ({
         return [...a, item];
       }
     }, []); // distinct
-
-  console.log(resultArrayNew);
 
   // SYNC ORDER BUTTON
   const syncHandler = () => {
@@ -201,30 +162,13 @@ export const ListOfCustomers = ({
     }
   }, [elixirCustomers]);
 
-  // useEffect(() => {
-  //   if (search) {
-  //     setCurrentPage(1);
-  //   }
-  // }, [search]);
-
   return (
-    <Flex
-      color="fontColor"
-      h="auto"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-    >
+    <Flex color="fontColor" h="auto" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} flexDirection="column">
         <Flex justifyContent="space-between" w="100%" p={4} mt={-3}>
           <HStack>
-            {/* <Text>Search</Text> */}
             <InputGroup size="sm">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiSearch bg="black" fontSize="18px" />}
-              />
+              <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
               <Input
                 w="230px"
                 fontSize="13px"
@@ -244,7 +188,6 @@ export const ListOfCustomers = ({
               colorScheme="blue"
               size="sm"
               fontSize="13px"
-              // borderRadius="none"
               isLoading={isLoading}
               disabled={isLoading}
               leftIcon={<TiArrowSync fontSize="19px" />}
@@ -282,16 +225,7 @@ export const ListOfCustomers = ({
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  // size="sm"
-                  //   width="full"
-                  // height="100%"
-                  className="inputUpperCase"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table className="inputUpperCase" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="primary" position="sticky" top={0}>
                     <Tr h="30px">
                       <Th color="#D6D6D6" fontSize="10px">
@@ -300,9 +234,6 @@ export const ListOfCustomers = ({
                       <Th color="#D6D6D6" fontSize="10px">
                         Customer Id
                       </Th>
-                      {/* <Th color="#D6D6D6" fontSize="10px" pl="100px">
-                               
-                              </Th> */}
                       <Th color="#D6D6D6" fontSize="10px">
                         Customer Code
                       </Th>
@@ -323,27 +254,21 @@ export const ListOfCustomers = ({
                       </Th>
                     </Tr>
                   </Thead>
+
                   <Tbody>
                     {elixirCustomers?.customer
                       ?.filter((val) => {
-                        const newKeyword = new RegExp(
-                          `${keyword.toLowerCase()}`
-                        );
-                        return val?.customerName
-                          ?.toLowerCase()
-                          .match(newKeyword, "*");
+                        const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
+                        return val?.customerName?.toLowerCase().match(newKeyword, "*");
                       })
                       ?.map((comp, i) => (
                         <Tr key={i}>
                           <Td fontSize="12px">{i + 1}</Td>
                           <Td fontSize="12px">{comp.id}</Td>
-                          {/* <Td fontSize="12px" pl="100px"></Td> */}
                           <Td fontSize="12px">{comp.customerCode}</Td>
                           <Td fontSize="12px">{comp.customerName}</Td>
                           <Td fontSize="12px">{comp.customerType}</Td>
-                          <Td fontSize="12px">
-                            {moment(comp.dateAdded).format("yyyy/MM/DD")}
-                          </Td>
+                          <Td fontSize="12px">{moment(comp.dateAdded).format("yyyy/MM/DD")}</Td>
                           <Td fontSize="12px">{comp.modifyBy}</Td>
                           <Td fontSize="12px">{comp.syncStatus}</Td>
                         </Tr>
@@ -358,12 +283,7 @@ export const ListOfCustomers = ({
         <Flex justifyContent="space-between">
           <HStack>
             <Badge colorScheme="cyan">
-              <Text color="secondary">
-                {!keyword
-                  ? `Number of records: ${ordersCount} `
-                  : `Number of records from ${keyword}: ${filteredLength.length}`}
-                {/* Number of Records: {elixirSuppliers?.supplier?.length} */}
-              </Text>
+              <Text color="secondary">{!keyword ? `Number of records: ${ordersCount} ` : `Number of records from ${keyword}: ${filteredLength.length}`}</Text>
             </Badge>
           </HStack>
           <HStack>
@@ -375,14 +295,11 @@ export const ListOfCustomers = ({
                 ""
               ) : (
                 <Text color="primary" fontSize="12px">
-                  {moment(elixirCustomers?.customer?.syncDate).format(
-                    "MM/DD/yyyy"
-                  )}
+                  {moment(elixirCustomers?.customer?.syncDate).format("MM/DD/yyyy")}
                 </Text>
               )}
             </Badge>
           </HStack>
-          {/* <Text fontSize="12px">Sync Date: "11/11/23"</Text> */}
         </Flex>
 
         {isOpen && (
@@ -390,12 +307,11 @@ export const ListOfCustomers = ({
             isOpen={isOpen}
             onOpen={onOpen}
             onClose={onClose}
-            resultArrayNew={resultArrayNew}
-            // resultArray={resultArray}
             errorData={errorData}
             setErrorData={setErrorData}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
+            resultArrayNew={resultArrayNew}
           />
         )}
       </Flex>

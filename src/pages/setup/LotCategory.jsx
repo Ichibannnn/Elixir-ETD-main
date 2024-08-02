@@ -1,9 +1,11 @@
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
@@ -37,17 +39,15 @@ import {
   Portal,
   Image,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
 import { RiAddFill } from "react-icons/ri";
-import PageScroll from "../../utils/PageScroll";
-import request from "../../services/ApiClient";
-import { ToastComponent } from "../../components/Toast";
-import { yupResolver } from "@hookform/resolvers/yup";
+
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import request from "../../services/ApiClient";
+import PageScroll from "../../utils/PageScroll";
+import { ToastComponent } from "../../components/Toast";
 import { decodeUser } from "../../services/decode-user";
 import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
@@ -63,14 +63,14 @@ const LotCategory = () => {
   const [pageTotal, setPageTotal] = useState(undefined);
   const [disableEdit, setDisableEdit] = useState(false);
 
-  // FETCH API LOT CATEGORY:
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const fetchLotCategoryApi = async (pageNumber, pageSize, status, search) => {
     const response = await request.get(`Lot/GetAllLotNameWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
     return response.data;
   };
 
-  //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
   const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
@@ -91,15 +91,12 @@ const LotCategory = () => {
     setPageSize(pageSize);
   };
 
-  //STATUS
   const statusHandler = (data) => {
     setStatus(data);
   };
 
   const changeStatusHandler = (id, isActive) => {
     let routeLabel;
-    // console.log(id);
-    // console.log(isActive);
     if (isActive) {
       routeLabel = "InActiveLotName";
     } else {
@@ -118,7 +115,6 @@ const LotCategory = () => {
       });
   };
 
-  //SHOW LOT CATEGORY DATA----
   const getLotCategoryHandler = () => {
     fetchLotCategoryApi(currentPage, pageSize, status, search).then((res) => {
       setIsLoading(false);
@@ -135,13 +131,10 @@ const LotCategory = () => {
     };
   }, [currentPage, pageSize, status, search]);
 
-  // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log(inputValue);
   };
 
-  //ADD LOT CATEGORY HANDLER---
   const addLotCategoryHandler = () => {
     setEditData({
       id: "",
@@ -153,17 +146,11 @@ const LotCategory = () => {
     setDisableEdit(false);
   };
 
-  //EDIT LOT CATEGORY--
   const editLotCategoryHandler = (cat) => {
-    console.log(editData);
     setDisableEdit(true);
     setEditData(cat);
     onOpen();
-    console.log(editData);
   };
-
-  //FOR DRAWER (Drawer / Drawer Tagging)
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     if (search) {
@@ -204,15 +191,10 @@ const LotCategory = () => {
 
           <Flex w="full" flexDirection="column" gap={2}>
             <PageScroll maxHeight="750px">
-              <Text
-                textAlign="center"
-                bgColor="primary"
-                color="white"
-                fontSize="14px"
-                // fontWeight="semibold"
-              >
+              <Text textAlign="center" bgColor="primary" color="white" fontSize="14px">
                 List of Lot Section
               </Text>
+
               {isLoading ? (
                 <Stack width="full">
                   <Skeleton height="20px" />
@@ -250,8 +232,6 @@ const LotCategory = () => {
                     {lotCategory?.lotname?.map((cat, i) => (
                       <Tr key={i}>
                         <Td fontSize="xs">{cat.id}</Td>
-                        {/* <Td fontSize="11px">{cat.lotCode}</Td> */}
-                        {/* <Td fontSize="11px">{cat.lotCategoryCode}</Td> */}
                         <Td fontSize="xs">
                           {cat.lotCode} - {cat.lotName}
                         </Td>
@@ -321,13 +301,11 @@ const LotCategory = () => {
                 _hover={{ bg: "blue.400", color: "#fff" }}
                 w="auto"
                 leftIcon={<RiAddFill fontSize="20px" />}
-                // borderRadius="none"
                 onClick={addLotCategoryHandler}
               >
                 New
               </Button>
 
-              {/* PROPS */}
               {isOpen && (
                 <DrawerComponent
                   isOpen={isOpen}
@@ -481,8 +459,6 @@ const DrawerComponent = (props) => {
     }
   }, [editData]);
 
-  console.log(watch("formData"));
-
   return (
     <>
       <Drawer isOpen={isOpen} placement="right" onClose={onCloseDrawer}>
@@ -490,7 +466,6 @@ const DrawerComponent = (props) => {
         <form onSubmit={handleSubmit(submitHandler)}>
           <DrawerContent>
             <DrawerHeader borderBottomWidth="1px">Lot Section Form</DrawerHeader>
-            {/* <DrawerCloseButton /> */}
             <DrawerBody>
               <Stack spacing="7px">
                 <Box>

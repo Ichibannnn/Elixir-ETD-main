@@ -721,7 +721,7 @@ export const RawMatsInfoModal = ({
                       )}
                     />
                   ) : (
-                    <Spinner />
+                    <Spinner emptyColor="gray.200" color="blue.500" />
                   )}
                 </HStack>
 

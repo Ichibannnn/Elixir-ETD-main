@@ -51,7 +51,6 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             }),
-            "Transaction Type": item.transactionType,
             "Received By": item.receivedBy ? item.receivedBy : "-",
           };
         })
@@ -126,9 +125,6 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
                         Supplier
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
-                        Transaction Type
-                      </Th>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         Received By
                       </Th>
                     </>
@@ -190,7 +186,6 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
                           })}
                         </Td>
                         <Td fontSize="xs">{item.supplierName}</Td>
-                        <Td fontSize="xs">{item.transactionType}</Td>
                         <Td fontSize="xs">{item.receivedBy ? item.receivedBy : "-"}</Td>
                       </>
                     )}
