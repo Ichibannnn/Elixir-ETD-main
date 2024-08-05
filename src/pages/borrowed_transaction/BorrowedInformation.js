@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -8,7 +8,6 @@ import {
   Input,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -19,16 +18,19 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import moment from "moment";
-import { AddConfirmation } from "./ActionModal";
 import { RiAddFill } from "react-icons/ri";
-import { NumericFormat } from "react-number-format";
-import { yupResolver } from "@hookform/resolvers/yup";
+
 import * as yup from "yup";
+import axios from "axios";
+import moment from "moment";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { decodeUser } from "../../services/decode-user";
+
+import { NumericFormat } from "react-number-format";
 import { Controller, useForm } from "react-hook-form";
 import { Select as AutoComplete } from "chakra-react-select";
-import axios from "axios";
-import { decodeUser } from "../../services/decode-user";
+
+import { AddConfirmation } from "./ActionModal";
 
 const schema = yup.object().shape({
   formData: yup.object().shape({
@@ -38,30 +40,24 @@ const schema = yup.object().shape({
 });
 
 export const BorrowedInformation = ({
+  barcodeNo,
+  rawMats,
   rawMatsInfo,
   setRawMatsInfo,
   details,
   setDetails,
-  customerRef,
-  rawMats,
-  uoms,
-  barcodeNo,
-  setSelectorId,
-  setWarehouseId,
   warehouseId,
-  fetchActiveBorrowed,
+  setWarehouseId,
   customerData,
-  setCustomerData,
   remarks,
-  setRemarks,
   transactionDate,
   setTransactionDate,
   unitCost,
   setUnitCost,
-  fetchRawMats,
-  itemCode,
   employeeData,
   setEmployeeData,
+  fetchRawMats,
+  fetchActiveBorrowed,
 }) => {
   const [employees, setEmployees] = useState([]);
   const [idNumber, setIdNumber] = useState();
@@ -85,8 +81,7 @@ export const BorrowedInformation = ({
 
   const {
     register,
-    handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     setValue,
     reset,
     watch,
@@ -125,10 +120,6 @@ export const BorrowedInformation = ({
     }
   }, [details]);
 
-  const handlerSample = () => {
-    reset();
-  };
-
   const detailHandler = (data) => {
     if (data) {
       setDetails(data);
@@ -137,40 +128,41 @@ export const BorrowedInformation = ({
     }
   };
 
-  const customerHandler = (data) => {
-    if (data) {
-      const newData = JSON.parse(data);
-      const customerCode = newData.customerCode;
-      const customerName = newData.customerName;
-      setRawMatsInfo({
-        itemCode: rawMatsInfo.itemCode,
-        itemDescription: rawMatsInfo.itemDescription,
-        customerName: customerName,
-        uom: rawMatsInfo.uom,
-        warehouseId: rawMatsInfo.warehouseId,
-        quantity: rawMatsInfo.quantity,
-        unitCost: rawMatsInfo.unitCost,
-      });
-      setCustomerData({
-        customerCode: customerCode,
-        customerName: customerName,
-      });
-    } else {
-      setRawMatsInfo({
-        itemCode: rawMatsInfo.itemCode,
-        itemDescription: rawMatsInfo.itemDescription,
-        customerName: "",
-        uom: rawMatsInfo.uom,
-        warehouseId: rawMatsInfo.warehouseId,
-        quantity: rawMatsInfo.quantity,
-        unitCost: rawMatsInfo.unitCost,
-      });
-      setCustomerData({
-        customerCode: "",
-        customerName: "",
-      });
-    }
-  };
+  // For selecting Customer API ~~
+  // const customerHandler = (data) => {
+  //   if (data) {
+  //     const newData = JSON.parse(data);
+  //     const customerCode = newData.customerCode;
+  //     const customerName = newData.customerName;
+  //     setRawMatsInfo({
+  //       itemCode: rawMatsInfo.itemCode,
+  //       itemDescription: rawMatsInfo.itemDescription,
+  //       customerName: customerName,
+  //       uom: rawMatsInfo.uom,
+  //       warehouseId: rawMatsInfo.warehouseId,
+  //       quantity: rawMatsInfo.quantity,
+  //       unitCost: rawMatsInfo.unitCost,
+  //     });
+  //     setCustomerData({
+  //       customerCode: customerCode,
+  //       customerName: customerName,
+  //     });
+  //   } else {
+  //     setRawMatsInfo({
+  //       itemCode: rawMatsInfo.itemCode,
+  //       itemDescription: rawMatsInfo.itemDescription,
+  //       customerName: "",
+  //       uom: rawMatsInfo.uom,
+  //       warehouseId: rawMatsInfo.warehouseId,
+  //       quantity: rawMatsInfo.quantity,
+  //       unitCost: rawMatsInfo.unitCost,
+  //     });
+  //     setCustomerData({
+  //       customerCode: "",
+  //       customerName: "",
+  //     });
+  //   }
+  // };
 
   const newDate = moment();
   const maxDate = newDate.add(14, "days");
@@ -214,7 +206,7 @@ export const BorrowedInformation = ({
                 borderColor="gray.400"
                 pl={4}
                 py={2.5}
-                // onChange={(e) => customerHandler(e.target.value)}
+                // onChange={(e) => customerHandler(e.target.value)} ~~~~ Customer Api
               >
                 {customerData.customerCode ? customerData.customerCode : "Select a customer"}
               </Text>
@@ -340,14 +332,7 @@ export const BorrowedInformation = ({
         <Flex w="full" justifyContent="end" mt={4}>
           <Button
             onClick={() => openModal()}
-            isDisabled={
-              // !rawMatsInfo.customerName ||
-              !details ||
-              !watch("formData.empId") ||
-              !watch("formData.fullName") ||
-              // !remarks ||
-              !transactionDate
-            }
+            isDisabled={!details || !watch("formData.empId") || !watch("formData.fullName") || !transactionDate}
             size="sm"
             width="100px"
             colorScheme="blue"
@@ -361,33 +346,24 @@ export const BorrowedInformation = ({
 
       {isModal && (
         <RawMatsInfoModal
-          rawMatsInfo={rawMatsInfo}
-          setRawMatsInfo={setRawMatsInfo}
-          details={details}
-          setDetails={setDetails}
-          customerRef={customerRef}
-          rawMats={rawMats}
-          uoms={uoms}
-          barcodeNo={barcodeNo}
-          setSelectorId={setSelectorId}
-          customerData={customerData}
-          setCustomerData={setCustomerData}
-          warehouseId={warehouseId}
-          setWarehouseId={setWarehouseId}
           isOpen={isModal}
           onClose={closeModal}
-          remarks={remarks}
-          setRemarks={setRemarks}
+          barcodeNo={barcodeNo}
           transactionDate={transactionDate}
-          setTransactionDate={setTransactionDate}
+          details={details}
+          rawMats={rawMats}
+          rawMatsInfo={rawMatsInfo}
+          setRawMatsInfo={setRawMatsInfo}
+          warehouseId={warehouseId}
+          setWarehouseId={setWarehouseId}
+          remarks={remarks}
           unitCost={unitCost}
           setUnitCost={setUnitCost}
-          fetchActiveBorrowed={fetchActiveBorrowed}
-          fetchRawMats={fetchRawMats}
-          itemCode={itemCode}
           employeeFormData={watch("formData")}
           employeeData={employeeData}
           setEmployeeData={setEmployeeData}
+          fetchRawMats={fetchRawMats}
+          fetchActiveBorrowed={fetchActiveBorrowed}
         />
       )}
     </Flex>
@@ -397,30 +373,21 @@ export const BorrowedInformation = ({
 export const RawMatsInfoModal = ({
   isOpen,
   onClose,
+  barcodeNo,
   transactionDate,
-  setTransactionDate,
   details,
-  setDetails,
+  rawMats,
   rawMatsInfo,
   setRawMatsInfo,
-  customerRef,
-  rawMats,
-  barcodeNo,
-  setSelectorId,
-  setCustomerData,
-  setWarehouseId,
   warehouseId,
-  fetchActiveBorrowed,
-  customerData,
+  setWarehouseId,
   remarks,
-  setRemarks,
   unitCost,
   setUnitCost,
-  fetchRawMats,
-  itemCode,
   employeeFormData,
-  employeeData,
   setEmployeeData,
+  fetchRawMats,
+  fetchActiveBorrowed,
 }) => {
   const [availableStock, setAvailableStock] = useState("");
   const [reserve, setReserve] = useState("");
@@ -433,6 +400,7 @@ export const RawMatsInfoModal = ({
   });
 
   const { isOpen: isAdd, onClose: closeAdd, onOpen: openAdd } = useDisclosure();
+
   const openAddConfirmation = () => {
     openAdd();
   };
@@ -455,14 +423,8 @@ export const RawMatsInfoModal = ({
     }
   }, [barcodeNo]);
 
-  // console.log("Available: ", availableStock);
-  // console.log("Unit Cost: ", unitCost);
-  // console.log("Warehouse ID: ", warehouseId);
-  // console.log("Raw Materials: ", rawMatsInfo);
-
   const itemCodeHandler = (data) => {
     if (data) {
-      // const newData = JSON.parse(data);
       const itemCode = data.value.itemCode;
       const itemDescription = data.value.itemDescription;
       const uom = data.value.uom;
@@ -488,11 +450,9 @@ export const RawMatsInfoModal = ({
   };
 
   const barcodeNoHandler = (data) => {
-    // console.log(data)
     if (data) {
       setBarcode(data);
       const newData = JSON.parse(data);
-      // console.log(newData);
       const warehouseId = newData.warehouseId;
       setAvailableStock(newData.remainingStocks);
       setUnitCost(newData.unitCost);
@@ -520,15 +480,7 @@ export const RawMatsInfoModal = ({
     }
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-    setValue,
-    reset,
-    watch,
-    control,
-  } = useForm({
+  const { control } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
@@ -631,6 +583,7 @@ export const RawMatsInfoModal = ({
                   <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                     Quantity:{" "}
                   </Text>
+
                   <NumericFormat
                     customInput={Input}
                     fontSize="sm"
@@ -754,7 +707,6 @@ export const RawMatsInfoModal = ({
                 onClick={openAddConfirmation}
                 isDisabled={
                   !rawMatsInfo.itemCode ||
-                  // !rawMatsInfo.customerName ||
                   !rawMatsInfo.uom ||
                   !rawMatsInfo.warehouseId ||
                   !rawMatsInfo.quantity ||
@@ -777,26 +729,17 @@ export const RawMatsInfoModal = ({
           isOpen={isAdd}
           onClose={closeAdd}
           closeAddModal={onClose}
+          transactionDate={transactionDate}
           details={details}
-          setDetails={setDetails}
           rawMatsInfo={rawMatsInfo}
           setRawMatsInfo={setRawMatsInfo}
-          customerRef={customerRef}
-          setSelectorId={setSelectorId}
           warehouseId={warehouseId}
           setWarehouseId={setWarehouseId}
-          customerData={customerData}
           remarks={remarks}
-          setRemarks={setRemarks}
-          transactionDate={transactionDate}
-          setTransactionDate={setTransactionDate}
-          unitCost={unitCost}
-          setUnitCost={setUnitCost}
-          fetchActiveBorrowed={fetchActiveBorrowed}
-          fetchRawMats={fetchRawMats}
           employeeFormData={employeeFormData}
-          employeeData={employeeData}
           setEmployeeData={setEmployeeData}
+          fetchRawMats={fetchRawMats}
+          fetchActiveBorrowed={fetchActiveBorrowed}
         />
       )}
     </>

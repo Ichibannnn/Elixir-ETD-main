@@ -1,3 +1,6 @@
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -36,28 +39,19 @@ import {
   VStack,
   Portal,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { GiChoice } from "react-icons/gi";
 import { FiSearch } from "react-icons/fi";
 import { RiAddFill } from "react-icons/ri";
-import PageScroll from "../../utils/PageScroll";
-import request from "../../services/ApiClient";
-import { ToastComponent } from "../../components/Toast";
-import { yupResolver } from "@hookform/resolvers/yup";
+
 import * as yup from "yup";
+import request from "../../services/ApiClient";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { ToastComponent } from "../../components/Toast";
 import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+
+import PageScroll from "../../utils/PageScroll";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
 const AccTLocation = () => {
   const [location, setLocation] = useState([]);
@@ -71,25 +65,17 @@ const AccTLocation = () => {
   const [pageTotal, setPageTotal] = useState(undefined);
   const [disableEdit, setDisableEdit] = useState(false);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const fetchLocationApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Location/GetAllLocationWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
-    );
+    const response = await request.get(`Location/GetAllLocationWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
     return response.data;
   };
 
-  //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -98,7 +84,6 @@ const AccTLocation = () => {
     initialState: { currentPage: 1, pageSize: 5 },
   });
 
-  //SHOW USER DATA----
   const getLocationHandler = () => {
     fetchLocationApi(currentPage, pageSize, status, search).then((res) => {
       setIsLoading(false);
@@ -142,19 +127,13 @@ const AccTLocation = () => {
         ToastComponent("Success", "Status updated", "success", toast);
         getLocationHandler();
       })
-      .catch((err) => {
-        console.log(err);
-      });
-    // console.log(routeLabel)
+      .catch((err) => {});
   };
 
-  // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    // console.log(inputValue)
   };
 
-  //ADD USER HANDLER---
   const addLocationHandler = () => {
     setEditData({
       id: "",
@@ -167,36 +146,20 @@ const AccTLocation = () => {
     setDisableEdit(false);
   };
 
-  //EDIT USER--
   const editLocationHandler = (location) => {
     setDisableEdit(true);
     setEditData(location);
     onOpen();
   };
-  //FOR DRAWER
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  // console.log(status);
 
   return (
-    <Flex
-      color="fontColor"
-      h="full"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-      boxShadow="md"
-    >
+    <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form" boxShadow="md">
       <Flex p={2} w="full">
         <Flex flexDirection="column" gap={1} w="full">
           <Flex justifyContent="space-between" alignItems="center">
             <HStack w="25%" mt={3}>
               <InputGroup size="sm">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<FiSearch bg="black" fontSize="18px" />}
-                />
+                <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
                 <Input
                   borderRadius="lg"
                   fontSize="13px"
@@ -213,10 +176,8 @@ const AccTLocation = () => {
 
             <HStack flexDirection="row">
               <Text fontSize="12px">STATUS:</Text>
-              <Select
-                fontSize="12px"
-                onChange={(e) => statusHandler(e.target.value)}
-              >
+
+              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
@@ -235,14 +196,7 @@ const AccTLocation = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="secondary">
                     <Tr fontSize="15px">
                       <Th color="#D6D6D6" fontSize="10px">
@@ -265,6 +219,7 @@ const AccTLocation = () => {
                       </Th>
                     </Tr>
                   </Thead>
+
                   <Tbody>
                     {location.location?.map((loc, i) => (
                       <Tr key={i}>
@@ -276,10 +231,7 @@ const AccTLocation = () => {
 
                         <Td pl={0}>
                           <HStack>
-                            <Button
-                              bg="none"
-                              onClick={() => editLocationHandler(loc)}
-                            >
+                            <Button bg="none" onClick={() => editLocationHandler(loc)}>
                               <AiTwotoneEdit />
                             </Button>
                             <Popover>
@@ -294,32 +246,15 @@ const AccTLocation = () => {
                                     <PopoverContent bg="primary" color="#fff">
                                       <PopoverArrow bg="primary" />
                                       <PopoverCloseButton />
-                                      <PopoverHeader>
-                                        Confirmation!
-                                      </PopoverHeader>
+                                      <PopoverHeader>Confirmation!</PopoverHeader>
                                       <PopoverBody>
                                         <VStack onClick={onClose}>
                                           {loc.isActive === true ? (
-                                            <Text>
-                                              Are you sure you want to set this
-                                              location inactive?
-                                            </Text>
+                                            <Text>Are you sure you want to set this location inactive?</Text>
                                           ) : (
-                                            <Text>
-                                              Are you sure you want to set this
-                                              location active?
-                                            </Text>
+                                            <Text>Are you sure you want to set this location active?</Text>
                                           )}
-                                          <Button
-                                            colorScheme="green"
-                                            size="sm"
-                                            onClick={() =>
-                                              changeStatusHandler(
-                                                loc.id,
-                                                loc.isActive
-                                              )
-                                            }
-                                          >
+                                          <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(loc.id, loc.isActive)}>
                                             Yes
                                           </Button>
                                         </VStack>
@@ -353,32 +288,12 @@ const AccTLocation = () => {
                 New Location
               </Button>
 
-              {/* PROPS */}
-              {isOpen && (
-                <DrawerComponent
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  fetchLocationApi={fetchLocationApi}
-                  getLocationHandler={getLocationHandler}
-                  editData={editData}
-                  disableEdit={disableEdit}
-                />
-              )}
+              {isOpen && <DrawerComponent isOpen={isOpen} onClose={onClose} getLocationHandler={getLocationHandler} editData={editData} disableEdit={disableEdit} />}
 
               <Stack>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                      size="sm"
-                    >
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }} size="sm">
                       {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
@@ -396,22 +311,10 @@ const AccTLocation = () => {
                       ))}
                     </PaginationPageGroup>
                     <HStack>
-                      <PaginationNext
-                        bg="primary"
-                        color="white"
-                        p={1}
-                        _hover={{ bg: "btnColor", color: "white" }}
-                        size="sm"
-                        mb={2}
-                      >
+                      <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }} size="sm" mb={2}>
                         {">>"}
                       </PaginationNext>
-                      <Select
-                        onChange={handlePageSizeChange}
-                        bg="#FFFFFF"
-                        size="sm"
-                        mb={2}
-                      >
+                      <Select onChange={handlePageSizeChange} bg="#FFFFFF" size="sm" mb={2}>
                         <option value={Number(5)}>5</option>
                         <option value={Number(10)}>10</option>
                         <option value={Number(25)}>25</option>
@@ -450,7 +353,6 @@ const DrawerComponent = (props) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -472,12 +374,7 @@ const DrawerComponent = (props) => {
         const res = await request
           .post("Location/AddNewLocation", data.formData)
           .then((res) => {
-            ToastComponent(
-              "Success",
-              "New Location created!",
-              "success",
-              toast
-            );
+            ToastComponent("Success", "New Location created!", "success", toast);
             getLocationHandler();
             onClose();
           })
@@ -494,18 +391,11 @@ const DrawerComponent = (props) => {
             onClose(onClose);
           })
           .catch((error) => {
-            ToastComponent(
-              "Update Failed",
-              error.response.data,
-              "warning",
-              toast
-            );
+            ToastComponent("Update Failed", error.response.data, "warning", toast);
           });
       }
     } catch (err) {}
   };
-
-  // console.log(editData)
 
   useEffect(() => {
     if (editData.id) {
@@ -522,8 +412,6 @@ const DrawerComponent = (props) => {
     }
   }, [editData]);
 
-  // console.log(watch('formData.id'))
-
   return (
     <>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
@@ -531,7 +419,9 @@ const DrawerComponent = (props) => {
         <form onSubmit={handleSubmit(submitHandler)}>
           <DrawerContent>
             <DrawerHeader borderBottomWidth="1px">Location Form</DrawerHeader>
+
             <DrawerCloseButton />
+
             <DrawerBody>
               <Stack spacing="7px">
                 <Box>
@@ -553,17 +443,14 @@ const DrawerComponent = (props) => {
 
                 <Box>
                   <FormLabel>Location Name:</FormLabel>
-                  <Input
-                    {...register("formData.locationName")}
-                    placeholder="Please enter Department Name"
-                    autoComplete="off"
-                  />
+                  <Input {...register("formData.locationName")} placeholder="Please enter Department Name" autoComplete="off" />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.locationName?.message}
                   </Text>
                 </Box>
               </Stack>
             </DrawerBody>
+
             <DrawerFooter borderTopWidth="1px">
               <Button variant="outline" mr={3} onClick={onClose}>
                 Cancel

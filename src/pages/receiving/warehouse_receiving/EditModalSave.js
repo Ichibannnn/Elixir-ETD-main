@@ -59,7 +59,7 @@ const EditModalSave = ({
   });
 
   const submitEditedHandler = () => {
-    console.log("First submit: ", firstSubmit);
+    console.log("submit: ", firstSubmit);
 
     try {
       setIsLoading(true);

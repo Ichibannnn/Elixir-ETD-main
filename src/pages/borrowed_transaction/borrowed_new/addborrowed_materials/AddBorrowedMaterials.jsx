@@ -109,30 +109,24 @@ const AddBorrowedMaterials = ({ borrowedData, fetchActiveBorrowed, borrowedNav, 
         {borrowedNav === 1 ? (
           <>
             <BorrowedInformation
-              employeeData={employeeData}
-              setEmployeeData={setEmployeeData}
+              barcodeNo={barcodeNo}
+              rawMats={rawMats}
               rawMatsInfo={rawMatsInfo}
               setRawMatsInfo={setRawMatsInfo}
               details={details}
               setDetails={setDetails}
-              rawMats={rawMats}
-              barcodeNo={barcodeNo}
-              setSelectorId={setSelectorId}
               warehouseId={warehouseId}
               setWarehouseId={setWarehouseId}
-              fetchActiveBorrowed={fetchActiveBorrowed}
               customerData={customerData}
-              setCustomerData={setCustomerData}
-              customerRef={customerRef}
               remarks={remarks}
-              setRemarks={setRemarks}
-              remarksRef={remarksRef}
               transactionDate={transactionDate}
               setTransactionDate={setTransactionDate}
               unitCost={unitCost}
               setUnitCost={setUnitCost}
+              employeeData={employeeData}
+              setEmployeeData={setEmployeeData}
               fetchRawMats={fetchRawMats}
-              itemCode={itemCode}
+              fetchActiveBorrowed={fetchActiveBorrowed}
             />
             {borrowedData?.length > 0 ? (
               <>
@@ -189,6 +183,7 @@ const AddBorrowedMaterials = ({ borrowedData, fetchActiveBorrowed, borrowedNav, 
 
 export default AddBorrowedMaterials;
 
+// OLD CODES ~~~~~~
 // import React, { useEffect } from "react";
 // import {
 //   Button,

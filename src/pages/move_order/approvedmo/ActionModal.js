@@ -152,13 +152,13 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                       SERVED QTY
                     </Th>
                     <Th color="white" fontSize="xs">
+                      UNIT COST
+                    </Th>
+                    <Th color="white" fontSize="xs">
                       ITEM REMARKS
                     </Th>
                     <Th color="white" fontSize="xs">
                       ASSET TAG
-                    </Th>
-                    <Th color="white" fontSize="xs">
-                      UNSERVED QTY
                     </Th>
                   </Tr>
                 </Thead>
@@ -183,21 +183,25 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                         })}
                       </Td>
 
-                      {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
-                      {item.assetTag ? <Td fontSize="xs">{item.assetTag}</Td> : <Td fontSize="xs">-</Td>}
-
                       <Td fontSize="xs">
-                        {item.unservedQuantity.toLocaleString(undefined, {
+                        {item.unitCost.toLocaleString(undefined, {
                           maximumFractionDigits: 2,
                           minimumFractionDigits: 2,
                         })}
                       </Td>
+
+                      {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
+                      {item.assetTag ? <Td fontSize="xs">{item.assetTag}</Td> : <Td fontSize="xs">-</Td>}
                     </Tr>
                   ))}
-                  <Tr>
+
+                  {/* FOR ALL TOTAL */}
+                  {/* <Tr>
                     <Td fontSize="xs"></Td>
                     <Td fontSize="xs"></Td>
                     <Td fontSize="xs"></Td>
+
+                    
                     <Td fontSize="xs" fontWeight="bold">
                       Total:
                     </Td>
@@ -210,12 +214,12 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                     <Td fontSize="xs"></Td>
                     <Td fontSize="xs"></Td>
                     <Td fontSize="xs"></Td>
-                  </Tr>
+                  </Tr> */}
                 </Tbody>
               </Table>
             </PageScroll>
 
-            <Flex justifyContent="space-between" mb={5} mt={2}>
+            <Flex justifyContent="space-between" mb={5} mt={8}>
               <HStack>
                 <Text fontSize="xs">Delivery Status:</Text>
                 <Text textDecoration="underline" fontSize="xs">
@@ -775,13 +779,13 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                           SERVED QTY
                         </Th>
                         <Th color="white" fontSize="xs">
+                          UNIT COST
+                        </Th>
+                        <Th color="white" fontSize="xs">
                           ITEM REMARKS
                         </Th>
                         <Th color="white" fontSize="xs">
                           ASSET TAG
-                        </Th>
-                        <Th color="white" fontSize="xs">
-                          UNSERVED QTY
                         </Th>
                       </Tr>
                     </Thead>
@@ -806,18 +810,20 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                             })}
                           </Td>
 
-                          {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
-                          {item.assetTag ? <Td fontSize="xs">{item.assetTag}</Td> : <Td fontSize="xs">-</Td>}
-
                           <Td fontSize="xs">
-                            {item.unservedQuantity.toLocaleString(undefined, {
+                            {item.unitCost.toLocaleString(undefined, {
                               maximumFractionDigits: 2,
                               minimumFractionDigits: 2,
                             })}
                           </Td>
+
+                          {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
+                          {item.assetTag ? <Td fontSize="xs">{item.assetTag}</Td> : <Td fontSize="xs">-</Td>}
                         </Tr>
                       ))}
-                      <Tr>
+
+                      {/* FOR ALL TOTAL */}
+                      {/* <Tr>
                         <Td fontSize="xs"></Td>
                         <Td fontSize="xs"></Td>
                         <Td fontSize="xs"></Td>
@@ -833,7 +839,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                         <Td fontSize="xs"></Td>
                         <Td fontSize="xs"></Td>
                         <Td fontSize="xs"></Td>
-                      </Tr>
+                      </Tr> */}
                     </Tbody>
                   </Table>
 

@@ -75,6 +75,7 @@ import MiscReceiptPage from "./pages/misc_transactions/misc_receipt/MiscReceiptP
 import MiscIssuePage from "./pages/misc_transactions/misc_issue/MiscIssuePage";
 
 // BORROWED TRANSACTION
+// last stop
 import AddBorrowedMaterials from "./pages/borrowed_transaction/borrowed_new/addborrowed_materials/AddBorrowedMaterials";
 import BorrowedMaterialsPage from "./pages/borrowed_transaction/BorrowedMaterialsPage";
 import { PendingBorrowedMaterials } from "./pages/borrowed_transaction/borrowed_new/pending_borrowed/PendingBorrowedMaterials";
@@ -111,7 +112,6 @@ import ItemCategory from "./pages/setup/ItemCategory";
 import ItemSubCategory from "./pages/setup/ItemSubCategory";
 import MaterialsManagement from "./pages/setup/MaterialsManagement";
 import SupplierNew from "./pages/setup/suppliers_new/SupplierNew";
-// last stop
 import CustomerNew from "./pages/setup/customer_new/CustomerNew";
 import CustomerType from "./pages/setup/CustomerType";
 import LotManagement from "./pages/setup/LotManagement";

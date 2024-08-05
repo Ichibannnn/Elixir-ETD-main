@@ -601,6 +601,8 @@ export const RawMatsInfoModal = ({
   }, [idNumber]);
 
   const itemCodeHandler = (data) => {
+    console.log("material data: ", data);
+
     if (data) {
       const itemCode = data.value.itemCode;
       const itemDescription = data.value.itemDescription;

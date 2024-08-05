@@ -99,6 +99,9 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                         UOM
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Details
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         Aging Days
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
@@ -169,6 +172,16 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
                                 {item.uom}
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Td>
+
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700" fontWeight="semibold">
+                                {item.details}
                               </Text>
                             </HStack>
                           </Flex>

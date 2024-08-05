@@ -1,39 +1,17 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  FormLabel,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Select,
-  Stack,
-  Text,
-  toast,
-  useDisclosure,
-  useToast,
-  VStack,
-} from "@chakra-ui/react";
-import { FcAbout, FcCancel, FcInfo } from "react-icons/fc";
-import request from "../../services/ApiClient";
-import { decodeUser } from "../../services/decode-user";
-import { ToastComponent } from "../../components/Toast";
-import { BsPatchQuestionFill } from "react-icons/bs";
-import { GrCircleInformation } from "react-icons/gr";
-import { TiCancelOutline } from "react-icons/ti";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { Button, ButtonGroup, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useToast } from "@chakra-ui/react";
+import { FcInfo } from "react-icons/fc";
+
 import * as yup from "yup";
 import axios from "axios";
-import { Controller, useForm } from "react-hook-form";
-import Swal from "sweetalert2";
-import { FaExclamationCircle, FaExclamationTriangle } from "react-icons/fa";
+import request from "../../services/ApiClient";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { decodeUser } from "../../services/decode-user";
+import { ToastComponent } from "../../components/Toast";
+
+import { FaExclamationTriangle } from "react-icons/fa";
 
 const currentUser = decodeUser();
 
@@ -43,22 +21,15 @@ export const AddConfirmation = ({
   closeAddModal,
   transactionDate,
   details,
-  setDetails,
   rawMatsInfo,
   setRawMatsInfo,
-  customerRef,
   warehouseId,
-  setSelectorId,
   setWarehouseId,
-  fetchActiveBorrowed,
-  customerData,
   remarks,
-  setRemarks,
-  remarksRef,
-  fetchRawMats,
   employeeFormData,
-  employeeData,
   setEmployeeData,
+  fetchRawMats,
+  fetchActiveBorrowed,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -116,11 +87,7 @@ export const AddConfirmation = ({
       <ModalOverlay />
       <ModalContent pt={10} pb={5}>
         <ModalHeader>
-          <Flex
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-          >
+          <Flex justifyContent="center" alignItems="center" flexDirection="column">
             <FcInfo fontSize="90px" />
             <Text>Confirmation</Text>
           </Flex>
@@ -135,20 +102,10 @@ export const AddConfirmation = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup>
-            <Button
-              size="sm"
-              onClick={submitHandler}
-              isLoading={isLoading}
-              colorScheme="blue"
-            >
+            <Button size="sm" onClick={submitHandler} isLoading={isLoading} colorScheme="blue">
               Yes
             </Button>
-            <Button
-              size="sm"
-              onClick={onClose}
-              isLoading={isLoading}
-              variant="outline"
-            >
+            <Button size="sm" onClick={onClose} isLoading={isLoading} variant="outline">
               No
             </Button>
           </ButtonGroup>
@@ -158,15 +115,7 @@ export const AddConfirmation = ({
   );
 };
 
-export const CancelConfirmation = ({
-  isOpen,
-  onClose,
-  selectorId,
-  setSelectorId,
-  fetchActiveBorrowed,
-  fetchBarcodeNo,
-  fetchRawMats,
-}) => {
+export const CancelConfirmation = ({ isOpen, onClose, selectorId, setSelectorId, fetchActiveBorrowed, fetchBarcodeNo, fetchRawMats }) => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -176,12 +125,7 @@ export const CancelConfirmation = ({
       const res = request
         .put(`Borrowed/CancelItemForTransactBorrow`, [{ id: selectorId }])
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Item has been cancelled",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Item has been cancelled", "success", toast);
           fetchActiveBorrowed();
           fetchRawMats();
           fetchBarcodeNo();
@@ -203,11 +147,7 @@ export const CancelConfirmation = ({
       <ModalOverlay />
       <ModalContent pt={10} pb={5}>
         <ModalHeader>
-          <Flex
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-          >
+          <Flex justifyContent="center" alignItems="center" flexDirection="column">
             <FaExclamationTriangle color="red" fontSize="90px" />
             {/* <Text>Warning</Text> */}
           </Flex>
@@ -223,15 +163,7 @@ export const CancelConfirmation = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup>
-            <Button
-              size="sm"
-              height="28px"
-              width="100px"
-              onClick={cancelSubmitHandler}
-              isLoading={isLoading}
-              disabled={isLoading}
-              colorScheme="blue"
-            >
+            <Button size="sm" height="28px" width="100px" onClick={cancelSubmitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="blue">
               Yes
             </Button>
             <Button
@@ -256,10 +188,7 @@ const schema = yup.object().shape({
   formData: yup.object().shape({
     orderId: yup.string(),
     companyId: yup.number().required().typeError("Company Name is required"),
-    departmentId: yup
-      .number()
-      .required()
-      .typeError("Department Category is required"),
+    departmentId: yup.number().required().typeError("Department Category is required"),
     locationId: yup.number().required().typeError("Location Name is required"),
     accountId: yup.number().required().typeError("Account Name is required"),
   }),
@@ -301,14 +230,11 @@ export const SaveConfirmation = ({
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setCompany(res.data.result.companies);
       // console.log(res.data.result.companies);
     } catch (error) {}
@@ -317,15 +243,11 @@ export const SaveConfirmation = ({
   // FETCH DEPT API
   const fetchDepartmentApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setDepartment(res.data.result.departments);
       console.log(res.data.result.departments);
     } catch (error) {}
@@ -334,15 +256,11 @@ export const SaveConfirmation = ({
   // FETCH Loc API
   const fetchLocationApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setLocation(res.data.result.locations);
     } catch (error) {}
   };
@@ -354,15 +272,11 @@ export const SaveConfirmation = ({
   // FETCH ACcount API
   const fetchAccountApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setAccount(res.data.result.account_titles);
     } catch (error) {}
   };
@@ -431,45 +345,33 @@ export const SaveConfirmation = ({
                 };
               });
               try {
-                const res = request
-                  .put(`Borrowed/UpdateBorrowedIssuePKey`, arrayofId)
-                  .then((res) => {
-                    fetchActiveBorrowed();
-                    ToastComponent(
-                      "Success",
-                      "Information saved",
-                      "success",
-                      toast
-                    );
+                const res = request.put(`Borrowed/UpdateBorrowedIssuePKey`, arrayofId).then((res) => {
+                  fetchActiveBorrowed();
+                  ToastComponent("Success", "Information saved", "success", toast);
 
-                    fetchRawMats();
-                    setEmployeeData([]);
-                    setTotalQuantity("");
-                    setTransactionDate("");
-                    setDetails("");
-                    setRawMatsInfo({
-                      itemCode: "",
-                      itemDescription: "",
-                      customerName: "",
-                      uom: "",
-                      quantity: "",
-                    });
-                    setIsLoading(false);
-                    setHideButton(false);
-                    onClose();
+                  fetchRawMats();
+                  setEmployeeData([]);
+                  setTotalQuantity("");
+                  setTransactionDate("");
+                  setDetails("");
+                  setRawMatsInfo({
+                    itemCode: "",
+                    itemDescription: "",
+                    customerName: "",
+                    uom: "",
+                    quantity: "",
                   });
+                  setIsLoading(false);
+                  setHideButton(false);
+                  onClose();
+                });
               } catch (error) {
                 console.log(error);
               }
             }
           })
           .catch((err) => {
-            ToastComponent(
-              "Error",
-              "Information was not saved",
-              "error",
-              toast
-            );
+            ToastComponent("Error", "Information was not saved", "error", toast);
             setIsLoading(false);
           });
       } catch (error) {}
@@ -690,16 +592,7 @@ export const SaveConfirmation = ({
             >
               Yes
             </Button>
-            <Button
-              size="md"
-              onClick={closeHandler}
-              isLoading={isLoading}
-              variant="outline"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button size="md" onClick={closeHandler} isLoading={isLoading} variant="outline" height="28px" width="100px" borderRadius="none" fontSize="xs">
               No
             </Button>
           </ButtonGroup>
@@ -738,12 +631,7 @@ export const AllCancelConfirmation = ({
       const res = request
         .put(`Borrowed/CancelItemForTransactBorrow`, allId)
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Items has been cancelled",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Items has been cancelled", "success", toast);
           fetchActiveBorrowed();
           fetchRawMats();
           // customerRef.current.value = "";
@@ -778,11 +666,7 @@ export const AllCancelConfirmation = ({
       <ModalOverlay />
       <ModalContent pt={10} pb={5}>
         <ModalHeader>
-          <Flex
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="center"
-          >
+          <Flex justifyContent="center" alignItems="center" flexDirection="center">
             <FaExclamationTriangle color="red" fontSize="90px" />
           </Flex>
         </ModalHeader>
@@ -790,23 +674,13 @@ export const AllCancelConfirmation = ({
 
         <ModalBody mb={5}>
           <Text textAlign="center" fontSize="sm">
-            Are you sure you want to cancel all items from the list of requested
-            materials?
+            Are you sure you want to cancel all items from the list of requested materials?
           </Text>
         </ModalBody>
 
         <ModalFooter justifyContent="center">
           <ButtonGroup>
-            <Button
-              onClick={allCancelSubmitHandler}
-              isLoading={isLoading}
-              disabled={isLoading}
-              colorScheme="red"
-              height="28px"
-              width="100px"
-              borderRadius="none"
-              fontSize="xs"
-            >
+            <Button onClick={allCancelSubmitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="red" height="28px" width="100px" borderRadius="none" fontSize="xs">
               Yes
             </Button>
             <Button
