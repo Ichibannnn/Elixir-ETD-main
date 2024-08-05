@@ -38,6 +38,7 @@ import { TiWarning } from "react-icons/ti";
 
 export const MrpTable = ({
   mrpData,
+  printMRPData,
   fetchingData,
   loadingExport,
   setSelectorId,
@@ -201,7 +202,7 @@ export const MrpTable = ({
                     <Th color="white">Item Category</Th>
                     <Th color="white">UOM</Th>
                     <Th color="white">Unit Cost</Th>
-                    <Th color="white">Total Cost</Th>
+                    <Th color="white">Total Inventory Cost</Th>
                     <Th color="white">SOH</Th>
                     <Th color="white">Reserve</Th>
                     <Th color="white">Prepared</Th>
@@ -209,15 +210,15 @@ export const MrpTable = ({
                   </>
                 ) : (
                   <>
-                    <Th color="white">{`Receive (IN)`}</Th>
-                    <Th color="white">{`Receipt (IN)`}</Th>
-                    <Th color="white">{`Move Order (OUT)`}</Th>
-                    <Th color="white">{`Issue (OUT)`}</Th>
+                    <Th color="white">{`Receive`}</Th>
+                    <Th color="white">{`Miscellaneous Receipt`}</Th>
+                    <Th color="white">{`Move Order`}</Th>
+                    <Th color="white">{`Miscellaneous Issue`}</Th>
                     <Th color="white">{`Borrowed`}</Th>
                     <Th color="white">{`Returned`}</Th>
                     <Th color="white">{`Consumed`}</Th>
-                    <Th color="white">Average Issuance</Th>
-                    <Th color="white">Days Level</Th>
+                    {/* <Th color="white">Average Issuance</Th>
+                    <Th color="white">Days Level</Th> */}
                   </>
                 )}
               </Tr>
@@ -326,13 +327,13 @@ export const MrpTable = ({
                           minimumFractionDigits: 2,
                         })}
                       </Td>
-                      <Td fontSize="xs">
+                      {/* <Td fontSize="xs">
                         {item.averageIssuance?.toLocaleString(undefined, {
                           maximumFractionDigits: 2,
                           minimumFractionDigits: 2,
                         })}
                       </Td>
-                      <Td fontSize="xs">{item.daysLevel?.toLocaleString()}</Td>
+                      <Td fontSize="xs">{item.daysLevel?.toLocaleString()}</Td> */}
                     </>
                   )}
                 </Tr>
@@ -382,14 +383,14 @@ export const MrpTable = ({
         </Stack>
       </Flex>
 
-      {isPrint && <PrintModal isOpen={isPrint} onClose={closePrint} mrpData={mrpData} />}
+      {isPrint && <PrintModal isOpen={isPrint} onClose={closePrint} printMRPData={printMRPData} />}
 
       {isInformation && <MaterialInformationModal isOpen={isInformation} onClose={closeInformation} rawMatsInfo={rawMatsInfo} />}
     </Flex>
   );
 };
 
-const PrintModal = ({ isOpen, onClose, mrpData }) => {
+const PrintModal = ({ isOpen, onClose, printMRPData }) => {
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -412,7 +413,7 @@ const PrintModal = ({ isOpen, onClose, mrpData }) => {
 
           <ModalBody mt={5}>
             <PageScroll minHeight="617px" maxHeight="618px">
-              <Table size="sm" variant="simple" ref={componentRef} bg="gray.100">
+              <Table size="sm" variant="simple" ref={componentRef}>
                 <Thead bgColor="primary" position="sticky" top={0} zIndex={1} h="40px">
                   <Tr>
                     <Th p={0} color="white"></Th>
@@ -426,9 +427,9 @@ const PrintModal = ({ isOpen, onClose, mrpData }) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {mrpData?.inventory?.map((item, i) => (
-                    <Tr key={i}>
-                      <Td>{item.bufferLevel > item.reserve ? <TiWarning fontSize="20px" color="red" /> : ""}</Td>
+                  {printMRPData?.map((item, i) => (
+                    <Tr key={i} bg={item.bufferLevel >= item.reserve ? "gray.300" : ""}>
+                      <Td>{item.bufferLevel >= item.reserve ? <TiWarning fontSize="20px" color="red" /> : ""}</Td>
                       <Td>{item.itemCode}</Td>
                       <Td>{item.itemDescription}</Td>
                       <Td>{item.itemCategory}</Td>

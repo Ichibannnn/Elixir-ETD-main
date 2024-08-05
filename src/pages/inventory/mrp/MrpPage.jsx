@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Flex, VStack } from "@chakra-ui/react";
+import { Flex, others, VStack } from "@chakra-ui/react";
 import { usePagination } from "@ajna/pagination";
 import request from "../../../services/ApiClient";
 import { MrpTable } from "./MrpTable";
@@ -27,6 +27,7 @@ const MrpPage = () => {
   const [pageTotalSheet, setPageTotalSheet] = useState(100000);
   const [search, setSearch] = useState("");
   const [mrpData, setMrpData] = useState([]);
+  const [printMRPData, setPrintMrpData] = useState([]);
   const [selectorId, setSelectorId] = useState("");
   const [rawMatsInfo, setRawMatsInfo] = useState({
     itemCode: "",
@@ -117,7 +118,35 @@ const MrpPage = () => {
   const fetchMRPForSheet = () => {
     fetchMRPForSheetApi(pageTotalSheet).then((res) => {
       console.log("Response: ", res);
-      setSheetData(res.inventory);
+      setSheetData(
+        res.inventory?.map((item) => {
+          return {
+            ID: item.id,
+            "Item Code": item.itemCode,
+            "Item Description": item.itemDescription,
+            UOM: item.uom,
+            "Item Category": item.itemCategory,
+            "Unit Cost": item.unitCost,
+            "Total Inventory Cost": item.totalCost,
+            SOH: item.soh,
+            "Prepared Quantity": item.preparedQuantity,
+            Reserve: item.reserve,
+            "Buffer Level": item.bufferLevel,
+            Receive: item.receiveIn,
+            "Miscellaneous Receipt": item.receiptIn,
+            "Move Order": item.moveOrderOut,
+            "Miscellaneous Issue": item.issueOut,
+            Borrowed: item.borrowedOut,
+            Returned: item.returnedBorrowed,
+            Consumed: item.borrowConsume,
+            "Suggested PO": item.suggestedPO,
+            "Reserve Usage": item.reserveUsage,
+            // "Average Issuance": item.averageIssuance,
+            // "Days Level": item.daysLevel,
+          };
+        })
+      );
+      setPrintMrpData(res.inventory);
     });
   };
 
@@ -144,6 +173,7 @@ const MrpPage = () => {
       <VStack w="full" p={5} justifyContent="space-between" spacing={5}>
         <MrpTable
           mrpData={mrpData}
+          printMRPData={printMRPData}
           fetchingData={isLoading}
           loadingExport={loadingExport}
           setSelectorId={setSelectorId}

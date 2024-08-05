@@ -146,19 +146,17 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                       UOM
                     </Th>
                     <Th color="white" fontSize="xs">
-                      ORDERED QTY
-                    </Th>
-                    <Th color="white" fontSize="xs">
                       SERVED QTY
                     </Th>
                     <Th color="white" fontSize="xs">
                       UNIT COST
                     </Th>
+
                     <Th color="white" fontSize="xs">
-                      ITEM REMARKS
+                      TOTAL COST
                     </Th>
                     <Th color="white" fontSize="xs">
-                      ASSET TAG
+                      ITEM REMARKS
                     </Th>
                   </Tr>
                 </Thead>
@@ -170,12 +168,6 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                       <Td fontSize="xs">{item.itemCode}</Td>
                       <Td fontSize="xs">{item.itemDescription}</Td>
                       <Td fontSize="xs">{item.uom}</Td>
-                      <Td fontSize="xs">
-                        {item.quantity.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
                       <Td fontSize="xs">
                         {item.servedQuantity.toLocaleString(undefined, {
                           maximumFractionDigits: 2,
@@ -190,18 +182,23 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                         })}
                       </Td>
 
+                      <Td fontSize="xs">
+                        {item.totalCost.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+
                       {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
-                      {item.assetTag ? <Td fontSize="xs">{item.assetTag}</Td> : <Td fontSize="xs">-</Td>}
                     </Tr>
                   ))}
 
                   {/* FOR ALL TOTAL */}
-                  {/* <Tr>
+                  <Tr>
                     <Td fontSize="xs"></Td>
                     <Td fontSize="xs"></Td>
                     <Td fontSize="xs"></Td>
 
-                    
                     <Td fontSize="xs" fontWeight="bold">
                       Total:
                     </Td>
@@ -211,10 +208,20 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                         minimumFractionDigits: 2,
                       })}
                     </Td>
+                    <Td fontSize="xs" fontWeight="bold">
+                      {printData[0]?.tUnitCost.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2,
+                      })}
+                    </Td>
+                    <Td fontSize="xs" fontWeight="bold">
+                      {printData[0]?.tTotalCost.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2,
+                      })}
+                    </Td>
                     <Td fontSize="xs"></Td>
-                    <Td fontSize="xs"></Td>
-                    <Td fontSize="xs"></Td>
-                  </Tr> */}
+                  </Tr>
                 </Tbody>
               </Table>
             </PageScroll>
@@ -772,9 +779,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                         <Th color="white" fontSize="xs">
                           UOM
                         </Th>
-                        <Th color="white" fontSize="xs">
-                          ORDERED QTY
-                        </Th>
+
                         <Th color="white" fontSize="xs">
                           SERVED QTY
                         </Th>
@@ -782,10 +787,10 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                           UNIT COST
                         </Th>
                         <Th color="white" fontSize="xs">
-                          ITEM REMARKS
+                          TOTAL COST
                         </Th>
                         <Th color="white" fontSize="xs">
-                          ASSET TAG
+                          ITEM REMARKS
                         </Th>
                       </Tr>
                     </Thead>
@@ -797,12 +802,6 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                           <Td fontSize="xs">{item.itemCode}</Td>
                           <Td fontSize="xs">{item.itemDescription}</Td>
                           <Td fontSize="xs">{item.uom}</Td>
-                          <Td fontSize="xs">
-                            {item.quantity.toLocaleString(undefined, {
-                              maximumFractionDigits: 2,
-                              minimumFractionDigits: 2,
-                            })}
-                          </Td>
                           <Td fontSize="xs">
                             {item.servedQuantity.toLocaleString(undefined, {
                               maximumFractionDigits: 2,
@@ -817,29 +816,49 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                             })}
                           </Td>
 
+                          <Td fontSize="xs">
+                            {item.tTotalCost.toLocaleString(undefined, {
+                              maximumFractionDigits: 2,
+                              minimumFractionDigits: 2,
+                            })}
+                          </Td>
+
                           {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
-                          {item.assetTag ? <Td fontSize="xs">{item.assetTag}</Td> : <Td fontSize="xs">-</Td>}
                         </Tr>
                       ))}
 
                       {/* FOR ALL TOTAL */}
-                      {/* <Tr>
+                      <Tr>
                         <Td fontSize="xs"></Td>
                         <Td fontSize="xs"></Td>
                         <Td fontSize="xs"></Td>
+
                         <Td fontSize="xs" fontWeight="bold">
                           Total:
                         </Td>
+
                         <Td fontSize="xs" fontWeight="bold">
                           {printData[0]?.tQuantity.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
+
+                        <Td fontSize="xs" fontWeight="bold">
+                          {printData[0]?.tUnitCost.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2,
+                          })}
+                        </Td>
+
+                        <Td fontSize="xs" fontWeight="bold">
+                          {printData[0]?.tTotalCost.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2,
+                          })}
+                        </Td>
                         <Td fontSize="xs"></Td>
-                        <Td fontSize="xs"></Td>
-                        <Td fontSize="xs"></Td>
-                      </Tr> */}
+                      </Tr>
                     </Tbody>
                   </Table>
 

@@ -64,9 +64,10 @@ const ImportPO = () => {
       return Object.keys(item).length === 12;
     });
 
-    console.log(isColumnComplete);
-
     fileRender(jsonData);
+
+    // console.log("workbook", workbook);
+
     if (isColumnComplete) {
       setIsDisabled(false);
     } else {
@@ -95,7 +96,7 @@ const ImportPO = () => {
     };
   });
 
-  console.log("Excel Array: ", excelData);
+  console.log("resultArray: ", resultArray);
 
   const submitExcelHandler = (resultArray) => {
     Swal.fire({
@@ -165,6 +166,7 @@ const ImportPO = () => {
   useEffect(() => {
     // Check if any value in resultArray's any is a letter
     const hasLetterValue = resultArray.some((eData) => isNaN(eData.ordered) || isNaN(eData.delivered) || isNaN(eData.delivered) || isNaN(eData.billed) || isNaN(eData.unitPrice));
+
     setBufferError(hasLetterValue);
     setIsDisabled(hasLetterValue || resultArray.length === 0); // Disable if there's any letter value or if resultArray is empty
 
