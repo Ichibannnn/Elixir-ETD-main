@@ -14,7 +14,7 @@ export const ConsolidatedReportsAudit = ({ dateFrom, dateTo, setSheetData, searc
   const itemsPerPage = 50;
 
   const fetchConsolidatedApi = async (dateFrom, dateTo, search) => {
-    const res = await request.get(`Reports/ConsolidationFinanceReports?DateFrom=${dateFrom}&DateTo=${dateTo}`, {
+    const res = await request.get(`Reports/ConsolidateAuditReport?DateFrom=${dateFrom}&DateTo=${dateTo}`, {
       params: {
         Search: search,
       },
@@ -90,6 +90,9 @@ export const ConsolidatedReportsAudit = ({ dateFrom, dateTo, setSheetData, searc
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Transaction Type
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Status
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Reason
@@ -184,6 +187,7 @@ export const ConsolidatedReportsAudit = ({ dateFrom, dateTo, setSheetData, searc
                         </Td>
                         <Td fontSize="xs">{item.source}</Td>
                         <Td fontSize="xs">{item.transactionType ? item.transactionType : "-"}</Td>
+                        <Td fontSize="xs">{item.status ? item.status : "-"}</Td>
                         <Td fontSize="xs">{item.reason ? item.reason : "-"}</Td>
                         <Td fontSize="xs">{item.reference ? item.reference : "-"}</Td>
                         <Td fontSize="xs">{item.encodedBy}</Td>

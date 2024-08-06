@@ -17,8 +17,8 @@ import { BorrowedMatsHistory } from "./report_dropdown/BorrowedMatsHistory";
 import { ReturnedQuantityTransaction } from "./report_dropdown/ReturnedQuantityTransaction";
 import { CancelledOrders } from "./report_dropdown/CancelledOrders";
 import { ConsolidatedReportsFinance } from "./report_dropdown/ConsolidatedReportsFinance";
-import { InventoryMovement } from "./report_dropdown/InventoryMovement";
 import { ConsolidatedReportsAudit } from "./report_dropdown/ConsolidatedReportsAudit";
+import { InventoryMovement } from "./report_dropdown/InventoryMovement";
 
 const Reports = () => {
   const [dateFrom, setDateFrom] = useState(moment(new Date()).format("yyyy-MM-DD"));
@@ -67,7 +67,7 @@ const Reports = () => {
     } else if (sample === 11) {
       setIsLoading(true);
       try {
-        const response = await request.get("Reports/ExportConsolidateFinance", {
+        const response = await request.get("Reports/ConsolidateAuditExport", {
           params: {
             DateFrom: dateFrom,
             DateTo: dateTo,

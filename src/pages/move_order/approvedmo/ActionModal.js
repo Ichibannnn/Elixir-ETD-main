@@ -36,6 +36,7 @@ import Barcode from "react-barcode";
 import { useReactToPrint } from "react-to-print";
 import { decodeUser } from "../../../services/decode-user";
 import { ToastComponent } from "../../../components/Toast";
+import { RiCheckboxBlankLine } from "react-icons/ri";
 
 const currentUser = decodeUser();
 
@@ -764,32 +765,32 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                     </Flex>
                   </Flex>
 
-                  <Table size="sm">
+                  <Table size="xs">
                     <Thead bgColor="secondary">
                       <Tr>
-                        <Th color="white" fontSize="xs">
+                        <Th color="white" fontSize="xx-small">
                           LINE
                         </Th>
-                        <Th color="white" fontSize="xs">
+                        <Th color="white" fontSize="xx-small">
                           ITEM CODE
                         </Th>
-                        <Th color="white" fontSize="xs">
+                        <Th color="white" fontSize="xx-small">
                           ITEM DESCRIPTION
                         </Th>
-                        <Th color="white" fontSize="xs">
+                        <Th color="white" fontSize="xx-small">
                           UOM
                         </Th>
 
-                        <Th color="white" fontSize="xs">
+                        <Th color="white" fontSize="xx-small">
                           SERVED QTY
                         </Th>
-                        <Th color="white" fontSize="xs">
+                        <Th color="white" fontSize="xx-small">
                           UNIT COST
                         </Th>
-                        <Th color="white" fontSize="xs">
+                        <Th color="white" fontSize="xx-small">
                           TOTAL COST
                         </Th>
-                        <Th color="white" fontSize="xs">
+                        <Th color="white" fontSize="xx-small">
                           ITEM REMARKS
                         </Th>
                       </Tr>
@@ -797,7 +798,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
 
                     <Tbody>
                       {printData?.map((item, i) => (
-                        <Tr key={i}>
+                        <Tr borderX="1px" borderBottom="1px" key={i}>
                           <Td fontSize="xs">{i + 1}</Td>
                           <Td fontSize="xs">{item.itemCode}</Td>
                           <Td fontSize="xs">{item.itemDescription}</Td>
@@ -910,15 +911,20 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                     <VStack>
                       <CheckboxGroup colorScheme="blue">
                         <HStack spacing={3}>
-                          <Checkbox border="1px" borderColor="black" size="sm" isChecked={selectedCheckboxes?.includes("Option 1")}>
-                            Exceeds Expectation
-                          </Checkbox>
-                          <Checkbox border="1px" borderColor="black" size="sm" isChecked={selectedCheckboxes?.includes("Option 2")}>
-                            Meets Expectation
-                          </Checkbox>
-                          <Checkbox border="1px" borderColor="black" size="sm" isChecked={selectedCheckboxes?.includes("Option 3")}>
-                            Needs Improvement
-                          </Checkbox>
+                          <HStack>
+                            <RiCheckboxBlankLine />
+                            <Text fontSize="xs">Exceeds Expectation</Text>
+                          </HStack>
+
+                          <HStack>
+                            <RiCheckboxBlankLine />
+                            <Text fontSize="xs">Meets Expectation</Text>
+                          </HStack>
+
+                          <HStack>
+                            <RiCheckboxBlankLine />
+                            <Text fontSize="xs">Needs Improvement</Text>
+                          </HStack>
                         </HStack>
                       </CheckboxGroup>
                     </VStack>
