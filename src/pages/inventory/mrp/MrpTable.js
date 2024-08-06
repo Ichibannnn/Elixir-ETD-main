@@ -36,6 +36,9 @@ import { useReactToPrint } from "react-to-print";
 import { MaterialInformationModal } from "./MaterialInformationModal";
 import { TiWarning } from "react-icons/ti";
 
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+
 export const MrpTable = ({
   mrpData,
   printMRPData,
@@ -58,13 +61,126 @@ export const MrpTable = ({
 
   const { isOpen: isInformation, onOpen: openInformation, onClose: closeInformation } = useDisclosure();
 
-  const handleExport = () => {
-    var workbook = XLSX.utils.book_new(),
-      worksheet = XLSX.utils.json_to_sheet(sheetData);
+  // OLD EXPORT HANDLER
+  // const handleExport = () => {
+  //   var workbook = XLSX.utils.book_new(),
+  //     worksheet = XLSX.utils.json_to_sheet(sheetData);
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
 
-    XLSX.writeFile(workbook, "Elixir_MRP_ExportFile.xlsx");
+  //   XLSX.writeFile(workbook, "Elixir_MRP_ExportFile.xlsx");
+  // };
+
+  // const handleExport = async () => {
+  //   const workbook = new ExcelJS.Workbook();
+  //   const worksheet = workbook.addWorksheet("Sheet1");
+
+  //   // Define the columns
+  //   worksheet.columns = Object.keys(sheetData[0]).map((key) => ({ header: key, key }));
+
+  //   console.log("sheetData: ", sheetData);
+
+  //   // Add the rows
+  //   sheetData.forEach((item) => {
+  //     const row = worksheet.addRow(item);
+
+  //     // Check if the condition is met and apply the style
+  //     if (item["Buffer Level"] >= item.Reserve) {
+  //       row.eachCell((cell) => {
+  //         cell.fill = {
+  //           type: "pattern",
+  //           pattern: "solid",
+  //           fgColor: { argb: "CBD5E0" },
+  //         };
+  //       });
+  //     }
+  //   });
+
+  //   // Generate and download the Excel file
+  //   const buffer = await workbook.xlsx.writeBuffer();
+  //   const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  //   saveAs(blob, "asdasd.xlsx");
+  // };
+
+  const handleExport = async () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sheet1");
+
+    // Define the columns with an empty header before "ID"
+    worksheet.columns = [
+      { header: "", key: "empty", width: 3 }, // Empty header
+      { header: "ID", key: "ID", width: 10 },
+      { header: "Item Code", key: "Item Code", width: 20 },
+      { header: "Item Description", key: "Item Description", width: 30 },
+      { header: "UOM", key: "UOM", width: 15 },
+      { header: "Item Category", key: "Item Category", width: 20 },
+      { header: "Unit Cost", key: "Unit Cost", width: 15 },
+      { header: "Total Inventory Cost", key: "Total Inventory Cost", width: 25 },
+      { header: "SOH", key: "SOH", width: 15 },
+      { header: "Prepared Quantity", key: "Prepared Quantity", width: 20 },
+      { header: "Reserve", key: "Reserve", width: 15 },
+      { header: "Buffer Level", key: "Buffer Level", width: 20 },
+      { header: "Receive", key: "Receive", width: 20 },
+      { header: "Miscellaneous Receipt", key: "Miscellaneous Receipt", width: 20 },
+      { header: "Move Order", key: "Move Order", width: 20 },
+      { header: "Miscellaneous Issue", key: "Miscellaneous Issue", width: 20 },
+      { header: "Borrowed", key: "Borrowed", width: 20 },
+      { header: "Returned", key: "Returned", width: 20 },
+      { header: "Consumed", key: "Consumed", width: 20 },
+      { header: "Suggested PO", key: "Suggested PO", width: 20 },
+      { header: "Reserve Usage", key: "Reserve Usage", width: 20 },
+    ];
+
+    console.log("Sheet Data: ", sheetData);
+
+    // Add the rows with the warning icon if the condition is met
+    sheetData.forEach((item) => {
+      const row = worksheet.addRow({
+        empty: item["Buffer Level"] >= item.Reserve ? "⚠️" : "",
+        ID: item.ID,
+        "Item Code": item["Item Code"],
+        "Item Description": item["Item Description"],
+        UOM: item.UOM,
+        "Item Category": item["Item Category"],
+        "Unit Cost": item["Unit Cost"],
+        "Total Inventory Cost": item["Total Inventory Cost"],
+        SOH: item.SOH,
+        "Prepared Quantity": item["Prepared Quantity"],
+        Reserve: item.Reserve,
+        "Buffer Level": item["Buffer Level"],
+        Receive: item.Receive,
+        "Miscellaneous Receipt": item["Miscellaneous Receipt"],
+        "Move Order": item["Move Order"],
+        "Miscellaneous Issue": item["Miscellaneous Issue"],
+        Borrowed: item.Borrowed,
+        Returned: item.Returned,
+        Consumed: item.Consumed,
+        "Suggested PO": item["Suggested PO"],
+        "Reserve Usage": item["Reserve Usage"],
+      });
+
+      // Check if the condition is met and apply the style
+      if (item.Reserve <= item["Buffer Level"]) {
+        row.eachCell((cell) => {
+          if (cell.value === "⚠️") {
+            // Apply red color to warning icon cell
+            cell.font = {
+              color: { argb: "FFFF0000" }, // Red color for text
+            };
+          }
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "CBD5E0" }, // Light red color for critical levels
+          };
+        });
+      }
+    });
+
+    // Generate and download the Excel file
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    saveAs(blob, "Elixir_MRP_ExportFile.xlsx");
   };
 
   const handlePageChange = (nextPage) => {

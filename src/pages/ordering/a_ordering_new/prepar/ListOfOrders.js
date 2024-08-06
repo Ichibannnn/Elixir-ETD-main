@@ -1,31 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Menu, MenuButton, MenuItem, MenuList, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import request from "../../../../services/ApiClient";
 import PageScroll from "../../../../utils/PageScroll";
 import { FiEdit } from "react-icons/fi";
 import { GiCancel } from "react-icons/gi";
-import {
-  CancelModalConfirmation,
-  EditModal,
-  ScheduleModal,
-} from "./ActionModal";
+import { CancelModalConfirmation, EditModal, ScheduleModal } from "./ActionModal";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdOutlineCancel, MdOutlineMoreHoriz } from "react-icons/md";
 
@@ -50,36 +29,18 @@ export const ListOfOrders = ({
   const [editData, setEditData] = useState([]);
   const [cancelId, setCancelId] = useState("");
 
-  const {
-    isOpen: isEdit,
-    onOpen: openEdit,
-    onClose: closeEdit,
-  } = useDisclosure();
-  const {
-    isOpen: isCancel,
-    onOpen: openCancel,
-    onClose: closeCancel,
-  } = useDisclosure();
+  const { isOpen: isEdit, onOpen: openEdit, onClose: closeEdit } = useDisclosure();
+  const { isOpen: isCancel, onOpen: openCancel, onClose: closeCancel } = useDisclosure();
 
-  const {
-    isOpen: isSchedule,
-    onOpen: openSchedule,
-    onClose: closeSchedule,
-  } = useDisclosure();
+  const { isOpen: isSchedule, onOpen: openSchedule, onClose: closeSchedule } = useDisclosure();
 
   const fetchOrderList = async () => {
     try {
-      const response = await request.get(
-        `Ordering/GetAllListOfMirOrdersByMirIds?listofMirIds=${selectedMIRIds.join(
-          "&listofMirIds="
-        )}`
-      );
+      const response = await request.get(`Ordering/GetAllListOfMirOrdersByMirIds?listofMirIds=${selectedMIRIds.join("&listofMirIds=")}`);
       setOrderList(response.data);
 
       // Check if any order has a negative value for "Reserve"
-      const hasNegativeReserve = response.data.some(
-        (order) => order.reserve < 0
-      );
+      const hasNegativeReserve = response.data.some((order) => order.reserve < 0);
       setDisableScheduleButton(hasNegativeReserve);
     } catch (error) {
       console.error("Error fetching order list:", error);
@@ -120,13 +81,7 @@ export const ListOfOrders = ({
 
   return (
     <Flex direction="column" w="full">
-      <Flex
-        direction="column"
-        p={4}
-        className="boxShadow"
-        w="full"
-        bg="#F5F5F7"
-      >
+      <Flex direction="column" p={4} className="boxShadow" w="full" bg="#F5F5F7">
         <Text
           textAlign="center"
           bgColor="primary"
@@ -201,16 +156,8 @@ export const ListOfOrders = ({
                       maximumFractionDigits: 2,
                     })}
                   </Td>
-                  {order?.itemRemarks ? (
-                    <Td fontSize="xs">{order.itemRemarks}</Td>
-                  ) : (
-                    <Td fontSize="xs">-</Td>
-                  )}
-                  {order?.assetTag ? (
-                    <Td fontSize="xs">{order.assetTag}</Td>
-                  ) : (
-                    <Td fontSize="xs">-</Td>
-                  )}
+                  {order?.itemRemarks ? <Td fontSize="xs">{order.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
+                  {order?.assetTag ? <Td fontSize="xs">{order.assetTag}</Td> : <Td fontSize="xs">-</Td>}
                   <Td fontSize="xs">
                     {order.actualReserve.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
@@ -240,20 +187,12 @@ export const ListOfOrders = ({
                             <MdOutlineMoreHoriz fontSize="20px" />
                           </MenuButton>
                           <MenuList>
-                            <MenuItem
-                              onClick={() => editHandler(order)}
-                              icon={<AiOutlineEdit fontSize="17px" />}
-                            >
+                            <MenuItem onClick={() => editHandler(order)} icon={<AiOutlineEdit fontSize="17px" />}>
                               <Text fontSize="15px" _hover={{ color: "red" }}>
                                 Edit
                               </Text>
                             </MenuItem>
-                            <MenuItem
-                              onClick={() => cancelHandler(order)}
-                              icon={
-                                <MdOutlineCancel fontSize="17px" color="red" />
-                              }
-                            >
+                            <MenuItem onClick={() => cancelHandler(order)} icon={<MdOutlineCancel fontSize="17px" color="red" />}>
                               <Text fontSize="15px" color="red">
                                 Cancel
                               </Text>
@@ -271,26 +210,12 @@ export const ListOfOrders = ({
       </Flex>
       <Flex w="full" justifyContent="space-between" py={2} px={2}>
         <Text fontSize="xs"></Text>
-        <Button
-          onClick={scheduleHandler}
-          isDisabled={!selectedMIRIds?.length > 0 || disableScheduleButton}
-          size="sm"
-          px={3}
-          colorScheme="blue"
-        >
+        <Button onClick={scheduleHandler} isDisabled={!selectedMIRIds?.length > 0 || disableScheduleButton} size="sm" px={3} colorScheme="blue">
           Schedule
         </Button>
       </Flex>
 
-      {isEdit && (
-        <EditModal
-          isOpen={isEdit}
-          onClose={closeEdit}
-          editData={editData}
-          fetchOrderList={fetchOrderList}
-          orderList={orderList}
-        />
-      )}
+      {isEdit && <EditModal isOpen={isEdit} onClose={closeEdit} editData={editData} fetchOrderList={fetchOrderList} orderList={orderList} />}
 
       {isCancel && (
         <CancelModalConfirmation

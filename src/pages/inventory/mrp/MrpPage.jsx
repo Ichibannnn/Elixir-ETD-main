@@ -117,7 +117,7 @@ const MrpPage = () => {
 
   const fetchMRPForSheet = () => {
     fetchMRPForSheetApi(pageTotalSheet).then((res) => {
-      console.log("Response: ", res);
+      // console.log("Response: ", res);
       setSheetData(
         res.inventory?.map((item) => {
           return {
@@ -139,7 +139,7 @@ const MrpPage = () => {
             Borrowed: item.borrowedOut,
             Returned: item.returnedBorrowed,
             Consumed: item.borrowConsume,
-            "Suggested PO": item.suggestedPO,
+            "Suggested PO": item.suggestedPo,
             "Reserve Usage": item.reserveUsage,
             // "Average Issuance": item.averageIssuance,
             // "Days Level": item.daysLevel,
