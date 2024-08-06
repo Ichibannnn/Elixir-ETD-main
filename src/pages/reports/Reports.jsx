@@ -18,6 +18,7 @@ import { ReturnedQuantityTransaction } from "./report_dropdown/ReturnedQuantityT
 import { CancelledOrders } from "./report_dropdown/CancelledOrders";
 import { ConsolidatedReportsFinance } from "./report_dropdown/ConsolidatedReportsFinance";
 import { InventoryMovement } from "./report_dropdown/InventoryMovement";
+import { ConsolidatedReportsAudit } from "./report_dropdown/ConsolidatedReportsAudit";
 
 const Reports = () => {
   const [dateFrom, setDateFrom] = useState(moment(new Date()).format("yyyy-MM-DD"));
@@ -56,6 +57,31 @@ const Reports = () => {
         const link = document.createElement("a");
         link.href = url;
         link.setAttribute("download", "Consolidated_Finance_Report.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Error", error);
+      }
+    } else if (sample === 11) {
+      setIsLoading(true);
+      try {
+        const response = await request.get("Reports/ExportConsolidateFinance", {
+          params: {
+            DateFrom: dateFrom,
+            DateTo: dateTo,
+            Search: search,
+          },
+          responseType: "blob",
+        });
+
+        console.log("Response: ", response);
+
+        const url = window.URL.createObjectURL(new Blob([response.data]), { type: response.headers["content-type"] });
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "Consolidated_Audit_Report.xlsx");
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -133,7 +159,8 @@ const Reports = () => {
                   <option value={8}>Returned Materials History</option>
                   <option value={9}>Unserved Orders History</option>
                   <option value={10}>Consolidated Report (Finance)</option>
-                  <option value={11}>Inventory Movement</option>
+                  <option value={11}>Consolidated Report (Audit)</option>
+                  <option value={12}>Inventory Movement</option>
                 </Select>
               </HStack>
             </Flex>
@@ -160,9 +187,9 @@ const Reports = () => {
 
               {/* Viewing Condition  */}
               <Flex justifyContent="start">
-                {sample < 12 ? (
+                {sample < 13 ? (
                   <Flex justifyContent="start" flexDirection="row">
-                    {sample != 11 && (
+                    {sample != 12 && (
                       <Flex flexDirection="column" ml={1}>
                         <Flex>
                           <Badge>Date from:</Badge>
@@ -173,14 +200,14 @@ const Reports = () => {
                           type="date"
                           value={dateFrom}
                           onChange={(e) => setDateFrom(e.target.value)}
-                          min={sample === 11 ? minimumDateForInventoryMovement : undefined}
+                          min={sample === 12 ? minimumDateForInventoryMovement : undefined}
                         />
                       </Flex>
                     )}
 
                     <Flex flexDirection="column" ml={1}>
                       <Flex>
-                        <Badge>{sample === 11 ? `Rollback Date:` : `Date To:`}</Badge>
+                        <Badge>{sample === 12 ? `Rollback Date:` : `Date To:`}</Badge>
                       </Flex>
                       <Input fontSize="xs" bgColor="#fff8dc" type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
                     </Flex>
@@ -212,6 +239,8 @@ const Reports = () => {
             ) : sample === 10 ? (
               <ConsolidatedReportsFinance search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} isLoading={isLoading} />
             ) : sample === 11 ? (
+              <ConsolidatedReportsAudit search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} isLoading={isLoading} />
+            ) : sample === 12 ? (
               <InventoryMovement search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : (
               ""
