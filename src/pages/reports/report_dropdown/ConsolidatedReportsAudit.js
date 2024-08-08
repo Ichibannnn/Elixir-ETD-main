@@ -160,7 +160,7 @@ export const ConsolidatedReportsAudit = ({ dateFrom, dateTo, setSheetData, searc
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
                     <Td fontSize="xs">{item.id}</Td>
-                    <Td fontSize="xs">{moment(item.transactionDate).format("YYYY-MM-DD")}</Td>
+                    <Td fontSize="xs">{item.transactionDate ? moment(item.transactionDate).format("YYYY-MM-DD") : "-"}</Td>
                     <Td fontSize="xs">{item.itemCode}</Td>
                     <Td fontSize="xs">{item.itemDescription}</Td>
                     {buttonChanger ? (

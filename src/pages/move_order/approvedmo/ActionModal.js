@@ -818,7 +818,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                           </Td>
 
                           <Td fontSize="xs">
-                            {item.tTotalCost.toLocaleString(undefined, {
+                            {item.totalCost.toLocaleString(undefined, {
                               maximumFractionDigits: 2,
                               minimumFractionDigits: 2,
                             })}
