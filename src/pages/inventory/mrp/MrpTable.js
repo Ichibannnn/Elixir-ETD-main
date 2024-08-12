@@ -108,7 +108,7 @@ export const MrpTable = ({
 
     // Define the columns with an empty header before "ID"
     worksheet.columns = [
-      { header: "", key: "empty", width: 3 }, // Empty header
+      { header: "⚠️", key: "empty", width: 3 }, // Empty header
       { header: "ID", key: "ID", width: 10 },
       { header: "Item Code", key: "Item Code", width: 20 },
       { header: "Item Description", key: "Item Description", width: 30 },
@@ -132,6 +132,23 @@ export const MrpTable = ({
     ];
 
     console.log("Sheet Data: ", sheetData);
+
+    // Style the header row (including the empty header with the warning icon)
+    worksheet.getRow(1).eachCell((cell, colNumber) => {
+      console.log("Column Number: ", colNumber);
+
+      if (colNumber === 1) {
+        cell.value = "⚠️"; // Add warning icon to the first (empty) header
+        cell.font = { color: { argb: "FFFF0000", bold: true } }; // Red color for the warning icon
+      }
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "90CDF4" }, // Light pink background color for all headers
+      };
+      // cell.font = { bold: true };
+      cell.alignment = { vertical: "middle", horizontal: "center" };
+    });
 
     // Add the rows with the warning icon if the condition is met
     sheetData.forEach((item) => {
@@ -177,7 +194,19 @@ export const MrpTable = ({
       }
     });
 
+    // Freeze the header row
+    // worksheet.views = [
+    //   {
+    //     state: "frozen",
+    //     xSplit: 0,
+    //     ySplit: 1, // Freeze the first row
+    //     topLeftCell: { col: 1, row: 1 },
+    //     activeCell: { col: 1, row: 1 },
+    //   },
+    // ];
+
     // Generate and download the Excel file
+
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     saveAs(blob, "Elixir_MRP_ExportFile.xlsx");
@@ -303,7 +332,11 @@ export const MrpTable = ({
             <Thead bgColor="primary" position="sticky" top={0}>
               <Tr>
                 <Th p={0} color="white" fontSize="xs"></Th>
-                <Th p={0} color="white" fontSize="xs"></Th>
+                <Th p={0} fontSize="xs">
+                  <Flex justifyContent="center">
+                    <TiWarning fontSize="18px" color="red" />
+                  </Flex>
+                </Th>
                 <Th color="white" fontSize="xs">
                   Line
                 </Th>

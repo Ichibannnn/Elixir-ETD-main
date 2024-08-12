@@ -243,3 +243,7 @@
   font-size: x-small !important;
   text-align: center !important;
 }
+
+.warning-icon {
+  background-color: red;
+}
