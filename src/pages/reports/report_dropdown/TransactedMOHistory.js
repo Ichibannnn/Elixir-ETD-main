@@ -32,7 +32,7 @@ export const TransactedMOHistory = ({ dateFrom, dateTo, setSheetData, search }) 
           return {
             "MIR ID": item.mirId,
             "CIP#": item.cip_No === null ? "-" : item.cip_No,
-            "Transaction Date": item.transactedDate ? new Date(moment(item.transactedDate).format("MM/DD/YYYY")) : "",
+            "Transacted Date": item.transactedDate ? new Date(moment(item.transactedDate).format("MM/DD/YYYY")) : "",
             "Customer Code": item.customerCode,
             "Customer Name": item.customerName,
             "Customer Type": item.customerType,

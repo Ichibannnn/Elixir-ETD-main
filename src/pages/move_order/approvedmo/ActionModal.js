@@ -227,7 +227,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
               </Table>
             </PageScroll>
 
-            <Flex justifyContent="space-between" mb={5} mt={8}>
+            <Flex justifyContent="space-between" mb={5} mt={4}>
               <HStack>
                 <Text fontSize="xs">Delivery Status:</Text>
                 <Text textDecoration="underline" fontSize="xs">
@@ -248,7 +248,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
               </VStack>
             </Flex>
 
-            <Flex justifyContent="space-between">
+            <Flex justifyContent="space-between" mb={5}>
               <VStack spacing={0}>
                 <HStack>
                   <Text fontSize="xs">Prepared By:</Text>
@@ -262,6 +262,20 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
               <VStack spacing={0}>
                 <HStack>
                   <Text fontSize="xs">Received By:</Text>
+                  <Text textDecoration="underline" fontSize="xs">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </Text>
+                </HStack>
+              </VStack>
+            </Flex>
+
+            <Flex justifyContent="space-between">
+              <VStack spacing={0}></VStack>
+              <VStack spacing={0}>
+                <HStack>
+                  <Text fontSize="xs">Date Received:</Text>
                   <Text textDecoration="underline" fontSize="xs">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -863,7 +877,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                     </Tbody>
                   </Table>
 
-                  <Flex justifyContent="space-between" mb={5} mt={2}>
+                  <Flex justifyContent="space-between" mb={5} mt={4}>
                     <HStack>
                       <Text fontSize="xs">Delivery Status:</Text>
                       <Text textDecoration="underline" fontSize="xs">
@@ -884,7 +898,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                     </VStack>
                   </Flex>
 
-                  <Flex justifyContent="space-between">
+                  <Flex justifyContent="space-between" mb={5}>
                     <VStack spacing={0}>
                       <HStack>
                         <Text fontSize="xs">Prepared By:</Text>
@@ -898,6 +912,20 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                     <VStack spacing={0}>
                       <HStack>
                         <Text fontSize="xs">Received By:</Text>
+                        <Text textDecoration="underline" fontSize="xs">
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  </Flex>
+
+                  <Flex justifyContent="space-between">
+                    <VStack spacing={0}></VStack>
+                    <VStack spacing={0}>
+                      <HStack>
+                        <Text fontSize="xs">Date Received:</Text>
                         <Text textDecoration="underline" fontSize="xs">
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
