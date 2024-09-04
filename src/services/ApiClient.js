@@ -16,19 +16,8 @@ const user = decodeUser();
 
 //LIVE
 // Set config defaults when creating the instance
-const request = axios.create({
-  baseURL: "http://10.10.2.31:72/api/",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + user?.token,
-  },
-});
-
-export default request;
-
-// PRE_TEST
 // const request = axios.create({
-//   baseURL: "https://pretest-api.elixir-etd.rdfmis.com/api/",
+//   baseURL: "http://10.10.2.31:72/api/",
 //   headers: {
 //     "Content-Type": "application/json",
 //     Authorization: "Bearer " + user?.token,
@@ -36,3 +25,14 @@ export default request;
 // });
 
 // export default request;
+
+// PRE_TEST
+const request = axios.create({
+  baseURL: "https://pretest-api.elixir-etd.rdfmis.com/api/",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + user?.token,
+  },
+});
+
+export default request;

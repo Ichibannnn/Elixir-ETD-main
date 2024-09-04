@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Button, Flex, Input, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Input, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast, VStack } from "@chakra-ui/react";
 import { BiImport } from "react-icons/bi";
-import { MdOutlineError } from "react-icons/md";
+import { MdOutlineError, MdOutlineSync } from "react-icons/md";
 
 import * as XLSX from "xlsx";
 import moment from "moment/moment";
@@ -13,22 +13,64 @@ import Swal from "sweetalert2";
 
 import ErrorList from "./ErrorList";
 import PageScroll from "../../utils/PageScroll";
+import axios from "axios";
+import SyncModal from "./SyncModal";
 
 const currentUser = decodeUser();
 
+const fetchYMIRApi = async (fromDate, toDate) => {
+  const fromDateFormatted = moment(fromDate).format("yyyy-MM-DD");
+  const toDateFormatted = moment(toDate).format("yyyy-MM-DD");
+  const res = await axios.get(`http://10.10.13.6:8080/api/etd_api?system_name=ESG WAREHOUSE ETD&from=${fromDateFormatted}&to=${toDateFormatted}`, {
+    headers: {
+      Authorization: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
+    },
+  });
+  return res.data;
+};
+
 const ImportPO = () => {
   const [excelData, setExcelData] = useState([]);
+  const [ymirPO, setYmirPo] = useState([]);
+
+  const dateVar = new Date();
+  const startDate = moment(dateVar).format("yyyy-MM-DD");
+  const [fromDate, setFromDate] = useState(startDate);
+  const [toDate, setToDate] = useState(new Date());
+
   const [workbook, setWorkbook] = useState([]);
   const [sheetOption, setSheetOption] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [fetchData, setFetchData] = useState(false);
 
   const [errorOpener, setErrorOpener] = useState(false);
   const [errorData, setErrorData] = useState([]);
   const toast = useToast();
 
   const { isOpen: isErrorOpen, onOpen: onErrorOpen, onClose: onErrorClose } = useDisclosure();
+  const { isOpen: isSyncOpen, onOpen: onSyncOpen, onClose: onSyncClose } = useDisclosure();
+
   const clearExcelFile = useRef();
+
+  // GET YMIR PO
+  const getYmirPo = () => {
+    fetchYMIRApi(fromDate, toDate).then((res) => {
+      setYmirPo(res);
+      setFetchData(false);
+    });
+  };
+
+  useEffect(() => {
+    if (fromDate && toDate) {
+      getYmirPo();
+    }
+    return () => {
+      setYmirPo([]);
+    };
+  }, [fromDate, toDate]);
+
+  // console.log("YMIR PO: ", ymirPO);
 
   // EXCEL DATA TRIM TO LOWERCASE
   const fileRender = (jsonData) => {
@@ -92,11 +134,11 @@ const ImportPO = () => {
       uom: item?.uom?.toString().trim(),
       unitPrice: item?.unit_cost?.toString().trim(),
       vendorName: item?.supplier_name?.toString().trim(),
-      addedBy: currentUser.username?.toString().trim(),
+      addedBy: currentUser?.username?.toString().trim(),
     };
   });
 
-  console.log("resultArray: ", resultArray);
+  // console.log("resultArray: ", resultArray);
 
   const submitExcelHandler = (resultArray) => {
     Swal.fire({
@@ -160,6 +202,10 @@ const ImportPO = () => {
     onErrorOpen();
   };
 
+  const openSyncYMIRModal = () => {
+    onSyncOpen();
+  };
+
   const [bufferError, setBufferError] = useState(false); // Set it to false initially
   const [toastShown, setToastShown] = useState(false); // Set it to false initially
 
@@ -180,7 +226,7 @@ const ImportPO = () => {
     <Flex bg="form" h="920px" w="full" flexDirection="column">
       <Flex justifyContent="space-between">
         <Box />
-        <Box p={2}>
+        <Box p={2} gap={3}>
           {errorOpener === true ? (
             <Button
               onClick={() => openErrorModal()}
@@ -197,19 +243,35 @@ const ImportPO = () => {
               Error List
             </Button>
           ) : (
-            <Button
-              type="submit"
-              leftIcon={<BiImport fontSize="19px" />}
-              colorScheme="blue"
-              borderRadius="none"
-              fontSize="12px"
-              size="xs"
-              isLoading={isLoading}
-              isDisabled={isDisabled}
-              onClick={() => submitExcelHandler(resultArray)}
-            >
-              Import Purchase Order
-            </Button>
+            <HStack gap={1}>
+              <Button
+                type="submit"
+                leftIcon={<MdOutlineSync fontSize="19px" />}
+                colorScheme="teal"
+                borderRadius="none"
+                fontSize="12px"
+                size="xs"
+                isLoading={isLoading}
+                // isDisabled={isDisabled}
+                onClick={() => openSyncYMIRModal()}
+              >
+                Sync from YMIR
+              </Button>
+
+              <Button
+                type="submit"
+                leftIcon={<BiImport fontSize="19px" />}
+                colorScheme="blue"
+                borderRadius="none"
+                fontSize="12px"
+                size="xs"
+                isLoading={isLoading}
+                isDisabled={isDisabled}
+                onClick={() => submitExcelHandler(resultArray)}
+              >
+                Import Purchase Order
+              </Button>
+            </HStack>
           )}
         </Box>
       </Flex>
@@ -376,6 +438,22 @@ const ImportPO = () => {
           <Input ref={clearExcelFile} color="white" type="file" w="25%" size="25px" fontSize="13px" onChange={(e) => fileHandler(e.target.files)} />
         </Flex>
       </Flex>
+
+      {isSyncOpen && (
+        <SyncModal
+          isOpen={isSyncOpen}
+          onClose={onSyncClose}
+          onErrorSyncModal={onErrorOpen}
+          ymirPO={ymirPO}
+          fetchData={fetchData}
+          setFetchData={setFetchData}
+          setErrorData={setErrorData}
+          fromDate={fromDate}
+          setFromDate={setFromDate}
+          toDate={toDate}
+          setToDate={setToDate}
+        />
+      )}
 
       {isErrorOpen && (
         <ErrorList
