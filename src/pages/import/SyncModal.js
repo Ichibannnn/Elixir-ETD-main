@@ -41,6 +41,8 @@ import PageScroll from "../../utils/PageScroll";
 import { decodeUser } from "../../services/decode-user";
 import { MdOutlineSync } from "react-icons/md";
 
+import noRecordsFound from "../../../src/assets/svg/noRecordsFound.svg";
+
 const currentUser = decodeUser();
 
 const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate, setFromDate, toDate, setToDate, onErrorSyncModal, errorData, setErrorData }) => {
@@ -282,6 +284,21 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                             </Td>
                           </Tr>
                         ))}
+
+                        {!ymirResultArray?.length && (
+                          <Tr>
+                            <Td colSpan={12} align="center">
+                              <Flex width="100%" justifyContent="center" alignItems="center">
+                                <VStack>
+                                  <img src={noRecordsFound} alt="No Records Found" className="norecords-found-table" />
+                                  <Text color="black" marginLeft={2}>
+                                    No records found.
+                                  </Text>
+                                </VStack>
+                              </Flex>
+                            </Td>
+                          </Tr>
+                        )}
                       </Tbody>
                     </Table>
                   )}

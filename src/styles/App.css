@@ -247,3 +247,13 @@
 .warning-icon {
   background-color: red;
 }
+
+.norecords-found-table {
+  width: 150px;
+  height: 150px;
+  object-fit: fill;
+  border-style: none;
+  background: none;
+  z-index: 1;
+  top: 0;
+}
