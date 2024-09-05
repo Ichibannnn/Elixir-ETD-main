@@ -447,6 +447,7 @@ const ImportPO = () => {
           ymirPO={ymirPO}
           fetchData={fetchData}
           setFetchData={setFetchData}
+          errorData={errorData}
           setErrorData={setErrorData}
           fromDate={fromDate}
           setFromDate={setFromDate}

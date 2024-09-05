@@ -43,7 +43,7 @@ import { MdOutlineSync } from "react-icons/md";
 
 const currentUser = decodeUser();
 
-const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate, setFromDate, toDate, setToDate, onErrorSyncModal, setErrorData }) => {
+const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate, setFromDate, toDate, setToDate, onErrorSyncModal, errorData, setErrorData }) => {
   const toast = useToast();
 
   const dateVar = new Date();
@@ -51,7 +51,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
 
   const ymirResultArray = ymirPO?.data?.map((item) => {
     return {
-      pR_Number: item?.pr_number?.toString().trim(),
+      pR_Number: item?.pr_year_number_id?.toString().trim(),
       pR_Date: moment(item?.pr_date)?.format("YYYY-MM-DD")?.toString().trim(),
       pO_Number: item?.po_number?.toString().trim(),
       pO_Date: moment(item?.po_date)?.format("YYYY-MM-DD")?.toString().trim(),
@@ -66,6 +66,8 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
       addedBy: currentUser?.username?.toString().trim(),
     };
   });
+
+  console.log("YMIR RESULT: ", ymirResultArray);
 
   const submitSyncHandler = () => {
     Swal.fire({
@@ -102,6 +104,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                 setFetchData(false);
                 setErrorData(err.response.data);
                 if (err.response.data) {
+                  // console.log("ErrorData: ", err);
                   onErrorSyncModal();
                 }
               });
@@ -115,6 +118,12 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
     });
   };
 
+  const closeModalHandler = () => {
+    setFromDate(moment(new Date()).format("yyyy-MM-DD"));
+    setToDate(moment(new Date()).format("yyyy-MM-DD"));
+    onClose();
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="6xl">
       <ModalOverlay />
@@ -126,7 +135,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
             </Text>
           </Flex>
         </ModalHeader>
-        <ModalCloseButton onClick={onClose} />
+        <ModalCloseButton onClick={() => closeModalHandler()} />
 
         <PageScroll>
           <ModalBody>
@@ -166,7 +175,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
             <Flex p={4}>
               <VStack alignItems="center" w="100%" mt={-8}>
                 <PageScroll minHeight="300px" maxHeight="720px" maxWidth="full">
-                  {fetchData && !ymirPO.data?.length ? (
+                  {fetchData ? (
                     <Stack width="full">
                       <Skeleton height="20px" />
                       <Skeleton height="20px" />
@@ -249,18 +258,24 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                             </Td>
                             <Td color="gray.600" fontSize="11px">
                               {d?.ordered.toLocaleString(undefined, {
-                                minumFractionDigits: 2,
-                                maximumFractionDigits: 2,
+                                minimumFractionDigits: 2,
+                                maximumFractionDigi: 2,
                               })}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
-                              {d?.delivered}
-                            </Td>
-                            <Td color="gray.600" fontSize="11px">
-                              {d?.billed}
+                              {d?.delivered.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigi: 2,
+                              })}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
                               {d?.uom}
+                            </Td>
+                            <Td color="gray.600" fontSize="11px">
+                              {d?.unitPrice.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigi: 2,
+                              })}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
                               {d?.vendorName}

@@ -42,6 +42,8 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
   const toast = useToast();
   const clearExcelFile = useRef();
 
+  console.log("Error Data: ", errorData);
+
   const availableImportData = errorData?.availableImport?.map((list) => {
     return {
       pR_Number: list?.pR_Number?.toString().trim(),
@@ -188,7 +190,8 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
     }).then((result) => {
       if (result.isConfirmed) {
         if (available?.length > 0) {
-          console.log(available);
+          console.log("Available Sync: ", available);
+
           try {
             setIsLoading(true);
             const res = request
