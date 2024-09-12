@@ -61,6 +61,14 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             }),
+            "Unit Cost": item.unitCost.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            }),
+            Amount: item.amount.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            }),
           };
         })
       );
@@ -126,6 +134,12 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
                   <Th color="white" fontSize="10px" fontWeight="semibold">
                     Current Stock
                   </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Unit Cost
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Amount
+                  </Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -177,6 +191,18 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
                     </Td>
                     <Td fontSize="xs">
                       {item.currentStock.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2,
+                      })}
+                    </Td>
+                    <Td fontSize="xs">
+                      {item.unitCost.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2,
+                      })}
+                    </Td>
+                    <Td fontSize="xs">
+                      {item.amount.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
