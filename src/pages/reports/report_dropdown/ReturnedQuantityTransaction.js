@@ -52,6 +52,14 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
             }),
             "Returned Date": item.isApproveReturnDate ? moment(item.isApproveReturnDate).format("MM-DD-YYYY") : "-",
             "Aging Days": `${item.agingDays} Day(s)`,
+            "Unit Cost": item.unitCost.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }),
+            "Line Amount": item.lineAmount.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }),
             "Service Report No.": item.reportNumber ?? "-",
             "Employee Id": item.empIdByIssue,
             "Employee Name": item.fullNameByIssue,
@@ -132,6 +140,12 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Aging Days
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Unit Cost
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Amount
                       </Th>
                     </>
                   ) : (
@@ -282,6 +296,32 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
                                 {item.agingDays} Day(s)
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Td>
+
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700" fontWeight="semibold">
+                                {item.unitCost?.toLocaleString(undefined, {
+                                  maximumFractionDigits: 2,
+                                  minimumFractionDigits: 2,
+                                })}
+                              </Text>
+                            </HStack>
+                          </Flex>
+                        </Td>
+
+                        <Td>
+                          <Flex flexDirection="column" gap="10px">
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text color="gray.700" fontWeight="semibold">
+                                {item.lineAmount.toLocaleString(undefined, {
+                                  maximumFractionDigits: 2,
+                                  minimumFractionDigits: 2,
+                                })}
                               </Text>
                             </HStack>
                           </Flex>
