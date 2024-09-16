@@ -294,7 +294,6 @@ export const AccountTitleModal = ({
   }, [orderId, company]);
 
   const submitHandler = async (data) => {
-    console.log("example");
     Swal.fire({
       title: "Confirmation!",
       text: "Are you sure you want to save this move order list?",
@@ -320,8 +319,11 @@ export const AccountTitleModal = ({
           departmentName: data.formData.departmentId.value.name,
           locationCode: data.formData.locationId.value.code,
           locationName: data.formData.locationId.value.name,
+          preparedBy: currentUser?.fullName,
         };
       });
+
+      // console.log("submitArrayBody: ", submitArrayBody);
 
       const genusStatus = moveData?.orders?.map((item) => {
         return {
@@ -528,7 +530,7 @@ export const AddQuantityConfirmation = ({
           orderNo: orderNo,
           itemCode: itemCode,
           quantityOrdered: Number(quantity),
-          preparedBy: currentUser.userName,
+          preparedBy: currentUser.fullName,
         })
         .then((res) => {
           ToastComponent("Success", "Quantity has been prepared.", "success", toast);

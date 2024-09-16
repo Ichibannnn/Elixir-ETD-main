@@ -62,7 +62,7 @@ export const ListMoveOrder = ({
     } else {
       setCheckedItems([]);
     }
-    console.log(checkedItems);
+    console.log("checkedItems: ", checkedItems);
   };
 
   const childCheckHandler = (e) => {

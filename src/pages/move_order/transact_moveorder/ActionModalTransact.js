@@ -27,6 +27,7 @@ import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
 
 import { ToastComponent } from "../../../components/Toast";
+import { decodeUser } from "../../../services/decode-user";
 
 export const ViewModal = ({ isOpen, onClose, moveOrderInformation, moveOrderViewTable }) => {
   const TableHead = ["Line", "Order Date", "Item Code", "Item Description", "UOM", "Quantity", "Item Remarks", "Asset Tag"];
@@ -137,10 +138,15 @@ export const TransactConfirmation = ({
   fetchNotification,
   moveOrderViewTable,
 }) => {
+  const currentUser = decodeUser();
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log("User: ", currentUser);
+
   const submitHandler = () => {
+    // console.log("Check Items: ", checkedItems);
+
     const arraySubmit = checkedItems?.map((item) => {
       return {
         orderNo: item.orderNo,
@@ -149,8 +155,11 @@ export const TransactConfirmation = ({
         orderNoPKey: item.orderNoPKey,
         isApprove: item.isApprove,
         deliveryDate: deliveryDate,
+        preparedBy: item.preparedBy,
       };
     });
+
+    console.log("arraySubmit: ", arraySubmit);
 
     const genusStatus = checkedItems?.map((item) => {
       return {

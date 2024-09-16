@@ -62,8 +62,9 @@ export const TransactedMOHistory = ({ dateFrom, dateTo, setSheetData, search }) 
             Status: item.transactedDate ? "Transacted" : "For Transaction",
             Requestor: item.requestor,
             Approver: item.approver,
-            "Move Order Date": item.moveOrderDate ? new Date(moment(item.moveOrderDate).format("MM/DD/YYYY")) : "",
+            "Move Order Date": item.moveOrderDate ? new Date(moment(item.moveOrderDate).format("MM/DD/YYYY")) : "-",
             "Move Order By": item.moveOrderBy,
+            "Pick-Up Date": item.picUp_Date ? new Date(moment(item.picUp_Date).format("MM/DD/YYYY")) : "-",
           };
         })
       );
@@ -182,6 +183,9 @@ export const TransactedMOHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Transacted By
                       </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Pick-Up Date
+                      </Th>
                     </>
                   )}
                 </Tr>
@@ -239,6 +243,7 @@ export const TransactedMOHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                         <Td fontSize="xs">{item.transactedDate ? "Transacted" : "For Transaction"}</Td>
                         <Td fontSize="xs">{item.transactedDate ? moment(item.transactedDate).format("yyyy-MM-DD") : "-"}</Td>
                         <Td fontSize="xs">{item.transactedBy ? item.transactedBy : "-"}</Td>
+                        <Td fontSize="xs">{item.picUp_Date ? moment(item.picUp_Date).format("yyyy-MM-DD") : "-"}</Td>
                       </>
                     )}
                   </Tr>
