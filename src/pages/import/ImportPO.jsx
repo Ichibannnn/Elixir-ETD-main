@@ -252,7 +252,7 @@ const ImportPO = () => {
                 fontSize="12px"
                 size="xs"
                 isLoading={isLoading}
-                // isDisabled={isDisabled}
+                isDisabled={true}
                 onClick={() => openSyncYMIRModal()}
               >
                 Sync from YMIR
