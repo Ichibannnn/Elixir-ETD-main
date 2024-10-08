@@ -37,15 +37,20 @@ import { ToastComponent } from "../../components/Toast";
 import PageScrollModalErrorList from "../../components/PageScrollModalErrorList";
 import PageScrollImportModal from "../../components/PageScrollImportModal";
 import PageScroll from "../../utils/PageScroll";
+import { decodeUser } from "../../services/decode-user";
+
+const currentUser = decodeUser();
 
 const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData, excelData }) => {
   const toast = useToast();
   const clearExcelFile = useRef();
 
-  console.log("Error Data: ", errorData);
+  // console.log("Error Data: ", errorData);
 
   const availableImportData = errorData?.availableImport?.map((list) => {
     return {
+      rrNo: list?.rrNo?.toString().trim(),
+      rrDate: moment(list.rrDate)?.format("YYYY-MM-DD")?.toString().trim(),
       pR_Number: list?.pR_Number?.toString().trim(),
       pR_Date: moment(list.pR_Date)?.format("YYYY-MM-DD")?.toString().trim(),
       pO_Number: list?.pO_Number?.toString().trim(),
@@ -57,12 +62,18 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       billed: list?.billed?.toString().trim(),
       uom: list?.uom?.toString().trim(),
       unitPrice: list?.unitPrice?.toString().trim(),
+      actualRemaining: list?.actualRemaining?.toString().trim(),
+      siNumber: list?.siNumber?.toString().trim(),
+      receiveDate: list?.receiveDate?.toString().trim(),
       vendorName: list?.vendorName?.toString().trim(),
+      addedBy: currentUser?.fullName?.toString().trim(),
     };
   });
 
   const duplicateListData = errorData?.duplicateList?.map((list) => {
     return {
+      rrNo: list?.rrNo?.toString().trim(),
+      rrDate: moment(list.rrDate)?.format("YYYY-MM-DD")?.toString().trim(),
       pR_Number: list.pR_Number,
       pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
       pO_Number: list.pO_Number,
@@ -80,6 +91,8 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
 
   const itemcodeNotExistData = errorData?.itemcodeNotExist?.map((list) => {
     return {
+      rrNo: list?.rrNo?.toString().trim(),
+      rrDate: moment(list.rrDate)?.format("YYYY-MM-DD")?.toString().trim(),
       pR_Number: list.pR_Number,
       pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
       pO_Number: list.pO_Number,
@@ -97,6 +110,8 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
 
   const itemdescriptionNotExist = errorData?.itemdescriptionNotExist?.map((list) => {
     return {
+      rrNo: list?.rrNo?.toString().trim(),
+      rrDate: moment(list.rrDate)?.format("YYYY-MM-DD")?.toString().trim(),
       pR_Number: list.pR_Number,
       pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
       pO_Number: list.pO_Number,
@@ -114,6 +129,8 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
 
   const supplierNotExistData = errorData?.supplierNotExist?.map((list) => {
     return {
+      rrNo: list?.rrNo?.toString().trim(),
+      rrDate: moment(list.rrDate)?.format("YYYY-MM-DD")?.toString().trim(),
       pR_Number: list.pR_Number,
       pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
       pO_Number: list.pO_Number,
@@ -131,6 +148,8 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
 
   const uomCodeNotExistData = errorData?.uomCodeNotExist?.map((list) => {
     return {
+      rrNo: list?.rrNo?.toString().trim(),
+      rrDate: moment(list.rrDate)?.format("YYYY-MM-DD")?.toString().trim(),
       pR_Number: list.pR_Number,
       pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
       pO_Number: list.pO_Number,
@@ -148,6 +167,8 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
 
   const materialInformationData = errorData?.itemcodeanduomNotExist?.map((list) => {
     return {
+      rrNo: list?.rrNo?.toString().trim(),
+      rrDate: moment(list.rrDate)?.format("YYYY-MM-DD")?.toString().trim(),
       pR_Number: list.pR_Number,
       pR_Date: moment(list.pR_Date).format("YYYY-MM-DD"),
       pO_Number: list.pO_Number,
@@ -171,6 +192,8 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
   const uom = uomCodeNotExistData;
   const materialInfo = materialInformationData;
 
+  // console.log("Available Import: ", available);
+
   const submitAvailablePOHandler = () => {
     Swal.fire({
       title: "Confirmation!",
@@ -189,9 +212,9 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        if (available?.length > 0) {
-          console.log("Available Sync: ", available);
+        console.log("Available Sync: ", available);
 
+        if (available?.length > 0) {
           try {
             setIsLoading(true);
             const res = request
@@ -256,6 +279,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                                 Line
                               </Th>
                               <Th color="white" fontSize="9px">
+                                RR Number
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                RR Date
+                              </Th>
+                              <Th color="white" fontSize="9px">
                                 PR Number
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -296,6 +325,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                               <Tr key={i}>
                                 <Td color="gray.600" fontSize="11px">
                                   {i + 1}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.rrNo}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.rrDate}
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.pR_Number}
@@ -386,7 +421,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                         <Table variant="striped" size="sm" bg="white">
                           <Thead bgColor="gray.600">
                             <Tr>
-                              {/* <Th color='white'>ID</Th> */}
+                              <Th color="white" fontSize="9px">
+                                RR Number
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                RR Date
+                              </Th>
                               <Th color="white" fontSize="9px">
                                 PR Number
                               </Th>
@@ -431,6 +471,29 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                               <Tr key={i}>
                                 <Td color="gray.600" fontSize="11px">
                                   {/* <Td>{ }</Td> */}
+
+                                  {d?.rrNo === 0 ? (
+                                    <Text fontWeight="semibold" color="danger">
+                                      Empty field
+                                    </Text>
+                                  ) : (
+                                    d?.rrNo
+                                  )}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {/* <Td>{ }</Td> */}
+
+                                  {d?.rrDate === 0 ? (
+                                    <Text fontWeight="semibold" color="danger">
+                                      Empty field
+                                    </Text>
+                                  ) : (
+                                    d?.rrDate
+                                  )}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {/* <Td>{ }</Td> */}
+
                                   {d?.pR_Number === 0 ? (
                                     <Text fontWeight="semibold" color="danger">
                                       Empty field
@@ -530,6 +593,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                             <Tr>
                               {/* <Th color='white'>ID</Th> */}
                               <Th color="white" fontSize="9px">
+                                RR Number
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                RR Date
+                              </Th>
+                              <Th color="white" fontSize="9px">
                                 PO Number
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -557,6 +626,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                             {itemCodes?.map((ne, i) => (
                               <Tr key={i}>
                                 {/* <Td>{ }</Td> */}
+                                <Td color="gray.600" fontSize="11px">
+                                  {ne?.rrNo}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {ne?.rrDate}
+                                </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {ne?.pO_Number}
                                 </Td>
@@ -618,6 +693,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                             <Tr>
                               {/* <Th color='white'>ID</Th> */}
                               <Th color="white" fontSize="9px">
+                                RR Number
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                RR Date
+                              </Th>
+                              <Th color="white" fontSize="9px">
                                 PO Number
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -633,6 +714,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                             {supplier?.map((ne, i) => (
                               <Tr key={i}>
                                 {/* <Td>{ }</Td> */}
+                                <Td color="gray.600" fontSize="11px">
+                                  {ne?.rrNo}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {ne?.rrDate}
+                                </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {ne?.pO_Number}
                                 </Td>
@@ -681,6 +768,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                             <Tr>
                               {/* <Th color='white'>ID</Th> */}
                               <Th color="white" fontSize="9px">
+                                RR Number
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                RR Date
+                              </Th>
+                              <Th color="white" fontSize="9px">
                                 PO Number
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -704,6 +797,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                           {uom?.map((ne, i) => (
                             <Tr key={i}>
                               {/* <Td>{ }</Td> */}
+                              <Td color="gray.600" fontSize="11px">
+                                {ne?.rrNo}
+                              </Td>
+                              <Td color="gray.600" fontSize="11px">
+                                {ne?.rrDate}
+                              </Td>
                               <Td color="gray.600" fontSize="11px">
                                 {ne?.pO_Number}
                               </Td>
@@ -760,6 +859,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                             <Tr>
                               {/* <Th color='white'>ID</Th> */}
                               <Th color="white" fontSize="9px">
+                                RR Number
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                RR Date
+                              </Th>
+                              <Th color="white" fontSize="9px">
                                 PR Number
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -801,6 +906,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                           {itemDescription?.map((ne, i) => (
                             <Tr key={i}>
                               {/* <Td>{ }</Td> */}
+                              <Td color="gray.600" fontSize="11px">
+                                {ne?.rrNo}
+                              </Td>
+                              <Td color="gray.600" fontSize="11px">
+                                {ne?.rrDate}
+                              </Td>
                               <Td color="gray.600" fontSize="11px">
                                 {ne?.pR_Number}
                               </Td>
@@ -875,6 +986,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                             <Tr>
                               {/* <Th color='white'>ID</Th> */}
                               <Th color="white" fontSize="9px">
+                                RR Number
+                              </Th>
+                              <Th color="white" fontSize="9px">
+                                RR Date
+                              </Th>
+                              <Th color="white" fontSize="9px">
                                 PR Number
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -916,6 +1033,12 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                           {materialInfo?.map((ne, i) => (
                             <Tr key={i}>
                               {/* <Td>{ }</Td> */}
+                              <Td color="gray.600" fontSize="11px">
+                                {ne?.rrNo}
+                              </Td>
+                              <Td color="gray.600" fontSize="11px">
+                                {ne?.rrDate}
+                              </Td>
                               <Td color="gray.600" fontSize="11px">
                                 {ne?.pR_Number}
                               </Td>

@@ -575,6 +575,7 @@ const PrintModal = ({ isOpen, onClose, printMRPData }) => {
                     <Th color="white">Buffer Level</Th>
                   </Tr>
                 </Thead>
+
                 <Tbody>
                   {printMRPData?.map((item, i) => (
                     <Tr key={i} bg={item.bufferLevel >= item.reserve ? "gray.300" : ""}>

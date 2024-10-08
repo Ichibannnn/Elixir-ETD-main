@@ -45,10 +45,8 @@ export const EditModal = ({
   setUnitPrice,
 }) => {
   const [actualDelivered, setActualDelivered] = useState(null);
-  const [siNumber, setSINumber] = useState(null);
 
   const [lotSection, setLotSection] = useState(null);
-  const [expectedDelivery, setExpectedDelivery] = useState(null);
   const toast = useToast();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   const [quantity, setQuantity] = useState(undefined);
@@ -57,8 +55,6 @@ export const EditModal = ({
   const [submitDataThree, setSubmitDataThree] = useState([]);
   const [submitDataTwo, setSubmitDataTwo] = useState([]);
   const [lotCategories, setLotCategories] = useState([]);
-  const [receivingDateDisplay, setReceivingDateDisplay] = useState(null);
-  const [disableQuantity, setDisableQuantity] = useState(0);
 
   // FETCH LOT CATEGORY
   const fetchLotCategory = async () => {
@@ -93,6 +89,17 @@ export const EditModal = ({
       },
       displayData: {
         id: editData.id,
+
+        rrNumber: editData.rrNumber,
+        rrDate: moment(editData.rrDate).format("MM/DD/YYYY"),
+        actualDelivered: editData.quantityDelivered.toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        }),
+
+        siNumber: editData.siNumber,
+        receiveDate: moment(editData.receiveDate).format("MM/DD/YYYY"),
+
         prNumber: editData.prNumber,
         prDate: moment(editData.prDate).format("MM/DD/YYYY"),
         poNumber: editData.poNumber,
@@ -111,9 +118,10 @@ export const EditModal = ({
         }),
         unitPrice: editData.unitPrice.toLocaleString(undefined, {
           maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
         }),
         checkingDate: moment().format("MM/DD/YYYY"),
-        actualRemaining: editData.actualRemaining.toLocaleString(undefined, {
+        actualRemaining: editData.actualRemaining?.toLocaleString(undefined, {
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         }),
@@ -123,29 +131,11 @@ export const EditModal = ({
   });
 
   const expectedDeliveryRef = useRef();
-
-  const expectedDeliveryProvider = (data) => {
-    if (data < 1) {
-      setExpectedDelivery("");
-      expectedDeliveryRef.current.value = "";
-    } else {
-      setExpectedDelivery(data);
-    }
-  };
-
-  useEffect(() => {
-    if (expectedDelivery > editData.actualRemaining) {
-      setExpectedDelivery("");
-      expectedDeliveryRef.current.value = "";
-      ToastComponent("Warning!", "Expected delivery is greater than actual delivered", "warning", toast);
-    }
-  }, [expectedDelivery, actualDelivered]);
+  const actualDeliveredRef = useRef();
 
   const lotSectionProvider = (data) => {
     setLotSection(data.value.sectionName);
   };
-
-  const actualDeliveredRef = useRef();
 
   // ALLOWABLE -----------
   // const actualDeliveredProvider = (data) => {
@@ -184,11 +174,6 @@ export const EditModal = ({
     }
   };
 
-  const siNumberProvider = (data) => {
-    setSINumber(data);
-    // console.log(siNumber);
-  };
-
   const unitPriceRef = useRef();
   const unitPriceProvider = (data) => {
     if (data < 1) {
@@ -204,13 +189,18 @@ export const EditModal = ({
     poNumber: editData.poNumber,
     itemCode: editData.itemCode,
     itemDescription: editData.itemDescription,
-    expectedDelivery: Number(expectedDelivery),
-    actualDelivered: Number(actualDelivered),
     uom: editData.uom,
     supplier: editData.supplier,
-    actualDelivered: Number(actualDelivered),
-    unitPrice: unitPrice,
-    siNumber: siNumber,
+
+    rrNo: editData.rrNumber,
+    rrDate: moment(editData.rrDate).format("MM/DD/YYYY"),
+    actualDelivered: editData.quantityDelivered,
+    actualReceiving: editData.quantityDelivered,
+    unitPrice: editData.unitPrice,
+    receivingDate: moment(editData.receiveDate).format("MM/DD/YYYY"),
+    actualReceivingDate: moment(editData.receiveDate).format("MM/DD/YYYY"),
+    siNumber: editData.siNumber,
+
     totalReject: sumQuantity,
     addedBy: currentUser.fullName,
     lotSection: lotSection,
@@ -221,20 +211,6 @@ export const EditModal = ({
   }, [sumQuantity]);
 
   useEffect(() => {}, [receivingDate]);
-
-  const receivingDateProvider = (event) => {
-    const data = event.target.value;
-    if (data) {
-      setReceivingDateDisplay(data);
-      const newData = moment(data).format("yyyy-MM-DD");
-      setReceivingDate(newData);
-    } else {
-      setReceivingDateDisplay(null);
-      setReceivingDate(null);
-      setLotSection(null);
-      setValue("formData.lotCategories", null);
-    }
-  };
 
   useEffect(() => {
     if (editData) {
@@ -311,6 +287,17 @@ export const EditModal = ({
 
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">
+                      RR Number
+                      <Input {...register("displayData.rrNumber")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
+                    </FormLabel>
+                    <FormLabel w="50%" fontSize="12px">
+                      RR Date
+                      <Input {...register("displayData.rrDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
+                    </FormLabel>
+                  </Flex>
+
+                  <Flex justifyContent="space-between" p={1}>
+                    <FormLabel w="50%" fontSize="12px">
                       PO Number
                       <Input {...register("displayData.poNumber")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
@@ -339,7 +326,7 @@ export const EditModal = ({
 
                     <FormLabel w="100%" fontSize="12px">
                       Unit Cost
-                      <Input
+                      {/* <Input
                         {...register("displayData.unitPrice")}
                         fontSize="13px"
                         size="sm"
@@ -354,7 +341,8 @@ export const EditModal = ({
                         onChange={(e) => unitPriceProvider(e.target.value)}
                         value={unitPrice}
                         ref={unitPriceRef}
-                      />
+                      /> */}
+                      <Input {...register("displayData.unitPrice")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
                   </Flex>
 
@@ -371,8 +359,11 @@ export const EditModal = ({
                   </Flex>
 
                   <Flex justifyContent="space-between" p={1}>
-                    <FormLabel w="50%" fontSize="12px">
+                    {/* ExpectedDelivery */}
+                    {/* <FormLabel w="50%" fontSize="12px">
                       Expected Delivery
+                      <Input {...register("displayData.expectedDelivery")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
+                      
                       <Input
                         {...register("submitData.expected_delivery")}
                         type="number"
@@ -388,10 +379,13 @@ export const EditModal = ({
                         onChange={(e) => expectedDeliveryProvider(e.target.value)}
                         ref={expectedDeliveryRef}
                       />
-                    </FormLabel>
+                    </FormLabel> */}
+
                     <FormLabel w="50%" fontSize="12px">
                       Qty Actual Delivered
-                      <Input
+                      <Input {...register("displayData.actualDelivered")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
+                      {/* <Input
+                      {/* <Input
                         {...register("submitData.actualDelivered")}
                         type="number"
                         onWheel={(e) => e.target.blur()}
@@ -405,26 +399,28 @@ export const EditModal = ({
                         bgColor="#ffffe0"
                         onChange={(e) => actualDeliveredProvider(e.target.value)}
                         ref={actualDeliveredRef}
-                      />
+                      /> */}
                     </FormLabel>
 
                     <FormLabel w="50%" fontSize="12px">
                       SI Number
-                      <Input
+                      <Input {...register("displayData.siNumber")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
+                      {/* <Input
                         fontSize="13px"
                         size="sm"
                         placeholder="SI Number (Optional)"
                         // bgColor="white"
                         bgColor="#ffffe0"
                         onChange={(e) => siNumberProvider(e.target.value)}
-                      />
+                      /> */}
                     </FormLabel>
                   </Flex>
 
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">
                       Receiving Date
-                      <Input
+                      <Input {...register("displayData.receiveDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
+                      {/* <Input
                         size="sm"
                         border="1px"
                         borderColor="gray.400"
@@ -434,7 +430,7 @@ export const EditModal = ({
                         // min={moment(new Date(new Date().setDate(new Date().getDate() - 3))).format("yyyy-MM-DD")}
                         // max={moment(new Date()).format("yyyy-MM-DD")}
                         type="date"
-                      />
+                      /> */}
                     </FormLabel>
 
                     <FormLabel w="50%" fontSize="12px">
@@ -469,7 +465,8 @@ export const EditModal = ({
                   </Flex>
                 </Stack>
 
-                <Stack spacing={2} bg="gray.200" mt={2}>
+                {/* REMOVED REJECT PO */}
+                {/* <Stack spacing={2} bg="gray.200" mt={2}>
                   <EditAddRejectionModal
                     sumQuantity={sumQuantity}
                     receivingId={receivingId}
@@ -480,22 +477,19 @@ export const EditModal = ({
                     setQuantity={setQuantity}
                     actualDelivered={actualDelivered}
                   />
-                </Stack>
+                </Stack> */}
               </PageScroll>
             </ModalBody>
 
             <ModalFooter bg="#F8FAFC" h="50px">
               <EditModalSave
-                quantity={quantity}
                 sumQuantity={sumQuantity}
                 po_ReceivingId={submitDataOne.poSummaryId}
                 submitDataOne={submitDataOne}
                 submitDataTwo={submitDataTwo}
                 submitDataThree={submitDataThree}
-                expectedDelivery={expectedDelivery}
                 actualDelivered={actualDelivered}
                 getAvailablePOHandler={getAvailablePOHandler}
-                siNumber={siNumber}
                 unitPrice={unitPrice}
                 isSubmitDisabled={isSubmitDisabled}
                 closeModal={onClose}
@@ -504,8 +498,6 @@ export const EditModal = ({
                 setReceivingDate={setReceivingDate}
                 lotSection={lotSection}
                 lotCategory={lotCategory}
-                setDisableQuantity={setDisableQuantity}
-                disableQuantity={disableQuantity}
                 receivingId={receivingId}
                 setReceivingId={setReceivingId}
               />

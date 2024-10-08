@@ -16,7 +16,7 @@ const PrintBarcode = ({ printData, receivingDate, lotSection, sumQuantity, isOpe
   const displayData = {
     "PO Number": printData.poNumber,
     Date: moment().format("MM/DD/YYYY, h:mm:ss a"),
-    "Receiving Date": moment(receivingDate).format("MM/DD/YYYY"),
+    "Receiving Date": moment(printData.receiveDate).format("MM/DD/YYYY"),
     "Item Code": printData.itemCode,
     "Item Description": printData.itemDescription,
     UOM: printData.uom,
@@ -25,13 +25,15 @@ const PrintBarcode = ({ printData, receivingDate, lotSection, sumQuantity, isOpe
       maximumFractionDigits: 2,
     }),
     Supplier: printData.supplier,
-    "Quantity Good": qtyGood.toLocaleString(undefined, {
+    "Quantity Good": printData.quantityDelivered.toLocaleString(undefined, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }),
     "Lot Section": lotSection,
     "SI Number": siNumber,
   };
+
+  console.log("PrintData: ", printData);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="sm">

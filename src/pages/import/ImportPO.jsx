@@ -21,11 +21,12 @@ const currentUser = decodeUser();
 const fetchYMIRApi = async (fromDate, toDate) => {
   const fromDateFormatted = moment(fromDate).format("yyyy-MM-DD");
   const toDateFormatted = moment(toDate).format("yyyy-MM-DD");
-  const res = await axios.get(`http://10.10.13.6:8080/api/etd_api?system_name=ESG WAREHOUSE ETD&from=${fromDateFormatted}&to=${toDateFormatted}`, {
+  const res = await axios.get(`https://rdfymir.com/backend/public/api/etd_api?system_name=ETD Warehouse&from=${fromDateFormatted}&to=${toDateFormatted}`, {
     headers: {
-      Authorization: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
+      Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
     },
   });
+
   return res.data;
 };
 
@@ -56,6 +57,7 @@ const ImportPO = () => {
   // GET YMIR PO
   const getYmirPo = () => {
     fetchYMIRApi(fromDate, toDate).then((res) => {
+      console.log("Response: ", res);
       setYmirPo(res);
       setFetchData(false);
     });
@@ -252,7 +254,7 @@ const ImportPO = () => {
                 fontSize="12px"
                 size="xs"
                 isLoading={isLoading}
-                isDisabled={true}
+                // isDisabled={true}
                 onClick={() => openSyncYMIRModal()}
               >
                 Sync from YMIR
@@ -402,6 +404,7 @@ const ImportPO = () => {
                           })
                         : `${eData.billed} is not a number`}
                     </Td>
+
                     <Td fontSize="xs">
                       {eData.uom ? (
                         eData.uom
@@ -411,6 +414,7 @@ const ImportPO = () => {
                         </Text>
                       )}
                     </Td>
+
                     <Td fontSize="xs">
                       {!isNaN(eData.unitPrice)
                         ? eData.unitPrice.toLocaleString(undefined, {
@@ -419,6 +423,7 @@ const ImportPO = () => {
                           })
                         : `${eData.unitPrice} is not a number`}
                     </Td>
+
                     <Td fontSize="xs">
                       {eData.vendorName ? (
                         eData.vendorName

@@ -26,7 +26,6 @@ const EditModalSave = ({
   submitUnitPriceNull,
   submitDataTwo,
   submitDataThree,
-  expectedDelivery,
   actualDelivered,
   siNumber,
   unitPrice,
@@ -38,9 +37,7 @@ const EditModalSave = ({
   actualGood,
   setCode,
   editData,
-  disableQuantity,
   lotSection,
-  quantity,
   receivingId,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +56,7 @@ const EditModalSave = ({
   });
 
   const submitEditedHandler = () => {
-    console.log("submit: ", firstSubmit);
+    // console.log("submit: ", firstSubmit);
 
     try {
       setIsLoading(true);
@@ -68,34 +65,11 @@ const EditModalSave = ({
         .then((res) => {
           ToastComponent("Success!", "Purchase order updated.", "success", toast);
           setReceivingId(res.data.id);
-          setReceivingDate(receivingDate);
           setIsLoading(false);
           getAvailablePOHandler();
           handlePrint();
           openPrintModal();
           onClose();
-
-          // take generated id
-          const receivingIdWithoutUseContext = res.data.id;
-
-          // final array data for second put
-          const secondSubmit = submitDataTwo.map((data) => {
-            return {
-              pO_ReceivingId: receivingIdWithoutUseContext,
-              quantity: data.quantity,
-              remarks: data.remarksName,
-            };
-          });
-
-          if (sumQuantity > 0) {
-            try {
-              const res = request.put(`Warehouse/ReceiveRawMaterialsById`, secondSubmit);
-            } catch (err) {
-              console.log(err);
-            }
-
-            // proceed to first put error catch if condition for second put is not met
-          }
         })
         .catch((err) => {
           setIsLoading(false);
@@ -113,17 +87,15 @@ const EditModalSave = ({
         onClick={onOpen}
         isDisabled={
           isSubmitDisabled ||
-          !expectedDelivery ||
-          !actualDelivered ||
-          !unitPrice ||
-          !unitPrice === 0 ||
-          !siNumber ||
-          !receivingDate ||
-          !lotSection ||
-          disableQuantity < 0 ||
-          quantity
+          // !expectedDelivery ||
+          // !actualDelivered ||
+          // !unitPrice ||
+          // !unitPrice === 0 ||
+          // !siNumber ||
+          // !receivingDate ||
+          !lotSection
         }
-        title={isSubmitDisabled || !expectedDelivery || !actualDelivered || !siNumber || !unitPrice || !editData.unitPrice ? "Please provide required fields" : ""}
+        title={isSubmitDisabled || !actualDelivered || !siNumber || !unitPrice || !editData.unitPrice ? "Please provide required fields" : ""}
       >
         Receive
       </Button>

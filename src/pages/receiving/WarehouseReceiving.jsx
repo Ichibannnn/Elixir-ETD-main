@@ -217,6 +217,9 @@ const WarehouseReceiving = () => {
                   <Thead bg="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
                       <Th h="40px" color="white" fontSize="10px">
+                        RR Number
+                      </Th>
+                      <Th h="40px" color="white" fontSize="10px">
                         <HStack>
                           <Text>PO Number</Text>
                           <Button
@@ -230,10 +233,11 @@ const WarehouseReceiving = () => {
                             background="none"
                             _hover={{ background: "none" }}
                           >
-                            <FaSort />
+                            <FaSort color="#fff" />
                           </Button>
                         </HStack>
                       </Th>
+
                       <Th h="40px" color="white" fontSize="10px">
                         Item Code
                       </Th>
@@ -250,7 +254,7 @@ const WarehouseReceiving = () => {
                         Qty Ordered
                       </Th>
                       <Th h="40px" color="white" fontSize="10px">
-                        Actual Good
+                        Actual Delivered
                       </Th>
                       <Th h="40px" color="white" fontSize="10px">
                         Actual Remaining
@@ -266,6 +270,7 @@ const WarehouseReceiving = () => {
                   <Tbody>
                     {pO?.posummary?.sort(getComparator(poSort)).map((pos) => (
                       <Tr key={pos.id}>
+                        <Td fontSize="xs">{pos.rrNumber}</Td>
                         <Td fontSize="xs">{pos.poNumber}</Td>
                         <Td fontSize="xs">{pos.itemCode}</Td>
                         <Td fontSize="xs">{pos.itemDescription}</Td>
@@ -278,13 +283,13 @@ const WarehouseReceiving = () => {
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {pos.actualGood.toLocaleString(undefined, {
+                          {pos.quantityDelivered.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {pos.actualRemaining.toLocaleString(undefined, {
+                          {pos.actualRemaining?.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
@@ -380,6 +385,7 @@ const WarehouseReceiving = () => {
                   onClose={closeEditModal}
                   editData={editData}
                   getAvailablePOHandler={getAvailablePOHandler}
+                  ww
                   setReceivingDate={setReceivingDate}
                   receivingDate={receivingDate}
                   setLotCategory={setLotCategory}

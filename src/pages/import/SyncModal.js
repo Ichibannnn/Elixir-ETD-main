@@ -51,23 +51,50 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
   const dateVar = new Date();
   const minDate = moment(dateVar.setDate(dateVar.getDate() - 3)).format("yyyy-MM-DD");
 
-  const ymirResultArray = ymirPO?.data?.map((item) => {
-    return {
-      pR_Number: item?.pr_year_number_id?.toString().trim(),
-      pR_Date: moment(item?.pr_date)?.format("YYYY-MM-DD")?.toString().trim(),
-      pO_Number: item?.po_number?.toString().trim(),
-      pO_Date: moment(item?.po_date)?.format("YYYY-MM-DD")?.toString().trim(),
-      itemCode: item?.item_code?.toString().trim(),
-      itemDescription: item?.item_name?.toString()?.trim(),
-      ordered: item?.ordered?.toString().trim(),
-      delivered: item?.delivered?.toString().trim(),
-      billed: 0,
-      uom: item?.uom?.toString().trim(),
-      unitPrice: item?.unit_price?.toString().trim(),
-      vendorName: item?.supplier_name?.toString().trim(),
-      addedBy: currentUser?.username?.toString().trim(),
-    };
-  });
+  // const ymirResultArray = ymirPO?.map((item) => {
+  //   return {
+  //     pR_Number: item?.pr_year_number_id?.toString().trim(),
+  //     pR_Date: moment(item?.pr_date)?.format("YYYY-MM-DD")?.toString().trim(),
+  //     pO_Number: item?.po_number?.toString().trim(),
+  //     pO_Date: moment(item?.po_date)?.format("YYYY-MM-DD")?.toString().trim(),
+  //     itemCode: item?.item_code?.toString().trim(),
+  //     itemDescription: item?.item_name?.toString()?.trim(),
+  //     ordered: item?.ordered?.toString().trim(),
+  //     delivered: item?.delivered?.toString().trim(),
+  //     billed: 0,
+  //     uom: item?.uom?.toString().trim(),
+  //     unitPrice: item?.unit_price?.toString().trim(),
+  //     vendorName: item?.supplier_name?.toString().trim(),
+  //     addedBy: currentUser?.username?.toString().trim(),
+
+  //   };
+  // });
+
+  const ymirResultArray = ymirPO?.flatMap((data) =>
+    data.rr_orders.map((subData) => {
+      return {
+        rrNo: data?.rr_year_number_id.toString().trim(),
+        rrDate: moment(subData?.rr_date)?.format("YYYY-MM-DD")?.toString().trim(),
+        pR_Number: data?.pr_transaction?.pr_year_number_id?.toString().trim(),
+        pR_Date: moment(data?.pr_transaction?.created_at)?.format("YYYY-MM-DD")?.toString().trim(),
+        pO_Number: data?.po_transaction?.po_year_number_id?.toString().trim(),
+        pO_Date: moment(data?.po_transaction?.created_at)?.format("YYYY-MM-DD")?.toString().trim(),
+
+        itemCode: subData?.item_code?.toString().trim(),
+        itemDescription: subData?.item_name?.toString()?.trim(),
+
+        ordered: data?.po_transaction?.order?.[0]?.quantity?.toString().trim(),
+        delivered: subData?.quantity_receive?.toString().trim(),
+        actualRemaining: subData?.remaining.toString().trim(),
+        billed: 0,
+        unitPrice: data?.po_transaction?.order?.[0]?.price?.toString().trim(),
+        siNumber: subData?.shipment_no?.toString().trim(),
+        receiveDate: moment(subData?.delivery_Date)?.format("YYYY-MM-DD")?.toString().trim(),
+        vendorName: data?.po_transaction?.supplier_name?.toString().trim(),
+        addedBy: currentUser?.fullName?.toString().trim(),
+      };
+    })
+  );
 
   console.log("YMIR RESULT: ", ymirResultArray);
 
@@ -89,9 +116,8 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
       },
     }).then((result) => {
       if (result.isConfirmed) {
+        console.log("YMIR Submit Payload: ", ymirResultArray);
         if (ymirResultArray.length > 0) {
-          console.log("YMIR Submit Payload: ", ymirResultArray);
-
           try {
             setFetchData(true);
             const res = request
@@ -150,7 +176,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                   <Badge fontSize="xs" colorScheme="blue" variant="solid">
                     From:
                   </Badge>
-                  <Input onChange={(date) => setFromDate(date.target.value)} defaultValue={fromDate} min={minDate} type="date" fontSize="11px" fontWeight="semibold" />
+                  <Input onChange={(date) => setFromDate(date.target.value)} defaultValue={fromDate} type="date" fontSize="11px" fontWeight="semibold" />
                   <Badge fontSize="xs" colorScheme="blue" variant="solid">
                     To:
                   </Badge>
@@ -200,16 +226,22 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                             Line Number
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
-                            PR Number
+                            RR Number
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
-                            PR Date
+                            RR Date
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
                             PO Number
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
                             PO Date
+                          </Th>
+                          <Th color="#D6D6D6" fontSize="10px">
+                            PR Number
+                          </Th>
+                          <Th color="#D6D6D6" fontSize="10px">
+                            PR Date
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
                             Item Code
@@ -224,9 +256,6 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                             Qty Delivered
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
-                            UOM
-                          </Th>
-                          <Th color="#D6D6D6" fontSize="10px">
                             Unit Cost
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
@@ -239,6 +268,12 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                           <Tr key={i}>
                             <Td color="gray.600" fontSize="11px">
                               {i + 1}
+                            </Td>
+                            <Td color="gray.600" fontSize="11px">
+                              {d?.rrNo}
+                            </Td>
+                            <Td color="gray.600" fontSize="11px">
+                              {d?.rrDate}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
                               {d?.pR_Number}
@@ -259,22 +294,19 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                               {d?.itemDescription}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
-                              {d?.ordered.toLocaleString(undefined, {
+                              {d?.ordered?.toLocaleString(undefined, {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigi: 2,
                               })}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
-                              {d?.delivered.toLocaleString(undefined, {
+                              {d?.delivered?.toLocaleString(undefined, {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigi: 2,
                               })}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
-                              {d?.uom}
-                            </Td>
-                            <Td color="gray.600" fontSize="11px">
-                              {d?.unitPrice.toLocaleString(undefined, {
+                              {d?.unitPrice?.toLocaleString(undefined, {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigi: 2,
                               })}
@@ -287,7 +319,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
 
                         {!ymirResultArray?.length && (
                           <Tr>
-                            <Td colSpan={12} align="center">
+                            <Td colSpan={14} align="center">
                               <Flex width="100%" justifyContent="center" alignItems="center">
                                 <VStack>
                                   <img src={noRecordsFound} alt="No Records Found" className="norecords-found-table" />
@@ -312,14 +344,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
           {/* <Button size="xs" colorScheme="blue">
                 View Purchase Orders
               </Button> */}
-          <Button
-            size="sm"
-            leftIcon={<MdOutlineSync fontSize="19px" />}
-            colorScheme="teal"
-            isLoading={fetchData}
-            onClick={() => submitSyncHandler()}
-            isDisabled={!ymirPO.data?.length}
-          >
+          <Button size="sm" leftIcon={<MdOutlineSync fontSize="19px" />} colorScheme="teal" isLoading={fetchData} onClick={() => submitSyncHandler()} isDisabled={!ymirPO?.length}>
             Sync Purchase Orders
           </Button>
 

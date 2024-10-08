@@ -50,6 +50,7 @@ const ReceivedMaterials = () => {
   const [pageTotal, setPageTotal] = useState(undefined);
   const [printData, setPrintData] = useState({
     warehouseId: "",
+    rrNumber: "",
     poNumber: "",
     dateReceive: "",
     itemCode: "",
@@ -121,10 +122,11 @@ const ReceivedMaterials = () => {
   };
 
   // PRINT
-  const printHandler = ({ id, poNumber, itemCode, itemDescription, dateReceive, uom, unitPrice, supplier, actualGood, lotSection, siNumber }) => {
+  const printHandler = ({ id, rrNumber, poNumber, itemCode, itemDescription, dateReceive, uom, unitPrice, supplier, actualGood, lotSection, siNumber }) => {
     if (id) {
       setPrintData({
         warehouseId: id,
+        rrNumber: rrNumber,
         poNumber: poNumber,
         Date: moment().format("MM/DD/YYYY, h:mm:ss a"),
         dateReceive: dateReceive,
@@ -141,6 +143,7 @@ const ReceivedMaterials = () => {
     } else {
       setPrintData({
         warehouseId: "",
+        rrNumber: "",
         poNumber: "",
         Date: "",
         dateReceive: "",
@@ -216,6 +219,9 @@ const ReceivedMaterials = () => {
                       Warehouse ID
                     </Th>
                     <Th color="white" fontSize="10px">
+                      RR Number
+                    </Th>
+                    <Th color="white" fontSize="10px">
                       PO Number
                     </Th>
 
@@ -252,6 +258,7 @@ const ReceivedMaterials = () => {
                   {warehouseData?.warehouse?.map((items) => (
                     <Tr key={items.id}>
                       <Td fontSize="xs">{items.id}</Td>
+                      {items.rrNumber === null ? <Td fontSize="xs">-</Td> : <Td fontSize="xs">{items.rrNumber}</Td>}
                       {items.poNumber === 0 ? <Td fontSize="xs">-</Td> : <Td fontSize="xs">{items.poNumber}</Td>}
                       {items.siNumber ? <Td fontSize="xs">{items.siNumber}</Td> : <Td fontSize="xs">-</Td>}
                       <Td fontSize="xs">{items.itemCode}</Td>
@@ -352,7 +359,10 @@ const PrintModal = ({ isOpen, onClose, printData }) => {
     content: () => componentRef.current,
   });
 
+  console.log("PrintData: ", printData);
+
   const displayData = {
+    "RR Number": printData?.rrNumber === !null ? printData?.rrNumber : "-",
     "PO Number": printData?.poNumber,
     Date: moment().format("MM/DD/YYYY, h:mm:ss a"),
     "Receiving Date": moment(printData?.dateReceive).format("MM/DD/YYYY"),
