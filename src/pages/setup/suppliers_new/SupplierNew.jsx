@@ -5,8 +5,8 @@ import axios from "axios";
 import { ListOfSuppliers } from "./ListOfSuppliers";
 import { usePagination } from "@ajna/pagination";
 
-const fetchGenusApi = async () => {
-  const res = await axios.get(`http://10.10.2.76:8000/api/dropdown/suppliers?status=1&paginate=0&api_for=vladimir`, {
+const fetchFistoApi = async () => {
+  const res = await axios.get(`http://10.10.2.76:8088/api/dropdown/suppliers?paginate=0&status=1&api_for=vladimir`, {
     headers: {
       Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
     },
@@ -16,7 +16,7 @@ const fetchGenusApi = async () => {
 
 // FETCH API ELIXIR API:
 const fetchElixirApi = async (pageNumber, pageSize, search) => {
-  const response = await request.get(`Supplier/GetAllSupplierithPaginationOrig/true?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
+  const response = await request.get(`Supplier/,/true?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
   return response.data;
 };
@@ -24,7 +24,7 @@ const fetchElixirApi = async (pageNumber, pageSize, search) => {
 const SupplierNew = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const [genusSupplier, setGenusSupplier] = useState([]);
+  const [fistoSuppliers, setFistoSuppliers] = useState([]);
   const [elixirSuppliers, setElixirSuppliers] = useState([]);
   const [pageTotal, setPageTotal] = useState(undefined);
   const [search, setSearch] = useState("");
@@ -41,19 +41,19 @@ const SupplierNew = () => {
     initialState: { currentPage: 1, pageSize: 100 },
   });
 
-  // GET GENUS SUPPLIERS
-  const fetchGenusSuppliers = () => {
-    fetchGenusApi().then((res) => {
-      setGenusSupplier(res);
+  // GET FISTO SUPPLIERS
+  const fetchFistoSuppliers = () => {
+    fetchFistoApi().then((res) => {
+      setFistoSuppliers(res);
       setIsLoading(false);
     });
   };
 
   useEffect(() => {
-    fetchGenusSuppliers();
+    fetchFistoSuppliers();
 
     return () => {
-      setGenusSupplier([]);
+      setFistoSuppliers([]);
     };
   }, []);
 
@@ -78,7 +78,7 @@ const SupplierNew = () => {
     <ListOfSuppliers
       fetchElixirSuppliers={fetchElixirSuppliers}
       elixirSuppliers={elixirSuppliers}
-      genusSupplier={genusSupplier}
+      fistoSuppliers={fistoSuppliers}
       fetchingData={isLoading}
       currentPage={currentPage}
       setCurrentPage={setCurrentPage}

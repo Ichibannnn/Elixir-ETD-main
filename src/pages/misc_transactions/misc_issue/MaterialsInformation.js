@@ -75,7 +75,7 @@ export const MaterialsInformation = ({
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
     try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
         headers: {
           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
         },
@@ -87,7 +87,7 @@ export const MaterialsInformation = ({
   // FETCH DEPT API
   const fetchDepartmentApi = async (id = "") => {
     try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
         headers: {
           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
         },
@@ -99,7 +99,7 @@ export const MaterialsInformation = ({
   // FETCH Loc API
   const fetchLocationApi = async (id = "") => {
     try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
         headers: {
           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
         },
@@ -539,7 +539,7 @@ export const RawMatsInfoModal = ({
   // FETCH ACcount API
   const fetchAccountApi = async (id = "") => {
     try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/account-title?status=1&paginate=0" + id, {
         headers: {
           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
         },

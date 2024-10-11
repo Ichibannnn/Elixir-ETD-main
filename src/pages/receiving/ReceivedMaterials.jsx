@@ -362,10 +362,10 @@ const PrintModal = ({ isOpen, onClose, printData }) => {
   console.log("PrintData: ", printData);
 
   const displayData = {
-    "RR Number": printData?.rrNumber === !null ? printData?.rrNumber : "-",
+    "RR Number": printData?.rrNumber ? printData?.rrNumber : "-",
     "PO Number": printData?.poNumber,
     Date: moment().format("MM/DD/YYYY, h:mm:ss a"),
-    "Receiving Date": moment(printData?.dateReceive).format("MM/DD/YYYY"),
+    "Received Date": moment(printData?.dateReceive).format("MM/DD/YYYY"),
     "Item Code": printData?.itemCode,
     "Item Description": printData?.itemDescription,
     UOM: printData?.uom,

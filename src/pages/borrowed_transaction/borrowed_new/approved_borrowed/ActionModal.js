@@ -62,9 +62,7 @@ export const ViewModal = ({ isOpen, onCloseView, statusBody }) => {
 
   const id = statusBody.id;
   const fetchBorrowedDetailsApi = async (id) => {
-    const res = await request.get(
-      `Borrowed/GetAllDetailsInBorrowedIssue?id=${id}`
-    );
+    const res = await request.get(`Borrowed/GetAllDetailsInBorrowedIssue?id=${id}`);
     return res.data;
   };
 
@@ -106,9 +104,7 @@ export const ViewModal = ({ isOpen, onCloseView, statusBody }) => {
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer Code:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
 
               <HStack>
@@ -129,12 +125,7 @@ export const ViewModal = ({ isOpen, onCloseView, statusBody }) => {
                 <Text fontSize="xs" fontWeight="semibold">
                   Borrowed Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.preparedDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.preparedDate).format("MM/DD/yyyy")}</Text>
               </HStack>
             </VStack>
 
@@ -143,9 +134,7 @@ export const ViewModal = ({ isOpen, onCloseView, statusBody }) => {
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
 
               <HStack>
@@ -211,11 +200,7 @@ export const ViewModal = ({ isOpen, onCloseView, statusBody }) => {
                           minimumFractionDigits: 2,
                         })}
                       </Td>
-                      <Td fontSize="xs">
-                        {moment(borrowdetails.preparedDate).format(
-                          "MM/DD/yyyy"
-                        )}
-                      </Td>
+                      <Td fontSize="xs">{moment(borrowdetails.preparedDate).format("MM/DD/yyyy")}</Td>
                     </Tr>
                   ))}
                 </Tbody>
@@ -229,8 +214,7 @@ export const ViewModal = ({ isOpen, onCloseView, statusBody }) => {
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>
@@ -280,23 +264,11 @@ export const ConsumeModal = ({
   const schema = yup.object().shape({
     formData: yup.object().shape({
       borrowedItemPKey: yup.string(),
-      consume: yup
-        .number()
-        .required("Consume quantity is required")
-        .typeError("Must be a number"),
-      serviceReportNo: yup
-        .number()
-        .required("Service report number is required")
-        .typeError("Must be a number"),
+      consume: yup.number().required("Consume quantity is required").typeError("Must be a number"),
+      serviceReportNo: yup.number().required("Service report number is required").typeError("Must be a number"),
       companyId: yup.object().required().typeError("Company Name is required"),
-      departmentId: yup
-        .object()
-        .required()
-        .typeError("Department Category is required"),
-      locationId: yup
-        .object()
-        .required()
-        .typeError("Location Name is required"),
+      departmentId: yup.object().required().typeError("Department Category is required"),
+      locationId: yup.object().required().typeError("Location Name is required"),
       accountId: yup.object().required("Account Name is required"),
       empId: yup.object().nullable(),
       fullName: yup.string(),
@@ -334,14 +306,11 @@ export const ConsumeModal = ({
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setCompany(res.data.result.companies);
       // console.log(res.data.result.companies);
     } catch (error) {}
@@ -350,15 +319,11 @@ export const ConsumeModal = ({
   // FETCH DEPT API
   const fetchDepartmentApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setDepartment(res.data.result.departments);
       // console.log(res.data.result.departments);
     } catch (error) {}
@@ -367,15 +332,11 @@ export const ConsumeModal = ({
   // FETCH Loc API
   const fetchLocationApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setLocation(res.data.result.locations);
     } catch (error) {}
   };
@@ -383,23 +344,17 @@ export const ConsumeModal = ({
   // FETCH ACcount API
   const fetchAccountApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/account-title?status=1&paginate=0" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setAccount(res.data.result.account_titles);
     } catch (error) {}
   };
 
   useEffect(() => {
-    fetchLocationApi().then(() =>
-      fetchDepartmentApi().then(() => fetchCompanyApi())
-    );
+    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
     fetchAccountApi();
   }, []);
 
@@ -449,9 +404,7 @@ export const ConsumeModal = ({
     setInfo(
       pickerItems
         .filter((item) => {
-          return item?.general_info?.full_id_number_full_name
-            .toLowerCase()
-            .includes(idNumber);
+          return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
         .splice(0, 50)
     );
@@ -510,12 +463,7 @@ export const ConsumeModal = ({
             .then((response) => {
               sessionStorage.removeItem("Borrowed ID");
               sessionStorage.removeItem("Navigation");
-              ToastComponent(
-                "Success",
-                "Returned materials was saved",
-                "success",
-                toast
-              );
+              ToastComponent("Success", "Returned materials was saved", "success", toast);
               setIsLoading(false);
               setConsumedQuantity("");
               setServiceReportNo("");
@@ -558,14 +506,7 @@ export const ConsumeModal = ({
   };
 
   return (
-    <Modal
-      isOpen={isConsumeModalOpen}
-      onClose={() => setIsConsumeModalOpen(false)}
-      isCentered
-      size="5xl"
-      closeOnOverlayClick={false}
-      closeOnEsc={false}
-    >
+    <Modal isOpen={isConsumeModalOpen} onClose={() => setIsConsumeModalOpen(false)} isCentered size="5xl" closeOnOverlayClick={false} closeOnEsc={false}>
       <ModalOverlay />
       <form onSubmit={handleSubmit(submitConsumeHandler)}>
         <ModalContent>
@@ -573,22 +514,10 @@ export const ConsumeModal = ({
           {/* <ModalCloseButton onClick={clearConsumedQty} /> */}
           <ModalBody>
             <HStack>
-              <Stack
-                spacing={2}
-                p={4}
-                border="2px"
-                borderRadius="5%"
-                borderColor="gray.200"
-                w="50%"
-                h="full"
-              >
+              <Stack spacing={2} p={4} border="2px" borderRadius="5%" borderColor="gray.200" w="50%" h="full">
                 <HStack gap={1}>
                   <Text fontWeight="semibold">Input Consume Quantity</Text>
-                  <Badge
-                    colorScheme="green"
-                    variant="solid"
-                    className="inputConsume"
-                  >
+                  <Badge colorScheme="green" variant="solid" className="inputConsume">
                     <Text>{`Available consume: ${returnQuantity}`}</Text>
                   </Badge>
                 </HStack>
@@ -617,9 +546,7 @@ export const ConsumeModal = ({
                     onChange={(e) => setQuantityValidate(e.target.value)}
                     type="number"
                     onWheel={(e) => e.target.blur()}
-                    onKeyDown={(e) =>
-                      ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
+                    onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                     onPaste={(e) => e.preventDefault()}
                     autoComplete="off"
                     min="1"
@@ -639,9 +566,7 @@ export const ConsumeModal = ({
                     onChange={(e) => serviceReportHandler(e.target.value)}
                     type="number"
                     onWheel={(e) => e.target.blur()}
-                    onKeyDown={(e) =>
-                      ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
-                    }
+                    onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                     onPaste={(e) => e.preventDefault()}
                     autoComplete="off"
                     min="1"
@@ -651,14 +576,7 @@ export const ConsumeModal = ({
                   </Text>
                 </Box>
               </Stack>
-              <Stack
-                spacing={2}
-                p={4}
-                border="2px"
-                borderRadius="5%"
-                borderColor="gray.200"
-                w="50%"
-              >
+              <Stack spacing={2} p={4} border="2px" borderRadius="5%" borderColor="gray.200" w="50%">
                 <Text fontWeight="semibold">Charge Of Accounts</Text>
                 <Box>
                   <FormLabel fontSize="xs">Company</FormLabel>
@@ -864,8 +782,7 @@ export const ConsumeModal = ({
                               return {
                                 label: item.general_info?.full_id_number,
                                 value: {
-                                  full_id_number:
-                                    item.general_info?.full_id_number,
+                                  full_id_number: item.general_info?.full_id_number,
                                   full_name: item.general_info?.full_name,
                                 },
                               };
@@ -905,13 +822,7 @@ export const ConsumeModal = ({
             </HStack>
           </ModalBody>
           <ModalFooter gap={2}>
-            <Button
-              size="sm"
-              onClick={clearConsumedQty}
-              isLoading={isLoading}
-              disabled={isLoading}
-              variant="outline"
-            >
+            <Button size="sm" onClick={clearConsumedQty} isLoading={isLoading} disabled={isLoading} variant="outline">
               Close
             </Button>
             <Button
@@ -944,36 +855,15 @@ export const ConsumeModal = ({
 };
 
 export const EditQuantityModal = (props) => {
-  const {
-    isOpen,
-    onClose,
-    returnRequest,
-    editData,
-    setEditData,
-    fetchReturnRequest,
-    fetchMaterialsList,
-    borrowedId,
-    materialListId,
-    availableConsume,
-    serviceReportNo,
-  } = props;
+  const { isOpen, onClose, returnRequest, editData, setEditData, fetchReturnRequest, fetchMaterialsList, borrowedId, materialListId, availableConsume, serviceReportNo } = props;
 
   const schema = yup.object().shape({
     formData: yup.object().shape({
       editId: yup.string(),
-      consumedQty: yup
-        .number()
-        .required()
-        .typeError("Consumed quantity is required"),
+      consumedQty: yup.number().required().typeError("Consumed quantity is required"),
       companyId: yup.object().required().typeError("Company Name is required"),
-      departmentId: yup
-        .object()
-        .required()
-        .typeError("Department Category is required"),
-      locationId: yup
-        .object()
-        .required()
-        .typeError("Location Name is required"),
+      departmentId: yup.object().required().typeError("Department Category is required"),
+      locationId: yup.object().required().typeError("Location Name is required"),
       accountTitleId: yup.object().required("Account Name is required"),
       empId: yup.object().nullable(),
       fullName: yup.string(),
@@ -1019,14 +909,11 @@ export const EditQuantityModal = (props) => {
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setCompany(res.data.result.companies);
     } catch (error) {}
   };
@@ -1034,15 +921,11 @@ export const EditQuantityModal = (props) => {
   // FETCH DEPT API
   const fetchDepartmentApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setDepartment(res.data.result.departments);
     } catch (error) {}
   };
@@ -1050,15 +933,11 @@ export const EditQuantityModal = (props) => {
   // FETCH Loc API
   const fetchLocationApi = async (id = "") => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setLocation(res.data.result.locations);
     } catch (error) {}
   };
@@ -1066,22 +945,17 @@ export const EditQuantityModal = (props) => {
   // FETCH ACcount API
   const fetchAccountApi = async () => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
+      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/account-title?status=1&paginate=0", {
+        headers: {
+          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+        },
+      });
       setAccount(res.data.result.account_titles);
     } catch (error) {}
   };
 
   useEffect(() => {
-    fetchLocationApi().then(() =>
-      fetchDepartmentApi().then(() => fetchCompanyApi())
-    );
+    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
     fetchAccountApi();
   }, []);
 
@@ -1130,9 +1004,7 @@ export const EditQuantityModal = (props) => {
     setInfo(
       pickerItems
         .filter((item) => {
-          return item?.general_info?.full_id_number_full_name
-            .toLowerCase()
-            .includes(idNumber);
+          return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
         .splice(0, 50)
     );
@@ -1143,11 +1015,7 @@ export const EditQuantityModal = (props) => {
   useEffect(() => {
     const returnEdit = returnRequest?.find((item) => item.id === editData.id);
 
-    if (
-      location.length &&
-      !watch("formData.locationId") &&
-      !watch("formData.departmentId")
-    ) {
+    if (location.length && !watch("formData.locationId") && !watch("formData.departmentId")) {
       setValue("formData.locationId", {
         label: `${returnEdit.locationCode} - ${returnEdit.locationName}`,
         value: location?.find((item) => item.code === returnEdit.locationCode),
@@ -1158,16 +1026,10 @@ export const EditQuantityModal = (props) => {
   useEffect(() => {
     const returnEdit = returnRequest?.find((item) => item.id === editData.id);
 
-    if (
-      department.length &&
-      !watch("formData.departmentId") &&
-      !watch("formData.companyId")
-    ) {
+    if (department.length && !watch("formData.departmentId") && !watch("formData.companyId")) {
       setValue("formData.departmentId", {
         label: `${returnEdit.departmentCode} - ${returnEdit.departmentName}`,
-        value: department?.find(
-          (item) => item.code === returnEdit.departmentCode
-        ),
+        value: department?.find((item) => item.code === returnEdit.departmentCode),
       });
     }
   }, [editData.id, department]);
@@ -1253,24 +1115,14 @@ export const EditQuantityModal = (props) => {
             .then((response) => {
               sessionStorage.removeItem("Borrowed ID");
               sessionStorage.removeItem("Navigation");
-              ToastComponent(
-                "Success",
-                "Edit consumed quantity was saved.",
-                "success",
-                toast
-              );
+              ToastComponent("Success", "Edit consumed quantity was saved.", "success", toast);
               fetchReturnRequest();
               fetchMaterialsList();
               setIsLoading(false);
               onClose();
             })
             .catch((error) => {
-              ToastComponent(
-                "Update Failed",
-                error.response.data,
-                "error",
-                toast
-              );
+              ToastComponent("Update Failed", error.response.data, "error", toast);
               setIsLoading(false);
             });
         } catch (error) {
@@ -1306,11 +1158,7 @@ export const EditQuantityModal = (props) => {
                     <FormLabel fontSize="xs" fontWeight="semibold">
                       <HStack>
                         <Text>Consumed Quantity</Text>
-                        <Badge
-                          colorScheme="green"
-                          variant="solid"
-                          className="inputConsume"
-                        >
+                        <Badge colorScheme="green" variant="solid" className="inputConsume">
                           <Text>{`Available consume: ${availableConsume}`}</Text>
                         </Badge>
                       </HStack>
@@ -1324,10 +1172,7 @@ export const EditQuantityModal = (props) => {
                       placeholder="Please enter consumed quantity"
                       autoComplete="off"
                       onWheel={(e) => e.target.blur()}
-                      onKeyDown={(e) =>
-                        ["E", "e", "+", "-"].includes(e.key) &&
-                        e.preventDefault()
-                      }
+                      onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                       onPaste={(e) => e.preventDefault()}
                       min="1"
                       // onChange={(e) => consumedQtyHandler(e.target.value)}
@@ -1540,17 +1385,13 @@ export const EditQuantityModal = (props) => {
                               placeholder="Enter Employee ID"
                               onChange={(e) => {
                                 field.onChange(e);
-                                setValue(
-                                  "formData.fullName",
-                                  e.value.full_name
-                                );
+                                setValue("formData.fullName", e.value.full_name);
                               }}
                               options={pickerItems?.map((item) => {
                                 return {
                                   label: item.general_info?.full_id_number,
                                   value: {
-                                    full_id_number:
-                                      item.general_info?.full_id_number,
+                                    full_id_number: item.general_info?.full_id_number,
                                     full_name: item.general_info?.full_name,
                                   },
                                 };
@@ -1585,15 +1426,7 @@ export const EditQuantityModal = (props) => {
             </ModalBody>
 
             <ModalFooter>
-              <Button
-                mr={2}
-                type="submit"
-                variant="outline"
-                isLoading={isLoading}
-                onClick={onClose}
-                size="sm"
-                px={4}
-              >
+              <Button mr={2} type="submit" variant="outline" isLoading={isLoading} onClick={onClose} size="sm" px={4}>
                 Close
               </Button>
               <Button

@@ -38,7 +38,7 @@ import { ListOfErrors } from "./ListOfErrors";
 export const ListOfSuppliers = ({
   fetchElixirSuppliers,
   elixirSuppliers,
-  genusSupplier,
+  fistoSuppliers,
   fetchingData,
   currentPage,
   setCurrentPage,
@@ -77,7 +77,7 @@ export const ListOfSuppliers = ({
     }
   }, [search]);
 
-  const resultArray = genusSupplier?.result?.suppliers?.map((item) => {
+  const resultArray = fistoSuppliers?.result?.suppliers?.map((item) => {
     return {
       supplier_No: item?.id,
       supplierCode: item?.code,
@@ -89,6 +89,9 @@ export const ListOfSuppliers = ({
       syncDate: moment(new Date()).format("yyyy-MM-DD"),
     };
   });
+
+  // console.log("Suppliers: ", resultArray);
+  console.log("Fisto Supplier: ", fistoSuppliers);
 
   const syncHandler = () => {
     Swal.fire({
@@ -108,6 +111,8 @@ export const ListOfSuppliers = ({
       },
     }).then((result) => {
       if (result.isConfirmed) {
+        console.log("Result Array: ", resultArray);
+
         try {
           setIsLoading(true);
           const res = request
