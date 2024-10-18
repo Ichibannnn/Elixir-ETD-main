@@ -65,6 +65,7 @@ export const TransactedMOHistory = ({ dateFrom, dateTo, setSheetData, search }) 
             "Move Order Date": item.moveOrderDate ? new Date(moment(item.moveOrderDate).format("MM/DD/YYYY")) : "-",
             "Move Order By": item.moveOrderBy,
             "Pick-Up Date": item.picUp_Date ? new Date(moment(item.picUp_Date).format("MM/DD/YYYY")) : "-",
+            Reference: item.reference ? item.reference : "-",
           };
         })
       );

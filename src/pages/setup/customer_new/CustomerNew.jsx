@@ -13,7 +13,7 @@ const fetchGenusApi = async () => {
 };
 
 const fetchFistoDepartmentsApi = async () => {
-  const res = await axios.get(`http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir`, {
+  const res = await axios.get(`http://10.10.2.76:8088/api/dropdown/department?status=1&paginate=0&api_for=vladimir`, {
     headers: {
       Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
     },
@@ -22,7 +22,7 @@ const fetchFistoDepartmentsApi = async () => {
 };
 
 const fetchFistoLocationsApi = async () => {
-  const res = await axios.get(`http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir`, {
+  const res = await axios.get(`http://10.10.2.76:8088/api/dropdown/location?status=1&paginate=0&api_for=vladimir`, {
     headers: {
       Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
     },
