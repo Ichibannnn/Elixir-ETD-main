@@ -19,6 +19,7 @@ import { CancelledOrders } from "./report_dropdown/CancelledOrders";
 import { ConsolidatedReportsFinance } from "./report_dropdown/ConsolidatedReportsFinance";
 import { ConsolidatedReportsAudit } from "./report_dropdown/ConsolidatedReportsAudit";
 import { InventoryMovement } from "./report_dropdown/InventoryMovement";
+import { FuelRegister } from "./report_dropdown/FuelRegister";
 
 const Reports = () => {
   const [dateFrom, setDateFrom] = useState(moment(new Date()).format("yyyy-MM-DD"));
@@ -39,7 +40,7 @@ const Reports = () => {
   };
 
   const handleExport = async () => {
-    if (sample === 10) {
+    if (sample === 11) {
       setIsLoading(true);
       try {
         const response = await request.get("Reports/ExportConsolidateFinance", {
@@ -64,7 +65,7 @@ const Reports = () => {
       } catch (error) {
         console.log("Error", error);
       }
-    } else if (sample === 11) {
+    } else if (sample === 12) {
       setIsLoading(true);
       try {
         const response = await request.get("Reports/ConsolidateAuditExport", {
@@ -89,7 +90,7 @@ const Reports = () => {
       } catch (error) {
         console.log("Error", error);
       }
-    } else if (sample === 4) {
+    } else if (sample === 5) {
       setIsLoading(true);
       try {
         const response = await request.get("Reports/ExportMoveOrderReports", {
@@ -112,6 +113,19 @@ const Reports = () => {
       } catch (error) {
         console.log("Error", error);
       }
+    } else if (sample === 4) {
+      setIsLoading(true);
+      try {
+        var workbook = XLSX.utils.book_new(),
+          worksheet = XLSX.utils.json_to_sheet(sheetData);
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+        XLSX.writeFile(workbook, "Fuel_Transacted_History.xlsx");
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Error", error);
+      }
     } else {
       var workbook = XLSX.utils.book_new(),
         worksheet = XLSX.utils.json_to_sheet(sheetData);
@@ -129,6 +143,8 @@ const Reports = () => {
   };
 
   const minimumDateForInventoryMovement = "2022-01-01";
+
+  console.log("object");
 
   return (
     <>
@@ -152,15 +168,16 @@ const Reports = () => {
                   <option value={1}>Warehouse Receiving History</option>
                   <option value={2}>Move Order For Transaction History</option>
                   <option value={3}>Move Order Transacted History</option>
-                  <option value={4}>Service Level History</option>
-                  <option value={5}>Miscellaneous Receipt History</option>
-                  <option value={6}>Miscellaneous Issue History</option>
-                  <option value={7}>Borrowed Materials History</option>
-                  <option value={8}>Returned Materials History</option>
-                  <option value={9}>Unserved Orders History</option>
-                  <option value={10}>Consolidated Report (Finance)</option>
-                  <option value={11}>Consolidated Report (Audit)</option>
-                  <option value={12}>Inventory Movement</option>
+                  <option value={4}>Fuel Transacted History</option>
+                  <option value={5}>Service Level History</option>
+                  <option value={6}>Miscellaneous Receipt History</option>
+                  <option value={7}>Miscellaneous Issue History</option>
+                  <option value={8}>Borrowed Materials History</option>
+                  <option value={9}>Returned Materials History</option>
+                  <option value={10}>Unserved Orders History</option>
+                  <option value={11}>Consolidated Report (Finance)</option>
+                  <option value={12}>Consolidated Report (Audit)</option>
+                  <option value={13}>Inventory Movement</option>
                 </Select>
               </HStack>
             </Flex>
@@ -187,9 +204,9 @@ const Reports = () => {
 
               {/* Viewing Condition  */}
               <Flex justifyContent="start">
-                {sample < 13 ? (
+                {sample < 14 ? (
                   <Flex justifyContent="start" flexDirection="row">
-                    {sample != 12 && (
+                    {sample != 13 && (
                       <Flex flexDirection="column" ml={1}>
                         <Flex>
                           <Badge>Date from:</Badge>
@@ -200,14 +217,14 @@ const Reports = () => {
                           type="date"
                           value={dateFrom}
                           onChange={(e) => setDateFrom(e.target.value)}
-                          min={sample === 12 ? minimumDateForInventoryMovement : undefined}
+                          min={sample === 13 ? minimumDateForInventoryMovement : undefined}
                         />
                       </Flex>
                     )}
 
                     <Flex flexDirection="column" ml={1}>
                       <Flex>
-                        <Badge>{sample === 12 ? `Rollback Date:` : `Date To:`}</Badge>
+                        <Badge>{sample === 13 ? `Rollback Date:` : `Date To:`}</Badge>
                       </Flex>
                       <Input fontSize="xs" bgColor="#fff8dc" type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
                     </Flex>
@@ -225,22 +242,24 @@ const Reports = () => {
             ) : sample === 3 ? (
               <TransactedMOHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 4 ? (
-              <ServedUnservedReports search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} isLoading={isLoading} />
+              <FuelRegister search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 5 ? (
-              <MiscReceiptHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
+              <ServedUnservedReports search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} isLoading={isLoading} />
             ) : sample === 6 ? (
-              <MiscIssueHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
+              <MiscReceiptHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 7 ? (
-              <BorrowedMatsHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
+              <MiscIssueHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 8 ? (
-              <ReturnedQuantityTransaction search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
+              <BorrowedMatsHistory search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 9 ? (
-              <CancelledOrders search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
+              <ReturnedQuantityTransaction search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 10 ? (
-              <ConsolidatedReportsFinance search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} isLoading={isLoading} />
+              <CancelledOrders search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : sample === 11 ? (
-              <ConsolidatedReportsAudit search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} isLoading={isLoading} />
+              <ConsolidatedReportsFinance search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} isLoading={isLoading} />
             ) : sample === 12 ? (
+              <ConsolidatedReportsAudit search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} isLoading={isLoading} />
+            ) : sample === 13 ? (
               <InventoryMovement search={search} dateFrom={dateFrom} dateTo={dateTo} setSheetData={setSheetData} />
             ) : (
               ""

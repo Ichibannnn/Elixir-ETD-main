@@ -126,6 +126,12 @@ import AccTLocation from "./pages/setup/AccTLocation";
 import AccTAccount from "./pages/setup/AccTAccount";
 import Sample from "./pages/setup/Sample";
 
+// FUEL REGISTER
+import FuelRegisterPage from "./pages/fuel_register/FuelRegisterPage";
+import FuelRequest from "./pages/fuel_register/fuel_request/FuelRequest";
+import FuelApproval from "./pages/fuel_register/fuel_approval/FuelApproval";
+import FuelTransaction from "./pages/fuel_register/fuel_transaction/FuelTransaction";
+
 const currentUser = decodeUser();
 const employeeId = currentUser?.id;
 
@@ -422,6 +428,13 @@ const App = () => {
             {/* REPORTS */}
             <Route path="/reports" element={<ReportsPage notification={notification} fetchNotification={fetchNotification} />}>
               <Route path="/reports/report-details" element={<Reports />} />
+            </Route>
+
+            {/* FUEL REGISTER */}
+            <Route path="/fuel-register" element={<FuelRegisterPage notification={notification} fetchNotification={fetchNotification} />}>
+              <Route path="/fuel-register/fuel-request" element={<FuelRequest />} />
+              <Route path="/fuel-register/fuel-approval" element={<FuelApproval />} />
+              <Route path="/fuel-register/fuel-transaction" element={<FuelTransaction />} />
             </Route>
           </Route>
           <Route path="*" element={<ErrorPage />} />
