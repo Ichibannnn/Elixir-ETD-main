@@ -56,6 +56,7 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
             "Account Title": item.account_Title_Name ? item.account_Title_Name : "-",
             "Employee ID": item.empId ? item.empId : "-",
             Fullname: item.fullname ? item.fullname : "-",
+            Odometer: item.odometer ? item.odometer : "N/A",
           };
         })
       );
@@ -215,9 +216,11 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                         <Td fontSize="xs">{item.driver ? item.driver : "-"}</Td>
                         <Td fontSize="xs">{item.remarks ? item.remarks : "-"}</Td>
                         <Td fontSize="xs">
-                          {item.odometer.toLocaleString(undefined, {
-                            maximumFractionDigits: 2,
-                          })}
+                          {item.odometer
+                            ? item.odometer.toLocaleString(undefined, {
+                                maximumFractionDigits: 2,
+                              })
+                            : "-"}
                         </Td>
                         <Td fontSize="xs">{item.created_At ? moment(item.created_At).format("MM/DD/YYYY") : "-"}</Td>
                       </>

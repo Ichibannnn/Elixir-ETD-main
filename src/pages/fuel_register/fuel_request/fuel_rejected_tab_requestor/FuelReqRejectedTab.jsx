@@ -177,9 +177,11 @@ const FuelReqRejectedTab = () => {
                   </Td>
                   <Td fontSize="xs">{item.remarks}</Td>
                   <Td fontSize="xs">
-                    {item.odometer.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
+                    {item.odometer
+                      ? item.odometer.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })
+                      : "-"}
                   </Td>
                   <Td fontSize="xs">{moment(item.created_At).format("MM/DD/yyyy")}</Td>
 

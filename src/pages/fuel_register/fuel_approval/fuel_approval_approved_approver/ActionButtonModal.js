@@ -182,9 +182,11 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {data.odometer.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })}
+                      {data.odometer
+                        ? data.odometer.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                          })
+                        : "-"}
                     </Td>
                   </Tr>
                 </Tbody>
@@ -394,9 +396,11 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {data.odometer.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })}
+                      {data.odometer
+                        ? data.odometer.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                          })
+                        : "-"}
                     </Td>
                   </Tr>
                 </Tbody>

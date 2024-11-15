@@ -190,9 +190,11 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {data.odometer.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })}
+                      {data.odometer
+                        ? data.odometer.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                          })
+                        : "-"}
                     </Td>
                   </Tr>
                 </Tbody>
@@ -388,7 +390,7 @@ export const ApproveModal = ({ isOpen, onClose, data, fetchFuelApproval }) => {
         },
       });
       setDepartment(res.data.result.departments);
-      console.log(res.data.result.departments);
+      // console.log(res.data.result.departments);
     } catch (error) {}
   };
 
@@ -473,6 +475,8 @@ export const ApproveModal = ({ isOpen, onClose, data, fetchFuelApproval }) => {
   }, [idNumber]);
 
   const onSubmitHandler = (submitData) => {
+    console.log("SubmitData: ", submitData);
+
     const payload = [
       {
         id: data?.id,
@@ -592,9 +596,11 @@ export const ApproveModal = ({ isOpen, onClose, data, fetchFuelApproval }) => {
                     ODOMETER:
                   </Text>
                   <Text fontSize="14px">
-                    {data?.odometer.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
+                    {data.odometer
+                      ? data.odometer.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })
+                      : "-"}
                   </Text>
                 </HStack>
 
