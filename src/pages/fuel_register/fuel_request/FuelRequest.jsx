@@ -66,7 +66,7 @@ const FuelRequest = ({ notification, fetchNotification }) => {
         </HStack>
       </Flex>
 
-      <VStack h="90vh" className="boxShadow" w="full" p={2} bg="form">
+      <VStack h="800px" className="boxShadow" w="full" p={2} bg="form">
         {navigation === 1 ? (
           <>
             <FuelRequestsTab navigation={navigation} fetchNotification={fetchNotification} />

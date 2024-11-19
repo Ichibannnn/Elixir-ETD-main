@@ -1244,7 +1244,7 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
                 size="sm"
                 leftIcon={<IoSaveOutline fontSize="19px" />}
                 borderRadius="none"
-                colorScheme="teal"
+                colorScheme="blue"
                 // onClick={onSubmitHandler}
                 type="submit"
                 isLoading={isLoading}

@@ -257,3 +257,13 @@
   z-index: 1;
   top: 0;
 }
+
+.add-request {
+  width: 400px;
+  height: 400px;
+  object-fit: fill;
+  border-style: none;
+  background: none;
+  z-index: 1;
+  top: 0;
+}

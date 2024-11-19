@@ -56,6 +56,7 @@ const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigatio
     customerCode: "",
     customerName: "",
   });
+
   const [rawMatsInfo, setRawMatsInfo] = useState({
     itemCode: "",
     itemDescription: "",
