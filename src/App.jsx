@@ -131,6 +131,7 @@ import FuelRegisterPage from "./pages/fuel_register/FuelRegisterPage";
 import FuelRequest from "./pages/fuel_register/fuel_request/FuelRequest";
 import FuelApproval from "./pages/fuel_register/fuel_approval/FuelApproval";
 import FuelTransaction from "./pages/fuel_register/fuel_transaction/FuelTransaction";
+import FuelRequestV2 from "./pages/fuel_register_v2/FuelRequestsTab/FuelRequestV2";
 
 const currentUser = decodeUser();
 const employeeId = currentUser?.id;
@@ -157,6 +158,10 @@ const App = () => {
   //Borrowed Mats Fetch and Cancel Feature
   const [borrowedData, setBorrowedData] = useState([]);
   const [borrowedNav, setBorrowedNav] = useState(1);
+
+  //Borrowed Mats Fetch and Cancel Feature
+  const [fuelData, setFuelData] = useState([]);
+  const [fuelNav, setFuelNav] = useState(1);
 
   const [notification, setNotification] = useState([]);
 
@@ -202,12 +207,19 @@ const App = () => {
     return res.data;
   };
 
+  const fuelUserId = user?.id;
+  const fetchActiveFuelRequestsApi = async (fuelUserId) => {
+    const res = await request.get(`FuelRegister/page?Status=For%20Approval&UserId=${fuelUserId}`);
+    return res.data;
+  };
+
   //Misc Issue Data
   const fetchActiveMiscIssues = () => {
     fetchActiveMiscIssuesApi(userId).then((res) => {
       setMiscData(res);
     });
   };
+
   useEffect(() => {
     fetchActiveMiscIssues();
 
@@ -222,6 +234,7 @@ const App = () => {
       setBorrowedData(res);
     });
   };
+
   useEffect(() => {
     fetchActiveBorrowed();
 
@@ -229,6 +242,20 @@ const App = () => {
       setBorrowedData([]);
     };
   }, [borrowedUserId]);
+
+  //Fuel Data
+  const fetchActiveFuelRequests = () => {
+    fetchActiveFuelRequestsApi(fuelUserId).then((res) => {
+      setMiscData(res);
+    });
+  };
+  useEffect(() => {
+    fetchActiveFuelRequests();
+
+    return () => {
+      setFuelData([]);
+    };
+  }, [fuelUserId]);
 
   // Open modal to cancel all ID on table if re-routed without saving
   const { isOpen: isArrayCancel, onClose: closeArrayCancel, onOpen: openArrayCancel } = useDisclosure();
@@ -249,6 +276,16 @@ const App = () => {
       openArrayBorrowedCancel();
     }
   }, [pathBorrowed.pathname !== pathBorrowedMats]);
+
+  // Open modal to cancel all ID on table if re-routed without saving (Fuel Register)
+  const { isOpen: isArrayFuelCancel, onClose: closeArrayFuelCancel, onOpen: openArrayFuelCancel } = useDisclosure();
+  const pathFuel = useLocation();
+  const pathFuelMats = "/fuel-register/fuel-requests";
+  useEffect(() => {
+    if (pathFuel.pathname !== pathFuelMats && fuelData?.length > 0) {
+      openArrayFuelCancel();
+    }
+  }, [pathFuel.pathname !== pathFuelMats]);
 
   //Fetch Notif every 40s
   useEffect(() => {
@@ -432,9 +469,20 @@ const App = () => {
 
             {/* FUEL REGISTER */}
             <Route path="/fuel-register" element={<FuelRegisterPage notification={notification} fetchNotification={fetchNotification} />}>
-              <Route path="/fuel-register/fuel-request" element={<FuelRequest />} />
-              <Route path="/fuel-register/fuel-approval" element={<FuelApproval />} />
-              <Route path="/fuel-register/fuel-transaction" element={<FuelTransaction />} />
+              <Route path="/fuel-register/fuel-requests" element={<FuelRequest />} />
+              {/* <Route path="/fuel-register/fuel-approval" element={<FuelApproval />} />
+              <Route path="/fuel-register/fuel-transaction" element={<FuelTransaction />} /> */}
+
+              {/* <Route
+                path="/fuel-register/fuel-requests"
+                element={
+                  user ? (
+                    <FuelRequestV2 fuelData={fuelData} fetchActiveFuelRequests={fetchActiveFuelRequests} fuelNav={fuelNav} setFuelNav={setFuelNav} />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
+              /> */}
             </Route>
           </Route>
           <Route path="*" element={<ErrorPage />} />
@@ -458,6 +506,16 @@ const App = () => {
           borrowedData={borrowedData}
           fetchActiveBorrowed={fetchActiveBorrowed}
           setBorrowedNav={setBorrowedNav}
+        />
+      )}
+
+      {isArrayFuelCancel && (
+        <CancelFuelArrayModalConfirmation
+          isOpen={isArrayFuelCancel}
+          onClose={closeArrayFuelCancel}
+          fuelData={fuelData}
+          fetchActiveFuelRequests={fetchActiveFuelRequests}
+          setFuelNav={setFuelNav}
         />
       )}
     </Context.Provider>
@@ -604,6 +662,81 @@ const CancelBorrowedArrayModalConfirmation = ({ isOpen, onClose, borrowedData, f
               Yes
             </Button>
             <Button size="sm" onClick={noHandlerBorrowed} isLoading={isLoading} colorScheme="blackAlpha">
+              No
+            </Button>
+          </ButtonGroup>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};
+
+//Fuel Cancel Array
+const CancelFuelArrayModalConfirmation = ({ isOpen, onClose, fuelData, fetchActiveMiscIssues, setFuelNav }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  const cancelArraySubmitHandler = () => {
+    setIsLoading(true);
+    try {
+      const cancelArray = fuelData?.map((item) => {
+        return {
+          id: item.id,
+        };
+      });
+
+      const res = request
+        .put(`FuelRegister/cancel/`)
+        .then((res) => {
+          ToastComponent("Warning", "Items has been cancelled", "success", toast);
+          fetchActiveMiscIssues();
+          onClose();
+        })
+        .catch((err) => {});
+    } catch (error) {}
+  };
+
+  const noHandler = () => {
+    setFuelNav(1);
+    navigate("/fuel-register/fuel-requests");
+    onClose();
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
+      <ModalOverlay />
+      <ModalContent bg="gray.50" pt={10} pb={5}>
+        <ModalHeader>
+          <VStack justifyContent="center">
+            <FcHighPriority fontSize="50px" />
+            <Text color="warning" textAlign="center" fontSize="lg">
+              [Warning]
+            </Text>
+            <Text color="warning" textAlign="center" fontSize="sm">
+              [Fuel Request]
+            </Text>
+          </VStack>
+        </ModalHeader>
+        <ModalCloseButton onClick={noHandler} />
+
+        <ModalBody mb={5}>
+          <VStack spacing={0}>
+            <Text textAlign="center" fontSize="sm">
+              Your created lists will be cancelled.
+            </Text>
+            <Text textAlign="center" fontSize="xs">
+              Are you sure you want to leave this page?
+            </Text>
+          </VStack>
+        </ModalBody>
+
+        <ModalFooter justifyContent="center">
+          <ButtonGroup>
+            <Button size="sm" onClick={cancelArraySubmitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="blue">
+              Yes
+            </Button>
+            <Button size="sm" onClick={noHandler} isLoading={isLoading} colorScheme="blackAlpha">
               No
             </Button>
           </ButtonGroup>

@@ -32,7 +32,7 @@ import { MdPrint } from "react-icons/md";
 import { PrintModal, ViewModal } from "./ActionButtonModal";
 
 const fetchFuelApproveApi = async (pageNumber, pageSize, search) => {
-  const res = await request.get(`FuelRegister/page?PageNumber=${pageNumber}&PageSize=${pageSize}&Search=${search}&Status=Approved`);
+  const res = await request.get(`FuelRegister/page?PageNumber=${pageNumber}&PageSize=${pageSize}&Search=${search}&Status=Transacted`);
   return res.data;
 };
 
@@ -109,7 +109,7 @@ const ApproverApprovedTab = () => {
       <Flex flexDirection="column" mt={2}>
         <Box w="full" bgColor="primary" h="22px">
           <Text fontWeight="normal" fontSize="13px" color="white" textAlign="center" justifyContent="center">
-            List of Approved Fuel Requests
+            List of Transacted Fuels
           </Text>
         </Box>
         <PageScroll minHeight="400px" maxHeight="701px">
@@ -180,7 +180,7 @@ const ApproverApprovedTab = () => {
                       minimumFractionDigits: 2,
                     })}
                   </Td>
-                  <Td fontSize="xs">{item.driver}</Td>
+                  <Td fontSize="xs">{item.requestorName}</Td>
                   <Td fontSize="xs">{item.remarks}</Td>
                   <Td fontSize="xs">
                     {item.odometer

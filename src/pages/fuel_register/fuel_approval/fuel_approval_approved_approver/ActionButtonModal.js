@@ -54,7 +54,7 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                   <Text fontSize="xs" fontWeight="semibold">
                     Driver:
                   </Text>
-                  <Text fontSize="xs">{data?.driver}</Text>
+                  <Text fontSize="xs">{data?.requestorName}</Text>
                 </HStack>
 
                 <HStack>
@@ -199,14 +199,14 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                 </Text>
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {data?.driver}
+                  {data?.requestorName}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
-                  Approved By:
+                  Transacted By:
                 </Text>
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -234,6 +234,8 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+  console.log("Data: ", data);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="5xl" isCentered>
@@ -271,7 +273,7 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                 <Text fontSize="xs" fontWeight="semibold">
                   Driver:
                 </Text>
-                <Text fontSize="xs">{data?.driver}</Text>
+                <Text fontSize="xs">{data?.requestorName}</Text>
               </HStack>
 
               <HStack>
@@ -413,18 +415,18 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                 </Text>
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {data?.driver}
+                  {data?.requestorName}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
-                  Approved By:
+                  Transacted By:
                 </Text>
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {data?.approve_By}
+                  {data?.t}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>

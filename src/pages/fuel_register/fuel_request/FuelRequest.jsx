@@ -3,6 +3,7 @@ import { Button, Flex, HStack, VStack } from "@chakra-ui/react";
 import FuelRequestsTab from "./fuel_request_tab/FuelRequestsTab";
 import FuelApprovedTab from "./fuel_approved_tab_requestor/FuelApprovedTab";
 import FuelReqRejectedTab from "./fuel_rejected_tab_requestor/FuelReqRejectedTab";
+import ApproverApprovedTab from "../fuel_approval/fuel_approval_approved_approver/ApproverApprovedTab";
 
 const FuelRequest = ({ notification, fetchNotification }) => {
   const [navigation, setNavigation] = useState(1);
@@ -45,10 +46,10 @@ const FuelRequest = ({ notification, fetchNotification }) => {
             onClick={() => setNavigation(2)}
             borderRadius="none"
           >
-            Approved
+            Transacted
           </Button>
 
-          <Button
+          {/* <Button
             w="10%"
             bgColor={navigation === 3 ? "primary" : ""}
             color={navigation === 3 ? "white" : ""}
@@ -61,7 +62,7 @@ const FuelRequest = ({ notification, fetchNotification }) => {
             borderRadius="none"
           >
             Rejected
-          </Button>
+          </Button> */}
         </HStack>
       </Flex>
 
@@ -72,7 +73,7 @@ const FuelRequest = ({ notification, fetchNotification }) => {
           </>
         ) : navigation === 2 ? (
           <>
-            <FuelApprovedTab navigation={navigation} />
+            <ApproverApprovedTab navigation={navigation} />
           </>
         ) : navigation === 3 ? (
           <>

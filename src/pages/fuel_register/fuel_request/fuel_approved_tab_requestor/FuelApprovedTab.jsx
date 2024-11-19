@@ -35,7 +35,7 @@ const currentUser = decodeUser();
 const userId = currentUser?.id;
 
 const fetchFuelReqApprovedApi = async (pageNumber, pageSize, search) => {
-  const res = await request.get(`FuelRegister/page?PageNumber=${pageNumber}&PageSize=${pageSize}&Search=${search}&Status=Approved&UserId=${userId}`);
+  const res = await request.get(`FuelRegister/page?PageNumber=${pageNumber}&PageSize=${pageSize}&Search=${search}&Status=Transacted`);
   return res.data;
 };
 

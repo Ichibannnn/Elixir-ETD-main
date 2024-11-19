@@ -21,6 +21,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
 import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
@@ -31,15 +32,17 @@ import { decodeUser } from "../../../../services/decode-user";
 import { GiCancel } from "react-icons/gi";
 import { GrView } from "react-icons/gr";
 import { AiOutlineMore } from "react-icons/ai";
-import { AddModal, CancelRequestModal, ViewModal } from "./ActionButtonModal";
-import { IoAdd } from "react-icons/io5";
+import { AddModal, CancelRequestModal, EditModal, ViewModal } from "./ActionButtonModal";
+import { IoAdd, IoSave } from "react-icons/io5";
 import { MdOutlineEdit } from "react-icons/md";
+import Swal from "sweetalert2";
+import { ToastComponent } from "../../../../components/Toast";
 
 const currentUser = decodeUser();
 const userId = currentUser?.id;
 
 const fetchFuelRequestApi = async (pageNumber, pageSize, search) => {
-  const res = await request.get(`FuelRegister/page?PageNumber=${pageNumber}&PageSize=${pageSize}&Search=${search}&Status=For%20Approval&UserId=${userId}`);
+  const res = await request.get(`FuelRegister/page?PageNumber=${pageNumber}&PageSize=${pageSize}&Search=${search}&Status=For%20Approval`);
   return res.data;
 };
 
@@ -51,7 +54,21 @@ const FuelRequestsTab = () => {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const [fuelInfo, setFuelInfo] = useState({
+    warehouseId: "",
+    item_Code: "DIESEL",
+    item_Description: "DIESEL",
+    soh: "",
+    unit_Cost: "",
+    liters: "",
+    odometer: "",
+    remarks: "",
+    asset: "",
+  });
+
+  const toast = useToast();
   const { isOpen: isCreate, onClose: closeCreate, onOpen: openCreate } = useDisclosure();
+  const { isOpen: isEdit, onClose: closeEdit, onOpen: openEdit } = useDisclosure();
   const { isOpen: isView, onClose: closeView, onOpen: openView } = useDisclosure();
   const { isOpen: isCancel, onClose: closeCancel, onOpen: openCancel } = useDisclosure();
 
@@ -103,7 +120,7 @@ const FuelRequestsTab = () => {
 
   const editHandler = (data) => {
     setGetData(data);
-    openCreate();
+    openEdit();
   };
 
   const cancelHandler = (data) => {
@@ -115,34 +132,118 @@ const FuelRequestsTab = () => {
     openCreate();
   };
 
+  const onTransactAction = () => {
+    const transactPayload = requestFuelData?.fuel?.map((item) => ({
+      id: item?.id,
+    }));
+
+    console.log("transactPayload: ", transactPayload);
+
+    Swal.fire({
+      title: "Confirmation!",
+      text: "Are you sure you want to transact this request?",
+      icon: "info",
+      color: "black",
+      background: "white",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#CBD1D8",
+      confirmButtonText: "Yes",
+      heightAuto: false,
+      width: "40em",
+      customClass: {
+        container: "my-swal",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          setIsLoading(true);
+          const res = request
+            .put("FuelRegister/approve", transactPayload)
+            .then((res) => {
+              fetchFuelRequest();
+              ToastComponent("Success!", "Transact fuel successfully", "success", toast);
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              ToastComponent("Error!", err.response.data, "error", toast);
+              setIsLoading(false);
+            });
+        } catch (err) {
+          ToastComponent("Error!", "Check error.", "error", toast);
+        }
+      }
+    });
+  };
+
   return (
     <Flex justifyContent="center" flexDirection="column" mb="150px" w="full" p={5}>
       <Flex justifyContent="space-between" align="end">
-        <InputGroup w="15%">
+        {/* <InputGroup w="15%">
           <InputLeftElement pointerEvents="none" children={<FaSearch color="gray.300" />} />
           <Input onChange={(e) => searchHandler(e.target.value)} type="text" fontSize="xs" placeholder="Search: ID" focusBorderColor="accent" />
-        </InputGroup>
+        </InputGroup> */}
 
-        <Button
-          type="submit"
-          leftIcon={<IoAdd fontSize="19px" />}
-          colorScheme="teal"
-          borderRadius="none"
-          fontSize="12px"
-          size="sm"
-          isLoading={isLoading}
-          onClick={() => createHandler()}
-        >
-          Create Request
-        </Button>
+        <Box />
+
+        <Box gap={1}>
+          <Button
+            type="submit"
+            leftIcon={<IoAdd fontSize="19px" />}
+            colorScheme="teal"
+            borderRadius="none"
+            fontSize="12px"
+            size="sm"
+            isLoading={isLoading}
+            isDisabled={requestFuelData?.fuel?.length}
+            onClick={() => createHandler()}
+          >
+            Create Request
+          </Button>
+
+          <Button
+            type="submit"
+            leftIcon={<IoSave fontSize="19px" />}
+            colorScheme="facebook"
+            borderRadius="none"
+            fontSize="12px"
+            size="sm"
+            isLoading={isLoading}
+            isDisabled={!requestFuelData?.fuel?.length}
+            onClick={() => onTransactAction()}
+          >
+            Transact Request
+          </Button>
+
+          {/* {requestFuelData?.fuel?.length ? (
+            <>
+              <Button
+                type="submit"
+                leftIcon={<IoSave fontSize="19px" />}
+                colorScheme="blue"
+                borderRadius="none"
+                fontSize="12px"
+                size="sm"
+                isLoading={isLoading}
+                // isDisabled={requestFuelData?.fuel?.length}
+                onClick={() => onTransactAction()}
+              >
+                Transact Request
+              </Button>
+            </>
+          ) : (
+            ""
+          )} */}
+        </Box>
       </Flex>
 
-      <Flex flexDirection="column" mt={2}>
+      <Flex flexDirection="column">
         <Box w="full" bgColor="primary" h="22px">
           <Text fontWeight="normal" fontSize="13px" color="white" textAlign="center" justifyContent="center">
             List of Fuel Requests
           </Text>
         </Box>
+
         <PageScroll minHeight="400px" maxHeight="701px">
           <Table variant="striped">
             <Thead bgColor="primary" position="sticky" top={0} zIndex={1}>
@@ -230,9 +331,9 @@ const FuelRequestsTab = () => {
                             <MenuItem icon={<GrView fontSize="17px" />} onClick={() => viewHandler(item)}>
                               <Text fontSize="15px">View</Text>
                             </MenuItem>
-                            <MenuItem icon={<MdOutlineEdit fontSize="17px" />} onClick={() => editHandler(item)}>
+                            {/* <MenuItem icon={<MdOutlineEdit fontSize="17px" />} onClick={() => editHandler(item)}>
                               <Text fontSize="15px">Update</Text>
-                            </MenuItem>
+                            </MenuItem> */}
                             <MenuItem icon={<GiCancel fontSize="17px" color="red" />} onClick={() => cancelHandler(item)}>
                               <Text fontSize="15px" color="red" _hover={{ color: "red" }}>
                                 Cancel
@@ -250,41 +351,22 @@ const FuelRequestsTab = () => {
         </PageScroll>
       </Flex>
 
-      <Flex mt={1} justifyContent="end">
-        <Stack>
-          <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
-            <PaginationContainer>
-              <PaginationPrevious bg="secondary" color="white" p={1} _hover={{ bg: "accent", color: "white" }}>
-                {"<<"}
-              </PaginationPrevious>
-              <PaginationPageGroup ml={1} mr={1}>
-                {pages.map((page) => (
-                  <PaginationPage _hover={{ bg: "accent", color: "white" }} p={3} bg="secondary" color="white" key={`pagination_page_${page}`} page={page} />
-                ))}
-              </PaginationPageGroup>
-              <HStack>
-                <PaginationNext bg="secondary" color="white" p={1} _hover={{ bg: "accent", color: "white" }}>
-                  {">>"}
-                </PaginationNext>
-                <Select onChange={handlePageSizeChange} variant="filled" fontSize="md">
-                  <option value={Number(5)}>5</option>
-                  <option value={Number(10)}>10</option>
-                  <option value={Number(25)}>25</option>
-                  <option value={Number(50)}>50</option>
-                </Select>
-              </HStack>
-            </PaginationContainer>
-          </Pagination>
-        </Stack>
-      </Flex>
-
       {isView && <ViewModal isOpen={isView} onClose={closeView} data={getData} />}
 
       {isCancel && (
-        <CancelRequestModal isOpen={isCancel} onClose={closeCancel} data={getData} fetchFuelRequest={fetchFuelRequest} isLoading={isLoading} setIsLoading={setIsLoading} />
+        <CancelRequestModal
+          data={getData}
+          isOpen={isCancel}
+          onClose={closeCancel}
+          fetchFuelRequest={fetchFuelRequest}
+          setFuelInfo={setFuelInfo}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+        />
       )}
 
-      {isCreate && <AddModal isOpen={isCreate} onClose={closeCreate} data={getData} fetchFuelRequest={fetchFuelRequest} />}
+      {isCreate && <AddModal isOpen={isCreate} onClose={closeCreate} fuelInfo={fuelInfo} setFuelInfo={setFuelInfo} fetchFuelRequest={fetchFuelRequest} />}
+      {isEdit && <EditModal data={getData} isOpen={isEdit} onClose={closeEdit} fuelInfo={fuelInfo} setFuelInfo={setFuelInfo} fetchFuelRequest={fetchFuelRequest} />}
     </Flex>
   );
 };
