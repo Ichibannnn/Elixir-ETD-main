@@ -209,7 +209,7 @@ const App = () => {
 
   const fuelUserId = user?.id;
   const fetchActiveFuelRequestsApi = async (fuelUserId) => {
-    const res = await request.get(`FuelRegister/page?Status=For%20Approval&UserId=${fuelUserId}`);
+    const res = await request.get(`FuelRegister/view`);
     return res.data;
   };
 
@@ -245,8 +245,8 @@ const App = () => {
 
   //Fuel Data
   const fetchActiveFuelRequests = () => {
-    fetchActiveFuelRequestsApi(fuelUserId).then((res) => {
-      setMiscData(res);
+    fetchActiveFuelRequestsApi().then((res) => {
+      setFuelData(res);
     });
   };
   useEffect(() => {
@@ -255,7 +255,7 @@ const App = () => {
     return () => {
       setFuelData([]);
     };
-  }, [fuelUserId]);
+  }, []);
 
   // Open modal to cancel all ID on table if re-routed without saving
   const { isOpen: isArrayCancel, onClose: closeArrayCancel, onOpen: openArrayCancel } = useDisclosure();
@@ -469,11 +469,13 @@ const App = () => {
 
             {/* FUEL REGISTER */}
             <Route path="/fuel-register" element={<FuelRegisterPage notification={notification} fetchNotification={fetchNotification} />}>
-              <Route path="/fuel-register/fuel-requests" element={<FuelRequest />} />
+              {/* <Route path="/fuel-register/fuel-requests" element={<FuelRequestV2 />} /> */}
+
+              {/* <Route path="/fuel-register/fuel-requests" element={<FuelRequest />} /> */}
               {/* <Route path="/fuel-register/fuel-approval" element={<FuelApproval />} />
               <Route path="/fuel-register/fuel-transaction" element={<FuelTransaction />} /> */}
 
-              {/* <Route
+              <Route
                 path="/fuel-register/fuel-requests"
                 element={
                   user ? (
@@ -482,7 +484,7 @@ const App = () => {
                     <Navigate to="/login" />
                   )
                 }
-              /> */}
+              />
             </Route>
           </Route>
           <Route path="*" element={<ErrorPage />} />
@@ -680,20 +682,18 @@ const CancelFuelArrayModalConfirmation = ({ isOpen, onClose, fuelData, fetchActi
   const cancelArraySubmitHandler = () => {
     setIsLoading(true);
     try {
-      const cancelArray = fuelData?.map((item) => {
-        return {
-          id: item.id,
-        };
-      });
+      const cancelArray = fuelData?.map((item) => item.id);
 
-      const res = request
-        .put(`FuelRegister/cancel/`)
-        .then((res) => {
-          ToastComponent("Warning", "Items has been cancelled", "success", toast);
-          fetchActiveMiscIssues();
-          onClose();
-        })
-        .catch((err) => {});
+      console.log("Cancel Array: ", cancelArray);
+
+      // const res = request
+      //   .put(`FuelRegister/cancel`)
+      //   .then((res) => {
+      //     ToastComponent("Warning", "Items has been cancelled", "success", toast);
+      //     fetchActiveMiscIssues();
+      //     onClose();
+      //   })
+      //   .catch((err) => {});
     } catch (error) {}
   };
 

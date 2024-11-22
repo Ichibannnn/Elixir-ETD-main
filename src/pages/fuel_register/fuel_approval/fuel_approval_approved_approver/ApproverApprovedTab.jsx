@@ -141,7 +141,7 @@ const ApproverApprovedTab = () => {
                   UNIT COST
                 </Th>
                 <Th h="20px" color="white" fontSize="10px" textAlign="center">
-                  DRIVER
+                  REQUESTOR
                 </Th>
                 <Th h="20px" color="white" fontSize="10px" textAlign="center">
                   REMARKS
@@ -174,7 +174,6 @@ const ApproverApprovedTab = () => {
                   <Td fontSize="xs">{item.asset}</Td>
 
                   <Td fontSize="xs">
-                    {" "}
                     {item.unit_Cost.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                       minimumFractionDigits: 2,
@@ -187,7 +186,7 @@ const ApproverApprovedTab = () => {
                       ? item.odometer.toLocaleString(undefined, {
                           maximumFractionDigits: 2,
                         })
-                      : "-"}
+                      : "N/A"}
                   </Td>
                   <Td fontSize="xs">{moment(item.created_At).format("MM/DD/yyyy")}</Td>
 
@@ -203,6 +202,7 @@ const ApproverApprovedTab = () => {
                             <MenuItem icon={<GrView fontSize="17px" />} onClick={() => viewHandler(item)}>
                               <Text fontSize="15px">View</Text>
                             </MenuItem>
+
                             <MenuItem icon={<MdPrint fontSize="17px" color="green" />} onClick={() => printHandler(item)}>
                               <Text fontSize="15px" color="green" _hover={{ color: "green" }}>
                                 Print

@@ -27,6 +27,8 @@ import moment from "moment";
 import { useReactToPrint } from "react-to-print";
 
 export const ViewModal = ({ isOpen, onClose, data }) => {
+  console.log("Data: ", data);
+
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="5xl" isCentered>
       <ModalOverlay />
@@ -52,9 +54,29 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
 
                 <HStack>
                   <Text fontSize="xs" fontWeight="semibold">
-                    Driver:
+                    Requestor:
                   </Text>
                   <Text fontSize="xs">{data?.requestorName}</Text>
+                </HStack>
+
+                <HStack>
+                  <Text fontSize="xs" fontWeight="semibold">
+                    Asset:
+                  </Text>
+                  <Text fontSize="xs">{data?.asset}</Text>
+                </HStack>
+
+                <HStack>
+                  <Text fontSize="xs" fontWeight="semibold">
+                    Odometer:
+                  </Text>
+                  <Text fontSize="xs">
+                    {data.odometer
+                      ? data.odometer.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })
+                      : "N/A"}
+                  </Text>
                 </HStack>
 
                 <HStack>
@@ -149,16 +171,10 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                       UOM
                     </Th>
                     <Th color="white" fontSize="xs">
-                      LITERS
-                    </Th>
-                    <Th color="white" fontSize="xs">
-                      ASSET
-                    </Th>
-                    <Th color="white" fontSize="xs">
                       UNIT COST
                     </Th>
                     <Th color="white" fontSize="xs">
-                      ODOMETER
+                      LITERS
                     </Th>
                   </Tr>
                 </Thead>
@@ -169,24 +185,16 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                     <Td fontSize="xs">{data.item_Description}</Td>
                     <Td fontSize="xs">{data.uom}</Td>
                     <Td fontSize="xs">
-                      {data.liters.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">{data.asset}</Td>
-                    <Td fontSize="xs">
                       {data.unit_Cost.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {data.odometer
-                        ? data.odometer.toLocaleString(undefined, {
-                            maximumFractionDigits: 2,
-                          })
-                        : "-"}
+                      {data.liters.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2,
+                      })}
                     </Td>
                   </Tr>
                 </Tbody>
@@ -210,7 +218,7 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                 </Text>
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {data?.approve_By}
+                  {data?.added_By}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
@@ -271,9 +279,29 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
-                  Driver:
+                  Requestor:
                 </Text>
                 <Text fontSize="xs">{data?.requestorName}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Asset:
+                </Text>
+                <Text fontSize="xs">{data?.asset}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Odometer:
+                </Text>
+                <Text fontSize="xs">
+                  {data.odometer
+                    ? data.odometer.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })
+                    : "N/A"}
+                </Text>
               </HStack>
 
               <HStack>
@@ -365,16 +393,10 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                       UOM
                     </Th>
                     <Th color="white" fontSize="xs">
-                      LITERS
-                    </Th>
-                    <Th color="white" fontSize="xs">
-                      ASSET
-                    </Th>
-                    <Th color="white" fontSize="xs">
                       UNIT COST
                     </Th>
                     <Th color="white" fontSize="xs">
-                      ODOMETER
+                      LITERS
                     </Th>
                   </Tr>
                 </Thead>
@@ -385,24 +407,16 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                     <Td fontSize="xs">{data.item_Description}</Td>
                     <Td fontSize="xs">{data.uom}</Td>
                     <Td fontSize="xs">
-                      {data.liters.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">{data.asset}</Td>
-                    <Td fontSize="xs">
                       {data.unit_Cost.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {data.odometer
-                        ? data.odometer.toLocaleString(undefined, {
-                            maximumFractionDigits: 2,
-                          })
-                        : "-"}
+                      {data.liters.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2,
+                      })}
                     </Td>
                   </Tr>
                 </Tbody>
@@ -426,7 +440,7 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                 </Text>
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {data?.t}
+                  {data?.added_By}
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>

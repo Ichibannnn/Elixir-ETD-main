@@ -175,7 +175,8 @@ const FuelRequestsTab = () => {
               setIsLoading(false);
             });
         } catch (err) {
-          ToastComponent("Error!", "Check error.", "error", toast);
+          // ToastComponent("Error!", "Check error.", "error", toast);
+          setIsLoading(false);
         }
       }
     });
@@ -183,36 +184,57 @@ const FuelRequestsTab = () => {
 
   const onCancelAction = () => {
     setIsLoading(true);
-    try {
-      const res = request
-        .put(`FuelRegister/cancel/${requestFuelData?.fuel?.[0].id}`)
-        .then((res) => {
-          fetchFuelRequest();
-          ToastComponent("Success", "Item has been cancelled", "success", toast);
-          setFuelInfo({
-            item_Code: "DIESEL",
-            item_Description: "DIESEL",
-            soh: "",
-            unit_Cost: "",
-            liters: "",
-            odometer: "",
-            remarks: "",
-            asset: "",
-          });
+    Swal.fire({
+      title: "Confirmation!",
+      text: "Are you sure you want to cancel this request?",
+      icon: "info",
+      color: "black",
+      background: "white",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#CBD1D8",
+      confirmButtonText: "Yes",
+      heightAuto: false,
+      width: "40em",
+      customClass: {
+        container: "my-swal",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = request
+            .put(`FuelRegister/cancel/${requestFuelData?.fuel?.[0].id}`)
+            .then((res) => {
+              fetchFuelRequest();
+              ToastComponent("Success", "Item has been cancelled", "success", toast);
+              setFuelInfo({
+                item_Code: "DIESEL",
+                item_Description: "DIESEL",
+                soh: "",
+                unit_Cost: "",
+                liters: "",
+                odometer: "",
+                remarks: "",
+                asset: "",
+              });
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              ToastComponent("Error", "Item was not cancelled", "error", toast);
+              setIsLoading(false);
+            });
+        } catch (error) {
           setIsLoading(false);
-        })
-        .catch((err) => {
-          ToastComponent("Error", "Item was not cancelled", "error", toast);
-          setIsLoading(false);
-        });
-    } catch (error) {}
+        }
+      }
+    });
   };
 
   console.log("Request Data: ", requestFuelData);
 
   return (
-    <Flex w="100%" height="100%" flexDirection="column" p={5} border="2px" borderWidth="5px" borderColor="#1B1C1D">
-      {requestFuelData?.fuel?.length ? (
+    <Flex w="100%" height="100%" flexDirection="column" p={5} border="2px" borderWidth="5px" borderColor="#1E2227">
+      {!requestFuelData?.fuel?.length ? (
         <Flex width="100%" height="100%" justifyContent="center" alignItems="center" direction="column">
           <VStack gap={-1}>
             <img src={addRequest} alt="No Records Found" className="add-request" />
@@ -232,7 +254,7 @@ const FuelRequestsTab = () => {
               fontSize="12px"
               size="lg"
               isLoading={isLoading}
-              isDisabled={requestFuelData?.fuel?.length}
+              // isDisabled={requestFuelData?.fuel?.length}
               onClick={() => createHandler()}
             >
               Create Request
@@ -268,7 +290,7 @@ const FuelRequestsTab = () => {
                   </Box>
                   <Box>
                     <Text fontSize="0.875rem" fontWeight="500" lineHeight="1.57">
-                      ID-00001
+                      {requestFuelData?.fuel?.[0]?.id}
                     </Text>
                   </Box>
                 </Stack>
@@ -281,7 +303,7 @@ const FuelRequestsTab = () => {
                   </Box>
                   <Box>
                     <Text fontSize="0.875rem" fontWeight="500" lineHeight="1.57">
-                      RDFFLFI-10920, PANGILINAN, GIB IBANSON
+                      {`${requestFuelData?.fuel?.[0]?.requestorId} - ${requestFuelData?.fuel?.[0]?.requestorName}`}
                     </Text>
                   </Box>
                 </Stack>
@@ -294,7 +316,7 @@ const FuelRequestsTab = () => {
                   </Box>
                   <Box>
                     <Text fontSize="0.875rem" fontWeight="500" lineHeight="1.57">
-                      FULL TANK - PAMPANGA TO MANILA
+                      {requestFuelData?.fuel?.[0]?.remarks}
                     </Text>
                   </Box>
                 </Stack>
@@ -307,7 +329,7 @@ const FuelRequestsTab = () => {
                   </Box>
                   <Box>
                     <Text fontSize="0.875rem" fontWeight="500" lineHeight="1.57">
-                      1001010011
+                      {requestFuelData?.fuel?.[0]?.odometer}
                     </Text>
                   </Box>
                 </Stack>
@@ -322,7 +344,7 @@ const FuelRequestsTab = () => {
                   </Box>
                   <Box>
                     <Text fontSize="0.875rem" fontWeight="500" lineHeight="1.57">
-                      Fresh Options
+                      {`${requestFuelData?.fuel?.[0]?.company_Code} - ${requestFuelData?.fuel?.[0]?.company_Name}`}
                     </Text>
                   </Box>
                 </Stack>
@@ -335,7 +357,7 @@ const FuelRequestsTab = () => {
                   </Box>
                   <Box>
                     <Text fontSize="0.875rem" fontWeight="500" lineHeight="1.57">
-                      Fresh Options
+                      {`${requestFuelData?.fuel?.[0]?.department_Code} - ${requestFuelData?.fuel?.[0]?.department_Name}`}
                     </Text>
                   </Box>
                 </Stack>
@@ -348,7 +370,7 @@ const FuelRequestsTab = () => {
                   </Box>
                   <Box>
                     <Text fontSize="0.875rem" fontWeight="500" lineHeight="1.57">
-                      Fresh Options
+                      {`${requestFuelData?.fuel?.[0]?.location_Code} - ${requestFuelData?.fuel?.[0]?.location_Name}`}
                     </Text>
                   </Box>
                 </Stack>
@@ -361,10 +383,25 @@ const FuelRequestsTab = () => {
                   </Box>
                   <Box>
                     <Text fontSize="0.875rem" fontWeight="500" lineHeight="1.57">
-                      Fresh Options
+                      {`${requestFuelData?.fuel?.[0]?.account_Title_Code} - ${requestFuelData?.fuel?.[0]?.account_Title_Name}`}
                     </Text>
                   </Box>
                 </Stack>
+
+                {requestFuelData?.fuel?.[0]?.empId && (
+                  <Stack direction="row" width="full">
+                    <Box width="15%">
+                      <Text fontSize="0.875rem" fontWeight="500" lineHeight="1.57">
+                        Employee:
+                      </Text>
+                    </Box>
+                    <Box>
+                      <Text fontSize="0.875rem" fontWeight="500" lineHeight="1.57">
+                        {`${requestFuelData?.fuel?.[0]?.empId} - ${requestFuelData?.fuel?.[0]?.fullname}`}
+                      </Text>
+                    </Box>
+                  </Stack>
+                )}
               </VStack>
             </Stack>
 
@@ -377,7 +414,7 @@ const FuelRequestsTab = () => {
             </Stack>
 
             <Stack width="full" flexDirection="row">
-              <PageScroll minHeight="250px" maxHeight="251px">
+              <PageScroll>
                 <Table variant="striped" size="lg">
                   <Thead bgColor="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
@@ -408,135 +445,32 @@ const FuelRequestsTab = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    <Tr>
-                      <Td fontSize="xs">ELIXIR ETD</Td>
-                      <Td fontSize="xs">ITEM0001</Td>
-                      <Td fontSize="xs">ITEM SAMPLE</Td>
-                      <Td fontSize="xs">LITER</Td>
-                      <Td fontSize="xs">1,000.00</Td>
-                      <Td fontSize="xs">Z-AAABBBBCCC</Td>
-                      <Td fontSize="xs">100.00</Td>
-                      <Td fontSize="xs">01/01/2024</Td>
-                    </Tr>
+                    {requestFuelData?.fuel?.map((item, i) => (
+                      <Tr key={i}>
+                        <Td fontSize="xs">{item.source}</Td>
+                        <Td fontSize="xs">{item.item_Code}</Td>
+                        <Td fontSize="xs">{item.item_Description}</Td>
+                        <Td fontSize="xs">{item.uom}</Td>
+                        <Td fontSize="xs">
+                          {item.liters.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2,
+                          })}
+                        </Td>
+                        <Td fontSize="xs">{item.asset}</Td>
+                        <Td fontSize="xs">
+                          {" "}
+                          {item.unit_Cost.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2,
+                          })}
+                        </Td>
+                        <Td fontSize="xs">{moment(item.created_At).format("MM/DD/yyyy")}</Td>
+                      </Tr>
+                    ))}
                   </Tbody>
                 </Table>
               </PageScroll>
-
-              {/* <PageScroll minHeight="400px" maxHeight="701px">
-          <Table variant="striped">
-            <Thead bgColor="primary" position="sticky" top={0} zIndex={1}>
-              <Tr>
-                <Th h="20px" color="white" fontSize="10px">
-                  SOURCE
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  ITEM CODE
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  ITEM DESCRIPTION
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  UOM
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  LITERS
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  ASSET
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  UNIT COST
-                </Th>
-                <Th h="20px" color="white" fontSize="10px" textAlign="center">
-                  REMARKS
-                </Th>
-                <Th h="20px" color="white" fontSize="10px" textAlign="center">
-                  ODOMETER
-                </Th>
-                <Th h="20px" color="white" fontSize="10px" textAlign="center">
-                  REQUESTED DATE
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {requestFuelData?.fuel?.map((item, i) => (
-                <Tr key={i}>
-                  <Td fontSize="xs">
-                    {item.source}
-                    </Td>
-                  <Td fontSize="xs">
-                    {item.item_Code}
-                    </Td>
-                  <Td fontSize="xs">
-                    {item.item_Description}
-                    </Td>
-                  <Td fontSize="xs">
-                    {item.uom}
-                    </Td>
-                  <Td fontSize="xs">
-                    {item.liters.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                      minimumFractionDigits: 2,
-                    })}
-                  </Td>
-                  <Td fontSize="xs">
-                    
-                    {item.asset}
-                    </Td>
-
-                  <Td fontSize="xs">
-
-                    {item.unit_Cost.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                      minimumFractionDigits: 2,
-                    })}
-                  </Td>
-
-                  <Td fontSize="xs">
-                    {item.remarks}
-                    </Td>
-
-                  <Td fontSize="xs">
-                    {item.odometer
-                      ? item.odometer.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })
-                      : "-"}
-                  </Td>
-
-                  <Td fontSize="xs">
-                    {moment(item.created_At).format("MM/DD/yyyy")}
-                    </Td>
-
-
-                  <Td fontSize="xs" mr={3}>
-                    <Flex justifyContent="center">
-                      <Box>
-                        <Menu>
-                          <MenuButton alignItems="center" justifyContent="center" bg="none">
-                            <AiOutlineMore fontSize="20px" />
-                          </MenuButton>
-
-                          <MenuList>
-                            <MenuItem icon={<GrView fontSize="17px" />} onClick={() => viewHandler(item)}>
-                              <Text fontSize="15px">View</Text>
-                            </MenuItem>
-
-                            <MenuItem icon={<GiCancel fontSize="17px" color="red" />} onClick={() => cancelHandler(item)}>
-                              <Text fontSize="15px" color="red" _hover={{ color: "red" }}>
-                                Cancel
-                              </Text>
-                            </MenuItem>
-                          </MenuList>
-                        </Menu>
-                      </Box>
-                    </Flex>
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </PageScroll> */}
             </Stack>
 
             <Stack width="full" justifyContent="space-between" flexDirection="row" mt={8}>
@@ -549,7 +483,7 @@ const FuelRequestsTab = () => {
                   colorScheme="facebook"
                   borderRadius="none"
                   fontSize="12px"
-                  isLoading={isLoading}
+                  // isLoading={isLoading}
                   onClick={() => onTransactAction()}
                 >
                   Transact Request
@@ -561,162 +495,26 @@ const FuelRequestsTab = () => {
                   colorScheme="red"
                   borderRadius="none"
                   fontSize="12px"
-                  isLoading={isLoading}
+                  // isLoading={isLoading}
                   onClick={() => onCancelAction()}
                 >
                   Cancel
                 </Button>
               </Stack>
             </Stack>
+
+            <Stack width="full" mt={4}>
+              <Text fontSize="1.125rem" fontWeight="500" lineHeight="1.2" color="#0A8FD4">
+                Note:
+              </Text>
+
+              <Text fontSize="0.875rem" fontWeight="400" lineHeight="1.2" color="#1E2227" fontStyle="italic">
+                Please make sure you have the correct request fuel information. If the information is incorrect, cancel the request.
+              </Text>
+            </Stack>
           </Stack>
         </Flex>
       )}
-
-      {/* <Flex justifyContent="space-between" align="end">
-        <Box />
-
-        <Box gap={1}>
-          <Button
-            type="submit"
-            leftIcon={<IoAdd fontSize="19px" />}
-            colorScheme="teal"
-            borderRadius="none"
-            fontSize="12px"
-            size="sm"
-            isLoading={isLoading}
-            isDisabled={requestFuelData?.fuel?.length}
-            onClick={() => createHandler()}
-          >
-            Create Request
-          </Button>
-
-          <Button
-            type="submit"
-            leftIcon={<IoSave fontSize="19px" />}
-            colorScheme="facebook"
-            borderRadius="none"
-            fontSize="12px"
-            size="sm"
-            isLoading={isLoading}
-            isDisabled={!requestFuelData?.fuel?.length}
-            onClick={() => onTransactAction()}
-          >
-            Transact Request
-          </Button>
-        </Box>
-      </Flex>
-
-      <Flex flexDirection="column">
-        <Box w="full" bgColor="primary" h="22px">
-          <Text fontWeight="normal" fontSize="13px" color="white" textAlign="center" justifyContent="center">
-            List of Fuel Requests
-          </Text>
-        </Box>
-
-        <PageScroll minHeight="400px" maxHeight="701px">
-          <Table variant="striped">
-            <Thead bgColor="primary" position="sticky" top={0} zIndex={1}>
-              <Tr>
-                <Th h="20px" color="white" fontSize="10px">
-                  ID
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  SOURCE
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  ITEM CODE
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  ITEM DESCRIPTION
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  UOM
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  LITERS
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  ASSET
-                </Th>
-                <Th h="20px" color="white" fontSize="10px">
-                  UNIT COST
-                </Th>
-                <Th h="20px" color="white" fontSize="10px" textAlign="center">
-                  REMARKS
-                </Th>
-                <Th h="20px" color="white" fontSize="10px" textAlign="center">
-                  ODOMETER
-                </Th>
-                <Th h="20px" color="white" fontSize="10px" textAlign="center">
-                  REQUESTED DATE
-                </Th>
-                <Th h="20px" color="white" fontSize="10px" textAlign="center">
-                  ACTION
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {requestFuelData?.fuel?.map((item, i) => (
-                <Tr key={i}>
-                  <Td fontSize="xs">{item.id}</Td>
-                  <Td fontSize="xs">{item.source}</Td>
-                  <Td fontSize="xs">{item.item_Code}</Td>
-                  <Td fontSize="xs">{item.item_Description}</Td>
-                  <Td fontSize="xs">{item.uom}</Td>
-                  <Td fontSize="xs">
-                    {item.liters.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                      minimumFractionDigits: 2,
-                    })}
-                  </Td>
-                  <Td fontSize="xs">{item.asset}</Td>
-
-                  <Td fontSize="xs">
-                    {" "}
-                    {item.unit_Cost.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                      minimumFractionDigits: 2,
-                    })}
-                  </Td>
-                  <Td fontSize="xs">{item.remarks}</Td>
-                  <Td fontSize="xs">
-                    {item.odometer
-                      ? item.odometer.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })
-                      : "-"}
-                  </Td>
-                  <Td fontSize="xs">{moment(item.created_At).format("MM/DD/yyyy")}</Td>
-
-                  <Td fontSize="xs" mr={3}>
-                    <Flex justifyContent="center">
-                      <Box>
-                        <Menu>
-                          <MenuButton alignItems="center" justifyContent="center" bg="none">
-                            <AiOutlineMore fontSize="20px" />
-                          </MenuButton>
-
-                          <MenuList>
-                            <MenuItem icon={<GrView fontSize="17px" />} onClick={() => viewHandler(item)}>
-                              <Text fontSize="15px">View</Text>
-                            </MenuItem>
-
-                            <MenuItem icon={<GiCancel fontSize="17px" color="red" />} onClick={() => cancelHandler(item)}>
-                              <Text fontSize="15px" color="red" _hover={{ color: "red" }}>
-                                Cancel
-                              </Text>
-                            </MenuItem>
-                          </MenuList>
-                        </Menu>
-                      </Box>
-                    </Flex>
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </PageScroll>
-      </Flex> */}
 
       {isView && <ViewModal isOpen={isView} onClose={closeView} data={getData} />}
 

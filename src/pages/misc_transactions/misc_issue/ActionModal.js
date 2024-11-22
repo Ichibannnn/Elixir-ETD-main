@@ -385,6 +385,7 @@ export const SaveConfirmation = ({
                   id: item.id,
                 };
               });
+
               try {
                 const res = request.put(`Miscellaneous/UpdateMiscellaneousIssuePKey`, arrayofId).then((res) => {
                   fetchActiveMiscIssues();
@@ -453,6 +454,8 @@ export const SaveConfirmation = ({
 
     return () => {};
   }, [idNumber]);
+
+  console.log("totalQuantity: ", totalQuantity);
 
   return (
     //OLD MODAL ~~~~

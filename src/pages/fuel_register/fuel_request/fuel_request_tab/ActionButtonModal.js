@@ -39,7 +39,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { Select as AutoComplete } from "chakra-react-select";
 import { NumericFormat } from "react-number-format";
-import { IoSaveOutline } from "react-icons/io5";
+import { IoAdd, IoSaveOutline } from "react-icons/io5";
 import { decodeUser } from "../../../../services/decode-user";
 
 export const ViewModal = ({ isOpen, onClose, data }) => {
@@ -620,7 +620,7 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
                 <HStack w="full">
                   <HStack w="full">
                     <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
-                      Driver ID
+                      Requestor ID
                     </Text>
 
                     <Box w="full">
@@ -730,7 +730,7 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
                 <HStack w="full">
                   <HStack w="full">
                     <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
-                      Driver Name
+                      Requestor Name
                     </Text>
 
                     <Box w="full">
@@ -1183,57 +1183,6 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
                     onChange={(e) => assetHandler(e.target.value)}
                   />
                 </HStack>
-
-                {/* <HStack w="full">
-                <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
-                  Remarks:{" "}
-                </Text>
-
-                <Input
-                  {...register("formData.remarks")}
-                  fontSize="15px"
-                  size="md"
-                  placeholder="Enter Remarks"
-                  border="1px"
-                  borderColor="gray.400"
-                  borderRadius="none"
-                  autoComplete="off"
-                  onChange={(e) => remarksHandler(e.target.value)}
-                />
-              </HStack>
-
-              <HStack w="full">
-                <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
-                  Odometer:{" "}
-                </Text>
-
-                <NumericFormat
-                  customInput={Input}
-                  value={data ? data?.odometer : ""}
-                  fontSize="sm"
-                  onValueChange={(e) =>
-                    setFuelInfo({
-                      warehouseId: fuelInfo.warehouseId,
-                      item_Code: fuelInfo.item_Code,
-                      item_Description: fuelInfo.item_Description,
-                      soh: fuelInfo.soh,
-                      unit_Cost: fuelInfo.unit_Cost,
-                      liters: fuelInfo.liters,
-                      odometer: Number(e?.value),
-                      remarks: fuelInfo.remarks,
-                      asset: fuelInfo.asset,
-                    })
-                  }
-                  onWheel={(e) => e.target.blur()}
-                  onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
-                  min="1"
-                  placeholder="Enter Odometer (Optional)"
-                  border="1px"
-                  borderColor="gray.400"
-                  borderRadius="none"
-                  thousandSeparator=","
-                />
-              </HStack> */}
               </VStack>
             </Stack>
           </ModalBody>
@@ -1242,7 +1191,7 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
             <Stack w="100%">
               <Button
                 size="sm"
-                leftIcon={<IoSaveOutline fontSize="19px" />}
+                leftIcon={<IoAdd fontSize="19px" />}
                 borderRadius="none"
                 colorScheme="blue"
                 // onClick={onSubmitHandler}
