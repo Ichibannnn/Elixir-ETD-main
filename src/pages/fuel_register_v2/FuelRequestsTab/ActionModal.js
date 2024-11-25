@@ -50,7 +50,7 @@ export const AddConfirmation = ({ isOpen, onClose, onCloseMaterialModal, fuelInf
     try {
       const addSubmit = {
         item_Code: fuelInfo.item_Code,
-        warehouse_ReceivingId: fuelInfo.warehouseId,
+        // warehouse_ReceivingId: fuelInfo.warehouseId,
         liters: fuelInfo.liters,
       };
 

@@ -27,7 +27,7 @@ import moment from "moment";
 import { useReactToPrint } from "react-to-print";
 
 export const ViewModal = ({ isOpen, onClose, data }) => {
-  console.log("Data: ", data);
+  // console.log("Data: ", data);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="5xl" isCentered>
@@ -181,17 +181,17 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                 <Tbody>
                   <Tr>
                     <Td fontSize="xs">{data.source}</Td>
-                    <Td fontSize="xs">{data.item_Code}</Td>
-                    <Td fontSize="xs">{data.item_Description}</Td>
-                    <Td fontSize="xs">{data.uom}</Td>
+                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.item_Code}</Td>
+                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.item_Description}</Td>
+                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.uom}</Td>
                     <Td fontSize="xs">
-                      {data.unit_Cost.toLocaleString(undefined, {
+                      {data.getFuelDetails?.[0]?.unit_Cost.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {data.liters.toLocaleString(undefined, {
+                      {data.getFuelDetails?.[0]?.liters.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
@@ -403,17 +403,17 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                 <Tbody>
                   <Tr>
                     <Td fontSize="xs">{data.source}</Td>
-                    <Td fontSize="xs">{data.item_Code}</Td>
-                    <Td fontSize="xs">{data.item_Description}</Td>
-                    <Td fontSize="xs">{data.uom}</Td>
+                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.item_Code}</Td>
+                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.item_Description}</Td>
+                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.uom}</Td>
                     <Td fontSize="xs">
-                      {data.unit_Cost.toLocaleString(undefined, {
+                      {data.getFuelDetails?.[0]?.unit_Cost.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {data.liters.toLocaleString(undefined, {
+                      {data.getFuelDetails?.[0]?.liters.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}

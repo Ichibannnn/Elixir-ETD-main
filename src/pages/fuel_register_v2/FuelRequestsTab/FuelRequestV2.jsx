@@ -15,7 +15,7 @@ import { ListOfViewFuel } from "../ViewTransactedTab/ListOfViewFuel";
 import ApproverApprovedTab from "../../fuel_register/fuel_approval/fuel_approval_approved_approver/ApproverApprovedTab";
 
 const fetchBarcodeApi = async () => {
-  const res = await request.get(`FuelRegister/material-available-item`);
+  const res = await request.get(`FuelRegister/material-available`);
   return res.data;
 };
 
@@ -56,10 +56,10 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
 
   const fetchBarcode = () => {
     fetchBarcodeApi().then((res) => {
-      // console.log("Res: ", res?.[0]?.warehouseId);
+      // console.log("Res: ", res?.[0]);
 
-      setBarcode(res);
-      setIndexBarcodeId(res?.[0]?.warehouseId);
+      setBarcode(res?.[0]);
+      setIndexBarcodeId(res?.[0]);
 
       // setBarcode(res?.[0]?.warehouseId);
     });
@@ -119,6 +119,8 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
 
   // console.log("FuelData: ", fuelData);
   // console.log("FuelInfo: ", fuelInfo);
+
+  // console.log("Barcode: ", barcode);
 
   return (
     <Flex px={5} pt={5} pb={0} w="full" flexDirection="column" bg="form">

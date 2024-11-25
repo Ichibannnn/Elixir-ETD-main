@@ -162,11 +162,11 @@ const ApproverApprovedTab = () => {
                 <Tr key={i}>
                   <Td fontSize="xs">{item.id}</Td>
                   <Td fontSize="xs">{item.source}</Td>
-                  <Td fontSize="xs">{item.item_Code}</Td>
-                  <Td fontSize="xs">{item.item_Description}</Td>
-                  <Td fontSize="xs">{item.uom}</Td>
+                  <Td fontSize="xs">{item.getFuelDetails?.[0]?.item_Code}</Td>
+                  <Td fontSize="xs">{item.getFuelDetails?.[0]?.item_Description}</Td>
+                  <Td fontSize="xs">{item.getFuelDetails?.[0]?.uom}</Td>
                   <Td fontSize="xs">
-                    {item.liters.toLocaleString(undefined, {
+                    {item.getFuelDetails?.[0]?.liters.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                       minimumFractionDigits: 2,
                     })}
@@ -174,7 +174,7 @@ const ApproverApprovedTab = () => {
                   <Td fontSize="xs">{item.asset}</Td>
 
                   <Td fontSize="xs">
-                    {item.unit_Cost.toLocaleString(undefined, {
+                    {item.getFuelDetails?.[0]?.unit_Cost.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                       minimumFractionDigits: 2,
                     })}

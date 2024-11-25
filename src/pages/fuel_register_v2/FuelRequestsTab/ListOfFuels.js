@@ -6,7 +6,7 @@ import PageScroll from "../../../utils/PageScroll";
 import { CancelConfirmation } from "./ActionModal";
 
 export const ListOfFuels = ({ fuelData, fetchBarcode, selectorId, setSelectorId, fetchActiveFuelRequests }) => {
-  const TableHead = ["Line", "ID", "Item Code", "Item Description", "UOM", "Unit Cost", "Liters", "Cancel"];
+  const TableHead = ["ID", "Barcode", "Item Code", "Item Description", "UOM", "Unit Cost", "Liters", "Cancel"];
 
   const { isOpen: isCancel, onClose: closeCancel, onOpen: openCancel } = useDisclosure();
 
@@ -18,6 +18,8 @@ export const ListOfFuels = ({ fuelData, fetchBarcode, selectorId, setSelectorId,
       setSelectorId("");
     }
   };
+
+  console.log("FuelData: ", fuelData);
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
@@ -41,8 +43,8 @@ export const ListOfFuels = ({ fuelData, fetchBarcode, selectorId, setSelectorId,
               <Tbody>
                 {fuelData?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="sm">{i + 1}</Td>
                     <Td fontSize="sm">{item?.id}</Td>
+                    <Td fontSize="sm">{item.warehouse_ReceivingId}</Td>
                     <Td fontSize="sm">{item?.item_Code}</Td>
                     <Td fontSize="sm">{item?.item_Description}</Td>
                     <Td fontSize="sm">{item?.uom}</Td>

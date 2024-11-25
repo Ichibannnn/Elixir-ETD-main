@@ -379,6 +379,7 @@ export const FuelInformation = ({
                     borderColor="gray.400"
                     borderRadius="none"
                     thousandSeparator=","
+                    autoComplete="off"
                   />
                 )}
               />
@@ -813,7 +814,7 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
   };
 
   useEffect(() => {
-    if (barcode?.length > 0) {
+    if (barcode) {
       setValue("formData.warehouseId", {
         label: `${barcode[0]?.warehouseId}`,
         value: `${barcode[0]}`,
@@ -823,8 +824,8 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
         warehouseId: barcode[0]?.warehouseId,
         item_Code: "DIESEL",
         item_Description: "DIESEL",
-        soh: barcode[0]?.remaining_Stocks,
-        unit_Cost: barcode[0]?.unit_Cost,
+        soh: barcode?.remainingStocks,
+        unit_Cost: barcode?.unit_Cost,
         liters: fuelInfo.liters,
         odometer: fuelInfo.odometer,
         remarks: fuelInfo.remarks,
@@ -833,11 +834,7 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
     }
   }, [barcode, setValue]);
 
-  // console.log("Index: ", indexBarcodeId);
-  // console.log("barcode: ", barcode);
-  // console.log("auto: ", barcode[0]);
-
-  // console.log("WarehouseID: ", watch("formData.warehouseId"));
+  console.log("Barcode: ", barcode);
 
   return (
     <>
@@ -973,12 +970,12 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
                           maximumFractionDigits: 2,
                           minimumFractionDigits: 2,
                         })
-                      : "Select barcode number first"}
+                      : "No available stock"}
                   </Text>
                 </HStack>
 
                 {/* Unit Cost */}
-                <HStack w="full">
+                {/* <HStack w="full">
                   <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                     Unit Cost:
                   </Text>
@@ -990,7 +987,7 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
                         })
                       : "Select barcode number first"}
                   </Text>
-                </HStack>
+                </HStack> */}
               </VStack>
             </Flex>
           </ModalBody>
@@ -1002,9 +999,9 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
                 isDisabled={
                   !fuelInfo.item_Code ||
                   !fuelInfo.item_Description ||
-                  !fuelInfo.warehouseId ||
+                  // !fuelInfo.warehouseId ||
                   !fuelInfo.soh ||
-                  !fuelInfo.unit_Cost ||
+                  // !fuelInfo.unit_Cost ||
                   !fuelInfo.liters ||
                   fuelInfo.liters > fuelInfo.soh
                 }
