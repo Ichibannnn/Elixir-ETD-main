@@ -41,8 +41,56 @@ export const ListOfCustomers = ({ genusCustomers, fistoDepartments, fistoLocatio
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentUser = decodeUser();
 
-  const resultArrayNew = genusCustomers?.result
-    ?.filter((item) => item.scope_order?.length) // kukunin nya yung mga customer na my scope for ordering
+  // WITH FISTO SYNCING
+  // const resultArrayNew = genusCustomers?.result
+  //   ?.filter((item) => item.scope_order?.length) // kukunin nya yung mga customer na my scope for ordering
+  //   ?.reduce(
+  //     (a, item) => [
+  //       ...a,
+  //       ...item.scope_order.map((customer) => {
+  //         return {
+  //           ...customer,
+  //           customer_type: item.account_type,
+  //         };
+  //       }),
+  //     ],
+  //     []
+  //   ) // pagsasamahin nya sa isang array
+  //   ?.map((item) => {
+  //     console.log("Genus Data: ", item);
+
+  //     return {
+  //       customer_No: item.location_id,
+  //       customerCode: item.location_code,
+  //       customerName:
+  //         item.customer_type === "online"
+  //           ? fistoDepartments.result.departments?.find((customer) => {
+  //               // console.log({ customer, item });
+  //               return customer.code === item.location_code;
+  //             })?.name
+  //           : fistoLocations.result.locations?.find((customer) => customer.code === item.location_code)?.name,
+  //       customerType: item.customer_type,
+  //       dateAdded: moment(new Date()).format("yyyy-MM-DD"),
+  //       addedBy: currentUser.fullName,
+  //       modifyDate: moment(new Date()).format("yyyy-MM-DD"),
+  //       modifyBy: currentUser.fullName,
+  //     };
+  //   }) // format
+  //   ?.reduce((a, item) => {
+  //     const isExist = a.some((customer) => customer.customer_No === item.customer_No);
+
+  //     if (isExist) {
+  //       return a;
+  //     } else {
+  //       return [...a, item];
+  //     }
+  //   }, []); // distinct
+
+  // console.log("genusCustomers: ", genusCustomers);
+  // console.log("Payload: ", resultArrayNew);
+
+  const genusArrayResult = genusCustomers?.result
+    ?.filter((item) => item?.scope_order?.length) // kukunin nya yung mga customer na my scope for ordering
     ?.reduce(
       (a, item) => [
         ...a,
@@ -55,32 +103,26 @@ export const ListOfCustomers = ({ genusCustomers, fistoDepartments, fistoLocatio
       ],
       []
     ) // pagsasamahin nya sa isang array
+
     ?.map((item) => {
+      // console.log("item: ", item);
+
       return {
-        customer_No: item.location_id,
-        customerCode: item.location_code,
-        customerName:
-          item.customer_type === "online"
-            ? fistoDepartments.result.departments?.find((customer) => customer.code === item.location_code)?.name
-            : fistoLocations.result.locations?.find((customer) => customer.code === item.location_code)?.name,
+        customer_No: item.location.id,
+        customerCode: item.location.code,
+        customerName: item.location.name,
         customerType: item.customer_type,
         dateAdded: moment(new Date()).format("yyyy-MM-DD"),
         addedBy: currentUser.fullName,
         modifyDate: moment(new Date()).format("yyyy-MM-DD"),
         modifyBy: currentUser.fullName,
       };
-    }) // format
-    ?.reduce((a, item) => {
-      const isExist = a.some((customer) => customer.customer_No === item.customer_No);
+    })
+    ?.filter((value, index, self) => index === self.findIndex((a) => a.customer_No === value.customer_No && a.customerCode === value.customerCode));
 
-      if (isExist) {
-        return a;
-      } else {
-        return [...a, item];
-      }
-    }, []); // distinct
+  // console.log("Payload: ", genusArrayResult);
+  console.log("Genus Data: ", genusCustomers);
 
-  // SYNC ORDER BUTTON
   const syncHandler = () => {
     Swal.fire({
       title: "Confirmation!",
@@ -101,7 +143,7 @@ export const ListOfCustomers = ({ genusCustomers, fistoDepartments, fistoLocatio
           const res = request
             .put(
               `Customer/AddNewCustomer`,
-              resultArrayNew.map((item) => {
+              genusArrayResult.map((item) => {
                 return {
                   customer_No: item?.customer_No,
                   customerCode: item?.customerCode,
@@ -188,7 +230,7 @@ export const ListOfCustomers = ({ genusCustomers, fistoDepartments, fistoLocatio
               colorScheme="blue"
               size="sm"
               fontSize="13px"
-              isLoading={isLoading}
+              isLoading={isLoading || genusCustomers?.length === 0}
               disabled={isLoading}
               leftIcon={<TiArrowSync fontSize="19px" />}
               onClick={() => syncHandler()}
@@ -311,7 +353,7 @@ export const ListOfCustomers = ({ genusCustomers, fistoDepartments, fistoLocatio
             setErrorData={setErrorData}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
-            resultArrayNew={resultArrayNew}
+            resultArrayNew={genusArrayResult}
           />
         )}
       </Flex>

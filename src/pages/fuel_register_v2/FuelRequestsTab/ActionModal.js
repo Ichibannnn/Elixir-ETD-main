@@ -43,8 +43,8 @@ export const AddConfirmation = ({ isOpen, onClose, onCloseMaterialModal, fuelInf
   const toast = useToast();
 
   const submitHandler = () => {
-    console.log("FuelInfo: ", fuelInfo);
-    console.log("FuelFormData: ", fuelInformation);
+    // console.log("FuelInfo: ", fuelInfo);
+    // console.log("FuelFormData: ", fuelInformation);
 
     setIsLoading(true);
     try {
