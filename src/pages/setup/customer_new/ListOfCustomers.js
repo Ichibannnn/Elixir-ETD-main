@@ -32,7 +32,7 @@ import { ToastComponent } from "../../../components/Toast";
 import { ErrorCustomers } from "./ErrorCustomers";
 import { decodeUser } from "../../../services/decode-user";
 
-export const ListOfCustomers = ({ genusCustomers, fistoDepartments, fistoLocations, fetchingData, elixirCustomers, fetchElixirCustomers }) => {
+export const ListOfCustomers = ({ genusCustomers, fetchingData, elixirCustomers, fetchElixirCustomers }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [errorData, setErrorData] = useState([]);
@@ -103,7 +103,6 @@ export const ListOfCustomers = ({ genusCustomers, fistoDepartments, fistoLocatio
       ],
       []
     ) // pagsasamahin nya sa isang array
-
     ?.map((item) => {
       // console.log("item: ", item);
 

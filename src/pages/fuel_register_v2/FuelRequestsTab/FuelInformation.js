@@ -30,6 +30,7 @@ import * as yup from "yup";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AddConfirmation } from "./ActionModal";
+import { debounce } from "lodash";
 
 const currentUser = decodeUser();
 
@@ -50,6 +51,8 @@ export const FuelInformation = ({
   requestorInformation,
 }) => {
   const [employees, setEmployees] = useState([]);
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [idNumber, setIdNumber] = useState();
   const [info, setInfo] = useState();
 
@@ -59,6 +62,8 @@ export const FuelInformation = ({
   const [account, setAccount] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
   const [disableFullName, setDisableFullName] = useState(true);
+
+  const ITEMS_PER_PAGE = 50;
 
   const { isOpen: isMaterial, onClose: closeMaterial, onOpen: openMaterial } = useDisclosure();
 
@@ -73,6 +78,7 @@ export const FuelInformation = ({
         },
       });
       setEmployees(res.data.data);
+      setFilteredEmployees(res.data.data.slice(0, 50));
       setPickerItems(res.data.data);
     } catch (error) {}
   };
@@ -80,6 +86,15 @@ export const FuelInformation = ({
   useEffect(() => {
     fetchEmployees();
   }, []);
+
+  // Debounced search handler
+  const handleSearch = debounce((value) => {
+    setSearchTerm(value);
+    const filtered = employees.filter((employee) => employee.general_info?.full_id_number.toLowerCase().includes(value.toLowerCase())).slice(0, 50); // Show only the first 50 matches
+    setFilteredEmployees(filtered);
+  }, 300);
+
+  console.log("Requestor: ", filteredEmployees);
 
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
@@ -258,7 +273,7 @@ export const FuelInformation = ({
                 Requestor ID:
               </Text>
 
-              {employees?.length > 0 ? (
+              {filteredEmployees?.length > 0 ? (
                 <Controller
                   control={control}
                   name="formData.requestorId"
@@ -272,15 +287,23 @@ export const FuelInformation = ({
                         field.onChange(e);
                         setValue("formData.requestorFullName", e.value.full_name);
                       }}
+                      onInputChange={(inputValue) => handleSearch(inputValue)} // Call search handler
                       options={employees?.map((item) => {
                         return {
                           label: item.general_info?.full_id_number,
                           value: {
-                            full_id_number: item.general_info?.full_id_number,
+                            full_id_number: item.general_info?.full_id_number, 
                             full_name: item.general_info?.full_name,
                           },
                         };
                       })}
+                      // options={filteredEmployees.map((item) => ({
+                      //   label: item.general_info?.full_id_number,
+                      //   value: {
+                      //     full_id_number: item.general_info?.full_id_number,
+                      //     full_name: item.general_info?.full_name,
+                      //   },
+                      // }))}
                       chakraStyles={{
                         container: (provided) => ({
                           ...provided,

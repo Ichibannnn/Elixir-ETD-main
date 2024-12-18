@@ -38,7 +38,14 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
             "Item Code": item.itemCode,
             "Item Description": item.itemDescription,
             UOM: item.uom,
-            Quantity: item.quantity,
+            Quantity: item.quantity.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }),
+            "Unit Cost": item.unitCost.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }),
             // 'Expiration Date': item.expirationDate,
             "Transacted By": item.trantedBy,
             "Transaction Date": new Date(moment(item.transactDate).format("MM/DD/YYYY")),
@@ -107,6 +114,9 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
                         Quantity
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Unit Cost
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         Transacted By
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
@@ -157,6 +167,12 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
                         {/* <Td>{item.category}</Td> */}
                         <Td fontSize="xs">
                           {item.quantity.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </Td>
+                        <Td fontSize="xs">
+                          {item.unitCost.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                           })}

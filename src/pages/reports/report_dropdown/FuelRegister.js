@@ -43,7 +43,7 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             }),
-            Driver: item.driver,
+            Driver: item.requestorName,
             Remarks: item.remarks,
             "Requested Date": item.created_At ? new Date(moment(item.created_At).format("MM/DD/YYYY")) : "",
             "Company Code": item.company_Code ? item.company_Code : "-",
@@ -112,7 +112,7 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                         UNIT COST
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
-                        DRIVER
+                        REQUESTOR
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         REMARKS
@@ -213,7 +213,7 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                             minimumFractionDigits: 2,
                           })}
                         </Td>
-                        <Td fontSize="xs">{item.driver ? item.driver : "-"}</Td>
+                        <Td fontSize="xs">{item.requestorName ? item.requestorName : "-"}</Td>
                         <Td fontSize="xs">{item.remarks ? item.remarks : "-"}</Td>
                         <Td fontSize="xs">
                           {item.odometer

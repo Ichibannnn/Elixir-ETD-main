@@ -27,7 +27,7 @@ import moment from "moment";
 import { useReactToPrint } from "react-to-print";
 
 export const ViewModal = ({ isOpen, onClose, data }) => {
-  // console.log("Data: ", data);
+  console.log("Data: ", data);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="5xl" isCentered>
@@ -36,7 +36,7 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
         <ModalHeader bg="primary">
           <Flex justifyContent="left">
             <Text fontSize="xs" color="white">
-              View Fuel Request
+              View Fuel RequestSD
             </Text>
           </Flex>
         </ModalHeader>
@@ -179,24 +179,26 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td fontSize="xs">{data.source}</Td>
-                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.item_Code}</Td>
-                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.item_Description}</Td>
-                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.uom}</Td>
-                    <Td fontSize="xs">
-                      {data.getFuelDetails?.[0]?.unit_Cost.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {data.getFuelDetails?.[0]?.liters.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                  </Tr>
+                  {data?.getFuelDetails?.map((item) => (
+                    <Tr key={item.id}>
+                      <Td fontSize="xs">{data.source}</Td>
+                      <Td fontSize="xs">{item?.item_Code}</Td>
+                      <Td fontSize="xs">{item?.item_Description}</Td>
+                      <Td fontSize="xs">{item?.uom}</Td>
+                      <Td fontSize="xs">
+                        {item?.unit_Cost.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.liters.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             </PageScroll>
@@ -401,24 +403,26 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td fontSize="xs">{data.source}</Td>
-                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.item_Code}</Td>
-                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.item_Description}</Td>
-                    <Td fontSize="xs">{data.getFuelDetails?.[0]?.uom}</Td>
-                    <Td fontSize="xs">
-                      {data.getFuelDetails?.[0]?.unit_Cost.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    <Td fontSize="xs">
-                      {data.getFuelDetails?.[0]?.liters.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                  </Tr>
+                  {data?.getFuelDetails?.map((item) => (
+                    <Tr key={item.id}>
+                      <Td fontSize="xs">{data.source}</Td>
+                      <Td fontSize="xs">{item?.item_Code}</Td>
+                      <Td fontSize="xs">{item?.item_Description}</Td>
+                      <Td fontSize="xs">{item?.uom}</Td>
+                      <Td fontSize="xs">
+                        {item?.unit_Cost.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td fontSize="xs">
+                        {item.liters.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             </PageScroll>
