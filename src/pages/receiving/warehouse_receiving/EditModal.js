@@ -285,7 +285,7 @@ export const EditModal = ({
                     </Text>
                   </Flex>
 
-                  <Flex justifyContent="space-between" p={1}>
+                  {/* <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">
                       RR Number
                       <Input {...register("displayData.rrNumber")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
@@ -294,7 +294,7 @@ export const EditModal = ({
                       RR Date
                       <Input {...register("displayData.rrDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
-                  </Flex>
+                  </Flex> */}
 
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">

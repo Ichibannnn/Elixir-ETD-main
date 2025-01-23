@@ -168,6 +168,8 @@ const MrpPage = () => {
     }
   }, [sheetData]);
 
+  console.log("SheetData: ", sheetData);
+
   return (
     <Flex flexDirection="column" w="full" bg="form" p={4}>
       <VStack w="full" p={5} justifyContent="space-between" spacing={5}>

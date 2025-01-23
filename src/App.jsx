@@ -118,6 +118,7 @@ import LotManagement from "./pages/setup/LotManagement";
 import LotCategory from "./pages/setup/LotCategory";
 import ReasonManagement from "./pages/setup/ReasonManagement";
 import TransactionType from "./pages/setup/TransactionType";
+import Assets from "./pages/setup/assets_sync/Assets";
 
 // ACCOUNT TITLE
 import CompanyManagement from "./pages/account_title/CompanyManagement";
@@ -330,6 +331,7 @@ const App = () => {
               <Route path="/setup/account_title-department" element={<AccTDepartment />} />
               <Route path="/setup/account_title-location" element={<AccTLocation />} />
               <Route path="/setup/account_title-account" element={<AccTAccount />} />
+              <Route path="/setup/assets" element={<Assets />} />
             </Route>
 
             {/* USER */}

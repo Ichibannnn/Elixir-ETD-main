@@ -51,52 +51,37 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
   const dateVar = new Date();
   const minDate = moment(dateVar.setDate(dateVar.getDate() - 3)).format("yyyy-MM-DD");
 
-  // const ymirResultArray = ymirPO?.map((item) => {
-  //   return {
-  //     pR_Number: item?.pr_year_number_id?.toString().trim(),
-  //     pR_Date: moment(item?.pr_date)?.format("YYYY-MM-DD")?.toString().trim(),
-  //     pO_Number: item?.po_number?.toString().trim(),
-  //     pO_Date: moment(item?.po_date)?.format("YYYY-MM-DD")?.toString().trim(),
-  //     itemCode: item?.item_code?.toString().trim(),
-  //     itemDescription: item?.item_name?.toString()?.trim(),
-  //     ordered: item?.ordered?.toString().trim(),
-  //     delivered: item?.delivered?.toString().trim(),
-  //     billed: 0,
-  //     uom: item?.uom?.toString().trim(),
-  //     unitPrice: item?.unit_price?.toString().trim(),
-  //     vendorName: item?.supplier_name?.toString().trim(),
-  //     addedBy: currentUser?.username?.toString().trim(),
+  // console.log("length: ", ymirPO);
 
-  //   };
-  // });
+  const ymirResultArray = Array.isArray(ymirPO)
+    ? ymirPO.flatMap((data) =>
+        data?.rr_orders?.map((subData) => {
+          return {
+            rrNo: data?.rr_year_number_id?.toString().trim(),
+            rrDate: moment(subData?.rr_date)?.format("YYYY-MM-DD")?.toString().trim(),
+            pR_Number: subData?.pr_transaction?.pr_year_number_id?.toString().trim(),
+            pR_Date: moment(subData?.pr_transaction?.created_at)?.format("YYYY-MM-DD")?.toString().trim(),
+            pO_Number: subData?.po_transaction?.po_year_number_id?.toString().trim(),
+            pO_Date: moment(subData?.po_transaction?.created_at)?.format("YYYY-MM-DD")?.toString().trim(),
 
-  const ymirResultArray = ymirPO?.flatMap((data) =>
-    data.rr_orders.map((subData) => {
-      return {
-        rrNo: data?.rr_year_number_id.toString().trim(),
-        rrDate: moment(subData?.rr_date)?.format("YYYY-MM-DD")?.toString().trim(),
-        pR_Number: data?.pr_transaction?.pr_year_number_id?.toString().trim(),
-        pR_Date: moment(data?.pr_transaction?.created_at)?.format("YYYY-MM-DD")?.toString().trim(),
-        pO_Number: data?.po_transaction?.po_year_number_id?.toString().trim(),
-        pO_Date: moment(data?.po_transaction?.created_at)?.format("YYYY-MM-DD")?.toString().trim(),
+            itemCode: subData?.order?.item_code?.toString().trim(),
+            itemDescription: subData?.order?.item_name?.toString()?.trim(),
 
-        itemCode: subData?.item_code?.toString().trim(),
-        itemDescription: subData?.item_name?.toString()?.trim(),
+            ordered: subData?.order?.quantity?.toString().trim(),
+            delivered: subData?.quantity_receive?.toString().trim(),
+            actualRemaining: subData?.remaining.toString().trim(),
+            billed: 0,
+            unitPrice: subData?.order?.price?.toString().trim(),
+            siNumber: subData?.shipment_no?.toString().trim(),
+            receiveDate: moment(subData?.delivery_Date)?.format("YYYY-MM-DD")?.toString().trim(),
+            vendorName: subData?.po_transaction?.supplier_name?.toString().trim(),
+            addedBy: currentUser?.fullName?.toString().trim(),
 
-        ordered: data?.po_transaction?.order?.[0]?.quantity?.toString().trim(),
-        delivered: subData?.quantity_receive?.toString().trim(),
-        actualRemaining: subData?.remaining.toString().trim(),
-        billed: 0,
-        unitPrice: data?.po_transaction?.order?.[0]?.price?.toString().trim(),
-        siNumber: subData?.shipment_no?.toString().trim(),
-        receiveDate: moment(subData?.delivery_Date)?.format("YYYY-MM-DD")?.toString().trim(),
-        vendorName: data?.po_transaction?.supplier_name?.toString().trim(),
-        addedBy: currentUser?.fullName?.toString().trim(),
-      };
-    })
-  );
-
-  console.log("YMIR RESULT: ", ymirResultArray);
+            uom: subData?.order?.uom?.name?.toString().trim(),
+          };
+        })
+      )
+    : [];
 
   const submitSyncHandler = () => {
     Swal.fire({
@@ -118,26 +103,32 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
       if (result.isConfirmed) {
         console.log("YMIR Submit Payload: ", ymirResultArray);
         if (ymirResultArray.length > 0) {
-          try {
-            setFetchData(true);
-            const res = request
-              .post("Import/AddNewPOSummary", ymirResultArray)
-              .then((res) => {
-                ToastComponent("Success!", "Sync purchase orders successfully", "success", toast);
-                setFetchData(false);
-                // setIsDisabled(false);
-              })
-              .catch((err) => {
-                ToastComponent("Error!", "Sync error.", "error", toast);
-                setFetchData(false);
-                setErrorData(err.response.data);
-                if (err.response.data) {
-                  // console.log("ErrorData: ", err);
-                  onErrorSyncModal();
-                }
-              });
-          } catch (err) {
-            ToastComponent("Error!", "Sync error.", "error", toast);
+          const hasZeroUnitCost = ymirResultArray.some((data) => data.unitPrice <= 0);
+
+          if (hasZeroUnitCost) {
+            ToastComponent("Warning!", "Unit Cost cannot be zero value", "warning", toast);
+          } else {
+            try {
+              setFetchData(true);
+              const res = request
+                .post("Import/AddNewPOSummary", ymirResultArray)
+                .then((res) => {
+                  ToastComponent("Success!", "Sync purchase orders successfully", "success", toast);
+                  setFetchData(false);
+                  // setIsDisabled(false);
+                })
+                .catch((err) => {
+                  ToastComponent("Error!", "Sync error.", "error", toast);
+                  setFetchData(false);
+                  setErrorData(err.response.data);
+                  if (err.response.data) {
+                    // console.log("ErrorData: ", err);
+                    onErrorSyncModal();
+                  }
+                });
+            } catch (err) {
+              ToastComponent("Error!", "Sync error.", "error", toast);
+            }
           }
         } else {
           ToastComponent("Error!", "Sync error.", "error", toast);
@@ -232,16 +223,16 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                             RR Date
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
-                            PO Number
-                          </Th>
-                          <Th color="#D6D6D6" fontSize="10px">
-                            PO Date
-                          </Th>
-                          <Th color="#D6D6D6" fontSize="10px">
                             PR Number
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
                             PR Date
+                          </Th>
+                          <Th color="#D6D6D6" fontSize="10px">
+                            PO Number
+                          </Th>
+                          <Th color="#D6D6D6" fontSize="10px">
+                            PO Date
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
                             Item Code
@@ -257,6 +248,9 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
                             Unit Cost
+                          </Th>
+                          <Th color="#D6D6D6" fontSize="10px">
+                            SI Number
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
                             Supplier Name
@@ -310,6 +304,9 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                                 minimumFractionDigits: 2,
                                 maximumFractionDigi: 2,
                               })}
+                            </Td>
+                            <Td color="gray.600" fontSize="11px">
+                              {d?.siNumber}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
                               {d?.vendorName}

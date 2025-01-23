@@ -56,28 +56,28 @@ const EditModalSave = ({
   });
 
   const submitEditedHandler = () => {
-    // console.log("submit: ", firstSubmit);
+    console.log("submit: ", firstSubmit);
 
-    try {
-      setIsLoading(true);
-      const res = request
-        .put(`Warehouse/ReceiveRawMaterialsById`, firstSubmit)
-        .then((res) => {
-          ToastComponent("Success!", "Purchase order updated.", "success", toast);
-          setReceivingId(res.data.id);
-          setIsLoading(false);
-          getAvailablePOHandler();
-          handlePrint();
-          openPrintModal();
-          onClose();
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          ToastComponent("Error", err.response.data, "error", toast);
-        });
-    } catch (err) {
-      console.log(err);
-    }
+    // try {
+    //   setIsLoading(true);
+    //   const res = request
+    //     .put(`Warehouse/ReceiveRawMaterialsById`, firstSubmit)
+    //     .then((res) => {
+    //       ToastComponent("Success!", "Purchase order updated.", "success", toast);
+    //       setReceivingId(res.data.id);
+    //       setIsLoading(false);
+    //       getAvailablePOHandler();
+    //       handlePrint();
+    //       openPrintModal();
+    //       onClose();
+    //     })
+    //     .catch((err) => {
+    //       setIsLoading(false);
+    //       ToastComponent("Error", err.response.data, "error", toast);
+    //     });
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   return (

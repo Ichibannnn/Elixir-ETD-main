@@ -31,6 +31,7 @@ import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AddConfirmation } from "./ActionModal";
 import { debounce } from "lodash";
+import request from "../../../services/ApiClient";
 
 const currentUser = decodeUser();
 
@@ -56,6 +57,7 @@ export const FuelInformation = ({
   const [idNumber, setIdNumber] = useState();
   const [info, setInfo] = useState();
 
+  const [assets, setAssets] = useState([]);
   const [company, setCompany] = useState([]);
   const [department, setDepartment] = useState([]);
   const [location, setLocation] = useState([]);
@@ -69,6 +71,26 @@ export const FuelInformation = ({
 
   // SEDAR
   const [pickerItems, setPickerItems] = useState([]);
+
+  const fetchAssetsApi = async () => {
+    const res = await request.get(`asset/page?&Archived=true`);
+    return res.data;
+  };
+
+  //Assets Fetching
+  const fetchAssets = () => {
+    fetchAssetsApi().then((res) => {
+      setAssets(res.asset);
+    });
+  };
+
+  useEffect(() => {
+    fetchAssets();
+
+    return () => {
+      setAssets([]);
+    };
+  }, []);
 
   const fetchEmployees = async () => {
     try {
@@ -93,8 +115,6 @@ export const FuelInformation = ({
     const filtered = employees.filter((employee) => employee.general_info?.full_id_number.toLowerCase().includes(value.toLowerCase())).slice(0, 50); // Show only the first 50 matches
     setFilteredEmployees(filtered);
   }, 300);
-
-  console.log("Requestor: ", filteredEmployees);
 
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
@@ -292,7 +312,7 @@ export const FuelInformation = ({
                         return {
                           label: item.general_info?.full_id_number,
                           value: {
-                            full_id_number: item.general_info?.full_id_number, 
+                            full_id_number: item.general_info?.full_id_number,
                             full_name: item.general_info?.full_name,
                           },
                         };
@@ -349,7 +369,7 @@ export const FuelInformation = ({
                 Asset:
               </Text>
 
-              <Input
+              {/* <Input
                 {...register("formData.asset")}
                 fontSize="15px"
                 size="md"
@@ -359,7 +379,49 @@ export const FuelInformation = ({
                 borderRadius="none"
                 autoComplete="off"
                 onChange={(e) => assetHandler(e.target.value)}
-              />
+              /> */}
+
+              {assets?.length ? (
+                <Controller
+                  control={control}
+                  name="formData.asset"
+                  render={({ field }) => (
+                    <AutoComplete
+                      className="react-select-layout"
+                      ref={field.ref}
+                      value={field.value}
+                      placeholder="Select Assets"
+                      onChange={(e) => {
+                        // console.log("E: ", e);
+
+                        field.onChange(e);
+                      }}
+                      options={assets?.map((item) => {
+                        return {
+                          label: `${item.assetCode} - ${item.assetName}`,
+                          value: item,
+                        };
+                      })}
+                      chakraStyles={{
+                        container: (provided) => ({
+                          ...provided,
+                          width: "100%",
+                        }),
+                        control: (provided) => ({
+                          ...provided,
+                          fontSize: "15px",
+                          textAlign: "left",
+                        }),
+                      }}
+                    />
+                  )}
+                />
+              ) : (
+                <Spinner thickness="4px" emptyColor="gray.200" color="blue.500" size="md" />
+              )}
+              <Text color="red" fontSize="xs">
+                {errors.formData?.asset?.message}
+              </Text>
             </HStack>
 
             {/* Odometer */}
@@ -738,7 +800,8 @@ export const FuelInformation = ({
           <Button
             onClick={() => openMaterial()}
             isDisabled={
-              !fuelInfo.asset ||
+              // !fuelInfo.asset ||
+              !watch("formData.asset") ||
               !fuelInfo.remarks ||
               !watch("formData.requestorId") ||
               !watch("formData.requestorFullName") ||

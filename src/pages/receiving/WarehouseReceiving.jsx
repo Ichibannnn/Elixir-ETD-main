@@ -216,9 +216,9 @@ const WarehouseReceiving = () => {
                 <Table width="full" border="none" boxShadow="md" bg="gray.200" variant="striped" className="uppercase">
                   <Thead bg="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
-                      <Th h="40px" color="white" fontSize="10px">
+                      {/* <Th h="40px" color="white" fontSize="10px">
                         RR Number
-                      </Th>
+                      </Th> */}
                       <Th h="40px" color="white" fontSize="10px">
                         <HStack>
                           <Text>PO Number</Text>
@@ -270,7 +270,7 @@ const WarehouseReceiving = () => {
                   <Tbody>
                     {pO?.posummary?.sort(getComparator(poSort)).map((pos) => (
                       <Tr key={pos.id}>
-                        <Td fontSize="xs">{pos.rrNumber}</Td>
+                        {/* <Td fontSize="xs">{pos.rrNumber}</Td> */}
                         <Td fontSize="xs">{pos.poNumber}</Td>
                         <Td fontSize="xs">{pos.itemCode}</Td>
                         <Td fontSize="xs">{pos.itemDescription}</Td>

@@ -41,9 +41,9 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
     formData: yup.object().shape({
       requestorId: yup.object().required().label("Employee ID"),
       requestorFullName: yup.string().required().label("Fullname"),
-      asset: yup.string().required().label("Fullname"),
+      asset: yup.object().required().typeError("Asset is required"),
       odometer: yup.string(),
-      remarks: yup.string().required().label("Fullname"),
+      remarks: yup.string().required().label("Remarks"),
 
       companyId: yup.object().required().typeError("Company Name is required"),
       departmentId: yup.object().required().typeError("Department Category is required"),
@@ -102,7 +102,7 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
       formData: {
         requestorId: "",
         requestorFullName: "",
-        asset: "",
+        asset: null,
         odometer: "",
         remarks: "",
 
