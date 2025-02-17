@@ -600,8 +600,7 @@ export const ScheduleModal = ({ isOpen, onClose, fetchMirList, selectedMIRIds, s
             })),
           };
         });
-        console.log("Genus Status: ", genusStatus);
-        console.log("Submit Array: ", submitArray);
+
         setIsLoading(true);
         try {
           const res = request

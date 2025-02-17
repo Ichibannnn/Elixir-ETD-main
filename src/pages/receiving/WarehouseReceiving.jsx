@@ -125,7 +125,7 @@ const WarehouseReceiving = () => {
   // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log(inputValue);
+    // console.log(inputValue);
   };
 
   const viewModalHandler = (poNumber, poDate, prNumber, prDate, supplier) => {
@@ -239,6 +239,10 @@ const WarehouseReceiving = () => {
                       </Th>
 
                       <Th h="40px" color="white" fontSize="10px">
+                        RR Number
+                      </Th>
+
+                      <Th h="40px" color="white" fontSize="10px">
                         Item Code
                       </Th>
                       <Th h="40px" color="white" fontSize="10px">
@@ -272,6 +276,7 @@ const WarehouseReceiving = () => {
                       <Tr key={pos.id}>
                         {/* <Td fontSize="xs">{pos.rrNumber}</Td> */}
                         <Td fontSize="xs">{pos.poNumber}</Td>
+                        <Td fontSize="xs">{pos.rrNumber ? pos.rrNumber : "-"}</Td>
                         <Td fontSize="xs">{pos.itemCode}</Td>
                         <Td fontSize="xs">{pos.itemDescription}</Td>
                         <Td fontSize="xs">{pos.supplier}</Td>
@@ -385,7 +390,6 @@ const WarehouseReceiving = () => {
                   onClose={closeEditModal}
                   editData={editData}
                   getAvailablePOHandler={getAvailablePOHandler}
-                  ww
                   setReceivingDate={setReceivingDate}
                   receivingDate={receivingDate}
                   setLotCategory={setLotCategory}
@@ -396,6 +400,7 @@ const WarehouseReceiving = () => {
                   setReceivingId={setReceivingId}
                   unitPrice={unitPrice}
                   setUnitPrice={setUnitPrice}
+                  fromYmir={editData.siNumber !== null}
                 />
               )}
 

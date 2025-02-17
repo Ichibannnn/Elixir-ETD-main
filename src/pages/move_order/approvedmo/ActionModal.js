@@ -82,7 +82,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
     setSelectedCheckboxes(newSelected);
   };
 
-  console.log("Print Data: ", printData);
+  // console.log("Print Data: ", printData);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="6xl">

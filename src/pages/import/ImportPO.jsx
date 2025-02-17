@@ -21,7 +21,7 @@ const currentUser = decodeUser();
 const fetchYMIRApi = async (fromDate, toDate) => {
   const fromDateFormatted = moment(fromDate).format("yyyy-MM-DD");
   const toDateFormatted = moment(toDate).format("yyyy-MM-DD");
-  const res = await axios.get(`https://pretestomega.rdfymir.com/backend/public/api/etd_api?system_name=ETD Warehouse&from=${fromDateFormatted}&to=${toDateFormatted}`, {
+  const res = await axios.get(`https://rdfymir.com/backend/public/api/etd_api?system_name=Elixir ETD&from=${fromDateFormatted}&to=${toDateFormatted}`, {
     headers: {
       Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
     },

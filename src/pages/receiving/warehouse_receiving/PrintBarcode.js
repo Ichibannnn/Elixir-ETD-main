@@ -4,7 +4,21 @@ import moment from "moment";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
 
-const PrintBarcode = ({ printData, receivingDate, lotSection, sumQuantity, isOpen, onClose, actualDelivered, closeModal, receivingId, siNumber, unitPrice }) => {
+const PrintBarcode = ({
+  printData,
+  formData,
+  formData2,
+  receivingDate,
+  lotSection,
+  sumQuantity,
+  isOpen,
+  onClose,
+  actualDelivered,
+  closeModal,
+  receivingId,
+  siNumber,
+  unitPrice,
+}) => {
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -16,7 +30,7 @@ const PrintBarcode = ({ printData, receivingDate, lotSection, sumQuantity, isOpe
   const displayData = {
     "PO Number": printData.poNumber,
     Date: moment().format("MM/DD/YYYY, h:mm:ss a"),
-    "Receiving Date": moment(printData.receiveDate).format("MM/DD/YYYY"),
+    "Receiving Date": moment(formData.receiveDate).format("MM/DD/YYYY"),
     "Item Code": printData.itemCode,
     "Item Description": printData.itemDescription,
     UOM: printData.uom,
@@ -25,15 +39,22 @@ const PrintBarcode = ({ printData, receivingDate, lotSection, sumQuantity, isOpe
       maximumFractionDigits: 2,
     }),
     Supplier: printData.supplier,
-    "Quantity Good": printData.quantityDelivered.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }),
+    "Quantity Good": printData?.siNumber
+      ? printData?.actualRemaining.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      : actualDelivered?.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
     "Lot Section": lotSection,
-    "SI Number": siNumber,
+    "SI Number": printData?.siNumber ? printData?.siNumber : siNumber,
   };
 
-  console.log("PrintData: ", printData);
+  // console.log("formData: ", formData);
+  // console.log("formData: ", formData);
+  console.log("print: ", printData);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="sm">

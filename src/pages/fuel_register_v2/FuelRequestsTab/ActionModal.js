@@ -269,13 +269,14 @@ export const SaveConfirmation = ({
   const toast = useToast();
 
   const saveSubmitHandler = () => {
-    // console.log("Requestor: ", requestorInformation);
+    console.log("Requestor: ", requestorInformation);
 
     const savePayload = {
       requestorId: requestorInformation?.requestorId?.value?.full_id_number,
       requestorName: requestorInformation?.requestorId?.value?.full_name,
-      asset: `${requestorInformation?.asset?.value?.assetCode} - ${requestorInformation?.asset?.value?.assetName}`,
-      odometer: requestorInformation?.odometer ? Number(requestorInformation?.odometer) : "",
+      // assetId: `${requestorInformation?.asset?.value?.assetCode} - ${requestorInformation?.asset?.value?.assetName}`,
+      assetId: requestorInformation?.asset?.value?.id,
+      odometer: requestorInformation?.odometer ? requestorInformation?.odometer : "",
       remarks: requestorInformation?.remarks,
       company_Code: requestorInformation?.companyId?.value?.code,
       company_Name: requestorInformation?.companyId?.value?.name,
@@ -293,7 +294,6 @@ export const SaveConfirmation = ({
     console.log("Save: ", savePayload);
 
     setIsLoading(true);
-
     try {
       const res = request
         .post(`FuelRegister/create-fuel`, savePayload)

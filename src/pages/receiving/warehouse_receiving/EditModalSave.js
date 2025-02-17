@@ -39,13 +39,15 @@ const EditModalSave = ({
   editData,
   lotSection,
   receivingId,
+
+  formData,
+  formData2,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
   const { setReceivingId } = useContext(ReceivingContext);
   const firstSubmit = { ...submitDataOne, ...submitDataThree };
-  const submitNotNull = { ...submitUnitPriceNull, ...submitDataThree };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isPrintModalOpen, onOpen: openPrintModal, onClose: closePrintModal } = useDisclosure();
@@ -58,44 +60,46 @@ const EditModalSave = ({
   const submitEditedHandler = () => {
     console.log("submit: ", firstSubmit);
 
-    // try {
-    //   setIsLoading(true);
-    //   const res = request
-    //     .put(`Warehouse/ReceiveRawMaterialsById`, firstSubmit)
-    //     .then((res) => {
-    //       ToastComponent("Success!", "Purchase order updated.", "success", toast);
-    //       setReceivingId(res.data.id);
-    //       setIsLoading(false);
-    //       getAvailablePOHandler();
-    //       handlePrint();
-    //       openPrintModal();
-    //       onClose();
-    //     })
-    //     .catch((err) => {
-    //       setIsLoading(false);
-    //       ToastComponent("Error", err.response.data, "error", toast);
-    //     });
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      setIsLoading(true);
+      const res = request
+        .put(`Warehouse/ReceiveRawMaterialsById`, firstSubmit)
+        .then((res) => {
+          ToastComponent("Success!", "Purchase order updated.", "success", toast);
+          setReceivingId(res.data.id);
+          setIsLoading(false);
+          getAvailablePOHandler();
+          handlePrint();
+          openPrintModal();
+          onClose();
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          ToastComponent("Error", err.response.data, "error", toast);
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  // console.log("editData:  ", editData);
+  // console.log("Actual Delivered ", actualDelivered);
+  // console.log("Actual Remaining ", editData.actualRemaining);
+  // console.log("Formdata ", formData);
+  // console.log("UnitCost: ", unitPrice);
+  // console.log("Receiving Date: ", receivingDate);
+
+  // console.log("UnitCost: ", unitPrice);
+  // console.log("actualDelivered: ", actualDelivered);
+  // console.log("siNumber: ", siNumber);
+  // console.log("receivingDate: ", receivingDate);
 
   return (
     <Flex>
       <Button
         colorScheme="blue"
         onClick={onOpen}
-        isDisabled={
-          isSubmitDisabled ||
-          // !expectedDelivery ||
-          // !actualDelivered ||
-          // !unitPrice ||
-          // !unitPrice === 0 ||
-          // !siNumber ||
-          // !receivingDate ||
-          !lotSection
-        }
-        title={isSubmitDisabled || !actualDelivered || !siNumber || !unitPrice || !editData.unitPrice ? "Please provide required fields" : ""}
+        isDisabled={isSubmitDisabled || !unitPrice || !actualDelivered || actualDelivered > Number(editData.actualRemaining) || !siNumber || !receivingDate || !lotSection}
       >
         Receive
       </Button>
@@ -130,6 +134,7 @@ const EditModalSave = ({
       {isPrintModalOpen && (
         <PrintBarcode
           printData={editData}
+          formData={formData}
           receivingDate={receivingDate}
           lotSection={lotSection}
           actualGood={actualGood}

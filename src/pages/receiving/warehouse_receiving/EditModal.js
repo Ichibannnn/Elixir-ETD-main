@@ -34,15 +34,16 @@ export const EditModal = ({
   isOpen,
   onClose,
   getAvailablePOHandler,
+  receivingDate,
   setReceivingDate,
   lotCategory,
-  receivingDate,
   actualGood,
   setActualGood,
   setReceivingId,
   receivingId,
   unitPrice,
   setUnitPrice,
+  fromYmir,
 }) => {
   const [actualDelivered, setActualDelivered] = useState(null);
 
@@ -55,6 +56,8 @@ export const EditModal = ({
   const [submitDataThree, setSubmitDataThree] = useState([]);
   const [submitDataTwo, setSubmitDataTwo] = useState([]);
   const [lotCategories, setLotCategories] = useState([]);
+
+  const [siNumber, setSINumber] = useState(null);
 
   // FETCH LOT CATEGORY
   const fetchLotCategory = async () => {
@@ -80,7 +83,12 @@ export const EditModal = ({
       submitData: {
         po_summary_id: editData.id,
         expected_delivery: "",
-        actual_delivered: "",
+        actual_delivered: editData.siNumber
+          ? editData.actualRemaining.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })
+          : "",
         si_number: "",
         addedBy: currentUser.fullName,
       },
@@ -92,13 +100,21 @@ export const EditModal = ({
 
         rrNumber: editData.rrNumber,
         rrDate: moment(editData.rrDate).format("MM/DD/YYYY"),
-        actualDelivered: editData.quantityDelivered.toLocaleString(undefined, {
+
+        unitPrice: editData.unitPrice.toLocaleString(undefined, {
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         }),
 
-        siNumber: editData.siNumber,
-        receiveDate: moment(editData.receiveDate).format("MM/DD/YYYY"),
+        actualDelivered: editData?.siNumber
+          ? editData.quantityDelivered.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })
+          : "",
+
+        siNumber: editData.siNumber ? editData.siNumber : null,
+        receiveDate: editData.siNumber ? moment(editData.receiveDate).format("MM/DD/YYYY") : null,
 
         prNumber: editData.prNumber,
         prDate: moment(editData.prDate).format("MM/DD/YYYY"),
@@ -112,14 +128,12 @@ export const EditModal = ({
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         }),
+
         actualGood: editData.actualGood.toLocaleString(undefined, {
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         }),
-        unitPrice: editData.unitPrice.toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
-        }),
+
         checkingDate: moment().format("MM/DD/YYYY"),
         actualRemaining: editData.actualRemaining?.toLocaleString(undefined, {
           maximumFractionDigits: 2,
@@ -129,6 +143,9 @@ export const EditModal = ({
       },
     },
   });
+
+  // console.log("Edit Data: ", editData);
+  // console.log("Display Data: ", watch("displayData"));
 
   const expectedDeliveryRef = useRef();
   const actualDeliveredRef = useRef();
@@ -157,18 +174,19 @@ export const EditModal = ({
   //   }
   // };
 
+  useEffect(() => {
+    if (fromYmir) {
+      unitPriceProvider(editData.unitPrice);
+      actualDeliveredProvider(editData.quantityDelivered);
+      setReceivingDate(moment(editData.receivingDate).format("MM/DD/YYYY"));
+      siNumberProvider(editData.siNumber);
+    }
+  }, []);
+
   const actualDeliveredProvider = (data) => {
     if (data > editData.actualRemaining) {
       setActualDelivered("");
       ToastComponent("Warning!", "Actual delivered is greater than actual remaining", "warning", toast);
-      actualDeliveredRef.current.value = "";
-    } else {
-      setActualDelivered(data);
-    }
-
-    if (data < 1) {
-      setActualDelivered("");
-      actualDeliveredRef.current.value = "";
     } else {
       setActualDelivered(data);
     }
@@ -194,12 +212,13 @@ export const EditModal = ({
 
     rrNo: editData.rrNumber,
     rrDate: moment(editData.rrDate).format("MM/DD/YYYY"),
-    actualDelivered: editData.quantityDelivered,
-    actualReceiving: editData.quantityDelivered,
-    unitPrice: editData.unitPrice,
-    receivingDate: moment(editData.receiveDate).format("MM/DD/YYYY"),
-    actualReceivingDate: moment(editData.receiveDate).format("MM/DD/YYYY"),
-    siNumber: editData.siNumber,
+
+    unitPrice: editData.siNumber ? editData.unitPrice : unitPrice,
+    siNumber: editData.siNumber ? editData.siNumber : siNumber,
+    actualDelivered: editData.siNumber ? editData.quantityDelivered : Number(actualDelivered),
+    // actualReceiving: editData.quantityDelivered,
+    receivingDate: editData.receiveDate ? moment(editData.receiveDate).format("MM/DD/YYYY") : watch("displayData")?.receiveDate,
+    actualReceivingDate: editData.receiveDate ? moment(editData.receiveDate).format("MM/DD/YYYY") : watch("displayData")?.receiveDate,
 
     totalReject: sumQuantity,
     addedBy: currentUser.fullName,
@@ -209,8 +228,6 @@ export const EditModal = ({
   useEffect(() => {
     setActualGood(editData.actualDelivered - sumQuantity);
   }, [sumQuantity]);
-
-  useEffect(() => {}, [receivingDate]);
 
   useEffect(() => {
     if (editData) {
@@ -225,6 +242,29 @@ export const EditModal = ({
     }
   }, [editData]);
 
+  const siNumberProvider = (data) => {
+    setSINumber(data);
+  };
+
+  const receivingDateProvider = (event) => {
+    const data = event.target.value;
+
+    console.log("Data: ", data);
+
+    if (data) {
+      const newData = moment(data).format("MM/DD/YYYY");
+      setReceivingDate(newData);
+    } else {
+      setReceivingDate(null);
+    }
+  };
+
+  console.log("Receiving date: ", receivingDate);
+
+  const closeModalHandler = () => {
+    setReceivingDate(null);
+  };
+
   return (
     <ReceivingContext.Provider
       value={{
@@ -235,7 +275,7 @@ export const EditModal = ({
       }}
     >
       <Flex>
-        <Modal size="5xl" isOpen={isOpen} onClose={() => {}} isCentered>
+        <Modal size="5xl" isOpen={isOpen} onClose={() => closeModalHandler()} isCentered>
           <ModalOverlay />
           <ModalContent h="95vh">
             <ModalHeader h="130px" boxShadow="xl" bg="primary" color="white">
@@ -260,6 +300,7 @@ export const EditModal = ({
                       Item Code
                       <Input {...register("displayData.itemCode")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
+
                     <FormLabel w="50%" fontSize="12px">
                       Description
                       <Input {...register("displayData.itemDescription")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
@@ -271,6 +312,7 @@ export const EditModal = ({
                       Supplier
                       <Input {...register("displayData.supplier")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
+
                     <FormLabel w="50%" fontSize="12px">
                       Date of Checking
                       <Input {...register("displayData.checkingDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
@@ -301,6 +343,7 @@ export const EditModal = ({
                       PO Number
                       <Input {...register("displayData.poNumber")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
+
                     <FormLabel w="50%" fontSize="12px">
                       PO Date
                       <Input {...register("displayData.poDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
@@ -312,6 +355,7 @@ export const EditModal = ({
                       PR Number
                       <Input {...register("displayData.prNumber")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
                     </FormLabel>
+
                     <FormLabel w="50%" fontSize="12px">
                       PR Date
                       <Input {...register("displayData.prDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
@@ -342,7 +386,25 @@ export const EditModal = ({
                         value={unitPrice}
                         ref={unitPriceRef}
                       /> */}
-                      <Input {...register("displayData.unitPrice")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
+                      <Input
+                        {...register("displayData.unitPrice")}
+                        placeholder="Please enter unit cost (Required)"
+                        disabled={editData.siNumber ? true : false}
+                        readOnly={editData.siNumber ? true : false}
+                        _disabled={{ color: "black" }}
+                        fontSize="13px"
+                        size="sm"
+                        bg={editData.siNumber ? "gray.300" : "#ffffe0"}
+                        // editable
+                        type="number"
+                        onWheel={(e) => e.target.blur()}
+                        onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
+                        autoComplete="off"
+                        min="1"
+                        onChange={(e) => unitPriceProvider(Number(e.target.value))}
+                        value={unitPrice}
+                        ref={unitPriceRef}
+                      />
                     </FormLabel>
                   </Flex>
 
@@ -383,8 +445,24 @@ export const EditModal = ({
 
                     <FormLabel w="50%" fontSize="12px">
                       Qty Actual Delivered
-                      <Input {...register("displayData.actualDelivered")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
-                      {/* <Input
+                      <Input
+                        {...register("displayData.actualDelivered")}
+                        placeholder="Please enter quantity (Required)"
+                        disabled={editData.siNumber ? true : false}
+                        readOnly={editData.siNumber ? true : false}
+                        _disabled={{ color: "black" }}
+                        fontSize="13px"
+                        size="sm"
+                        bg={editData.siNumber ? "gray.300" : "#ffffe0"}
+                        // editable
+                        // type="number"
+                        min="1"
+                        autoComplete="off"
+                        onWheel={(e) => e.target.blur()}
+                        onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
+                        onChange={(e) => actualDeliveredProvider(Number(e.target.value))}
+                        // ref={actualDeliveredRef}
+                      />
                       {/* <Input
                         {...register("submitData.actualDelivered")}
                         type="number"
@@ -404,11 +482,22 @@ export const EditModal = ({
 
                     <FormLabel w="50%" fontSize="12px">
                       SI Number
-                      <Input {...register("displayData.siNumber")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
+                      <Input
+                        {...register("displayData.siNumber")}
+                        placeholder="Please enter SI Number (Required)"
+                        disabled={editData.siNumber ? true : false}
+                        readOnly={editData.siNumber ? true : false}
+                        _disabled={{ color: "black" }}
+                        autoComplete="off"
+                        fontSize="13px"
+                        size="sm"
+                        bg={editData.siNumber ? "gray.300" : "#ffffe0"}
+                        onChange={(e) => siNumberProvider(e.target.value)}
+                      />
                       {/* <Input
                         fontSize="13px"
                         size="sm"
-                        placeholder="SI Number (Optional)"
+                        placeholder="Enter SI Number"
                         // bgColor="white"
                         bgColor="#ffffe0"
                         onChange={(e) => siNumberProvider(e.target.value)}
@@ -419,7 +508,18 @@ export const EditModal = ({
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">
                       Receiving Date
-                      <Input {...register("displayData.receiveDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
+                      {/* <Input {...register("displayData.receiveDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" /> */}
+                      <Input
+                        {...register("displayData.receiveDate")}
+                        disabled={editData.receiveDate ? true : false}
+                        readOnly={editData.receiveDate ? true : false}
+                        _disabled={{ color: "black" }}
+                        fontSize="13px"
+                        size="sm"
+                        bg={editData.receiveDate ? "gray.300" : "#ffffe0"}
+                        type={editData.receiveDate ? "text" : "date"}
+                        onChange={receivingDateProvider}
+                      />
                       {/* <Input
                         size="sm"
                         border="1px"
@@ -427,8 +527,8 @@ export const EditModal = ({
                         fontSize="13px"
                         bgColor="#ffffe0"
                         onChange={receivingDateProvider}
-                        // min={moment(new Date(new Date().setDate(new Date().getDate() - 3))).format("yyyy-MM-DD")}
-                        // max={moment(new Date()).format("yyyy-MM-DD")}
+                        min={moment(new Date(new Date().setDate(new Date().getDate() - 3))).format("yyyy-MM-DD")}
+                        max={moment(new Date()).format("yyyy-MM-DD")}
                         type="date"
                       /> */}
                     </FormLabel>
@@ -494,12 +594,17 @@ export const EditModal = ({
                 isSubmitDisabled={isSubmitDisabled}
                 closeModal={onClose}
                 editData={editData}
+                siNumber={siNumber}
+                setSINumber={setSINumber}
                 receivingDate={receivingDate}
                 setReceivingDate={setReceivingDate}
                 lotSection={lotSection}
                 lotCategory={lotCategory}
                 receivingId={receivingId}
                 setReceivingId={setReceivingId}
+                // display data
+                formData={watch("displayData")}
+                // formData2={watch("submitData")}
               />
             </ModalFooter>
           </ModalContent>

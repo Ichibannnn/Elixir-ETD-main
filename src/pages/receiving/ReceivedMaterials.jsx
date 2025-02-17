@@ -218,13 +218,13 @@ const ReceivedMaterials = () => {
                     <Th color="white" fontSize="10px">
                       Warehouse ID
                     </Th>
-                    <Th color="white" fontSize="10px">
-                      RR Number
-                    </Th>
+
                     <Th color="white" fontSize="10px">
                       PO Number
                     </Th>
-
+                    <Th color="white" fontSize="10px">
+                      RR Number
+                    </Th>
                     <Th color="white" fontSize="10px">
                       SI Number
                     </Th>
@@ -258,8 +258,8 @@ const ReceivedMaterials = () => {
                   {warehouseData?.warehouse?.map((items) => (
                     <Tr key={items.id}>
                       <Td fontSize="xs">{items.id}</Td>
+                      {items.poNumber === "0" || items.poNumber === null ? <Td fontSize="xs">-</Td> : <Td fontSize="xs">{items.poNumber}</Td>}
                       {items.rrNumber === null ? <Td fontSize="xs">-</Td> : <Td fontSize="xs">{items.rrNumber}</Td>}
-                      {items.poNumber === 0 ? <Td fontSize="xs">-</Td> : <Td fontSize="xs">{items.poNumber}</Td>}
                       {items.siNumber ? <Td fontSize="xs">{items.siNumber}</Td> : <Td fontSize="xs">-</Td>}
                       <Td fontSize="xs">{items.itemCode}</Td>
                       <Td fontSize="xs">{items.itemDescription}</Td>
@@ -359,11 +359,10 @@ const PrintModal = ({ isOpen, onClose, printData }) => {
     content: () => componentRef.current,
   });
 
-  console.log("PrintData: ", printData);
+  // console.log("PrintData: ", printData);
 
   const displayData = {
-    "RR Number": printData?.rrNumber ? printData?.rrNumber : "-",
-    "PO Number": printData?.poNumber,
+    "PO Number": printData.poNumber === "0" || printData.poNumber === null ? "-" : printData?.poNumber,
     Date: moment().format("MM/DD/YYYY, h:mm:ss a"),
     "Received Date": moment(printData?.dateReceive).format("MM/DD/YYYY"),
     "Item Code": printData?.itemCode,
@@ -378,6 +377,8 @@ const PrintModal = ({ isOpen, onClose, printData }) => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }),
+    "Lot Section": printData?.lotSection ? printData?.lotSection : "-",
+    "SI Number": printData?.siNumber ? printData?.siNumber : "-",
   };
 
   return (
