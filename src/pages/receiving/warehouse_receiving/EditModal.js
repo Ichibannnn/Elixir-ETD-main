@@ -217,8 +217,8 @@ export const EditModal = ({
     siNumber: editData.siNumber ? editData.siNumber : siNumber,
     actualDelivered: editData.siNumber ? editData.quantityDelivered : Number(actualDelivered),
     // actualReceiving: editData.quantityDelivered,
-    receivingDate: editData.receiveDate ? moment(editData.receiveDate).format("MM/DD/YYYY") : watch("displayData")?.receiveDate,
-    actualReceivingDate: editData.receiveDate ? moment(editData.receiveDate).format("MM/DD/YYYY") : watch("displayData")?.receiveDate,
+    receivingDate: editData.receiveDate ? moment(editData.receiveDate).format("MM/DD/YYYY") : receivingDate,
+    actualReceivingDate: editData.receiveDate ? moment(editData.receiveDate).format("MM/DD/YYYY") : receivingDate,
 
     totalReject: sumQuantity,
     addedBy: currentUser.fullName,
@@ -259,7 +259,7 @@ export const EditModal = ({
     }
   };
 
-  console.log("Receiving date: ", receivingDate);
+  // console.log("Receiving date: ", receivingDate);
 
   const closeModalHandler = () => {
     setReceivingDate(null);

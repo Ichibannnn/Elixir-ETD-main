@@ -112,6 +112,7 @@ const WarehouseReceiving = () => {
       setPO(res);
       setPageTotal(res.totalCount);
     });
+    setIsLoading(true);
   };
 
   useEffect(() => {

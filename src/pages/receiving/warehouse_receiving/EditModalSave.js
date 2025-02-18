@@ -68,6 +68,7 @@ const EditModalSave = ({
           ToastComponent("Success!", "Purchase order updated.", "success", toast);
           setReceivingId(res.data.id);
           setIsLoading(false);
+          setReceivingDate(null);
           getAvailablePOHandler();
           handlePrint();
           openPrintModal();
