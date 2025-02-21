@@ -20,6 +20,21 @@ const fetchMRPForSheetApi = async (pageTotalSheet) => {
   return res.data;
 };
 
+// const fetchMRPApi = async (pageNumber, pageSize, search) => {
+//   const res = await request.get(`Inventory/GetMRP?PageNumber=${pageNumber}&a=${pageSize}`, {
+//     params: {
+//       search: search,
+//     },
+//   });
+
+//   return res.data;
+// };
+
+// const fetchMRPForSheetApi = async (pageTotalSheet) => {
+//   const res = await request.get(`Inventory/GetMRP?PageNumber=1&PageSize=${pageTotalSheet}`);
+//   return res.data;
+// };
+
 const MrpPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingExport, setLoadingExport] = useState(true);

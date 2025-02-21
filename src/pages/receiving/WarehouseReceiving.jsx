@@ -84,6 +84,15 @@ const WarehouseReceiving = () => {
     return response.data;
   };
 
+  // const fetchAvailablePOApi = async (pageNumber, pageSize, search) => {
+  //   const response = await request.get(`Warehouse/GetPoSummary?PageNumber=${pageNumber}&PageSize=${pageSize}`, {
+  //     params: {
+  //       search: search,
+  //     },
+  //   });
+  //   return response.data;
+  // };
+
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;

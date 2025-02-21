@@ -604,7 +604,6 @@ export const EditModal = ({
                 setReceivingId={setReceivingId}
                 // display data
                 formData={watch("displayData")}
-                // formData2={watch("submitData")}
               />
             </ModalFooter>
           </ModalContent>

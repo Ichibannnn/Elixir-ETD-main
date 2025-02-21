@@ -160,8 +160,6 @@ const ImportPO = () => {
       if (result.isConfirmed) {
         if (result.isConfirmed) {
           if (resultArray.length > 0) {
-            console.log(resultArray);
-
             const hasZeroUnitCost = resultArray.some((eData) => eData.unitPrice <= 0);
 
             if (hasZeroUnitCost) {
@@ -179,6 +177,7 @@ const ImportPO = () => {
                     setExcelData([]);
                   })
                   .catch((err) => {
+                    // console.log("Error: ", err);
                     setIsLoading(false);
                     setErrorData(err.response.data);
                     if (err.response.data) {
@@ -223,10 +222,10 @@ const ImportPO = () => {
   }, [resultArray, toastShown]);
 
   return (
-    <Flex bg="form" h="920px" w="full" flexDirection="column">
+    <Flex bg="form" h="900px" w="full" flexDirection="column">
       <Flex justifyContent="space-between">
         <Box />
-        <Box p={2} gap={3}>
+        <Box p={2}>
           {errorOpener === true ? (
             <Button
               onClick={() => openErrorModal()}
@@ -243,7 +242,7 @@ const ImportPO = () => {
               Error List
             </Button>
           ) : (
-            <HStack gap={1}>
+            <HStack gap={0}>
               <Button
                 type="submit"
                 leftIcon={<MdOutlineSync fontSize="19px" />}
@@ -276,9 +275,9 @@ const ImportPO = () => {
         </Box>
       </Flex>
 
-      <Flex w="100%" h="full" p={2} mt={-4} flexDirection="column" justifyContent="space-between">
-        <Flex w="full" h="full">
-          <PageScroll maxHeight="840px">
+      <Flex w="100%" p={2} flexDirection="column">
+        <Flex w="full" h="800px" className="boxShadow">
+          <PageScroll maxHeight="800px">
             <Table variant="striped" size="sm">
               <Thead bg="primary" position="sticky" zIndex="0" top={0}>
                 <Tr>
