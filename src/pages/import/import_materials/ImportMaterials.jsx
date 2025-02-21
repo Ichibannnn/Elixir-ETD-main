@@ -155,10 +155,10 @@ const ImportMaterials = () => {
   };
 
   return (
-    <Flex bg="form" h="920px" w="full" flexDirection="column">
+    <Flex bg="form" h="900px" w="full" flexDirection="column">
       <Flex justifyContent="space-between">
         <Box />
-        <Box p={2}>
+        <Box pr={2} pt={4} pl={2}>
           {errorOpener === true ? (
             <Button
               onClick={() => openErrorModal()}
@@ -192,9 +192,9 @@ const ImportMaterials = () => {
         </Box>
       </Flex>
 
-      <Flex w="100%" h="full" p={2} mt={-4} flexDirection="column" justifyContent="space-between">
-        <Flex w="full" h="full">
-          <PageScroll maxHeight="840px">
+      <Flex w="100%" pr={2} pb={2} pl={2} flexDirection="column">
+        <Flex w="full" h="800px" className="boxShadow">
+          <PageScroll maxHeight="800px">
             <Table variant="striped" size="sm">
               <Thead bg="primary" position="sticky" zIndex="0" top={0}>
                 <Tr>

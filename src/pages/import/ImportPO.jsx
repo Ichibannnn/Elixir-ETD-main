@@ -225,7 +225,7 @@ const ImportPO = () => {
     <Flex bg="form" h="900px" w="full" flexDirection="column">
       <Flex justifyContent="space-between">
         <Box />
-        <Box p={2}>
+        <Box pr={2} pt={4} pl={2}>
           {errorOpener === true ? (
             <Button
               onClick={() => openErrorModal()}
@@ -275,7 +275,7 @@ const ImportPO = () => {
         </Box>
       </Flex>
 
-      <Flex w="100%" p={2} flexDirection="column">
+      <Flex w="100%" pr={2} pb={2} pl={2} flexDirection="column">
         <Flex w="full" h="800px" className="boxShadow">
           <PageScroll maxHeight="800px">
             <Table variant="striped" size="sm">
