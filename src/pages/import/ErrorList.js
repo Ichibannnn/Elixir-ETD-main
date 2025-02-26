@@ -49,8 +49,8 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
 
   const availableImportData = errorData?.availableImport?.map((list) => {
     return {
-      rrNo: list?.rrNo ? list?.rrNo?.toString().trim() : "-",
-      rrDate: list.rrDate ? moment(list.rrDate)?.format("YYYY-MM-DD")?.toString().trim() : "-",
+      rrNo: list?.rrNo ? list?.rrNo?.toString().trim() : null,
+      rrDate: list.rrDate ? moment(list.rrDate)?.format("YYYY-MM-DD")?.toString().trim() : null,
       pR_Number: list?.pR_Number?.toString().trim(),
       pR_Date: moment(list.pR_Date)?.format("YYYY-MM-DD")?.toString().trim(),
       pO_Number: list?.pO_Number?.toString().trim(),

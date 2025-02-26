@@ -31,7 +31,7 @@ export const MiscIssueHistory = ({ dateFrom, dateTo, setSheetData, search }) => 
         res?.inventory?.map((item, i) => {
           return {
             "Line Number": i + 1,
-            "Issue ID": item.orderId,
+            "Issue ID": item.issueId,
             "Customer Code": item.customerCode,
             "Customer Name": item.customerName,
             Details: item.details,
@@ -46,9 +46,13 @@ export const MiscIssueHistory = ({ dateFrom, dateTo, setSheetData, search }) => 
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             }),
-            // 'Expiration Date': item.expirationDate,
             "Transacted By": item.transactBy,
-            "Transaction Date": new Date(moment(item.transactDate).format("MM/DD/YYYY")),
+            "Transaction Date": moment(item.transactDate).format("MM/DD/YYYY"),
+            Company: `${item.companyCode} - ${item.companyName}`,
+            Department: `${item.departmentCode} - ${item.departmentName}`,
+            Location: `${item.locationCode} - ${item.locationName}`,
+            "Account Title": `${item.accountCode} - ${item.accountTitles}`,
+            Employee: item?.empId ? `${item.empId} - ${item.fullName}` : "-",
           };
         })
       );

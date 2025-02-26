@@ -32,6 +32,7 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
           return {
             "Line Number": i + 1,
             "Receipt Id": item.receiptId,
+            "Receipt Date": item.receivingDate,
             "Supplier Code": item.supplierCode,
             "Supplier Name": item.supplierName,
             Details: item.details,
@@ -47,8 +48,13 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
               maximumFractionDigits: 2,
             }),
             // 'Expiration Date': item.expirationDate,
-            "Transacted By": item.trantedBy,
-            "Transaction Date": new Date(moment(item.transactDate).format("MM/DD/YYYY")),
+            "Transacted By": item.transactBy,
+            "Transaction Date": moment(item.transactDate).format("MM/DD/YYYY"),
+            Company: `${item.companyCode} - ${item.companyName}`,
+            Department: `${item.departmentCode} - ${item.departmentName}`,
+            Location: `${item.locationCode} - ${item.locationName}`,
+            "Account Title": `${item.accountCode} - ${item.accountTitles}`,
+            Employee: item?.empId ? `${item.empId} - ${item.fullName}` : "-",
           };
         })
       );
@@ -74,6 +80,8 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
       setDisplayedData([]);
     };
   }, [dateFrom, dateTo, search]);
+
+  // console.log("Receipt: ", miscReceiptData);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -109,7 +117,6 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         UOM
                       </Th>
-                      {/* <Th color='white'>category</Th> */}
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Quantity
                       </Th>
@@ -125,7 +132,6 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
                     </>
                   ) : (
                     <>
-                      {/* <Th color='white'>Expiration Date</Th> */}
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Company Code
                       </Th>
@@ -147,6 +153,9 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Account Title
                       </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Employee
+                      </Th>
                     </>
                   )}
                 </Tr>
@@ -164,7 +173,6 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
                         <Td fontSize="xs">{item.itemCode}</Td>
                         <Td fontSize="xs">{item.itemDescription}</Td>
                         <Td fontSize="xs">{item.uom}</Td>
-                        {/* <Td>{item.category}</Td> */}
                         <Td fontSize="xs">
                           {item.quantity.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
@@ -182,13 +190,13 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
                       </>
                     ) : (
                       <>
-                        {/* <Td>{item.expirationDate}</Td> */}
                         <Td fontSize="xs">{item.companyCode}</Td>
                         <Td fontSize="xs">{item.companyName}</Td>
                         <Td fontSize="xs">{item.departmentCode}</Td>
                         <Td fontSize="xs">{item.departmentName}</Td>
                         <Td fontSize="xs">{item.locationCode}</Td>
                         <Td fontSize="xs">{item.locationName}</Td>
+                        <Td fontSize="xs">{item.accountTitles}</Td>
                         <Td fontSize="xs">{item.accountTitles}</Td>
                       </>
                     )}
