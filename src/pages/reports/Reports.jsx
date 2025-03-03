@@ -382,13 +382,13 @@ const PrintMiscReceiptModal = ({ isOpen, onClose, printData, setPrintData, dateF
           <ModalBody mt={5}>
             <PageScroll minHeight="617px" maxHeight="618px">
               <Table size="sm" variant="striped" ref={componentRef}>
-                <Thead bgColor="primary" position="sticky" top={0} zIndex={2} h="40px">
+                <Thead bgColor="primary" position="sticky" top={0} zIndex={1} h="40px">
                   <Tr>
                     <Th color="white" colSpan={17} textAlign="center">{`Miscellaneous Receipt History from ${moment(dateFrom).format("l")} - ${moment(dateTo).format("l")}`}</Th>
                   </Tr>
                 </Thead>
 
-                <Thead bgColor="primary" position="sticky" top={0} zIndex={1} h="40px">
+                <Thead bgColor="primary" position="sticky" top="40px" zIndex={2} h="40px">
                   <Tr>
                     <Th color="white">Receipt ID</Th>
                     <Th color="white">Receipt Date</Th>
@@ -608,13 +608,13 @@ const PrintMiscIssueModal = ({ isOpen, onClose, printData, setPrintData, dateFro
           <ModalBody mt={5}>
             <PageScroll minHeight="617px" maxHeight="618px">
               <Table size="sm" variant="striped" ref={componentRef}>
-                <Thead bgColor="primary" position="sticky" top={0} zIndex={2} h="40px">
+                <Thead bgColor="primary" position="sticky" top={0} zIndex={1} h="40px">
                   <Tr>
                     <Th color="white" colSpan={17} textAlign="center">{`Miscellaneous Issue History from ${moment(dateFrom).format("l")} - ${moment(dateTo).format("l")}`}</Th>
                   </Tr>
                 </Thead>
 
-                <Thead bgColor="primary" position="sticky" top={0} zIndex={1} h="40px">
+                <Thead bgColor="primary" position="sticky" top="40px" zIndex={2} h="40px">
                   <Tr>
                     <Th color="white">Issue ID</Th>
                     <Th color="white">Customer Code</Th>
