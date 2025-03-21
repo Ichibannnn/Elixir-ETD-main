@@ -16,15 +16,15 @@ const user = decodeUser();
 
 //LIVE
 // Set config defaults when creating the instance
-const request = axios.create({
-  baseURL: "http://10.10.2.31:72/api/",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + user?.token,
-  },
-});
+// const request = axios.create({
+//   baseURL: "http://10.10.2.31:72/api/",
+//   headers: {
+//     "Content-Type": "application/json",
+//     Authorization: "Bearer " + user?.token,
+//   },
+// });
 
-export default request;
+// export default request;
 
 // PRE_TEST
 // const request = axios.create({
@@ -37,13 +37,13 @@ export default request;
 
 // export default request;
 
-// Sir Vince Backend
-// const request = axios.create({
-//   baseURL: "https://10.10.13.5:5001/api/",
-//   headers: {
-//     "Content-Type": "application/json",
-//     Authorization: "Bearer " + user?.token,
-//   },
-// });
+// KK BACKEND
+const request = axios.create({
+  baseURL: "https://10.10.10.14:5001/api/",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + user?.token,
+  },
+});
 
-// export default request;
+export default request;

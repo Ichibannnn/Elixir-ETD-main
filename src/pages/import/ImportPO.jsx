@@ -168,7 +168,7 @@ const ImportPO = () => {
               try {
                 setIsLoading(true);
                 const res = request
-                  .post("Import/AddNewPOSummary", resultArray)
+                  .post("Import/import-manual", resultArray)
                   .then((res) => {
                     ToastComponent("Success!", "PO Imported", "success", toast);
                     setIsLoading(false);

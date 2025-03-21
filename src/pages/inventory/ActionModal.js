@@ -5,6 +5,7 @@ import {
   ButtonGroup,
   Flex,
   FormLabel,
+  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,6 +13,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Stack,
   Text,
   useDisclosure,
@@ -377,6 +379,9 @@ export const AccountTitleModal = ({
     });
   };
 
+  console.log("Watch Company: ", watch("formData.companyId"));
+  console.log("Company: ", company);
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
@@ -388,12 +393,17 @@ export const AccountTitleModal = ({
                 <Text>Charge of Accounts</Text>
               </Flex>
             </ModalHeader>
+
             <ModalCloseButton onClick={onClose} />
 
             <ModalBody>
               <Stack spacing={2} p={6}>
                 <Box>
-                  <FormLabel fontSize="sm">Company</FormLabel>
+                  <HStack gap={0.5}>
+                    {company.length === 0 && <Spinner size="sm" color="blue.500" emptyColor="gray.200" />}
+                    <FormLabel fontSize="sm">Company</FormLabel>
+                  </HStack>
+
                   <Controller
                     control={control}
                     name="formData.companyId"
@@ -403,6 +413,7 @@ export const AccountTitleModal = ({
                         value={field.value}
                         size="sm"
                         placeholder="Select Company"
+                        isDisabled
                         onChange={(e) => {
                           field.onChange(e);
                           setValue("formData.departmentId", "");
@@ -415,6 +426,23 @@ export const AccountTitleModal = ({
                             value: item,
                           };
                         })}
+                        chakraStyles={{
+                          control: (provided, state) => ({
+                            ...provided,
+                            backgroundColor: state.isDisabled ? "gray.400" : "black",
+                            color: state.isDisabled ? "blackAlpha.900" : "black",
+                            opacity: state.isDisabled ? 0.5 : 1,
+                          }),
+                          singleValue: (provided, state) => ({
+                            ...provided,
+                            color: state.isDisabled ? "black" : "black",
+                            fontWeight: state.isDisabled ? "semibold" : "normal",
+                          }),
+                          placeholder: (provided, state) => ({
+                            ...provided,
+                            color: state.isDisabled ? "blackAlpha.900" : "#888", // Placeholder color when disabled
+                          }),
+                        }}
                       />
                     )}
                   />
@@ -425,7 +453,11 @@ export const AccountTitleModal = ({
                 </Box>
 
                 <Box>
-                  <FormLabel fontSize="sm">Department</FormLabel>
+                  <HStack gap={0.5}>
+                    {department.length === 0 && <Spinner size="sm" color="blue.500" emptyColor="gray.200" />}
+                    <FormLabel fontSize="sm">Department</FormLabel>
+                  </HStack>
+
                   <Controller
                     control={control}
                     name="formData.departmentId"
@@ -446,6 +478,24 @@ export const AccountTitleModal = ({
                             value: item,
                           };
                         })}
+                        isDisabled
+                        chakraStyles={{
+                          control: (provided, state) => ({
+                            ...provided,
+                            backgroundColor: state.isDisabled ? "gray.400" : "black",
+                            color: state.isDisabled ? "blackAlpha.900" : "black",
+                            opacity: state.isDisabled ? 1 : 1,
+                          }),
+                          singleValue: (provided, state) => ({
+                            ...provided,
+                            color: state.isDisabled ? "blackAlpha.900" : "black",
+                            fontWeight: state.isDisabled ? "semibold" : "normal",
+                          }),
+                          placeholder: (provided, state) => ({
+                            ...provided,
+                            color: state.isDisabled ? "blackAlpha.900" : "#888", // Placeholder color when disabled
+                          }),
+                        }}
                       />
                     )}
                   />
@@ -456,7 +506,10 @@ export const AccountTitleModal = ({
                 </Box>
 
                 <Box>
-                  <FormLabel fontSize="sm">Location</FormLabel>
+                  <HStack gap={0.5}>
+                    {location.length === 0 && <Spinner size="sm" color="blue.500" emptyColor="gray.200" />}
+                    <FormLabel fontSize="sm">Location</FormLabel>
+                  </HStack>
                   <Controller
                     control={control}
                     name="formData.locationId"
@@ -475,6 +528,24 @@ export const AccountTitleModal = ({
                             value: item,
                           };
                         })}
+                        isDisabled
+                        chakraStyles={{
+                          control: (provided, state) => ({
+                            ...provided,
+                            backgroundColor: state.isDisabled ? "gray.400" : "black",
+                            color: state.isDisabled ? "blackAlpha.900" : "black",
+                            opacity: state.isDisabled ? 1 : 1,
+                          }),
+                          singleValue: (provided, state) => ({
+                            ...provided,
+                            color: state.isDisabled ? "blackAlpha.900" : "black",
+                            fontWeight: state.isDisabled ? "semibold" : "normal",
+                          }),
+                          placeholder: (provided, state) => ({
+                            ...provided,
+                            color: state.isDisabled ? "blackAlpha.900" : "#888", // Placeholder color when disabled
+                          }),
+                        }}
                       />
                     )}
                   />
@@ -489,7 +560,14 @@ export const AccountTitleModal = ({
               <Button
                 type="submit"
                 isLoading={isLoading}
-                isDisabled={!watch("formData.companyId") || !watch("formData.departmentId") || !watch("formData.locationId")}
+                isDisabled={
+                  !watch("formData.companyId") ||
+                  !watch("formData.departmentId") ||
+                  !watch("formData.locationId") ||
+                  company.length === 0 ||
+                  department.length === 0 ||
+                  location.length === 0
+                }
                 colorScheme="blue"
                 px={4}
               >
