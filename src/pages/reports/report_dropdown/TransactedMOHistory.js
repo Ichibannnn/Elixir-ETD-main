@@ -226,10 +226,6 @@ export const TransactedMOHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                         <Td fontSize="xs">{item.cip_No === null ? "-" : item.cip_No}</Td>
                         <Td fontSize="xs">{item.orderDate ? moment(item.orderDate).format("yyyy-MM-DD") : "-"}</Td>
                         <Td fontSize="xs">{item.dateNeeded ? moment(item.dateNeeded).format("yyyy-MM-DD") : "-"}</Td>
-                        {/* <Td fontSize="xs">
-                        {item.transactedDate ? "Transacted" : "For Transaction"}
-                      </Td> */}
-                        {/* <Td fontSize="xs">{item.batchNo}</Td> */}
                       </>
                     ) : (
                       <>

@@ -42,16 +42,15 @@ import { decodeUser } from "../../services/decode-user";
 import { MdOutlineSync } from "react-icons/md";
 
 import noRecordsFound from "../../../src/assets/svg/noRecordsFound.svg";
+import axios from "axios";
 
 const currentUser = decodeUser();
 
-const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate, setFromDate, toDate, setToDate, onErrorSyncModal, errorData, setErrorData }) => {
+const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate, setFromDate, toDate, setToDate, onErrorSyncModal, setErrorData, getYmirPo }) => {
   const toast = useToast();
 
   const dateVar = new Date();
   const minDate = moment(dateVar.setDate(dateVar.getDate() - 3)).format("yyyy-MM-DD");
-
-  // console.log("length: ", ymirPO);
 
   const ymirResultArray = Array.isArray(ymirPO)
     ? ymirPO.flatMap((data) =>
@@ -101,7 +100,18 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("YMIR Submit Payload: ", ymirResultArray);
+        const ymirSyncStatus = [
+          {
+            item_id: ymirPO?.flatMap((data) =>
+              data?.rr_orders?.map((subData) => {
+                return {
+                  id: subData?.id,
+                };
+              })
+            ),
+          },
+        ];
+
         if (ymirResultArray.length > 0) {
           const hasZeroUnitCost = ymirResultArray.some((data) => data.unitPrice <= 0);
 
@@ -113,16 +123,33 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
               const res = request
                 .post("Import/AddNewPOSummary", ymirResultArray)
                 .then((res) => {
+                  getYmirPo();
+                  // YMIR Status
+                  try {
+                    axios.patch(
+                      `https://rdfymir.com/backend/public/api/etd_api/sync`,
+                      // `http://10.10.13.6:8080/api/etd_api/sync`,
+                      ymirSyncStatus,
+                      {
+                        headers: {
+                          Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
+                        },
+                      }
+                    );
+                  } catch (error) {
+                    console.log(error);
+                  }
+
                   ToastComponent("Success!", "Sync purchase orders successfully", "success", toast);
+                  getYmirPo();
                   setFetchData(false);
-                  // setIsDisabled(false);
                 })
                 .catch((err) => {
                   ToastComponent("Error!", "Sync error.", "error", toast);
                   setFetchData(false);
                   setErrorData(err.response.data);
                   if (err.response.data) {
-                    // console.log("ErrorData: ", err);
+                    console.log("ErrorData: ", err.response.data);
                     onErrorSyncModal();
                   }
                 });
@@ -154,6 +181,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
             </Text>
           </Flex>
         </ModalHeader>
+
         <ModalCloseButton onClick={() => closeModalHandler()} />
 
         <PageScroll>
@@ -167,7 +195,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                   <Badge fontSize="xs" colorScheme="blue" variant="solid">
                     From:
                   </Badge>
-                  <Input onChange={(date) => setFromDate(date.target.value)} defaultValue={fromDate} min={minDate} type="date" fontSize="11px" fontWeight="semibold" />
+                  <Input onChange={(date) => setFromDate(date.target.value)} min={minDate} defaultValue={fromDate} type="date" fontSize="11px" fontWeight="semibold" />
                   <Badge fontSize="xs" colorScheme="blue" variant="solid">
                     To:
                   </Badge>
@@ -257,6 +285,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                           </Th>
                         </Tr>
                       </Thead>
+
                       <Tbody>
                         {ymirResultArray?.map((d, i) => (
                           <Tr key={i}>
@@ -290,19 +319,19 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                             <Td color="gray.600" fontSize="11px">
                               {d?.ordered?.toLocaleString(undefined, {
                                 minimumFractionDigits: 2,
-                                maximumFractionDigi: 2,
+                                maximumFractionDigits: 2,
                               })}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
                               {d?.delivered?.toLocaleString(undefined, {
                                 minimumFractionDigits: 2,
-                                maximumFractionDigi: 2,
+                                maximumFractionDigits: 2,
                               })}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
                               {d?.unitPrice?.toLocaleString(undefined, {
                                 minimumFractionDigits: 2,
-                                maximumFractionDigi: 2,
+                                maximumFractionDigits: 2,
                               })}
                             </Td>
                             <Td color="gray.600" fontSize="11px">

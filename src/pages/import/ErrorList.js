@@ -38,10 +38,11 @@ import PageScrollModalErrorList from "../../components/PageScrollModalErrorList"
 import PageScrollImportModal from "../../components/PageScrollImportModal";
 import PageScroll from "../../utils/PageScroll";
 import { decodeUser } from "../../services/decode-user";
+import axios from "axios";
 
 const currentUser = decodeUser();
 
-const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData, excelData }) => {
+const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData, ymirPO, getYmirPo }) => {
   const toast = useToast();
   const clearExcelFile = useRef();
 
@@ -192,7 +193,24 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
   const uom = uomCodeNotExistData;
   const materialInfo = materialInformationData;
 
-  // console.log("Available Import: ", available);
+  const ymirPO_Numbers = new Set(ymirPO?.flatMap((data) => data?.rr_orders?.map((subData) => subData?.po_transaction?.po_year_number_id?.toString().trim())));
+  const filteredItems = availableImportData?.filter((list) => ymirPO_Numbers.has(list.pO_Number));
+
+  const finalPayload = [
+    {
+      item_id: ymirPO?.flatMap((data) =>
+        data?.rr_orders
+          ?.filter((subData) => filteredItems.some((item) => item.pO_Number === subData?.po_transaction?.po_year_number_id?.toString().trim()))
+          ?.map((subData) => ({
+            id: subData?.id,
+          }))
+      ),
+    },
+  ];
+
+  console.log("ymirPO_Numbers:", ymirPO_Numbers);
+  console.log("filteredItems:", filteredItems);
+  console.log("Final Payload:", finalPayload);
 
   const submitAvailablePOHandler = () => {
     Swal.fire({
@@ -212,14 +230,29 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("Available Sync: ", available);
-
         if (available?.length > 0) {
           try {
             setIsLoading(true);
             const res = request
               .post("Import/AddNewPOSummary", available)
               .then((res) => {
+                // YMIR Status
+                try {
+                  axios.patch(
+                    `https://rdfymir.com/backend/public/api/etd_api/sync`,
+                    // `http://10.10.13.6:8080/api/etd_api/sync`,
+                    finalPayload,
+                    {
+                      headers: {
+                        Authorization: "Token " + process.env.REACT_APP_YMIR_PROD_TOKEN,
+                      },
+                    }
+                  );
+                } catch (error) {
+                  console.log(error);
+                }
+
+                getYmirPo();
                 onClose();
                 ToastComponent("Success!", "PO Imported", "success", toast);
                 setIsLoading(false);

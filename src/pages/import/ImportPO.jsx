@@ -21,11 +21,15 @@ const currentUser = decodeUser();
 const fetchYMIRApi = async (fromDate, toDate) => {
   const fromDateFormatted = moment(fromDate).format("yyyy-MM-DD");
   const toDateFormatted = moment(toDate).format("yyyy-MM-DD");
-  const res = await axios.get(`https://rdfymir.com/backend/public/api/etd_api?system_name=Elixir ETD&from=${fromDateFormatted}&to=${toDateFormatted}`, {
-    headers: {
-      Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
-    },
-  });
+  const res = await axios.get(
+    `https://rdfymir.com/backend/public/api/etd_api?system_name=Elixir ETD&from=${fromDateFormatted}&to=${toDateFormatted}`,
+    // `http://10.10.13.6:8080/api/etd_api?system_name=Elixir ETD&from=${fromDateFormatted}&to=${toDateFormatted}`,
+    {
+      headers: {
+        Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
+      },
+    }
+  );
 
   return res.data;
 };
@@ -57,7 +61,6 @@ const ImportPO = () => {
   // GET YMIR PO
   const getYmirPo = () => {
     fetchYMIRApi(fromDate, toDate).then((res) => {
-      // console.log("Response: ", res);
       setYmirPo(res);
       setFetchData(false);
     });
@@ -71,8 +74,6 @@ const ImportPO = () => {
       setYmirPo([]);
     };
   }, [fromDate, toDate]);
-
-  // console.log("YMIR PO: ", ymirPO);
 
   // EXCEL DATA TRIM TO LOWERCASE
   const fileRender = (jsonData) => {
@@ -251,7 +252,6 @@ const ImportPO = () => {
                 fontSize="12px"
                 size="xs"
                 isLoading={isLoading}
-                // isDisabled={true}
                 onClick={() => openSyncYMIRModal()}
               >
                 Sync from YMIR
@@ -455,6 +455,7 @@ const ImportPO = () => {
           setFromDate={setFromDate}
           toDate={toDate}
           setToDate={setToDate}
+          getYmirPo={getYmirPo}
         />
       )}
 
@@ -472,6 +473,8 @@ const ImportPO = () => {
           setExcelData={setExcelData}
           excelData={excelData}
           setIsDisabled={setIsDisabled}
+          ymirPO={ymirPO}
+          getYmirPo={getYmirPo}
         />
       )}
     </Flex>
