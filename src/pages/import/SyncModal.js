@@ -123,7 +123,6 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
               const res = request
                 .post("Import/AddNewPOSummary", ymirResultArray)
                 .then((res) => {
-                  getYmirPo();
                   // YMIR Status
                   try {
                     axios.patch(
