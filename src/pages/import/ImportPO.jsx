@@ -475,6 +475,7 @@ const ImportPO = () => {
           setIsDisabled={setIsDisabled}
           ymirPO={ymirPO}
           getYmirPo={getYmirPo}
+          onCloseSyncModal={onSyncClose}
         />
       )}
     </Flex>

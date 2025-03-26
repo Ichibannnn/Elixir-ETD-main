@@ -37,9 +37,9 @@ const user = decodeUser();
 
 // export default request;
 
-// KK BACKEND
+// LOCAL BACKEND
 const request = axios.create({
-  baseURL: "https://10.10.10.14:5001/api/",
+  baseURL: "https://10.10.10.7:5001/api/",
   headers: {
     "Content-Type": "application/json",
     Authorization: "Bearer " + user?.token,

@@ -143,6 +143,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                   ToastComponent("Success!", "Sync purchase orders successfully", "success", toast);
                   getYmirPo();
                   setFetchData(false);
+                  onClose();
                 })
                 .catch((err) => {
                   ToastComponent("Error!", "Sync error.", "error", toast);

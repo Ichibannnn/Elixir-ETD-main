@@ -42,7 +42,7 @@ import axios from "axios";
 
 const currentUser = decodeUser();
 
-const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData, ymirPO, getYmirPo }) => {
+const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData, ymirPO, getYmirPo, onCloseSyncModal }) => {
   const toast = useToast();
   const clearExcelFile = useRef();
 
@@ -253,13 +253,14 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                 }
 
                 getYmirPo();
-                onClose();
                 ToastComponent("Success!", "PO Imported", "success", toast);
                 setIsLoading(false);
                 setIsDisabled(false);
                 clearExcelFile.current.value = "";
                 setExcelData([]);
                 setErrorOpener(false);
+                onClose();
+                onCloseSyncModal();
               })
               .catch((err) => {
                 setIsLoading(false);
