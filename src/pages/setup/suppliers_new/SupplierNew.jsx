@@ -16,7 +16,7 @@ const fetchFistoApi = async () => {
 
 // FETCH API ELIXIR API:
 const fetchElixirApi = async (pageNumber, pageSize, search) => {
-  const response = await request.get(`Supplier/,/true?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
+  const response = await request.get(`Supplier/GetAllSupplierithPaginationOrig/true?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
   return response.data;
 };
