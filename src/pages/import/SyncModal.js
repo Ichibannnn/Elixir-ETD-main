@@ -125,16 +125,11 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                 .then((res) => {
                   // YMIR Status
                   try {
-                    axios.patch(
-                      `https://rdfymir.com/backend/public/api/etd_api/sync`,
-                      // `http://10.10.13.6:8080/api/etd_api/sync`,
-                      ymirSyncStatus,
-                      {
-                        headers: {
-                          Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
-                        },
-                      }
-                    );
+                    axios.patch(`https://rdfymir.com/backend/public/api/etd_api/sync`, ymirSyncStatus, {
+                      headers: {
+                        Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
+                      },
+                    });
                   } catch (error) {
                     console.log(error);
                   }

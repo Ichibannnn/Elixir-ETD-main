@@ -85,16 +85,7 @@ const CustomerNew = () => {
     };
   }, []);
 
-  return (
-    <ListOfCustomers
-      genusCustomers={genusCustomers}
-      fistoDepartments={fistoDepartments}
-      fistoLocations={fistoLocations}
-      fetchingData={isLoading}
-      elixirCustomers={elixirCustomers}
-      fetchElixirCustomers={fetchElixirCustomers}
-    />
-  );
+  return <ListOfCustomers genusCustomers={genusCustomers} fetchingData={isLoading} elixirCustomers={elixirCustomers} fetchElixirCustomers={fetchElixirCustomers} />;
 };
 
 export default CustomerNew;

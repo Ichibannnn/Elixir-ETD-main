@@ -119,7 +119,6 @@ export const ListOfCustomers = ({ genusCustomers, fetchingData, elixirCustomers,
     })
     ?.filter((value, index, self) => index === self.findIndex((a) => a.customer_No === value.customer_No && a.customerCode === value.customerCode));
 
-  // console.log("Payload: ", genusArrayResult);
   console.log("Genus Data: ", genusCustomers);
 
   const syncHandler = () => {
