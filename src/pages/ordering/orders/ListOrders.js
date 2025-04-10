@@ -129,7 +129,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
           accountCode: submit?.accountCode,
           accountTitles: submit?.accountTitles,
           assetTag: submit?.assetTag,
-          helpdeskNo: Number(submit?.helpdeskNo),
+          helpdeskNo: submit?.helpdeskNo ? Number(submit?.helpdeskNo) : null,
           dateApproved: moment(submit?.dateApproved).format("yyyy-MM-DD"),
         };
       });
@@ -197,7 +197,15 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
             <Badge fontSize="xs" colorScheme="blue" variant="solid">
               From:
             </Badge>
-            <Input onChange={(date) => setFromDate(date.target.value)} defaultValue={fromDate} min={minDate} type="date" fontSize="11px" fontWeight="semibold" />
+            <Input
+              onChange={(date) => setFromDate(date.target.value)}
+              defaultValue={fromDate}
+              min={minDate}
+              type="date"
+              fontSize="11px"
+              fontWeight="semibold"
+              onKeyDown={(e) => e.preventDefault()}
+            />
             <Badge fontSize="xs" colorScheme="blue" variant="solid">
               To:
             </Badge>
@@ -208,6 +216,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
               type="date"
               fontSize="11px"
               fontWeight="semibold"
+              onKeyDown={(e) => e.preventDefault()}
             />
           </HStack>
         </Flex>

@@ -666,6 +666,7 @@ export const ScheduleModal = ({ isOpen, onClose, fetchMirList, selectedMIRIds, s
                 onChange={(date) => dateProvider(date.target.value)}
                 min={moment(new Date()).format("yyyy-MM-DD")}
                 max={maxDate.format("yyyy-MM-DD")}
+                onKeyDown={(e) => e.preventDefault()}
               />
             </HStack>
           </VStack>

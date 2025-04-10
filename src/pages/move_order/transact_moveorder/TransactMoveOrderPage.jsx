@@ -110,6 +110,7 @@ const TransactMoveOrderPage = ({ fetchNotification }) => {
                 title={checkedItems <= 0 ? "Please select items to transact first" : ""}
                 type="date"
                 bgColor="#fff8dc"
+                onKeyDown={(e) => e.preventDefault()}
               />
             </HStack>
           )}
