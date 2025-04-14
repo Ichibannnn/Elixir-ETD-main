@@ -53,54 +53,13 @@ export const MrpTable = ({
   currentPage,
   setCurrentPage,
   setPageSize,
-  search,
-  setSearch,
+  searchValue,
+  setSearchValue,
   sheetData,
 }) => {
   const [buttonChanger, setButtonChanger] = useState(false);
 
   const { isOpen: isInformation, onOpen: openInformation, onClose: closeInformation } = useDisclosure();
-
-  // OLD EXPORT HANDLER
-  // const handleExport = () => {
-  //   var workbook = XLSX.utils.book_new(),
-  //     worksheet = XLSX.utils.json_to_sheet(sheetData);
-
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
-  //   XLSX.writeFile(workbook, "Elixir_MRP_ExportFile.xlsx");
-  // };
-
-  // const handleExport = async () => {
-  //   const workbook = new ExcelJS.Workbook();
-  //   const worksheet = workbook.addWorksheet("Sheet1");
-
-  //   // Define the columns
-  //   worksheet.columns = Object.keys(sheetData[0]).map((key) => ({ header: key, key }));
-
-  //   console.log("sheetData: ", sheetData);
-
-  //   // Add the rows
-  //   sheetData.forEach((item) => {
-  //     const row = worksheet.addRow(item);
-
-  //     // Check if the condition is met and apply the style
-  //     if (item["Buffer Level"] >= item.Reserve) {
-  //       row.eachCell((cell) => {
-  //         cell.fill = {
-  //           type: "pattern",
-  //           pattern: "solid",
-  //           fgColor: { argb: "CBD5E0" },
-  //         };
-  //       });
-  //     }
-  //   });
-
-  //   // Generate and download the Excel file
-  //   const buffer = await workbook.xlsx.writeBuffer();
-  //   const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-  //   saveAs(blob, "asdasd.xlsx");
-  // };
 
   const handleExport = async () => {
     const workbook = new ExcelJS.Workbook();
@@ -144,9 +103,8 @@ export const MrpTable = ({
       cell.fill = {
         type: "pattern",
         pattern: "solid",
-        fgColor: { argb: "90CDF4" }, // Light pink background color for all headers
+        fgColor: { argb: "90CDF4" },
       };
-      // cell.font = { bold: true };
       cell.alignment = { vertical: "middle", horizontal: "center" };
     });
 
@@ -194,19 +152,6 @@ export const MrpTable = ({
       }
     });
 
-    // Freeze the header row
-    // worksheet.views = [
-    //   {
-    //     state: "frozen",
-    //     xSplit: 0,
-    //     ySplit: 1, // Freeze the first row
-    //     topLeftCell: { col: 1, row: 1 },
-    //     activeCell: { col: 1, row: 1 },
-    //   },
-    // ];
-
-    // Generate and download the Excel file
-
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     saveAs(blob, "Elixir_MRP_ExportFile.xlsx");
@@ -223,15 +168,15 @@ export const MrpTable = ({
   };
 
   // SEARCH
-  const searchHandler = (inputValue) => {
-    setSearch(inputValue);
-  };
+  // const searchHandler = (inputValue) => {
+  //   setSearch(inputValue);
+  // };
 
   useEffect(() => {
-    if (search) {
+    if (searchValue) {
       setCurrentPage(1);
     }
-  }, [search]);
+  }, [searchValue]);
 
   const selectorHandler = (id, { itemCode, itemDescription, soh, bufferLevel, averageIssuance, daysLevel }) => {
     if (id) {
@@ -268,7 +213,15 @@ export const MrpTable = ({
       <Flex justifyContent="space-between" mb={1}>
         <InputGroup w="30%">
           <InputLeftElement pointerEvents="none" children={<FaSearch color="gray.300" />} fontSize="xs" />
-          <Input onChange={(e) => searchHandler(e.target.value)} type="text" fontSize="xs" placeholder="Search" focusBorderColor="btnColor" borderColor="gray.300" />
+          <Input
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            type="text"
+            fontSize="xs"
+            placeholder="Search"
+            focusBorderColor="btnColor"
+            borderColor="gray.300"
+          />
           <Button
             onClick={printMRPHandler}
             ml={3}
@@ -285,7 +238,6 @@ export const MrpTable = ({
           <Button
             onClick={handleExport}
             isLoading={loadingExport}
-            // isLoading={fetchingData}
             leftIcon={<BiExport fontSize="20px" />}
             disabled={!sheetData}
             ml={2}

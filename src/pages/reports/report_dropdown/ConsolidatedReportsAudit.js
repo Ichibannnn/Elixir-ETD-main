@@ -159,56 +159,56 @@ export const ConsolidatedReportsAudit = ({ dateFrom, dateTo, setSheetData, searc
               <Tbody>
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="xs">{item.id}</Td>
-                    <Td fontSize="xs">{item.transactionDate ? moment(item.transactionDate).format("YYYY-MM-DD") : "-"}</Td>
-                    <Td fontSize="xs">{item.itemCode}</Td>
-                    <Td fontSize="xs">{item.itemDescription}</Td>
+                    <Td fontSize="xs">{item?.id}</Td>
+                    <Td fontSize="xs">{item?.transactionDate ? moment(item?.transactionDate).format("YYYY-MM-DD") : "-"}</Td>
+                    <Td fontSize="xs">{item?.itemCode}</Td>
+                    <Td fontSize="xs">{item?.itemDescription}</Td>
                     {buttonChanger ? (
                       <>
-                        <Td fontSize="xs">{item.uom}</Td>
-                        <Td fontSize="xs">{item.category}</Td>
+                        <Td fontSize="xs">{item?.uom}</Td>
+                        <Td fontSize="xs">{item?.category}</Td>
                         <Td fontSize="xs">
-                          {item.quantity.toLocaleString(undefined, {
+                          {item?.quantity.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {item.unitCost.toLocaleString(undefined, {
+                          {item?.unitCost.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {item.lineAmount.toLocaleString(undefined, {
+                          {item?.lineAmount.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
-                        <Td fontSize="xs">{item.source}</Td>
-                        <Td fontSize="xs">{item.transactionType ? item.transactionType : "-"}</Td>
-                        <Td fontSize="xs">{item.status ? item.status : "-"}</Td>
-                        <Td fontSize="xs">{item.reason ? item.reason : "-"}</Td>
-                        <Td fontSize="xs">{item.reference ? item.reference : "-"}</Td>
-                        <Td fontSize="xs">{item.encodedBy}</Td>
+                        <Td fontSize="xs">{item?.source}</Td>
+                        <Td fontSize="xs">{item?.transactionType ? item?.transactionType : "-"}</Td>
+                        <Td fontSize="xs">{item?.status ? item?.status : "-"}</Td>
+                        <Td fontSize="xs">{item?.reason ? item?.reason : "-"}</Td>
+                        <Td fontSize="xs">{item?.reference ? item?.reference : "-"}</Td>
+                        <Td fontSize="xs">{item?.encodedBy}</Td>
                       </>
                     ) : (
                       <>
-                        <Td fontSize="xs">{item.companyCode}</Td>
-                        <Td fontSize="xs">{item.companyName}</Td>
-                        <Td fontSize="xs">{item.departmentCode}</Td>
-                        <Td fontSize="xs">{item.departmentName}</Td>
-                        <Td fontSize="xs">{item.locationCode}</Td>
-                        <Td fontSize="xs">{item.locationName}</Td>
-                        <Td fontSize="xs">{item.accountTitleCode ? item.accountTitleCode : "-"}</Td>
-                        <Td fontSize="xs">{item.accountTitle ? item.accountTitle : "-"}</Td>
-                        <Td fontSize="xs">{item.empId ? item.empId : "-"}</Td>
-                        <Td fontSize="xs">{item.fullname ? item.fullname : "-"}</Td>
-                        <Td fontSize="xs">{item.assetTag ? item.assetTag : "-"}</Td>
-                        <Td fontSize="xs">{item.cipNo ? item.cipNo : "-"}</Td>
-                        <Td fontSize="xs">{item.helpdesk ? item.helpdesk : "-"}</Td>
-                        <Td fontSize="xs">{item.remarks ? item.remarks : "-"}</Td>
-                        <Td fontSize="xs">{item.rush ? item.rush : "-"}</Td>
+                        <Td fontSize="xs">{item?.companyCode}</Td>
+                        <Td fontSize="xs">{item?.companyName}</Td>
+                        <Td fontSize="xs">{item?.departmentCode}</Td>
+                        <Td fontSize="xs">{item?.departmentName}</Td>
+                        <Td fontSize="xs">{item?.locationCode}</Td>
+                        <Td fontSize="xs">{item?.locationName}</Td>
+                        <Td fontSize="xs">{item?.accountTitleCode ? item?.accountTitleCode : "-"}</Td>
+                        <Td fontSize="xs">{item?.accountTitle ? item?.accountTitle : "-"}</Td>
+                        <Td fontSize="xs">{item?.empId ? item?.empId : "-"}</Td>
+                        <Td fontSize="xs">{item?.fullname ? item?.fullname : "-"}</Td>
+                        <Td fontSize="xs">{item?.assetTag ? item?.assetTag : "-"}</Td>
+                        <Td fontSize="xs">{item?.cipNo ? item?.cipNo : "-"}</Td>
+                        <Td fontSize="xs">{item?.helpdesk ? item?.helpdesk : "-"}</Td>
+                        <Td fontSize="xs">{item?.remarks ? item?.remarks : "-"}</Td>
+                        <Td fontSize="xs">{item?.rush ? item?.rush : "-"}</Td>
                       </>
                     )}
                   </Tr>

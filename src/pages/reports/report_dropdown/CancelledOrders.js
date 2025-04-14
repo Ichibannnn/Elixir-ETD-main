@@ -130,31 +130,31 @@ export const CancelledOrders = ({ dateFrom, dateTo, setSheetData, search }) => {
               <Tbody>
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="xs">{item.mirId}</Td>
-                    <Td fontSize="xs">{item.orderId}</Td>
-                    <Td fontSize="xs">{item.dateOrdered}</Td>
-                    <Td fontSize="xs">{item.dateNeeded}</Td>
-                    <Td fontSize="xs">{item.customerCode}</Td>
-                    <Td fontSize="xs">{item.customerName}</Td>
+                    <Td fontSize="xs">{item?.mirId}</Td>
+                    <Td fontSize="xs">{item?.orderId}</Td>
+                    <Td fontSize="xs">{item?.dateOrdered}</Td>
+                    <Td fontSize="xs">{item?.dateNeeded}</Td>
+                    <Td fontSize="xs">{item?.customerCode}</Td>
+                    <Td fontSize="xs">{item?.customerName}</Td>
                     <Td fontSize="xs">
-                      {item.departmentCode} - {item.department}
+                      {item?.departmentCode} - {item?.department}
                     </Td>
                     <Td fontSize="xs">
-                      {item.locationCode} - {item.locationName}
+                      {item?.locationCode} - {item?.locationName}
                     </Td>
-                    <Td fontSize="xs">{item.itemCode}</Td>
-                    <Td fontSize="xs">{item.itemDescription}</Td>
+                    <Td fontSize="xs">{item?.itemCode}</Td>
+                    <Td fontSize="xs">{item?.itemDescription}</Td>
                     <Td fontSize="xs">
-                      {item.quantityOrdered.toLocaleString(undefined, {
+                      {item?.quantityOrdered.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       })}
                     </Td>
-                    {item.itemRemarks ? <Td fontSize="xs">{item.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
-                    <Td fontSize="xs">{item.reason}</Td>
-                    {item.cancelledDate ? <Td fontSize="xs">{moment(item.cancelledDate).format("yyyy-MM-DD")}</Td> : <Td fontSize="xs">-</Td>}
+                    {item?.itemRemarks ? <Td fontSize="xs">{item?.itemRemarks}</Td> : <Td fontSize="xs">-</Td>}
+                    <Td fontSize="xs">{item?.reason}</Td>
+                    {item?.cancelledDate ? <Td fontSize="xs">{moment(item?.cancelledDate).format("yyyy-MM-DD")}</Td> : <Td fontSize="xs">-</Td>}
 
-                    {item.cancelledBy ? <Td fontSize="xs">{item.cancelledBy}</Td> : <Td fontSize="xs">-</Td>}
+                    {item?.cancelledBy ? <Td fontSize="xs">{item?.cancelledBy}</Td> : <Td fontSize="xs">-</Td>}
                   </Tr>
                 ))}
               </Tbody>

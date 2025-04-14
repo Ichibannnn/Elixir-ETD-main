@@ -180,7 +180,7 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
               <Tbody>
                 {returnedData?.inventory?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="xs">{item.borrowedId}</Td>
+                    <Td fontSize="xs">{item?.borrowedId}</Td>
 
                     {/* Customer Information */}
                     <Td>
@@ -188,12 +188,12 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                         <Flex flexDirection="column" justifyContent="left">
                           <HStack fontSize="sm" spacing="5px">
                             <Text color="gray.700" fontWeight="bold">
-                              {item.customerName}
+                              {item?.customerName}
                             </Text>
                           </HStack>
 
                           <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700">{item.customerCode}</Text>
+                            <Text color="gray.700">{item?.customerCode}</Text>
                           </HStack>
                         </Flex>
                       </Flex>
@@ -207,12 +207,12 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                             <Flex flexDirection="column" justifyContent="left">
                               <HStack fontSize="sm" spacing="5px">
                                 <Text color="gray.700" fontWeight="bold">
-                                  {item.itemDescription}
+                                  {item?.itemDescription}
                                 </Text>
                               </HStack>
 
                               <HStack fontSize="xs" spacing="5px">
-                                <Text color="gray.700">{item.itemCode}</Text>
+                                <Text color="gray.700">{item?.itemCode}</Text>
                               </HStack>
                             </Flex>
                           </Flex>
@@ -222,7 +222,7 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.uom}
+                                {item?.uom}
                               </Text>
                             </HStack>
                           </Flex>
@@ -232,7 +232,7 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.borrowedQuantity.toLocaleString(undefined, {
+                                {item?.borrowedQuantity.toLocaleString(undefined, {
                                   maximumFractionDigits: 2,
                                   minimumFractionDigits: 2,
                                 })}
@@ -244,7 +244,7 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                         <Td>
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
-                              <Text color="gray.700">{item.borrowedDate !== null ? moment(item.borrowedDate).format("MM/DD/yyyy") : "Pending Borrowed"}</Text>
+                              <Text color="gray.700">{item?.borrowedDate !== null ? moment(item?.borrowedDate).format("MM/DD/yyyy") : "Pending Borrowed"}</Text>
                             </HStack>
                           </Flex>
                         </Td>
@@ -253,7 +253,7 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.consumed.toLocaleString(undefined, {
+                                {item?.consumed.toLocaleString(undefined, {
                                   maximumFractionDigits: 2,
                                   minimumFractionDigits: 2,
                                 })}
@@ -266,7 +266,7 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.returnedQuantity.toLocaleString(undefined, {
+                                {item?.returnedQuantity.toLocaleString(undefined, {
                                   maximumFractionDigits: 2,
                                   minimumFractionDigits: 2,
                                 })}
@@ -279,11 +279,11 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700">
-                                {item.isApproveReturnDate !== null
-                                  ? moment(item.isApproveReturnDate).format("MM/DD/yyyy")
-                                  : item.isApproveReturnDate === null && item.isActive === true
+                                {item?.isApproveReturnDate !== null
+                                  ? moment(item?.isApproveReturnDate).format("MM/DD/yyyy")
+                                  : item?.isApproveReturnDate === null && item?.isActive === true
                                   ? "Pending Return"
-                                  : item.isActive === false && item.isApproveReturnDate === null
+                                  : item?.isActive === false && item?.isApproveReturnDate === null
                                   ? "Rejected"
                                   : ""}
                               </Text>
@@ -295,7 +295,7 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.agingDays} Day(s)
+                                {item?.agingDays} Day(s)
                               </Text>
                             </HStack>
                           </Flex>
@@ -305,7 +305,7 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.unitCost?.toLocaleString(undefined, {
+                                {item?.unitCost?.toLocaleString(undefined, {
                                   maximumFractionDigits: 2,
                                   minimumFractionDigits: 2,
                                 })}
@@ -318,7 +318,7 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.lineAmount.toLocaleString(undefined, {
+                                {item?.lineAmount.toLocaleString(undefined, {
                                   maximumFractionDigits: 2,
                                   minimumFractionDigits: 2,
                                 })}
@@ -329,41 +329,41 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                       </>
                     ) : (
                       <>
-                        {item.companyCode && item.companyName ? (
+                        {item?.companyCode && item?.companyName ? (
                           <Td fontSize="xs">
-                            {item.companyCode} - {item.companyName}
+                            {item?.companyCode} - {item?.companyName}
                           </Td>
                         ) : (
                           <Td fontSize="xs">-</Td>
                         )}
 
-                        {item.departmentCode && item.departmentName ? (
+                        {item?.departmentCode && item?.departmentName ? (
                           <Td fontSize="xs">
-                            {item.departmentCode} - {item.departmentName}
+                            {item?.departmentCode} - {item?.departmentName}
                           </Td>
                         ) : (
                           <Td fontSize="xs">-</Td>
                         )}
 
-                        {item.locationCode && item.locationName ? (
+                        {item?.locationCode && item?.locationName ? (
                           <Td fontSize="xs">
-                            {item.locationCode} - {item.locationName}
+                            {item?.locationCode} - {item?.locationName}
                           </Td>
                         ) : (
                           <Td fontSize="xs">-</Td>
                         )}
 
-                        {item.accountCode && item.accountTitles ? (
+                        {item?.accountCode && item?.accountTitles ? (
                           <Td fontSize="xs">
-                            {item.accountCode} - {item.accountTitles}
+                            {item?.accountCode} - {item?.accountTitles}
                           </Td>
                         ) : (
                           <Td fontSize="xs">-</Td>
                         )}
 
-                        <Td fontSize="xs">{item.status}</Td>
+                        <Td fontSize="xs">{item?.status}</Td>
 
-                        <Td fontSize="xs">{item.transactedBy}</Td>
+                        <Td fontSize="xs">{item?.transactedBy}</Td>
                         {/* <Td fontSize="xs">{item.isApproveBy}</Td> */}
                       </>
                     )}

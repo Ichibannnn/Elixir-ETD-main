@@ -163,24 +163,24 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
               <Tbody>
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="xs">{item.id}</Td>
+                    <Td fontSize="xs">{item?.id}</Td>
 
                     {/* Item Information */}
                     <Td>
                       <Flex flexDirection="column" gap="10px">
                         <Flex flexDirection="column" justifyContent="left">
                           <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700">{item.item_Code} - </Text>
+                            <Text color="gray.700">{item?.item_Code} - </Text>
                           </HStack>
 
                           <HStack fontSize="sm" spacing="5px">
                             <Text color="gray.700" fontWeight="bold">
-                              {item.item_Description}
+                              {item?.item_Description}
                             </Text>
                           </HStack>
 
                           <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700">{item.uom}</Text>
+                            <Text color="gray.700">{item?.uom}</Text>
                           </HStack>
                         </Flex>
                       </Flex>
@@ -191,7 +191,7 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                         <Flex flexDirection="column" justifyContent="left">
                           <HStack fontSize="sm" spacing="5px">
                             <Text color="gray.700" fontWeight="bold">
-                              {item.source}
+                              {item?.source}
                             </Text>
                           </HStack>
                         </Flex>
@@ -201,41 +201,41 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                     {buttonChanger ? (
                       <>
                         <Td fontSize="xs">
-                          {item.liters.toLocaleString(undefined, {
+                          {item?.liters.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
-                        <Td fontSize="xs">{item.asset ? item.asset : "-"}</Td>
+                        <Td fontSize="xs">{item?.asset ? item?.asset : "-"}</Td>
                         <Td fontSize="xs">
-                          {item.unit_Cost.toLocaleString(undefined, {
+                          {item?.unit_Cost.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
-                        <Td fontSize="xs">{item.requestorName ? item.requestorName : "-"}</Td>
-                        <Td fontSize="xs">{item.remarks ? item.remarks : "-"}</Td>
+                        <Td fontSize="xs">{item?.requestorName ? item?.requestorName : "-"}</Td>
+                        <Td fontSize="xs">{item?.remarks ? item?.remarks : "-"}</Td>
                         <Td fontSize="xs">
-                          {item.odometer
-                            ? item.odometer.toLocaleString(undefined, {
+                          {item?.odometer
+                            ? item?.odometer.toLocaleString(undefined, {
                                 maximumFractionDigits: 2,
                               })
                             : "-"}
                         </Td>
-                        <Td fontSize="xs">{item.created_At ? moment(item.created_At).format("MM/DD/YYYY") : "-"}</Td>
+                        <Td fontSize="xs">{item?.created_At ? moment(item?.created_At).format("MM/DD/YYYY") : "-"}</Td>
                       </>
                     ) : (
                       <>
-                        <Td fontSize="xs">{item.company_Code}</Td>
-                        <Td fontSize="xs">{item.company_Name}</Td>
-                        <Td fontSize="xs">{item.department_Code}</Td>
-                        <Td fontSize="xs">{item.department_Name}</Td>
-                        <Td fontSize="xs">{item.location_Code}</Td>
-                        <Td fontSize="xs">{item.location_Name}</Td>
-                        <Td fontSize="xs">{item.account_Title_Code ? item.account_Title_Code : "-"}</Td>
-                        <Td fontSize="xs">{item.account_Title_Name ? item.account_Title_Name : "-"}</Td>
-                        <Td fontSize="xs">{item.empId ? item.empId : "-"}</Td>
-                        <Td fontSize="xs">{item.fullname ? item.fullname : "-"}</Td>
+                        <Td fontSize="xs">{item?.company_Code}</Td>
+                        <Td fontSize="xs">{item?.company_Name}</Td>
+                        <Td fontSize="xs">{item?.department_Code}</Td>
+                        <Td fontSize="xs">{item?.department_Name}</Td>
+                        <Td fontSize="xs">{item?.location_Code}</Td>
+                        <Td fontSize="xs">{item?.location_Name}</Td>
+                        <Td fontSize="xs">{item?.account_Title_Code ? item?.account_Title_Code : "-"}</Td>
+                        <Td fontSize="xs">{item?.account_Title_Name ? item?.account_Title_Name : "-"}</Td>
+                        <Td fontSize="xs">{item?.empId ? item?.empId : "-"}</Td>
+                        <Td fontSize="xs">{item?.fullname ? item?.fullname : "-"}</Td>
                       </>
                     )}
                   </Tr>

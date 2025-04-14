@@ -163,41 +163,41 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
               <Tbody>
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="xs">{item.receiptId}</Td>
-                    <Td fontSize="xs">{item.receivingDate}</Td>
-                    <Td fontSize="xs">{item.supplierCode}</Td>
-                    <Td fontSize="xs">{item.supplierName}</Td>
+                    <Td fontSize="xs">{item?.receiptId}</Td>
+                    <Td fontSize="xs">{item?.receivingDate}</Td>
+                    <Td fontSize="xs">{item?.supplierCode}</Td>
+                    <Td fontSize="xs">{item?.supplierName}</Td>
                     {buttonChanger ? (
                       <>
-                        <Td fontSize="xs">{item.details}</Td>
-                        <Td fontSize="xs">{item.itemCode}</Td>
-                        <Td fontSize="xs">{item.itemDescription}</Td>
-                        <Td fontSize="xs">{item.uom}</Td>
+                        <Td fontSize="xs">{item?.details}</Td>
+                        <Td fontSize="xs">{item?.itemCode}</Td>
+                        <Td fontSize="xs">{item?.itemDescription}</Td>
+                        <Td fontSize="xs">{item?.uom}</Td>
                         <Td fontSize="xs">
-                          {item.quantity.toLocaleString(undefined, {
+                          {item?.quantity.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {item.unitCost.toLocaleString(undefined, {
+                          {item?.unitCost.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                           })}
                         </Td>
-                        <Td fontSize="xs">{item.transactBy}</Td>
-                        <Td fontSize="xs">{moment(item.transactDate).format("yyyy-MM-DD")}</Td>
+                        <Td fontSize="xs">{item?.transactBy}</Td>
+                        <Td fontSize="xs">{moment(item?.transactDate).format("yyyy-MM-DD")}</Td>
                       </>
                     ) : (
                       <>
-                        <Td fontSize="xs">{item.companyCode}</Td>
-                        <Td fontSize="xs">{item.companyName}</Td>
-                        <Td fontSize="xs">{item.departmentCode}</Td>
-                        <Td fontSize="xs">{item.departmentName}</Td>
-                        <Td fontSize="xs">{item.locationCode}</Td>
-                        <Td fontSize="xs">{item.locationName}</Td>
-                        <Td fontSize="xs">{item.accountTitles}</Td>
-                        <Td fontSize="xs">{item.accountTitles}</Td>
+                        <Td fontSize="xs">{item?.companyCode}</Td>
+                        <Td fontSize="xs">{item?.companyName}</Td>
+                        <Td fontSize="xs">{item?.departmentCode}</Td>
+                        <Td fontSize="xs">{item?.departmentName}</Td>
+                        <Td fontSize="xs">{item?.locationCode}</Td>
+                        <Td fontSize="xs">{item?.locationName}</Td>
+                        <Td fontSize="xs">{item?.accountTitles}</Td>
+                        <Td fontSize="xs">{item?.accountTitles}</Td>
                       </>
                     )}
                   </Tr>

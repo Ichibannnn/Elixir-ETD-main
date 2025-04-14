@@ -130,7 +130,7 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
               <Tbody>
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="xs">{item.borrowedId}</Td>
+                    <Td fontSize="xs">{item?.borrowedId}</Td>
 
                     {/* Customer Information */}
                     <Td>
@@ -138,12 +138,12 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                         <Flex flexDirection="column" justifyContent="left">
                           <HStack fontSize="sm" spacing="5px">
                             <Text color="gray.700" fontWeight="bold">
-                              {item.customerName}
+                              {item?.customerName}
                             </Text>
                           </HStack>
 
                           <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700">{item.customerCode}</Text>
+                            <Text color="gray.700">{item?.customerCode}</Text>
                           </HStack>
                         </Flex>
                       </Flex>
@@ -156,12 +156,12 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                             <Flex flexDirection="column" justifyContent="left">
                               <HStack fontSize="sm" spacing="5px">
                                 <Text color="gray.700" fontWeight="bold">
-                                  {item.itemDescription}
+                                  {item?.itemDescription}
                                 </Text>
                               </HStack>
 
                               <HStack fontSize="xs" spacing="5px">
-                                <Text color="gray.700">{item.itemCode}</Text>
+                                <Text color="gray.700">{item?.itemCode}</Text>
                               </HStack>
                             </Flex>
                           </Flex>
@@ -171,7 +171,7 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.uom}
+                                {item?.uom}
                               </Text>
                             </HStack>
                           </Flex>
@@ -181,7 +181,7 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.details}
+                                {item?.details}
                               </Text>
                             </HStack>
                           </Flex>
@@ -191,7 +191,7 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.agingDays.toLocaleString(undefined, {
+                                {item?.agingDays.toLocaleString(undefined, {
                                   maximumFractionDigits: 2,
                                   minimumFractionDigits: 2,
                                 })}
@@ -204,7 +204,7 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
                               <Text color="gray.700" fontWeight="semibold">
-                                {item.borrowedQuantity.toLocaleString(undefined, {
+                                {item?.borrowedQuantity.toLocaleString(undefined, {
                                   maximumFractionDigits: 2,
                                   minimumFractionDigits: 2,
                                 })}
@@ -216,7 +216,7 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                         <Td>
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
-                              <Text color="gray.700">{item.borrowedDate !== null ? moment(item.borrowedDate).format("MM/DD/yyyy") : "Pending Borrowed"}</Text>
+                              <Text color="gray.700">{item?.borrowedDate !== null ? moment(item?.borrowedDate).format("MM/DD/yyyy") : "Pending Borrowed"}</Text>
                             </HStack>
                           </Flex>
                         </Td>
@@ -228,12 +228,12 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                             <Flex flexDirection="column" justifyContent="left">
                               <HStack fontSize="sm" spacing="5px">
                                 <Text color="gray.700" fontWeight="bold">
-                                  {item.fullName}
+                                  {item?.fullName}
                                 </Text>
                               </HStack>
 
                               <HStack fontSize="xs" spacing="5px">
-                                <Text color="gray.700">{item.empId}</Text>
+                                <Text color="gray.700">{item?.empId}</Text>
                               </HStack>
                             </Flex>
                           </Flex>
@@ -242,7 +242,7 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                         <Td>
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
-                              <Text color="gray.700">{item.status}</Text>
+                              <Text color="gray.700">{item?.status}</Text>
                             </HStack>
                           </Flex>
                         </Td>
@@ -250,7 +250,7 @@ export const BorrowedMatsHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                         <Td>
                           <Flex flexDirection="column" gap="10px">
                             <HStack fontSize="xs" spacing="5px">
-                              <Text color="gray.700">{item.transactedBy}</Text>
+                              <Text color="gray.700">{item?.transactedBy}</Text>
                             </HStack>
                           </Flex>
                         </Td>

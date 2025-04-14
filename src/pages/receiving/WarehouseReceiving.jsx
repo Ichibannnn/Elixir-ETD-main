@@ -52,11 +52,12 @@ import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPr
 import { WarehouseContext } from "../../components/context/WarehouseContext";
 import { EditModal } from "./warehouse_receiving/EditModal";
 import CancelModal from "./warehouse_receiving/CancelModal";
+import useDebounce from "../../hooks/useDebounce";
 
 const WarehouseReceiving = () => {
   const [pO, setPO] = useState([]);
   const [poId, setPoId] = useState(null);
-  const [search, setSearch] = useState("");
+
   const [viewData, setViewData] = useState([]);
   const [editData, setEditData] = useState([]);
   const [actualGood, setActualGood] = useState(0);
@@ -69,6 +70,9 @@ const WarehouseReceiving = () => {
   const [receivingId, setReceivingId] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const [searchValue, setSearchValue] = useState("");
+  const search = useDebounce(searchValue, 700);
 
   const { isOpen: isViewModalOpen, onOpen: openViewModal, onClose: closeViewModal } = useDisclosure();
   const { isOpen: isEditModalOpen, onOpen: openEditModal, onClose: closeEditModal } = useDisclosure();
@@ -116,12 +120,12 @@ const WarehouseReceiving = () => {
 
   //SHOW MAIN MENU DATA----
   const getAvailablePOHandler = () => {
+    setIsLoading(true);
     fetchAvailablePOApi(currentPage, pageSize, search).then((res) => {
-      setIsLoading(false);
       setPO(res);
+      setIsLoading(false);
       setPageTotal(res.totalCount);
     });
-    setIsLoading(true);
   };
 
   useEffect(() => {
@@ -131,12 +135,6 @@ const WarehouseReceiving = () => {
       setPO([]);
     };
   }, [currentPage, pageSize, search]);
-
-  // SEARCH
-  const searchHandler = (inputValue) => {
-    setSearch(inputValue);
-    // console.log(inputValue);
-  };
 
   const viewModalHandler = (poNumber, poDate, prNumber, prDate, supplier) => {
     setViewData({ poNumber, poDate, prNumber, prDate, supplier });
@@ -192,6 +190,8 @@ const WarehouseReceiving = () => {
                 <InputLeftElement pointerEvents="none" children={<FiSearch color="blackAlpha" />} fontSize="sm" />
                 <Input
                   color="blackAlpha"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
                   type="text"
                   fontSize="sm"
                   placeholder="Search..."
@@ -199,7 +199,6 @@ const WarehouseReceiving = () => {
                   bg="whiteAlpha"
                   borderColor="gray.300"
                   borderRadius="xl"
-                  onChange={(e) => searchHandler(e.target.value)}
                 />
               </InputGroup>
             </HStack>

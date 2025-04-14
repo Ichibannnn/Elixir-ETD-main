@@ -146,19 +146,19 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, setSheetData, search }
               <Tbody>
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="xs">{item.mirId}</Td>
+                    <Td fontSize="xs">{item?.mirId}</Td>
 
                     {/* Customer Information */}
                     <Td>
                       <Flex flexDirection="column" gap="10px">
                         <Flex flexDirection="column" justifyContent="left">
                           <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700">{item.customerCode} - </Text>
+                            <Text color="gray.700">{item?.customerCode} - </Text>
                           </HStack>
 
                           <HStack fontSize="sm" spacing="5px">
                             <Text color="gray.700" fontWeight="bold">
-                              {item.customerName}
+                              {item?.customerName}
                             </Text>
                           </HStack>
                         </Flex>
@@ -170,17 +170,17 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, setSheetData, search }
                       <Flex flexDirection="column" gap="10px">
                         <Flex flexDirection="column" justifyContent="left">
                           <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700">{item.itemCode} - </Text>
+                            <Text color="gray.700">{item?.itemCode} - </Text>
                           </HStack>
 
                           <HStack fontSize="sm" spacing="5px">
                             <Text color="gray.700" fontWeight="bold">
-                              {item.itemDescription}
+                              {item?.itemDescription}
                             </Text>
                           </HStack>
 
                           <HStack fontSize="xs" spacing="5px">
-                            <Text color="gray.700">{item.uom}</Text>
+                            <Text color="gray.700">{item?.uom}</Text>
                           </HStack>
                         </Flex>
                       </Flex>
@@ -189,45 +189,45 @@ export const ServedUnservedReports = ({ dateFrom, dateTo, setSheetData, search }
                     {buttonChanger ? (
                       <>
                         <Td fontSize="xs">
-                          {item.orderedQuantity.toLocaleString(undefined, {
+                          {item?.orderedQuantity.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {item.servedOrder.toLocaleString(undefined, {
+                          {item?.servedOrder.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {item.unservedOrder.toLocaleString(undefined, {
+                          {item?.unservedOrder.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
-                        <Td fontSize="xs">{item.remarks ? item.remarks : "-"}</Td>
-                        <Td fontSize="xs">{`${(item.servedPercentage * 100).toFixed(0)}`}%</Td>
-                        <Td fontSize="xs">{item.approvedDate ? moment(item.approvedDate).format("MM/DD/YYYY") : "-"}</Td>
-                        <Td fontSize="xs">{item.deliveryDate ? moment(item.deliveryDate).format("MM/DD/YYYY") : "-"}</Td>
-                        <Td fontSize="xs">{item.status}</Td>
+                        <Td fontSize="xs">{item?.remarks ? item?.remarks : "-"}</Td>
+                        <Td fontSize="xs">{`${(item?.servedPercentage * 100).toFixed(0)}`}%</Td>
+                        <Td fontSize="xs">{item?.approvedDate ? moment(item?.approvedDate).format("MM/DD/YYYY") : "-"}</Td>
+                        <Td fontSize="xs">{item?.deliveryDate ? moment(item?.deliveryDate).format("MM/DD/YYYY") : "-"}</Td>
+                        <Td fontSize="xs">{item?.status}</Td>
                       </>
                     ) : (
                       <>
-                        <Td fontSize="xs">{item.assetTag ? item.assetTag : "-"}</Td>
-                        <Td fontSize="xs">{item.cip_No ? item.cip_No : "-"}</Td>
-                        <Td fontSize="xs">{item.helpdeskNo ? item.helpdeskNo : "-"}</Td>
-                        <Td fontSize="xs">{item.itemRemarks ? item.itemRemarks : "-"}</Td>
-                        <Td fontSize="xs">{item.companyCode}</Td>
-                        <Td fontSize="xs">{item.companyName}</Td>
-                        <Td fontSize="xs">{item.departmentCode}</Td>
-                        <Td fontSize="xs">{item.departmentName}</Td>
-                        <Td fontSize="xs">{item.locationCode}</Td>
-                        <Td fontSize="xs">{item.locationName}</Td>
-                        <Td fontSize="xs">{item.accountCode ? item.accountCode : "-"}</Td>
-                        <Td fontSize="xs">{item.accountTitles ? item.accountTitles : "-"}</Td>
-                        <Td fontSize="xs">{item.empId ? item.empId : "-"}</Td>
-                        <Td fontSize="xs">{item.fullname ? item.fullname : "-"}</Td>
+                        <Td fontSize="xs">{item?.assetTag ? item?.assetTag : "-"}</Td>
+                        <Td fontSize="xs">{item?.cip_No ? item?.cip_No : "-"}</Td>
+                        <Td fontSize="xs">{item?.helpdeskNo ? item?.helpdeskNo : "-"}</Td>
+                        <Td fontSize="xs">{item?.itemRemarks ? item?.itemRemarks : "-"}</Td>
+                        <Td fontSize="xs">{item?.companyCode}</Td>
+                        <Td fontSize="xs">{item?.companyName}</Td>
+                        <Td fontSize="xs">{item?.departmentCode}</Td>
+                        <Td fontSize="xs">{item?.departmentName}</Td>
+                        <Td fontSize="xs">{item?.locationCode}</Td>
+                        <Td fontSize="xs">{item?.locationName}</Td>
+                        <Td fontSize="xs">{item?.accountCode ? item?.accountCode : "-"}</Td>
+                        <Td fontSize="xs">{item?.accountTitles ? item?.accountTitles : "-"}</Td>
+                        <Td fontSize="xs">{item?.empId ? item?.empId : "-"}</Td>
+                        <Td fontSize="xs">{item?.fullname ? item?.fullname : "-"}</Td>
                       </>
                     )}
                   </Tr>

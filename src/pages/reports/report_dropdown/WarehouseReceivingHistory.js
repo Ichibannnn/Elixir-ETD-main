@@ -134,10 +134,10 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
               <Tbody>
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="xs">{item.warehouseId}</Td>
-                    <Td fontSize="xs">{item.receiveDate}</Td>
-                    <Td fontSize="xs">{item.poNumber ? item.poNumber : "-"}</Td>
-                    <Td fontSize="xs">{item.siNumber ? item.siNumber : "-"}</Td>
+                    <Td fontSize="xs">{item?.warehouseId}</Td>
+                    <Td fontSize="xs">{item?.receiveDate}</Td>
+                    <Td fontSize="xs">{item?.poNumber ? item?.poNumber : "-"}</Td>
+                    <Td fontSize="xs">{item?.siNumber ? item?.siNumber : "-"}</Td>
                     {buttonChanger ? (
                       <>
                         {/* Item Information */}
@@ -146,32 +146,32 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
                             <Flex flexDirection="column" justifyContent="left">
                               <HStack fontSize="sm" spacing="5px">
                                 <Text color="gray.700" fontWeight="bold">
-                                  {item.itemDescrption}
+                                  {item?.itemDescrption}
                                 </Text>
                               </HStack>
 
                               <HStack fontSize="xs" spacing="5px">
-                                <Text color="gray.700">{item.itemCode}</Text>
+                                <Text color="gray.700">{item?.itemCode}</Text>
                               </HStack>
                             </Flex>
                           </Flex>
                         </Td>
 
-                        <Td fontSize="xs">{item.uom}</Td>
+                        <Td fontSize="xs">{item?.uom}</Td>
                         <Td fontSize="xs">
-                          {item.quantity.toLocaleString(undefined, {
+                          {item?.quantity.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {item.unitPrice.toLocaleString(undefined, {
+                          {item?.unitPrice.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {item.amount.toLocaleString(undefined, {
+                          {item?.amount.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
@@ -180,13 +180,13 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
                     ) : (
                       <>
                         <Td fontSize="xs">
-                          {item.totalReject.toLocaleString(undefined, {
+                          {item?.totalReject.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
-                        <Td fontSize="xs">{item.supplierName}</Td>
-                        <Td fontSize="xs">{item.receivedBy ? item.receivedBy : "-"}</Td>
+                        <Td fontSize="xs">{item?.supplierName}</Td>
+                        <Td fontSize="xs">{item?.receivedBy ? item?.receivedBy : "-"}</Td>
                       </>
                     )}
                   </Tr>

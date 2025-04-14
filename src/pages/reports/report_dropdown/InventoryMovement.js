@@ -147,64 +147,64 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
               <Tbody>
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="xs">{item.itemCode}</Td>
-                    <Td fontSize="xs">{item.itemDescription}</Td>
+                    <Td fontSize="xs">{item?.itemCode}</Td>
+                    <Td fontSize="xs">{item?.itemDescription}</Td>
                     <Td fontSize="xs">
-                      {item.totalReceiving.toLocaleString(undefined, {
+                      {item?.totalReceiving.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.totalReceipt.toLocaleString(undefined, {
+                      {item?.totalReceipt.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.totalReturned.toLocaleString(undefined, {
+                      {item?.totalReturned.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.totalMoveOrder.toLocaleString(undefined, {
+                      {item?.totalMoveOrder.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.totalIssue.toLocaleString(undefined, {
+                      {item?.totalIssue.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.totalBorrowed.toLocaleString(undefined, {
+                      {item?.totalBorrowed.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.ending.toLocaleString(undefined, {
+                      {item?.ending.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.currentStock.toLocaleString(undefined, {
+                      {item?.currentStock.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.unitCost.toLocaleString(undefined, {
+                      {item?.unitCost.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}
                     </Td>
                     <Td fontSize="xs">
-                      {item.amount.toLocaleString(undefined, {
+                      {item?.amount.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                         minimumFractionDigits: 2,
                       })}

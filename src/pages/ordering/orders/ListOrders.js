@@ -129,7 +129,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
           accountCode: submit?.accountCode,
           accountTitles: submit?.accountTitles,
           assetTag: submit?.assetTag,
-          helpdeskNo: submit?.helpdeskNo ? Number(submit?.helpdeskNo) : null,
+          helpdeskNo: submit?.helpdeskNo ? submit?.helpdeskNo : null,
           dateApproved: moment(submit?.dateApproved).format("yyyy-MM-DD"),
         };
       });
