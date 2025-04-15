@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Flex, HStack, Menu, MenuButton, MenuItem, MenuList, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
-import request from "../../../../services/ApiClient";
-import PageScroll from "../../../../utils/PageScroll";
-import { FiEdit } from "react-icons/fi";
-import { GiCancel } from "react-icons/gi";
+import { Box, Button, Flex, Menu, MenuButton, MenuItem, MenuList, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
+
 import { CancelModalConfirmation, EditModal, ScheduleModal } from "./ActionModal";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdOutlineCancel, MdOutlineMoreHoriz } from "react-icons/md";
+
+import request from "../../../../services/ApiClient";
+import PageScroll from "../../../../utils/PageScroll";
 
 export const ListOfOrders = ({
   fetchMirList,
@@ -17,14 +17,11 @@ export const ListOfOrders = ({
   setIsAllChecked,
   disableScheduleButton,
   setDisableScheduleButton,
-  checkedItems,
-  setCheckedItems,
   setCurrentPage,
-  setSearch,
+  setSearchValue,
   fetchNotification,
 }) => {
   const [orderList, setOrderList] = useState([]);
-  const [disabledButton, setDisabledButton] = useState(false);
 
   const [editData, setEditData] = useState([]);
   const [cancelId, setCancelId] = useState("");
@@ -240,7 +237,7 @@ export const ListOfOrders = ({
           fetchMirList={fetchMirList}
           selectedMIRIds={selectedMIRIds}
           setSelectedMIRIds={setSelectedMIRIds}
-          setSearch={setSearch}
+          setSearchValue={setSearchValue}
           setCurrentPage={setCurrentPage}
           setIsAllChecked={setIsAllChecked}
           fetchNotification={fetchNotification}

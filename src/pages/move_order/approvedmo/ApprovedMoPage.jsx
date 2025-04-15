@@ -2,6 +2,7 @@ import { usePagination } from "@ajna/pagination";
 import React, { useEffect, useState } from "react";
 import request from "../../../services/ApiClient";
 import { ApproveMoveOrder } from "./ApproveMoveOrder";
+import useDebounce from "../../../hooks/useDebounce";
 
 const fetchApprovedMOApi = async (pageNumber, pageSize, search, status) => {
   const res = await request.get(`Ordering/ApprovedMoveOrderPaginationOrig?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}&status=${status}`);
@@ -15,11 +16,13 @@ const fetchViewApi = async (orderId) => {
 
 function ApprovedMoPage() {
   const [approvedData, setApprovedData] = useState([]);
-  const [search, setSearch] = useState("");
   const [pageTotal, setPageTotal] = useState(undefined);
   const [orderId, setOrderId] = useState("");
   const [printData, setPrintData] = useState([]);
   const [status, setStatus] = useState(false);
+
+  const [searchValue, setSearchValue] = useState("");
+  const search = useDebounce(searchValue, 700);
 
   const outerLimit = 2;
   const innerLimit = 2;
@@ -67,8 +70,8 @@ function ApprovedMoPage() {
     <ApproveMoveOrder
       setCurrentPage={setCurrentPage}
       setPageSize={setPageSize}
-      search={search}
-      setSearch={setSearch}
+      searchValue={searchValue}
+      setSearchValue={setSearchValue}
       pagesCount={pagesCount}
       currentPage={currentPage}
       pageSize={pageSize}

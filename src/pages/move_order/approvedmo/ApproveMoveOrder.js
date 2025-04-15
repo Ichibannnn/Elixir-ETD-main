@@ -15,8 +15,8 @@ import { PrintModal, RejectModal, TrackModal } from "./ActionModal";
 export const ApproveMoveOrder = ({
   setCurrentPage,
   setPageSize,
-  search,
-  setSearch,
+  searchValue,
+  setSearchValue,
   pagesCount,
   currentPage,
   approvedData,
@@ -49,13 +49,10 @@ export const ApproveMoveOrder = ({
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
   };
+
   const handlePageSizeChange = (e) => {
     const pageSize = Number(e.target.value);
     setPageSize(pageSize);
-  };
-
-  const searchHandler = (inputValue) => {
-    setSearch(inputValue);
   };
 
   const rejectHandler = (orderNo) => {
@@ -114,10 +111,10 @@ export const ApproveMoveOrder = ({
   };
 
   useEffect(() => {
-    if (search) {
+    if (searchValue) {
       setCurrentPage(1);
     }
-  }, [search]);
+  }, [searchValue]);
 
   return (
     <Flex w="full" flexDirection="column" p={5} bg="form">
@@ -130,7 +127,7 @@ export const ApproveMoveOrder = ({
         </Select>
         <HStack w="17%">
           <Text fontSize="13px">Search:</Text>
-          <Input borderColor="gray.400" fontSize="11px" borderRadius="none" placeholder="MIR Id" onChange={(e) => searchHandler(e.target.value)} />
+          <Input value={searchValue} onChange={(e) => setSearchValue(e.target.value)} borderColor="gray.400" fontSize="11px" borderRadius="none" placeholder="MIR Id" />
         </HStack>
       </Flex>
 
@@ -157,6 +154,7 @@ export const ApproveMoveOrder = ({
             Rush Orders
           </Button>
         </Flex>
+
         <PageScroll minHeight="400px" maxHeight="700px">
           <Text textAlign="center" bgColor="primary" color="white" fontSize="14px">
             List of Move Orders
@@ -171,6 +169,7 @@ export const ApproveMoveOrder = ({
                 ))}
               </Tr>
             </Thead>
+
             <Tbody>
               {approvedData?.moveorder?.map((order, i) => (
                 <Tr key={i}>

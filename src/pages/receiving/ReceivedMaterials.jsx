@@ -40,11 +40,13 @@ import PageScroll from "../../utils/PageScroll";
 import request from "../../services/ApiClient";
 import moment from "moment";
 import Barcode from "react-barcode";
+import useDebounce from "../../hooks/useDebounce";
 
 // RECEIVED MATERIALS ----------------------------------------------
 const ReceivedMaterials = () => {
   const [warehouseData, setWarehouseData] = useState([]);
-  const [search, setSearch] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const search = useDebounce(searchValue, 700);
 
   const [isLoading, setIsLoading] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
@@ -115,12 +117,6 @@ const ReceivedMaterials = () => {
     };
   }, [currentPage, pageSize, search]);
 
-  // SEARCH
-  const searchHandler = (inputValue) => {
-    setSearch(inputValue);
-    console.log(inputValue);
-  };
-
   // PRINT
   const printHandler = ({ id, rrNumber, poNumber, itemCode, itemDescription, dateReceive, uom, unitPrice, supplier, actualGood, lotSection, siNumber }) => {
     if (id) {
@@ -160,10 +156,10 @@ const ReceivedMaterials = () => {
   };
 
   useEffect(() => {
-    if (search) {
+    if (searchValue) {
       setCurrentPage(1);
     }
-  }, [search]);
+  }, [searchValue]);
 
   return (
     <Flex color="fontColor" h="100vh" w="full" borderRadius="md" flexDirection="column" bg="gray.300">
@@ -180,6 +176,8 @@ const ReceivedMaterials = () => {
               <InputLeftElement pointerEvents="none" children={<FiSearch color="blackAlpha" />} fontSize="sm" />
               <Input
                 color="blackAlpha"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
                 type="text"
                 fontSize="sm"
                 placeholder="Search..."
@@ -187,7 +185,6 @@ const ReceivedMaterials = () => {
                 bg="whiteAlpha"
                 borderColor="gray.300"
                 borderRadius="xl"
-                onChange={(e) => searchHandler(e.target.value)}
               />
             </InputGroup>
           </HStack>

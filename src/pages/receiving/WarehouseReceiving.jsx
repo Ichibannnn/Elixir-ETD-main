@@ -17,7 +17,6 @@ import {
   useDisclosure,
   Td,
   Button,
-  useToast,
   Icon,
   Menu,
   MenuButton,
@@ -46,7 +45,6 @@ import { useEffect } from "react";
 import PageScroll from "../../utils/PageScroll";
 import request from "../../services/ApiClient";
 import moment from "moment";
-import { decodeUser } from "../../services/decode-user";
 import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
 import { WarehouseContext } from "../../components/context/WarehouseContext";
@@ -170,10 +168,10 @@ const WarehouseReceiving = () => {
   }
 
   useEffect(() => {
-    if (search) {
+    if (searchValue) {
       setCurrentPage(1);
     }
-  }, [search]);
+  }, [searchValue]);
 
   return (
     <WarehouseContext.Provider value={{ receivingId }}>

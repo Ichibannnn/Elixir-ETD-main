@@ -541,12 +541,20 @@ export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderL
   );
 };
 
-export const ScheduleModal = ({ isOpen, onClose, fetchMirList, selectedMIRIds, setSelectedMIRIds, setIsAllChecked, setCurrentPage, setSearch, fetchNotification, orderList }) => {
+export const ScheduleModal = ({
+  isOpen,
+  onClose,
+  fetchMirList,
+  selectedMIRIds,
+  setSelectedMIRIds,
+  setIsAllChecked,
+  setCurrentPage,
+  setSearchValue,
+  fetchNotification,
+  orderList,
+}) => {
   const [preparationDate, setPreparationDate] = useState();
-  const date = new Date();
-  // const maxDate = moment(new Date(date.setMonth(date.getMonth() + 6))).format(
-  //   "yyyy-MM-DD"
-  // );
+
   const newDate = moment();
   const maxDate = newDate.add(14, "days");
 
@@ -562,6 +570,7 @@ export const ScheduleModal = ({ isOpen, onClose, fetchMirList, selectedMIRIds, s
       setPreparationDate("");
     }
   };
+
   // SCHEDULE BUTTON FUNCTION
   const submitValidate = () => {
     Swal.fire({
@@ -611,7 +620,7 @@ export const ScheduleModal = ({ isOpen, onClose, fetchMirList, selectedMIRIds, s
               onClose();
               setSelectedMIRIds([]);
               setIsAllChecked(false);
-              setSearch("");
+              setSearchValue("");
               setCurrentPage(1);
               fetchMirList();
               setIsLoading(false);

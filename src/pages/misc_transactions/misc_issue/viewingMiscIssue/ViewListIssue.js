@@ -7,6 +7,7 @@ import request from "../../../../services/ApiClient";
 import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import PageScroll from "../../../../utils/PageScroll";
 import { ViewModal } from "./ActionButton";
+import useDebounce from "../../../../hooks/useDebounce";
 
 const fetchIssuesApi = async (pageNumber, pageSize, search, status) => {
   const res = await request.get(`Miscellaneous/GetAllMiscellaneousIssuePaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}&status=${status}`);
@@ -18,7 +19,9 @@ export const ViewListIssue = () => {
 
   const [pageTotal, setPageTotal] = useState(undefined);
   const [status, setStatus] = useState(true);
-  const [search, setSearch] = useState("");
+
+  const [searchValue, setSearchValue] = useState("");
+  const search = useDebounce(searchValue, 700);
 
   const [statusBody, setStatusBody] = useState({
     id: "",
@@ -58,10 +61,6 @@ export const ViewListIssue = () => {
     setPageSize(pageSize);
   };
 
-  const searchHandler = (inputValue) => {
-    setSearch(inputValue);
-  };
-
   const viewHandler = (id, status) => {
     if (id) {
       setStatusBody({
@@ -78,17 +77,17 @@ export const ViewListIssue = () => {
   };
 
   useEffect(() => {
-    if (search) {
+    if (searchValue) {
       setCurrentPage(1);
     }
-  }, [search]);
+  }, [searchValue]);
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
       <Flex justifyContent="space-between">
         <InputGroup w="15%">
           <InputLeftElement pointerEvents="none" children={<FaSearch color="gray.300" />} />
-          <Input onChange={(e) => searchHandler(e.target.value)} type="text" fontSize="xs" placeholder="Search" focusBorderColor="accent" />
+          <Input value={searchValue} onChange={(e) => setSearchValue(e.target.value)} type="text" fontSize="xs" placeholder="Search" focusBorderColor="accent" />
         </InputGroup>
       </Flex>
 

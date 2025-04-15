@@ -8,6 +8,7 @@ import { MaterialsInformation } from "./MaterialsInformation";
 import { ListOfReceipts } from "./ListOfReceipts";
 import { ActionButtons } from "./ActionButtons";
 import { ListViewReceipt } from "./viewReceipts/ListViewReceipt";
+import useDebounce from "../../../hooks/useDebounce";
 
 const fetchSuppliersApi = async () => {
   const res = await request.get(`Supplier/GetAllActiveSupplier`);
@@ -139,7 +140,9 @@ const MiscReceiptPage = () => {
   const [receiptData, setReceiptData] = useState([]);
   const [pageTotal, setPageTotal] = useState(undefined);
   const [status, setStatus] = useState(true);
-  const [search, setSearch] = useState("");
+
+  const [searchValue, setSearchValue] = useState("");
+  const search = useDebounce(searchValue, 700);
 
   const outerLimit = 2;
   const innerLimit = 2;
@@ -278,8 +281,8 @@ const MiscReceiptPage = () => {
               receiptData={receiptData}
               setCurrentPage={setCurrentPage}
               setPageSize={setPageSize}
-              search={search}
-              setSearch={setSearch}
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
               pagesCount={pagesCount}
               currentPage={currentPage}
               pages={pages}

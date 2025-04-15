@@ -6,8 +6,6 @@ import {
   ButtonGroup,
   Flex,
   HStack,
-  Icon,
-  Image,
   Input,
   InputGroup,
   InputLeftElement,
@@ -15,7 +13,6 @@ import {
   ModalBody,
   ModalContent,
   ModalFooter,
-  ModalHeader,
   ModalOverlay,
   Select,
   Table,
@@ -26,7 +23,6 @@ import {
   Thead,
   Tr,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import { FiSearch } from "react-icons/fi";
 import { BiExport } from "react-icons/bi";
@@ -51,7 +47,7 @@ import { FuelRegister } from "./report_dropdown/FuelRegister";
 import { FaPrint } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
 import PageScroll from "../../utils/PageScroll";
-import { TiWarning } from "react-icons/ti";
+import useDebounce from "../../hooks/useDebounce";
 
 const Reports = () => {
   const [dateFrom, setDateFrom] = useState(moment(new Date()).format("yyyy-MM-DD"));
@@ -59,8 +55,10 @@ const Reports = () => {
 
   const [sample, setSample] = useState("");
   const [sheetData, setSheetData] = useState([]);
-  const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [searchValue, setSearchValue] = useState("");
+  const search = useDebounce(searchValue, 700);
 
   const [printData, setPrintData] = useState("");
 
@@ -75,6 +73,7 @@ const Reports = () => {
       setSheetData([]);
     }
   };
+
   const handleExport = async () => {
     if (sample === 11) {
       setIsLoading(true);
@@ -186,11 +185,9 @@ const Reports = () => {
     }
   };
 
-  console.log("PrintData: ", printData);
-
   // SEARCH
   const searchHandler = (inputValue) => {
-    setSearch(inputValue);
+    setSearchValue(inputValue);
   };
 
   const minimumDateForInventoryMovement = "2022-01-01";

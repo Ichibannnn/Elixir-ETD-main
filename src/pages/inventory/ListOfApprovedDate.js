@@ -45,8 +45,8 @@ export const ListofApprovedDate = ({
   preparedLength,
   status,
   setStatus,
-  search,
-  setSearch,
+  searchValue,
+  setSearchValue,
   pages,
   setPageSize,
   notification,
@@ -111,7 +111,7 @@ export const ListofApprovedDate = ({
 
   // SEARCH
   const searchHandler = (inputValue) => {
-    setSearch(inputValue);
+    setSearchValue(inputValue);
     setOrderId("");
     setHighlighterId("");
   };
@@ -124,10 +124,10 @@ export const ListofApprovedDate = ({
   };
 
   useEffect(() => {
-    if (search) {
+    if (searchValue) {
       setCurrentPage(1);
     }
-  }, [search]);
+  }, [searchValue]);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -174,6 +174,8 @@ export const ListofApprovedDate = ({
             <Input
               mb={1}
               color="blackAlpha"
+              value={searchValue}
+              onChange={(e) => searchHandler(e.target.value)}
               type="text"
               fontSize="xs"
               placeholder="Search..."
@@ -181,11 +183,11 @@ export const ListofApprovedDate = ({
               bg="whiteAlpha"
               borderColor="gray.300"
               borderRadius="md"
-              onChange={(e) => searchHandler(e.target.value)}
             />
           </InputGroup>
         </HStack>
       </Flex>
+
       <VStack w="full" spacing={0} justifyContent="center">
         <Box w="full" bgColor="primary" h="22px">
           <Text fontWeight="semibold" color="white" textAlign="center" justifyContent="center" fontSize="xs">

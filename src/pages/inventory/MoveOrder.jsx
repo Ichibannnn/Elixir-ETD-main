@@ -9,6 +9,7 @@ import { ListOfOrders } from "./ListOfOrders";
 import { ActualItemQuantity } from "./ActualItemQuantity";
 import { SaveButton } from "./ActionModal";
 import { PreparedItem } from "./PreparedItem";
+import useDebounce from "../../hooks/useDebounce";
 
 const MoveOrder = ({ notification, fetchNotification }) => {
   const [batchNumber, setBatchNumber] = useState("");
@@ -27,12 +28,12 @@ const MoveOrder = ({ notification, fetchNotification }) => {
   const [itemCode, setItemCode] = useState("");
   const [barcodeData, setBarcodeData] = useState([]);
 
-  const [search, setSearch] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const search = useDebounce(searchValue, 700);
+
   const [status, setStatus] = useState(false);
   const [pageTotal, setPageTotal] = useState(undefined);
-
   const [preparedData, setPreparedData] = useState([]);
-
   let [buttonChanger, setButtonChanger] = useState(false);
 
   const fetchApprovedMoveOrdersApi = async (pageNumber, pageSize, status, search) => {
@@ -160,10 +161,10 @@ const MoveOrder = ({ notification, fetchNotification }) => {
   }, [orderListData]);
 
   useEffect(() => {
-    if (search) {
+    if (searchValue) {
       setCurrentPage(1);
     }
-  }, [search]);
+  }, [searchValue]);
 
   return (
     <>
@@ -188,8 +189,8 @@ const MoveOrder = ({ notification, fetchNotification }) => {
           fetchApprovedMoveOrders={fetchApprovedMoveOrders}
           lengthIndicator={lengthIndicator}
           preparedLength={preparedData?.length}
-          search={search}
-          setSearch={setSearch}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
           notification={notification}
           fetchNotification={fetchNotification}
         />
@@ -206,6 +207,7 @@ const MoveOrder = ({ notification, fetchNotification }) => {
         ) : (
           ""
         )}
+
         {buttonChanger ? (
           <SaveButton
             orderId={orderId}
@@ -227,8 +229,8 @@ const MoveOrder = ({ notification, fetchNotification }) => {
           itemCode &&
           highlighterId && (
             <ActualItemQuantity
-              setWarehouseId={setWarehouseId}
               warehouseId={warehouseId}
+              setWarehouseId={setWarehouseId}
               barcodeData={barcodeData}
               orderId={orderId}
               highlighterId={highlighterId}
@@ -243,6 +245,7 @@ const MoveOrder = ({ notification, fetchNotification }) => {
             />
           )
         )}
+
         {preparedData.length > 0 && (
           <PreparedItem preparedData={preparedData} fetchPreparedItems={fetchPreparedItems} fetchOrderList={fetchOrderList} fetchNotification={fetchNotification} />
         )}

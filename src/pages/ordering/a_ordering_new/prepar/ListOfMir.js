@@ -16,8 +16,8 @@ export const ListOfMir = ({
   mirList,
   isAllChecked,
   setIsAllChecked,
-  search,
-  setSearch,
+  searchValue,
+  setSearchValue,
   pages,
   currentPage,
   setCurrentPage,
@@ -65,18 +65,12 @@ export const ListOfMir = ({
     setIsAllChecked(false);
   };
 
-  // SEARCH
-  const searchHandler = (inputValue) => {
-    setSearch(inputValue);
-    console.log(inputValue);
-  };
-
   // Uncheck mir id when searching
   useEffect(() => {
-    if (search) {
+    if (searchValue) {
       setSelectedMIRIds([]);
     }
-  }, [search]);
+  }, [searchValue]);
 
   const handleStatusChange = (newStatus) => {
     setStatus(newStatus);
@@ -95,10 +89,10 @@ export const ListOfMir = ({
   };
 
   useEffect(() => {
-    if (search) {
+    if (searchValue) {
       setCurrentPage(1);
     }
-  }, [search]);
+  }, [searchValue]);
 
   return (
     <Flex direction="column" p={4} w="full" className="boxShadow" bg="#F5F5F7">
@@ -146,13 +140,14 @@ export const ListOfMir = ({
               <Input
                 mb={1}
                 color="blackAlpha"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
                 type="text"
                 fontSize="xs"
                 placeholder="Search..."
                 focusBorderColor="btnColor"
                 borderColor="gray.300"
                 borderRadius="md"
-                onChange={(e) => searchHandler(e.target.value)}
               />
             </InputGroup>
           </HStack>

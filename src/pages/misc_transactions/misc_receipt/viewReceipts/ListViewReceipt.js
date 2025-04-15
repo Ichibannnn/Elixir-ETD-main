@@ -7,7 +7,7 @@ import { GrView } from "react-icons/gr";
 import { Pagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import PageScroll from "../../../../utils/PageScroll";
 
-export const ListViewReceipt = ({ receiptData, setCurrentPage, setPageSize, search, setSearch, pagesCount, currentPage, pages }) => {
+export const ListViewReceipt = ({ receiptData, setCurrentPage, setPageSize, searchValue, setSearchValue, pagesCount, currentPage, pages }) => {
   const [statusBody, setStatusBody] = useState({
     id: "",
     status: "",
@@ -22,10 +22,6 @@ export const ListViewReceipt = ({ receiptData, setCurrentPage, setPageSize, sear
   const handlePageSizeChange = (e) => {
     const pageSize = Number(e.target.value);
     setPageSize(pageSize);
-  };
-
-  const searchHandler = (inputValue) => {
-    setSearch(inputValue);
   };
 
   const viewHandler = (id, status) => {
@@ -44,17 +40,17 @@ export const ListViewReceipt = ({ receiptData, setCurrentPage, setPageSize, sear
   };
 
   useEffect(() => {
-    if (search) {
+    if (searchValue) {
       setCurrentPage(1);
     }
-  }, [search]);
+  }, [searchValue]);
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
       <Flex justifyContent="space-between">
         <InputGroup w="15%">
           <InputLeftElement pointerEvents="none" children={<FaSearch color="gray.300" />} />
-          <Input fontSize="xs" onChange={(e) => searchHandler(e.target.value)} type="text" placeholder="Search" focusBorderColor="accent" />
+          <Input fontSize="xs" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} type="text" placeholder="Search" focusBorderColor="accent" />
         </InputGroup>
       </Flex>
 

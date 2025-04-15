@@ -6,6 +6,7 @@ import { usePagination } from "@ajna/pagination";
 
 import { ListOfOrders } from "./ListOfOrders";
 import { ListOfMir } from "./ListOfMir";
+import useDebounce from "../../../../hooks/useDebounce";
 
 const NewPrepSched = ({ notification, fetchNotification }) => {
   const [selectedMIRIds, setSelectedMIRIds] = useState([]);
@@ -16,16 +17,17 @@ const NewPrepSched = ({ notification, fetchNotification }) => {
   const [regularOrdersCount, setRegularOrdersCount] = useState(0);
   const [rushOrdersCount, setRushOrdersCount] = useState(0);
 
-  const [lengthIndicator, setLengthIndicator] = useState("");
   const [checkedItems, setCheckedItems] = useState([]);
 
   const [isAllChecked, setIsAllChecked] = useState(false);
   const [disableScheduleButton, setDisableScheduleButton] = useState(true);
 
-  const [search, setSearch] = useState("");
   const [status, setStatus] = useState(false);
   const [pageTotal, setPageTotal] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [searchValue, setSearchValue] = useState("");
+  const search = useDebounce(searchValue, 700);
 
   const fetchMirListApi = async (pageNumber, pageSize, status, search) => {
     const response = await request.get(`Ordering/GetAllListOfMir?PageNumber=${pageNumber}&PageSize=${pageSize}&status=${status}`, {
@@ -83,8 +85,8 @@ const NewPrepSched = ({ notification, fetchNotification }) => {
           checkedItems={checkedItems}
           setCheckedItems={setCheckedItems}
           setDisableScheduleButton={setDisableScheduleButton}
-          search={search}
-          setSearch={setSearch}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
           rushOrders={rushOrders}
           regularOrders={regularOrders}
           currentPage={currentPage}
@@ -98,14 +100,12 @@ const NewPrepSched = ({ notification, fetchNotification }) => {
 
         <ListOfOrders
           setCurrentPage={setCurrentPage}
-          setSearch={setSearch}
+          setSearchValue={setSearchValue}
           selectedMIRIds={selectedMIRIds}
           setSelectedMIRIds={setSelectedMIRIds}
           fetchMirList={fetchMirList}
           isAllChecked={isAllChecked}
           setIsAllChecked={setIsAllChecked}
-          checkedItems={checkedItems}
-          setCheckedItems={setCheckedItems}
           disableScheduleButton={disableScheduleButton}
           setDisableScheduleButton={setDisableScheduleButton}
           fetchNotification={fetchNotification}
