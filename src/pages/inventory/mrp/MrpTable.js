@@ -167,11 +167,6 @@ export const MrpTable = ({
     setPageSize(pageSize);
   };
 
-  // SEARCH
-  // const searchHandler = (inputValue) => {
-  //   setSearch(inputValue);
-  // };
-
   useEffect(() => {
     if (searchValue) {
       setCurrentPage(1);

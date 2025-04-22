@@ -243,6 +243,7 @@ export const ListofApprovedDate = ({
                 </Th>
               </Tr>
             </Thead>
+
             <Tbody>
               {moveData?.orders?.sort(getComparator(order)).map((order, i) => (
                 <Tr
