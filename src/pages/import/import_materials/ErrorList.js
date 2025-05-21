@@ -48,7 +48,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
     return {
       itemCode: list.itemCode,
       itemDescription: list.itemDescription,
-      accountPName: list.accountPName,
+      // accountPName: list.accountPName,
       itemCategoryName: list.itemCategoryName,
       uomCode: list.uomCode,
       bufferLevel: list.bufferLevel,
@@ -60,7 +60,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
     return {
       itemCode: list.itemCode,
       itemDescription: list.itemDescription,
-      accountPName: list.accountPName,
+      // accountPName: list.accountPName,
       itemCategoryName: list.itemCategoryName,
       uomCode: list.uomCode,
       bufferLevel: list.bufferLevel,
@@ -72,7 +72,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
     return {
       itemCode: list.itemCode,
       itemDescription: list.itemDescription,
-      accountPName: list.accountPName,
+      // accountPName: list.accountPName,
       itemCategoryName: list.itemCategoryName,
       uomCode: list.uomCode,
       bufferLevel: list.bufferLevel,
@@ -84,7 +84,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
     return {
       itemCode: list.itemCode,
       itemDescription: list.itemDescription,
-      accountPName: list.accountPName,
+      // accountPName: list.accountPName,
       itemCategoryName: list.itemCategoryName,
       uomCode: list.uomCode,
       bufferLevel: list.bufferLevel,
@@ -96,7 +96,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
     return {
       itemCode: list.itemCode,
       itemDescription: list.itemDescription,
-      accountPName: list.accountPName,
+      // accountPName: list.accountPName,
       itemCategoryName: list.itemCategoryName,
       uomCode: list.uomCode,
       bufferLevel: list.bufferLevel,
@@ -110,7 +110,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
     return {
       itemCode: list.itemCode,
       itemDescription: list.itemDescription,
-      accountPName: list.accountPName,
+      // accountPName: list.accountPName,
       itemCategoryName: list.itemCategoryName,
       uomCode: list.uomCode,
       bufferLevel: list.bufferLevel,
@@ -122,7 +122,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
     return {
       itemCode: list.itemCode,
       itemDescription: list.itemDescription,
-      accountPName: list.accountPName,
+      // accountPName: list.accountPName,
       itemCategoryName: list.itemCategoryName,
       uomCode: list.uomCode,
       bufferLevel: list.bufferLevel,
@@ -134,7 +134,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
     return {
       itemCode: list.itemCode,
       itemDescription: list.itemDescription,
-      accountPName: list.accountPName,
+      // accountPName: list.accountPName,
       itemCategoryName: list.itemCategoryName,
       uomCode: list.uomCode,
       bufferLevel: list.bufferLevel,
@@ -146,7 +146,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
     return {
       itemCode: list.itemCode,
       itemDescription: list.itemDescription,
-      accountPName: list.accountPName,
+      // accountPName: list.accountPName,
       itemCategoryName: list.itemCategoryName,
       uomCode: list.uomCode,
       bufferLevel: list.bufferLevel,
@@ -157,7 +157,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
   const available = availableImportData;
   const duplicate = duplicateListData;
   const itemCategoryName = itemcategoryNotExist;
-  const accountTitle = accountTitleNotExist;
+  // const accountTitle = accountTitleNotExist;
   const uom = uomNotExist;
   const item_code_exist = itemCodeAlreadyExist;
   const item_code_null = itemCodeNull;
@@ -256,9 +256,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                               <Th color="white" fontSize="9px">
                                 Item Category
                               </Th>
-                              <Th color="white" fontSize="9px">
+                              {/* <Th color="white" fontSize="9px">
                                 Account Title
-                              </Th>
+                              </Th> */}
                               <Th color="white" fontSize="9px">
                                 UOM
                               </Th>
@@ -283,9 +283,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.itemCategoryName}
                                 </Td>
-                                <Td color="gray.600" fontSize="11px">
+                                {/* <Td color="gray.600" fontSize="11px">
                                   {d?.accountPName}
-                                </Td>
+                                </Td> */}
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.uomCode}
                                 </Td>
@@ -351,9 +351,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                               <Th color="white" fontSize="9px">
                                 Item Category
                               </Th>
-                              <Th color="white" fontSize="9px">
+                              {/* <Th color="white" fontSize="9px">
                                 Account Title
-                              </Th>
+                              </Th> */}
                               <Th color="white" fontSize="9px">
                                 UOM
                               </Th>
@@ -378,9 +378,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.itemCategoryName}
                                 </Td>
-                                <Td color="gray.600" fontSize="11px">
+                                {/* <Td color="gray.600" fontSize="11px">
                                   {d?.accountPName}
-                                </Td>
+                                </Td> */}
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.uomCode}
                                 </Td>
@@ -437,9 +437,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                               <Th color="white" fontSize="9px">
                                 Item Category
                               </Th>
-                              <Th color="white" fontSize="9px">
+                              {/* <Th color="white" fontSize="9px">
                                 Account Title
-                              </Th>
+                              </Th> */}
                               <Th color="white" fontSize="9px">
                                 UOM
                               </Th>
@@ -464,9 +464,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.itemCategoryName}
                                 </Td>
-                                <Td color="gray.600" fontSize="11px">
+                                {/* <Td color="gray.600" fontSize="11px">
                                   {d?.accountPName}
-                                </Td>
+                                </Td> */}
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.uomCode}
                                 </Td>
@@ -493,7 +493,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
               )}
 
               {/* Account Title*/}
-              {accountTitle?.length > 0 ? (
+              {/* {accountTitle?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton color="white" fontWeight="semibold" border="1px">
@@ -575,7 +575,7 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                 </AccordionItem>
               ) : (
                 ""
-              )}
+              )} */}
 
               {/* UOM Code */}
               {uom?.length > 0 ? (
@@ -607,9 +607,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                               <Th color="white" fontSize="9px">
                                 Item Category
                               </Th>
-                              <Th color="white" fontSize="9px">
+                              {/* <Th color="white" fontSize="9px">
                                 Account Title
-                              </Th>
+                              </Th> */}
                               <Th color="white" fontSize="9px">
                                 UOM
                               </Th>
@@ -634,9 +634,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.itemCategoryName}
                                 </Td>
-                                <Td color="gray.600" fontSize="11px">
+                                {/* <Td color="gray.600" fontSize="11px">
                                   {d?.accountPName}
-                                </Td>
+                                </Td> */}
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.uomCode}
                                 </Td>
@@ -692,9 +692,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                               <Th color="white" fontSize="9px">
                                 Item Category
                               </Th>
-                              <Th color="white" fontSize="9px">
+                              {/* <Th color="white" fontSize="9px">
                                 Account Title
-                              </Th>
+                              </Th> */}
                               <Th color="white" fontSize="9px">
                                 UOM
                               </Th>
@@ -719,9 +719,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.itemCategoryName}
                                 </Td>
-                                <Td color="gray.600" fontSize="11px">
+                                {/* <Td color="gray.600" fontSize="11px">
                                   {d?.accountPName}
-                                </Td>
+                                </Td> */}
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.uomCode}
                                 </Td>
@@ -776,9 +776,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                               <Th color="white" fontSize="9px">
                                 Item Category
                               </Th>
-                              <Th color="white" fontSize="9px">
+                              {/* <Th color="white" fontSize="9px">
                                 Account Title
-                              </Th>
+                              </Th> */}
                               <Th color="white" fontSize="9px">
                                 UOM
                               </Th>
@@ -803,9 +803,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.itemCategoryName}
                                 </Td>
-                                <Td color="gray.600" fontSize="11px">
+                                {/* <Td color="gray.600" fontSize="11px">
                                   {d?.accountPName}
-                                </Td>
+                                </Td> */}
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.uomCode}
                                 </Td>
@@ -860,9 +860,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                               <Th color="white" fontSize="9px">
                                 Item Category
                               </Th>
-                              <Th color="white" fontSize="9px">
+                              {/* <Th color="white" fontSize="9px">
                                 Account Title
-                              </Th>
+                              </Th> */}
                               <Th color="white" fontSize="9px">
                                 UOM
                               </Th>
@@ -887,9 +887,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.itemCategoryName}
                                 </Td>
-                                <Td color="gray.600" fontSize="11px">
+                                {/* <Td color="gray.600" fontSize="11px">
                                   {d?.accountPName}
-                                </Td>
+                                </Td> */}
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.uomCode}
                                 </Td>
@@ -944,9 +944,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                               <Th color="white" fontSize="9px">
                                 Item Category
                               </Th>
-                              <Th color="white" fontSize="9px">
+                              {/* <Th color="white" fontSize="9px">
                                 Account Title
-                              </Th>
+                              </Th> */}
                               <Th color="white" fontSize="9px">
                                 UOM
                               </Th>
@@ -971,9 +971,9 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.itemCategoryName}
                                 </Td>
-                                <Td color="gray.600" fontSize="11px">
+                                {/* <Td color="gray.600" fontSize="11px">
                                   {d?.accountPName}
-                                </Td>
+                                </Td> */}
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.uomCode}
                                 </Td>

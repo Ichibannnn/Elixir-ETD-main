@@ -194,7 +194,9 @@ export const EditModal = ({
 
   const unitPriceRef = useRef();
   const unitPriceProvider = (data) => {
-    if (data < 1) {
+    console.log("Unit Price: ", data);
+
+    if (data === 0) {
       setUnitPrice("");
       unitPriceRef.current.value = "";
     } else {

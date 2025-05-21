@@ -77,13 +77,15 @@ const ImportMaterials = () => {
     return {
       itemCode: item.item_code,
       itemDescription: item.item_description,
-      accountPName: item.account_title,
+      // accountPName: item.account_title,
       itemCategoryName: item.item_category,
       uomCode: item.uom,
       bufferLevel: item.buffer_level,
-      addedBy: currentUser.username,
+      addedBy: currentUser.fullName,
     };
   });
+
+  // console.log("Current User", currentUser);
 
   const submitExcelHandler = (resultArray) => {
     Swal.fire({
@@ -210,9 +212,9 @@ const ImportMaterials = () => {
                   <Th h="40px" color="white" fontSize="10px">
                     Item Category
                   </Th>
-                  <Th h="40px" color="white" fontSize="10px">
+                  {/* <Th h="40px" color="white" fontSize="10px">
                     Account Title
-                  </Th>
+                  </Th> */}
                   <Th h="40px" color="white" fontSize="10px">
                     UOM
                   </Th>
@@ -229,7 +231,7 @@ const ImportMaterials = () => {
                     <Td fontSize="xs">{eData.itemCode ? eData.itemCode : null}</Td>
                     <Td fontSize="xs">{eData.itemDescription ? eData.itemDescription : ""}</Td>
                     <Td fontSize="xs">{eData.itemCategoryName ? eData.itemCategoryName : ""}</Td>
-                    <Td fontSize="xs">{eData.accountPName ? eData.accountPName : ""}</Td>
+                    {/* <Td fontSize="xs">{eData.accountPName ? eData.accountPName : ""}</Td> */}
                     <Td fontSize="xs">{eData.uomCode ? eData.uomCode : ""}</Td>
                     <Td fontSize="xs">
                       <Text>

@@ -83,18 +83,6 @@ const EditModalSave = ({
     }
   };
 
-  // console.log("editData:  ", editData);
-  // console.log("Actual Delivered ", actualDelivered);
-  // console.log("Actual Remaining ", editData.actualRemaining);
-  // console.log("Formdata ", formData);
-  // console.log("UnitCost: ", unitPrice);
-  // console.log("Receiving Date: ", receivingDate);
-
-  // console.log("UnitCost: ", unitPrice);
-  // console.log("actualDelivered: ", actualDelivered);
-  // console.log("siNumber: ", siNumber);
-  // console.log("receivingDate: ", receivingDate);
-
   return (
     <Flex>
       <Button

@@ -230,9 +230,9 @@ export const SaveConfirmation = ({
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
     try {
-      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
         headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
         },
       });
       setCompany(res.data.result.companies);
@@ -243,9 +243,9 @@ export const SaveConfirmation = ({
   // FETCH DEPT API
   const fetchDepartmentApi = async (id = "") => {
     try {
-      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
         headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
         },
       });
       setDepartment(res.data.result.departments);
@@ -256,9 +256,9 @@ export const SaveConfirmation = ({
   // FETCH Loc API
   const fetchLocationApi = async (id = "") => {
     try {
-      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
         headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
         },
       });
       setLocation(res.data.result.locations);
@@ -272,9 +272,9 @@ export const SaveConfirmation = ({
   // FETCH ACcount API
   const fetchAccountApi = async (id = "") => {
     try {
-      const res = await axios.get("http://10.10.2.76:8088/api/dropdown/account-title?status=1&paginate=0" + id, {
+      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
         headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
         },
       });
       setAccount(res.data.result.account_titles);
