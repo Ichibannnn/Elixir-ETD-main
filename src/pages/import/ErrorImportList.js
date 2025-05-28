@@ -42,11 +42,9 @@ import axios from "axios";
 
 const currentUser = decodeUser();
 
-const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData, ymirPO, getYmirPo, onCloseSyncModal }) => {
+const ErrorImportList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData }) => {
   const toast = useToast();
   const clearExcelFile = useRef();
-
-  // console.log("Error Data: ", errorData);
 
   const availableImportData = errorData?.availableImport?.map((list) => {
     return {
@@ -236,18 +234,6 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
             const res = request
               .post("Import/AddNewPOSummary", available)
               .then((res) => {
-                // YMIR Status
-                // try {
-                //   axios.patch(`https://rdfymir.com/backend/public/api/etd_api/sync`, finalPayload, {
-                //     headers: {
-                //       Authorization: "Token " + process.env.REACT_APP_YMIR_PROD_TOKEN,
-                //     },
-                //   });
-                // } catch (error) {
-                //   console.log(error);
-                // }
-
-                getYmirPo();
                 ToastComponent("Success!", "PO Imported", "success", toast);
                 setIsLoading(false);
                 setIsDisabled(false);
@@ -255,7 +241,6 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                 setExcelData([]);
                 setErrorOpener(false);
                 onClose();
-                onCloseSyncModal();
               })
               .catch((err) => {
                 setIsLoading(false);
@@ -1125,4 +1110,4 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
   );
 };
 
-export default ErrorList;
+export default ErrorImportList;

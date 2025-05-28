@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -12,7 +12,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   Spinner,
   Text,
   useDisclosure,
@@ -20,37 +19,17 @@ import {
 } from "@chakra-ui/react";
 import { RiAddFill } from "react-icons/ri";
 
-import { decodeUser } from "../../../services/decode-user";
 import { Controller, useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { Select as AutoComplete } from "chakra-react-select";
 
-import moment from "moment";
 import * as yup from "yup";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AddConfirmation } from "./ActionModal";
-import { debounce } from "lodash";
 import request from "../../../services/ApiClient";
 
-const currentUser = decodeUser();
-
-export const FuelInformation = ({
-  fuelData,
-  fuelInfo,
-  setFuelInfo,
-  barcode,
-  indexBarcodeId,
-  setIndexBarcodeId,
-  fetchActiveFuelRequests,
-  fetchBarcode,
-  register,
-  setValue,
-  errors,
-  control,
-  watch,
-  requestorInformation,
-}) => {
+export const FuelInformation = ({ fuelInfo, setFuelInfo, barcode, fetchActiveFuelRequests, fetchBarcode, register, setValue, errors, control, watch, requestorInformation }) => {
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -64,8 +43,6 @@ export const FuelInformation = ({
   const [account, setAccount] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
   const [disableFullName, setDisableFullName] = useState(true);
-
-  const ITEMS_PER_PAGE = 50;
 
   const { isOpen: isMaterial, onClose: closeMaterial, onOpen: openMaterial } = useDisclosure();
 
@@ -108,13 +85,6 @@ export const FuelInformation = ({
   useEffect(() => {
     fetchEmployees();
   }, []);
-
-  // Debounced search handler
-  const handleSearch = debounce((value) => {
-    setSearchTerm(value);
-    const filtered = employees.filter((employee) => employee.general_info?.full_id_number.toLowerCase().includes(value.toLowerCase())).slice(0, 50); // Show only the first 50 matches
-    setFilteredEmployees(filtered);
-  }, 300);
 
   // FETCH COMPANY API
   const fetchCompanyApi = async () => {
@@ -196,72 +166,11 @@ export const FuelInformation = ({
     return () => {};
   }, [idNumber]);
 
-  const assetHandler = (data) => {
-    if (data) {
-      setFuelInfo({
-        warehouseId: fuelInfo.warehouseId,
-        item_Code: fuelInfo.item_Code,
-        item_Description: fuelInfo.item_Description,
-        soh: fuelInfo.soh,
-        unit_Cost: fuelInfo.unit_Cost,
-        liters: fuelInfo.liters,
-        odometer: fuelInfo.odometer,
-        remarks: fuelInfo.remarks,
-        asset: data,
-      });
-    } else {
-      setFuelInfo({
-        warehouseId: fuelInfo.warehouseId,
-        item_Code: fuelInfo.item_Code,
-        item_Description: fuelInfo.item_Description,
-        soh: fuelInfo.soh,
-        unit_Cost: fuelInfo.unit_Cost,
-        liters: fuelInfo.liters,
-        odometer: fuelInfo.odometer,
-        remarks: fuelInfo.remarks,
-        asset: "",
-      });
-    }
+  const openMaterialModal = () => {
+    openMaterial();
   };
 
-  const remarksHandler = (data) => {
-    if (data) {
-      setFuelInfo({
-        warehouseId: fuelInfo.warehouseId,
-        item_Code: fuelInfo.item_Code,
-        item_Description: fuelInfo.item_Description,
-        soh: fuelInfo.soh,
-        unit_Cost: fuelInfo.unit_Cost,
-        liters: fuelInfo.liters,
-        odometer: fuelInfo.odometer,
-        remarks: data,
-        asset: fuelInfo.asset,
-      });
-    } else {
-      setFuelInfo({
-        warehouseId: fuelInfo.warehouseId,
-        item_Code: fuelInfo.item_Code,
-        item_Description: fuelInfo.item_Description,
-        soh: fuelInfo.soh,
-        unit_Cost: fuelInfo.unit_Cost,
-        liters: fuelInfo.liters,
-        odometer: fuelInfo.odometer,
-        remarks: "",
-        asset: fuelInfo.asset,
-      });
-    }
-  };
-
-  // console.log("FuelInfo: ", fuelInfo);
-  // console.log("RequstorId: ", watch("formData.requestorId"));
-  // console.log("RequstorName: ", watch("formData.requestorFullName"));
-
-  // console.log("Company: ", watch("formData.companyId"));
-  // console.log("Department: ", watch("formData.departmentId"));
-  // console.log("Location: ", watch("formData.locationId"));
-  // console.log("Account: ", watch("formData.accountId"));
-
-  // console.log("FuelArrayData: ", fuelData);
+  // console.log("Watch: ", watch("formData"));
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
@@ -307,23 +216,15 @@ export const FuelInformation = ({
                         field.onChange(e);
                         setValue("formData.requestorFullName", e.value.full_name);
                       }}
-                      onInputChange={(inputValue) => handleSearch(inputValue)} // Call search handler
                       options={employees?.map((item) => {
                         return {
-                          label: item.general_info?.full_id_number,
+                          label: `${item.general_info?.full_id_number} - ${item.general_info?.full_name}`,
                           value: {
                             full_id_number: item.general_info?.full_id_number,
                             full_name: item.general_info?.full_name,
                           },
                         };
                       })}
-                      // options={filteredEmployees.map((item) => ({
-                      //   label: item.general_info?.full_id_number,
-                      //   value: {
-                      //     full_id_number: item.general_info?.full_id_number,
-                      //     full_name: item.general_info?.full_name,
-                      //   },
-                      // }))}
                       chakraStyles={{
                         container: (provided) => ({
                           ...provided,
@@ -368,18 +269,6 @@ export const FuelInformation = ({
               <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
                 Asset:
               </Text>
-
-              {/* <Input
-                {...register("formData.asset")}
-                fontSize="15px"
-                size="md"
-                placeholder="Enter Asset"
-                border="1px"
-                borderColor="gray.400"
-                borderRadius="none"
-                autoComplete="off"
-                onChange={(e) => assetHandler(e.target.value)}
-              /> */}
 
               {assets?.length ? (
                 <Controller
@@ -439,27 +328,11 @@ export const FuelInformation = ({
                     {...field}
                     ref={field.ref}
                     customInput={Input}
-                    fontSize="sm"
-                    onValueChange={(e) => {
-                      console.log("E: ", e);
-                      field.onChange(e?.value);
-
-                      setFuelInfo({
-                        warehouseId: fuelInfo.warehouseId,
-                        item_Code: fuelInfo.item_Code,
-                        item_Description: fuelInfo.item_Description,
-                        soh: fuelInfo.soh,
-                        unit_Cost: fuelInfo.unit_Cost,
-                        liters: fuelInfo.liters,
-                        odometer: Number(e?.value),
-                        remarks: fuelInfo.remarks,
-                        asset: fuelInfo.asset,
-                      });
-                    }}
+                    fontSize="14px"
                     onWheel={(e) => e.target.blur()}
                     onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                     min="1"
-                    placeholder="Enter Odometer (Optional)"
+                    placeholder="Enter Odometer"
                     border="1px"
                     borderColor="gray.400"
                     borderRadius="none"
@@ -468,32 +341,6 @@ export const FuelInformation = ({
                   />
                 )}
               />
-
-              {/* <NumericFormat
-                customInput={Input}
-                fontSize="sm"
-                onValueChange={(e) =>
-                  setFuelInfo({
-                    warehouseId: fuelInfo.warehouseId,
-                    item_Code: fuelInfo.item_Code,
-                    item_Description: fuelInfo.item_Description,
-                    soh: fuelInfo.soh,
-                    unit_Cost: fuelInfo.unit_Cost,
-                    liters: fuelInfo.liters,
-                    odometer: Number(e?.value),
-                    remarks: fuelInfo.remarks,
-                    asset: fuelInfo.asset,
-                  })
-                }
-                onWheel={(e) => e.target.blur()}
-                onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
-                min="1"
-                placeholder="Enter Odometer (Optional)"
-                border="1px"
-                borderColor="gray.400"
-                borderRadius="none"
-                thousandSeparator=","
-              /> */}
             </HStack>
 
             {/* Remarks */}
@@ -504,14 +351,31 @@ export const FuelInformation = ({
 
               <Input
                 {...register("formData.remarks")}
-                fontSize="15px"
+                fontSize="14px"
                 size="md"
-                placeholder="Enter Remarks"
+                placeholder="Enter Remarks (Optional)"
                 border="1px"
                 borderColor="gray.400"
                 borderRadius="none"
                 autoComplete="off"
-                onChange={(e) => remarksHandler(e.target.value)}
+              />
+            </HStack>
+
+            {/* CIP # */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
+                CIP #:
+              </Text>
+
+              <Input
+                {...register("formData.cipNo")}
+                fontSize="14px"
+                size="md"
+                placeholder="Enter CIP# (Optional)"
+                border="1px"
+                borderColor="gray.400"
+                borderRadius="none"
+                autoComplete="off"
               />
             </HStack>
           </VStack>
@@ -736,7 +600,7 @@ export const FuelInformation = ({
                         }}
                         options={pickerItems?.map((item) => {
                           return {
-                            label: item.general_info?.full_id_number,
+                            label: `${item.general_info?.full_id_number} - ${item.general_info?.full_name}`,
                             value: {
                               full_id_number: item.general_info?.full_id_number,
                               full_name: item.general_info?.full_name,
@@ -798,11 +662,11 @@ export const FuelInformation = ({
 
         <Flex w="full" justifyContent="end" mt={4} p={2}>
           <Button
-            onClick={() => openMaterial()}
+            onClick={() => openMaterialModal()}
             isDisabled={
-              // !fuelInfo.asset ||
+              !watch("formData.issuanceDate") ||
+              !watch("formData.odometer") ||
               !watch("formData.asset") ||
-              !fuelInfo.remarks ||
               !watch("formData.requestorId") ||
               !watch("formData.requestorFullName") ||
               !watch("formData.companyId") ||
@@ -824,21 +688,34 @@ export const FuelInformation = ({
       {isMaterial && (
         <FuelInformationModal
           isOpen={isMaterial}
-          onClose={closeMaterial}
           onCloseMaterialModal={closeMaterial}
           fuelInfo={fuelInfo}
           setFuelInfo={setFuelInfo}
-          requestorInformation={requestorInformation}
           barcode={barcode}
           fetchActiveFuelRequests={fetchActiveFuelRequests}
           fetchBarcode={fetchBarcode}
+          // FORM DATA 1
+          requestorRegister={register}
+          requestorWatch={watch}
+          requestorInformation={requestorInformation}
         />
       )}
     </Flex>
   );
 };
 
-export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fuelInfo, setFuelInfo, requestorInformation, barcode, fetchActiveFuelRequests, fetchBarcode }) => {
+export const FuelInformationModal = ({
+  isOpen,
+  onCloseMaterialModal,
+  fuelInfo,
+  setFuelInfo,
+  barcode,
+  fetchActiveFuelRequests,
+  fetchBarcode,
+  requestorRegister,
+  requestorWatch,
+  requestorInformation,
+}) => {
   const [readOnly, setReadOnly] = useState(true);
   const { isOpen: isAdd, onClose: closeAdd, onOpen: openAdd } = useDisclosure();
 
@@ -869,43 +746,9 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
     openAdd();
   };
 
-  const barcodeHandler = (data) => {
-    console.log("Data: ", data);
-
-    if (data) {
-      setFuelInfo({
-        warehouseId: data?.value?.warehouseId,
-        item_Code: "DIESEL",
-        item_Description: "DIESEL",
-        soh: data?.value?.remaining_Stocks,
-        unit_Cost: data?.value?.unit_Cost,
-        liters: fuelInfo.liters,
-        odometer: fuelInfo.odometer,
-        remarks: fuelInfo.remarks,
-        asset: fuelInfo.asset,
-      });
-    } else {
-      setFuelInfo({
-        warehouseId: "",
-        item_Code: "DIESEL",
-        item_Description: "DIESEL",
-        soh: "",
-        unit_Cost: "",
-        liters: "",
-        odometer: "",
-        remarks: "",
-        asset: "",
-      });
-    }
-  };
-
+  // Fuel Information - To show remaining stocks
   useEffect(() => {
     if (barcode) {
-      setValue("formData.warehouseId", {
-        label: `${barcode[0]?.warehouseId}`,
-        value: `${barcode[0]}`,
-      });
-
       setFuelInfo({
         warehouseId: barcode[0]?.warehouseId,
         item_Code: "DIESEL",
@@ -913,14 +756,11 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
         soh: barcode?.remainingStocks,
         unit_Cost: barcode?.unit_Cost,
         liters: fuelInfo.liters,
-        odometer: fuelInfo.odometer,
-        remarks: fuelInfo.remarks,
-        asset: fuelInfo.asset,
       });
     }
-  }, [barcode, setValue]);
+  }, [barcode]);
 
-  console.log("Barcode: ", barcode);
+  console.log("Requestor: ", requestorWatch("formData"));
 
   return (
     <>
@@ -947,57 +787,22 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
                   </Text>
                 </HStack>
 
-                {/* Barcode No */}
-                <HStack w="full" style={{ display: "none" }}>
-                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} pr={7} py={2.5} fontSize="xs">
-                    Barcode:
+                {/* Diesel PO# */}
+                <HStack w="full">
+                  <Text minW="25%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
+                    Diesel PO#:
                   </Text>
 
-                  {barcode?.length > 0 ? (
-                    <Controller
-                      control={control}
-                      name="formData.warehouseId"
-                      render={({ field }) => (
-                        <AutoComplete
-                          ref={field.ref}
-                          // defaultValues={barcode[0]?.warehouseId}
-                          value={field.value}
-                          placeholder="Select Barcode"
-                          onChange={(e) => {
-                            console.log("E: ", e);
-
-                            field.onChange(e);
-                            barcodeHandler(e);
-                          }}
-                          options={barcode?.map((item) => {
-                            return {
-                              label: `${item.warehouseId}`,
-                              value: item,
-                            };
-                          })}
-                          isDisabled={true}
-                          chakraStyles={{
-                            container: (provided) => ({
-                              ...provided,
-                              width: "100%",
-                            }),
-                            control: (provided) => ({
-                              ...provided,
-                              backgroundColor: "#D1D7DE",
-                              fontSize: "15px",
-                              textAlign: "left",
-                            }),
-                            dropdownIndicator: (provided, state) => ({
-                              ...provided,
-                              display: state.isDisabled ? "none" : "flex",
-                            }),
-                          }}
-                        />
-                      )}
-                    />
-                  ) : (
-                    <Spinner thickness="4px" emptyColor="gray.200" color="blue.500" size="md" />
-                  )}
+                  <Input
+                    {...requestorRegister("formData.dieselPONumber")}
+                    fontSize="14px"
+                    size="md"
+                    placeholder="Enter Diesel PO#"
+                    border="1px"
+                    borderColor="gray.400"
+                    borderRadius="none"
+                    autoComplete="off"
+                  />
                 </HStack>
 
                 {/* Liters */}
@@ -1017,9 +822,6 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
                         soh: fuelInfo.soh,
                         unit_Cost: fuelInfo.unit_Cost,
                         liters: Number(e?.value),
-                        odometer: fuelInfo.odometer,
-                        remarks: fuelInfo.remarks,
-                        asset: fuelInfo.asset,
                       })
                     }
                     onWheel={(e) => e.target.blur()}
@@ -1045,6 +847,24 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
                   </Text>
                 </HStack>
 
+                {/* Fuel Pump */}
+                <HStack w="full">
+                  <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
+                    Fuel Pump:
+                  </Text>
+
+                  <Input
+                    {...requestorRegister("formData.fuelPump")}
+                    fontSize="14px"
+                    size="md"
+                    placeholder="Enter Fuel Pump"
+                    border="1px"
+                    borderColor="gray.400"
+                    borderRadius="none"
+                    autoComplete="off"
+                  />
+                </HStack>
+
                 {/* Stocks */}
                 <HStack w="full">
                   <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
@@ -1059,21 +879,6 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
                       : "No available stock"}
                   </Text>
                 </HStack>
-
-                {/* Unit Cost */}
-                {/* <HStack w="full">
-                  <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
-                    Unit Cost:
-                  </Text>
-                  <Text fontSize="sm" textAlign="left" bgColor="gray.200" w="full" border="1px" borderColor="gray.200" py={1.5} px={4}>
-                    {fuelInfo.unit_Cost
-                      ? fuelInfo.unit_Cost.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })
-                      : "Select barcode number first"}
-                  </Text>
-                </HStack> */}
               </VStack>
             </Flex>
           </ModalBody>
@@ -1085,18 +890,18 @@ export const FuelInformationModal = ({ isOpen, onClose, onCloseMaterialModal, fu
                 isDisabled={
                   !fuelInfo.item_Code ||
                   !fuelInfo.item_Description ||
-                  // !fuelInfo.warehouseId ||
                   !fuelInfo.soh ||
-                  // !fuelInfo.unit_Cost ||
                   !fuelInfo.liters ||
-                  fuelInfo.liters > fuelInfo.soh
+                  fuelInfo.liters > fuelInfo.soh ||
+                  !requestorWatch("formData.dieselPONumber") ||
+                  !requestorWatch("formData.fuelPump")
                 }
                 colorScheme="blue"
                 px={4}
               >
                 Add
               </Button>
-              <Button color="black" variant="outline" onClick={onClose}>
+              <Button color="black" variant="outline" onClick={onCloseMaterialModal}>
                 Cancel
               </Button>
             </ButtonGroup>

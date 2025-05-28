@@ -119,6 +119,7 @@ import LotCategory from "./pages/setup/LotCategory";
 import ReasonManagement from "./pages/setup/ReasonManagement";
 import TransactionType from "./pages/setup/TransactionType";
 import Assets from "./pages/setup/assets_sync/Assets";
+import OneCharging from "./pages/setup/OneCharging";
 
 // ACCOUNT TITLE
 import CompanyManagement from "./pages/account_title/CompanyManagement";
@@ -160,7 +161,7 @@ const App = () => {
   const [borrowedData, setBorrowedData] = useState([]);
   const [borrowedNav, setBorrowedNav] = useState(1);
 
-  //Borrowed Mats Fetch and Cancel Feature
+  //Fuel Mats Fetch and Cancel Feature
   const [fuelData, setFuelData] = useState([]);
   const [fuelNav, setFuelNav] = useState(1);
 
@@ -332,6 +333,7 @@ const App = () => {
               <Route path="/setup/account_title-location" element={<AccTLocation />} />
               <Route path="/setup/account_title-account" element={<AccTAccount />} />
               <Route path="/setup/assets" element={<Assets />} />
+              <Route path="/setup/one-charging" element={<OneCharging />} />
             </Route>
 
             {/* USER */}

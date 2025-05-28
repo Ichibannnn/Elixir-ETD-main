@@ -1,18 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Button, Flex, HStack, VStack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Button, Flex, HStack, Input, Text, VStack } from "@chakra-ui/react";
 
 import * as yup from "yup";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import request from "../../../services/ApiClient";
-import { usePagination } from "@ajna/pagination";
 import { FuelInformation } from "./FuelInformation";
 import { ListOfFuels } from "./ListOfFuels";
 import { ActionButton } from "./ActionButton";
-import { ListOfViewFuel } from "../ViewTransactedTab/ListOfViewFuel";
 import ApproverApprovedTab from "../../fuel_register/fuel_approval/fuel_approval_approved_approver/ApproverApprovedTab";
+import moment from "moment";
 
 const fetchBarcodeApi = async () => {
   const res = await request.get(`FuelRegister/material-available`);
@@ -32,9 +30,6 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
     soh: "",
     unit_Cost: "",
     liters: "",
-    asset: "",
-    odometer: "",
-    remarks: "",
   });
 
   const schema = yup.object().shape({
@@ -43,7 +38,12 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
       requestorFullName: yup.string().required().label("Fullname"),
       asset: yup.object().required().typeError("Asset is required"),
       odometer: yup.string(),
-      remarks: yup.string().required().label("Remarks"),
+      remarks: yup.string().nullable(),
+
+      issuanceDate: yup.date().required("Issuance Date is required"),
+      cipNo: yup.string().nullable(),
+      dieselPONumber: yup.string().required().label("Diesel PO #"),
+      fuelPump: yup.string().required().label("Fuel Pump"),
 
       companyId: yup.object().required().typeError("Company Name is required"),
       departmentId: yup.object().required().typeError("Department Category is required"),
@@ -56,12 +56,8 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
 
   const fetchBarcode = () => {
     fetchBarcodeApi().then((res) => {
-      // console.log("Res: ", res?.[0]);
-
       setBarcode(res?.[0]);
       setIndexBarcodeId(res?.[0]);
-
-      // setBarcode(res?.[0]?.warehouseId);
     });
   };
 
@@ -106,6 +102,11 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
         odometer: "",
         remarks: "",
 
+        issuanceDate: null,
+        cipNo: "",
+        dieselPONumber: "",
+        fuelPump: "",
+
         warehouseId: null,
         companyId: "",
         departmentId: "",
@@ -116,11 +117,6 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
       },
     },
   });
-
-  // console.log("FuelData: ", fuelData);
-  // console.log("FuelInfo: ", fuelInfo);
-
-  // console.log("Barcode: ", barcode);
 
   return (
     <Flex px={5} pt={5} pb={0} w="full" flexDirection="column" bg="form">
@@ -152,6 +148,29 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
             Transacted
           </Button>
         </HStack>
+
+        {fuelNav === 1 && (
+          <HStack spacing={0}>
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={1} py={1.5} fontSize="xs" fontWeight="semibold">
+                Issuance Date:
+              </Text>
+
+              <Input
+                {...register("formData.issuanceDate")}
+                fontSize="14px"
+                placeholder="Select Date and Time"
+                bg="#ffffe0"
+                size="sm"
+                type="datetime-local"
+                border="1px"
+                borderColor="gray.400"
+                borderRadius="none"
+                autoComplete="off"
+              />
+            </HStack>
+          </HStack>
+        )}
       </Flex>
 
       <VStack w="full" p={5} spacing={10} height={fuelData?.length === 0 ? "90vh" : "auto"}>

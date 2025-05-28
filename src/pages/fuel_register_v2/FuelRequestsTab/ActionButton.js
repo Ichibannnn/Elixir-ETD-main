@@ -35,7 +35,6 @@ export const ActionButton = ({ isLoading, setIsLoading, setSelectorId, fuelData,
         <SaveConfirmation
           isOpen={isSave}
           onClose={closeSave}
-          isLoading={isLoading}
           setIsLoading={setIsLoading}
           fuelData={fuelData}
           fuelInfo={fuelInfo}

@@ -49,6 +49,7 @@ const ImportPO = () => {
   const [errorData, setErrorData] = useState([]);
   const toast = useToast();
 
+  const { isOpen: isErrorImportOpen, onOpen: onErrorImportOpen, onClose: onErrorImportClose } = useDisclosure();
   const { isOpen: isErrorOpen, onOpen: onErrorOpen, onClose: onErrorClose } = useDisclosure();
   const { isOpen: isSyncOpen, onOpen: onSyncOpen, onClose: onSyncClose } = useDisclosure();
 
@@ -61,6 +62,8 @@ const ImportPO = () => {
       setFetchData(false);
     });
   };
+
+  console.log("ymirPO: ", ymirPO);
 
   useEffect(() => {
     if (fromDate && toDate) {

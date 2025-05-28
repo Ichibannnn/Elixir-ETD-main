@@ -30,32 +30,34 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
       setSheetData(
         res?.inventory?.map((item, i) => {
           return {
-            ID: item.id,
             Source: item.source,
+            "Issuance Date": item.issuanceDate,
             "Item Code": item.item_Code,
             "Item Description": item.item_Description,
-            UOM: item.uom,
             Liters: item.liters.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             }),
+            Assets: item.asset ? item.asset : "-",
             "Unit Cost": item.unit_Cost.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             }),
-            Driver: item.requestorName,
-            Remarks: item.remarks,
-            "Requested Date": item.created_At ? new Date(moment(item.created_At).format("MM/DD/YYYY")) : "",
-            "Company Code": item.company_Code ? item.company_Code : "-",
-            "Company Name": item.company_Code ? item.company_Code : "-",
-            "Department Code": item.department_Code ? item.department_Code : "-",
-            "Department Name": item.department_Name ? item.department_Name : "-",
-            "Location Code": item.location_Code ? item.location_Code : "-",
-            "Location Name": item.location_Name ? item.location_Name : "-",
+            "Line Amount": item.lineAmount,
+            Month: item.month,
+            Requestor: item.requestorName,
+            Remarks: item.remarks ? item.remarks : "-",
             "Account Title Code": item.account_Title_Code ? item.account_Title_Code : "-",
             "Account Title": item.account_Title_Name ? item.account_Title_Name : "-",
             "Employee ID": item.empId ? item.empId : "-",
             Fullname: item.fullname ? item.fullname : "-",
+            "Company Code": item.company_Code ? item.company_Code : "-",
+            Company: item.company_Name ? item.company_Name : "-",
+            "Department Code": item.department_Code ? item.department_Code : "-",
+            Department: item.department_Name ? item.department_Name : "-",
+            "Location Code": item.location_Code ? item.location_Code : "-",
+            Location: item.location_Name ? item.location_Name : "-",
+            "Diesel PO#": item.dieselPONumber,
             Odometer: item.odometer ? item.odometer : "N/A",
           };
         })
@@ -92,14 +94,12 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
               <Thead bgColor="primary" h="40px" position="sticky" top={0} zIndex="1">
                 <Tr>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
-                    ID
+                    SOURCE
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
                     ITEM INFORMATION
                   </Th>
-                  <Th color="white" fontSize="10px" fontWeight="semibold">
-                    SOURCE
-                  </Th>
+
                   {buttonChanger ? (
                     <>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
@@ -112,38 +112,20 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                         UNIT COST
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
+                        LINE ACCOUNT
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        MONTH
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         REQUESTOR
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         REMARKS
                       </Th>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
-                        ODOMETER
-                      </Th>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
-                        REQUESTED DATE
-                      </Th>
                     </>
                   ) : (
                     <>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
-                        COMPANY CODE
-                      </Th>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
-                        COMPANY NAME
-                      </Th>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
-                        DEPARTMENT CODE
-                      </Th>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
-                        DEPARTMENT NAME
-                      </Th>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
-                        LOCATION CODE
-                      </Th>
-                      <Th color="white" fontSize="10px" fontWeight="semibold">
-                        LOCATION NAME
-                      </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         ACCOUNT TITLE CODE
                       </Th>
@@ -156,6 +138,30 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         FULLNAME
                       </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        COMPANY CODE
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        COMPANY
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        DEPARTMENT CODE
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        DEPARTMENT
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        LOCATION CODE
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        LOCATION
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        DIESEL PO#
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        ODOMETER
+                      </Th>
                     </>
                   )}
                 </Tr>
@@ -163,7 +169,13 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
               <Tbody>
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
-                    <Td fontSize="xs">{item?.id}</Td>
+                    <Td>
+                      <HStack fontSize="sm" spacing="5px">
+                        <Text color="gray.700" fontWeight="bold">
+                          {item?.source}
+                        </Text>
+                      </HStack>
+                    </Td>
 
                     {/* Item Information */}
                     <Td>
@@ -186,18 +198,6 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                       </Flex>
                     </Td>
 
-                    <Td>
-                      <Flex flexDirection="column" gap="10px">
-                        <Flex flexDirection="column" justifyContent="left">
-                          <HStack fontSize="sm" spacing="5px">
-                            <Text color="gray.700" fontWeight="bold">
-                              {item?.source}
-                            </Text>
-                          </HStack>
-                        </Flex>
-                      </Flex>
-                    </Td>
-
                     {buttonChanger ? (
                       <>
                         <Td fontSize="xs">
@@ -213,8 +213,31 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                             minimumFractionDigits: 2,
                           })}
                         </Td>
+                        <Td fontSize="xs">
+                          {item?.lineAmount
+                            ? item?.lineAmount?.toLocaleString(undefined, {
+                                maximumFractionDigits: 2,
+                                minimumFractionDigits: 2,
+                              })
+                            : "-"}
+                        </Td>
+                        <Td fontSize="xs">{item?.month ? item?.month : "-"}</Td>
                         <Td fontSize="xs">{item?.requestorName ? item?.requestorName : "-"}</Td>
                         <Td fontSize="xs">{item?.remarks ? item?.remarks : "-"}</Td>
+                      </>
+                    ) : (
+                      <>
+                        <Td fontSize="xs">{item?.account_Title_Code ? item?.account_Title_Code : "-"}</Td>
+                        <Td fontSize="xs">{item?.account_Title_Name ? item?.account_Title_Name : "-"}</Td>
+                        <Td fontSize="xs">{item?.empId ? item?.empId : "-"}</Td>
+                        <Td fontSize="xs">{item?.fullname ? item?.fullname : "-"}</Td>
+                        <Td fontSize="xs">{item?.company_Code}</Td>
+                        <Td fontSize="xs">{item?.company_Name}</Td>
+                        <Td fontSize="xs">{item?.department_Code}</Td>
+                        <Td fontSize="xs">{item?.department_Name}</Td>
+                        <Td fontSize="xs">{item?.location_Code}</Td>
+                        <Td fontSize="xs">{item?.location_Name}</Td>
+                        <Td fontSize="xs">{item?.dieselPONumber ? item?.dieselPONumber : "-"}</Td>
                         <Td fontSize="xs">
                           {item?.odometer
                             ? item?.odometer.toLocaleString(undefined, {
@@ -222,20 +245,6 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                               })
                             : "-"}
                         </Td>
-                        <Td fontSize="xs">{item?.created_At ? moment(item?.created_At).format("MM/DD/YYYY") : "-"}</Td>
-                      </>
-                    ) : (
-                      <>
-                        <Td fontSize="xs">{item?.company_Code}</Td>
-                        <Td fontSize="xs">{item?.company_Name}</Td>
-                        <Td fontSize="xs">{item?.department_Code}</Td>
-                        <Td fontSize="xs">{item?.department_Name}</Td>
-                        <Td fontSize="xs">{item?.location_Code}</Td>
-                        <Td fontSize="xs">{item?.location_Name}</Td>
-                        <Td fontSize="xs">{item?.account_Title_Code ? item?.account_Title_Code : "-"}</Td>
-                        <Td fontSize="xs">{item?.account_Title_Name ? item?.account_Title_Name : "-"}</Td>
-                        <Td fontSize="xs">{item?.empId ? item?.empId : "-"}</Td>
-                        <Td fontSize="xs">{item?.fullname ? item?.fullname : "-"}</Td>
                       </>
                     )}
                   </Tr>

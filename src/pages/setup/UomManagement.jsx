@@ -24,7 +24,6 @@ const UomManagement = () => {
 
   const [genusUom, setGenusUom] = useState([]);
   const [elixirUom, setElixirUom] = useState([]);
-  const [search, setSearch] = useState("");
 
   // GET GENUS SUPPLIERS
   const fetchGenusUom = () => {

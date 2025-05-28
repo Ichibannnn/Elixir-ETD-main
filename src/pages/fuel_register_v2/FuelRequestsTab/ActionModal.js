@@ -4,9 +4,6 @@ import {
   Button,
   ButtonGroup,
   Flex,
-  FormLabel,
-  HStack,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -36,6 +33,7 @@ import { ToastComponent } from "../../../components/Toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { Select as AutoComplete } from "chakra-react-select";
+import moment from "moment";
 
 export const AddConfirmation = ({ isOpen, onClose, onCloseMaterialModal, fuelInfo, setFuelInfo, requestorInformation, fuelInformation, fetchActiveFuelRequests, fetchBarcode }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,15 +41,13 @@ export const AddConfirmation = ({ isOpen, onClose, onCloseMaterialModal, fuelInf
   const toast = useToast();
 
   const submitHandler = () => {
-    // console.log("FuelInfo: ", fuelInfo);
-    // console.log("FuelFormData: ", fuelInformation);
-
     setIsLoading(true);
     try {
       const addSubmit = {
         item_Code: fuelInfo.item_Code,
-        // warehouse_ReceivingId: fuelInfo.warehouseId,
         liters: fuelInfo.liters,
+        dieselPONumber: requestorInformation?.dieselPONumber,
+        fuelPump: requestorInformation?.fuelPump,
       };
 
       const res = request
@@ -66,9 +62,6 @@ export const AddConfirmation = ({ isOpen, onClose, onCloseMaterialModal, fuelInf
             soh: "",
             unit_Cost: "",
             liters: "",
-            asset: fuelInfo.asset,
-            odometer: fuelInfo.odometer,
-            remarks: fuelInfo.remarks,
           });
           fetchBarcode();
           fetchActiveFuelRequests();
@@ -254,8 +247,6 @@ export const AllCancelConfirmation = ({ isOpen, onClose, setHideButton, fuelData
 export const SaveConfirmation = ({
   isOpen,
   onClose,
-  isLoading,
-  setIsLoading,
   fuelData,
   fuelInfo,
   setFuelInfo,
@@ -266,15 +257,16 @@ export const SaveConfirmation = ({
   requestorInformation,
   reset,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
   const saveSubmitHandler = () => {
-    console.log("Requestor: ", requestorInformation);
+    // console.log("Requestor: ", requestorInformation);
+    // console.log("Fuel Info: ", fuelInfo);
 
     const savePayload = {
       requestorId: requestorInformation?.requestorId?.value?.full_id_number,
       requestorName: requestorInformation?.requestorId?.value?.full_name,
-      // assetId: `${requestorInformation?.asset?.value?.assetCode} - ${requestorInformation?.asset?.value?.assetName}`,
       assetId: requestorInformation?.asset?.value?.id,
       odometer: requestorInformation?.odometer ? requestorInformation?.odometer : "",
       remarks: requestorInformation?.remarks,
@@ -289,6 +281,9 @@ export const SaveConfirmation = ({
       account_Title_Name: requestorInformation?.accountId?.value?.name,
       empId: requestorInformation?.empId ? requestorInformation?.empId?.value?.full_id_number : "",
       fullname: requestorInformation?.fullName ? requestorInformation?.fullName : "",
+
+      issuanceDate: moment(requestorInformation?.issuanceDate).format("YYYY-MM-DD h:mmA"),
+      cipNo: requestorInformation?.cipNo,
     };
 
     console.log("Save: ", savePayload);
@@ -307,9 +302,6 @@ export const SaveConfirmation = ({
             soh: "",
             unit_Cost: "",
             liters: "",
-            asset: fuelInfo.asset,
-            odometer: fuelInfo.odometer,
-            remarks: fuelInfo.remarks,
           });
 
           fetchBarcode();
@@ -354,7 +346,7 @@ export const SaveConfirmation = ({
             <Button
               size="sm"
               onClick={saveSubmitHandler}
-              // isLoading={isLoading}
+              isLoading={isLoading}
               // disabled={isLoading}
               colorScheme="blue"
               height="28px"
@@ -364,7 +356,7 @@ export const SaveConfirmation = ({
             >
               Yes
             </Button>
-            <Button size="sm" onClick={closeHandler} color="black" variant="outline" height="28px" width="100px" borderRadius="none" fontSize="xs">
+            <Button size="sm" onClick={closeHandler} isLoading={isLoading} color="black" variant="outline" height="28px" width="100px" borderRadius="none" fontSize="xs">
               No
             </Button>
           </ButtonGroup>

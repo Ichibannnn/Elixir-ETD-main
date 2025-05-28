@@ -6,7 +6,7 @@ import PageScroll from "../../../utils/PageScroll";
 import { CancelConfirmation } from "./ActionModal";
 
 export const ListOfFuels = ({ fuelData, fetchBarcode, selectorId, setSelectorId, fetchActiveFuelRequests }) => {
-  const TableHead = ["ID", "Barcode", "Item Code", "Item Description", "UOM", "Unit Cost", "Liters", "Cancel"];
+  const TableHead = ["ID", "Item Code", "Item Description", "Diesel PO#", "Fuel Pump", "UOM", "Unit Cost", "Liters", "Cancel"];
 
   const { isOpen: isCancel, onClose: closeCancel, onOpen: openCancel } = useDisclosure();
 
@@ -19,7 +19,7 @@ export const ListOfFuels = ({ fuelData, fetchBarcode, selectorId, setSelectorId,
     }
   };
 
-  console.log("FuelData: ", fuelData);
+  // console.log("FuelData: ", fuelData);
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
@@ -44,9 +44,11 @@ export const ListOfFuels = ({ fuelData, fetchBarcode, selectorId, setSelectorId,
                 {fuelData?.map((item, i) => (
                   <Tr key={i}>
                     <Td fontSize="sm">{item?.id}</Td>
-                    <Td fontSize="sm">{item.warehouse_ReceivingId}</Td>
+
                     <Td fontSize="sm">{item?.item_Code}</Td>
                     <Td fontSize="sm">{item?.item_Description}</Td>
+                    <Td fontSize="sm">{item?.dieselPONumber}</Td>
+                    <Td fontSize="sm">{item?.fuelPump}</Td>
                     <Td fontSize="sm">{item?.uom}</Td>
                     <Td fontSize="sm">
                       {item?.unit_Cost.toLocaleString(undefined, {

@@ -26,19 +26,8 @@ const user = decodeUser();
 // export default request;
 
 // KEIGH BACKEND
-// const request = axios.create({
-//   baseURL: "https://10.10.10.14:5001/api/",
-//   headers: {
-//     "Content-Type": "application/json",
-//     Authorization: "Bearer " + user?.token,
-//   },
-// });
-
-// export default request;
-
-//PRETEST
 const request = axios.create({
-  baseURL: "http://10.10.2.31:85/api/",
+  baseURL: "https://10.10.10.14:5001/api/",
   headers: {
     "Content-Type": "application/json",
     Authorization: "Bearer " + user?.token,
@@ -46,3 +35,14 @@ const request = axios.create({
 });
 
 export default request;
+
+//PRETEST
+// const request = axios.create({
+//   baseURL: "http://10.10.2.31:85/api/",
+//   headers: {
+//     "Content-Type": "application/json",
+//     Authorization: "Bearer " + user?.token,
+//   },
+// });
+
+// export default request;

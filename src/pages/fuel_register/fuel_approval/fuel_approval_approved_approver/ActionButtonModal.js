@@ -83,7 +83,21 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                   <Text fontSize="xs" fontWeight="semibold">
                     Remarks:
                   </Text>
-                  <Text fontSize="xs">{data?.remarks}</Text>
+                  <Text fontSize="xs">{data?.remarks ? data?.remarks : "-"}</Text>
+                </HStack>
+
+                <HStack>
+                  <Text fontSize="xs" fontWeight="semibold">
+                    CIP #:
+                  </Text>
+                  <Text fontSize="xs">{data?.cipNo ? data?.cipNo : "-"}</Text>
+                </HStack>
+
+                <HStack>
+                  <Text fontSize="xs" fontWeight="semibold">
+                    Issuance Date:
+                  </Text>
+                  <Text fontSize="xs">{data?.issuanceDate}</Text>
                 </HStack>
 
                 <HStack>
@@ -168,6 +182,12 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                       ITEM DESCRIPTION
                     </Th>
                     <Th color="white" fontSize="xs">
+                      DIESEL PO#
+                    </Th>
+                    <Th color="white" fontSize="xs">
+                      FUEL PUMP
+                    </Th>
+                    <Th color="white" fontSize="xs">
                       UOM
                     </Th>
                     <Th color="white" fontSize="xs">
@@ -184,6 +204,8 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
                       <Td fontSize="xs">{data.source}</Td>
                       <Td fontSize="xs">{item?.item_Code}</Td>
                       <Td fontSize="xs">{item?.item_Description}</Td>
+                      <Td fontSize="xs">{item?.dieselPONumber}</Td>
+                      <Td fontSize="xs">{item?.fuelPump}</Td>
                       <Td fontSize="xs">{item?.uom}</Td>
                       <Td fontSize="xs">
                         {item?.unit_Cost.toLocaleString(undefined, {
@@ -310,7 +332,21 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                 <Text fontSize="xs" fontWeight="semibold">
                   Remarks:
                 </Text>
-                <Text fontSize="xs">{data?.remarks}</Text>
+                <Text fontSize="xs">{data?.remarks ? data?.remarks : "-"}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  CIP #:
+                </Text>
+                <Text fontSize="xs">{data?.cipNo ? data?.cipNo : "-"}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Issuance Date:
+                </Text>
+                <Text fontSize="xs">{data?.issuanceDate ? data?.issuanceDate : "-"}</Text>
               </HStack>
 
               <HStack>
@@ -392,6 +428,12 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                       ITEM DESCRIPTION
                     </Th>
                     <Th color="white" fontSize="xs">
+                      DIESEL PO#
+                    </Th>
+                    <Th color="white" fontSize="xs">
+                      FUEL PUMP
+                    </Th>
+                    <Th color="white" fontSize="xs">
                       UOM
                     </Th>
                     <Th color="white" fontSize="xs">
@@ -408,6 +450,8 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
                       <Td fontSize="xs">{data.source}</Td>
                       <Td fontSize="xs">{item?.item_Code}</Td>
                       <Td fontSize="xs">{item?.item_Description}</Td>
+                      <Td fontSize="xs">{item?.dieselPONumber}</Td>
+                      <Td fontSize="xs">{item?.fuelPump}</Td>
                       <Td fontSize="xs">{item?.uom}</Td>
                       <Td fontSize="xs">
                         {item?.unit_Cost.toLocaleString(undefined, {
