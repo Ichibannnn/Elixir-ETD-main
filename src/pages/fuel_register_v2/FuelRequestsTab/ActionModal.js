@@ -1,41 +1,24 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Select,
-  Stack,
-  Text,
-  toast,
-  useDisclosure,
-  useToast,
-  VStack,
-} from "@chakra-ui/react";
-import { FcAbout, FcInfo } from "react-icons/fc";
-import { BsPatchQuestionFill } from "react-icons/bs";
+import { useState } from "react";
+import { Button, ButtonGroup, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useToast } from "@chakra-ui/react";
+import { FcInfo } from "react-icons/fc";
 import { FaExclamationTriangle, FaQuestion } from "react-icons/fa";
 
-import * as yup from "yup";
-import axios from "axios";
+import moment from "moment";
 import request from "../../../services/ApiClient";
-import Swal from "sweetalert2";
-import { decodeUser } from "../../../services/decode-user";
 import { ToastComponent } from "../../../components/Toast";
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
-import { Select as AutoComplete } from "chakra-react-select";
-import moment from "moment";
-
-export const AddConfirmation = ({ isOpen, onClose, onCloseMaterialModal, fuelInfo, setFuelInfo, requestorInformation, fuelInformation, fetchActiveFuelRequests, fetchBarcode }) => {
+export const AddConfirmation = ({
+  isOpen,
+  onClose,
+  onCloseMaterialModal,
+  fuelInfo,
+  setFuelInfo,
+  requestorInformation,
+  fuelInformation,
+  fetchActiveFuelRequests,
+  fetchBarcode,
+  reset,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toast = useToast();
@@ -49,6 +32,8 @@ export const AddConfirmation = ({ isOpen, onClose, onCloseMaterialModal, fuelInf
         dieselPONumber: requestorInformation?.dieselPONumber,
         fuelPump: requestorInformation?.fuelPump,
       };
+
+      console.log("addSubmit: ", addSubmit);
 
       const res = request
         .post(`FuelRegister/create-fuel-details`, addSubmit)
@@ -74,6 +59,8 @@ export const AddConfirmation = ({ isOpen, onClose, onCloseMaterialModal, fuelInf
         });
     } catch (error) {}
   };
+
+  console.log("RequestInformation: ", requestorInformation);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">

@@ -191,6 +191,7 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
               errors={errors}
               control={control}
               watch={watch}
+              reset={reset}
               requestorInformation={watch("formData")}
             />
             {fuelData?.length > 0 ? (

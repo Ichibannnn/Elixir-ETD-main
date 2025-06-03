@@ -22,7 +22,7 @@ import {
 import { TiArrowSync } from "react-icons/ti";
 import { FiSearch } from "react-icons/fi";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PageScroll from "../../../utils/PageScroll";
 import request from "../../../services/ApiClient";
 import moment from "moment";
@@ -61,12 +61,12 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
         category: itemsub?.category_name,
         uom: itemsub?.uom_code,
         quantityOrdered: itemsub?.quantity,
-        companyCode: item?.charge_company_code,
-        companyName: item?.charge_company_name,
-        departmentCode: item?.charge_department_code,
-        departmentName: item?.charge_department_name,
-        locationCode: item?.charge_location_code,
-        locationName: item?.charge_location_name,
+        // companyCode: item?.charge_company_code,
+        // companyName: item?.charge_company_name,
+        // departmentCode: item?.charge_department_code,
+        // departmentName: item?.charge_department_name,
+        // locationCode: item?.charge_location_code,
+        // locationName: item?.charge_location_name,
         rush: item?.rush,
         itemRemarks: itemsub?.remarks,
         accountCode: itemsub?.account_title_code,
@@ -74,6 +74,8 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
         assetTag: itemsub?.plate_no,
         helpdeskNo: item?.helpdesk_no,
         dateApproved: item?.date_approved,
+
+        oneChargingCode: 10,
       };
     })
   );
@@ -118,12 +120,12 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
           category: submit?.category,
           uom: submit?.uom,
           quantityOrdered: submit?.quantityOrdered,
-          companyCode: submit?.companyCode,
-          companyName: submit?.companyName,
-          departmentCode: submit?.departmentCode,
-          departmentName: submit?.departmentName,
-          locationCode: submit?.locationCode,
-          locationName: submit?.locationName,
+          // companyCode: submit?.companyCode,
+          // companyName: submit?.companyName,
+          // departmentCode: submit?.departmentCode,
+          // departmentName: submit?.departmentName,
+          // locationCode: submit?.locationCode,
+          // locationName: submit?.locationName,
           rush: submit?.rush,
           itemRemarks: submit?.itemRemarks,
           accountCode: submit?.accountCode,
@@ -131,6 +133,8 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
           assetTag: submit?.assetTag,
           helpdeskNo: submit?.helpdeskNo ? submit?.helpdeskNo : null,
           dateApproved: moment(submit?.dateApproved).format("yyyy-MM-DD"),
+
+          oneChargingCode: submit?.oneChargingCode,
         };
       });
       if (result.isConfirmed) {

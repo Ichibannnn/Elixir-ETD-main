@@ -152,93 +152,86 @@ const Reports = () => {
         console.log("Error", error);
       }
     } else if (sample === 4) {
-      // setIsLoading(true);
-      // try {
-      //   var workbook = XLSX.utils.book_new(),
-      //     worksheet = XLSX.utils.json_to_sheet(sheetData);
+      setIsLoading(true);
+      try {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Sheet1");
 
-      //   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+        console.log("SheetData: ", sheetData);
 
-      //   XLSX.writeFile(workbook, "Fuel_Transacted_History.xlsx");
-      //   setIsLoading(false);
-      // } catch (error) {
-      //   console.log("Error", error);
-      // }
+        worksheet.columns = [
+          { header: "Source", key: "Source", width: 20 },
+          { header: "Issuance Date", key: "Issuance Date", width: 20 },
+          { header: "Item Code", key: "Item Code", width: 20 },
+          { header: "Item Description", key: "Item Description", width: 20 },
+          { header: "Liters", key: "Liters", width: 20 },
+          { header: "Assets", key: "Assets", width: 20 },
+          { header: "Unit Cost", key: "Unit Cost", width: 20 },
+          { header: "Line Amount", key: "Line Amount", width: 20 },
+          { header: "Month", key: "Month", width: 20 },
+          { header: "Requestor", key: "Requestor", width: 20 },
+          { header: "Remarks", key: "Remarks", width: 20 },
+          { header: "Account Title Code", key: "Account Title Code", width: 20 },
+          { header: "Account Title", key: "Account Title", width: 20 },
+          { header: "Employee ID", key: "Employee ID", width: 20 },
+          { header: "Fullname", key: "Fullname", width: 20 },
+          { header: "Company Code", key: "Company Code", width: 20 },
+          { header: "Company", key: "Company", width: 20 },
+          { header: "Department Code", key: "Department Code", width: 20 },
+          { header: "Department", key: "Department", width: 20 },
+          { header: "Location Code", key: "Location Code", width: 20 },
+          { header: "Location", key: "Location", width: 20 },
+          { header: "Diesel PO#", key: "Diesel PO#", width: 20 },
+          { header: "Odometer", key: "Odometer", width: 20 },
+        ];
 
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet("Sheet1");
+        worksheet.getRow(1).eachCell((cell, colNumber) => {
+          console.log("Column Number: ", colNumber);
 
-      console.log("SheetData: ", sheetData);
-
-      worksheet.columns = [
-        { header: "Source", key: "Source", width: 20 },
-        { header: "Issuance Date", key: "Issuance Date", width: 20 },
-        { header: "Item Code", key: "Item Code", width: 20 },
-        { header: "Item Description", key: "Item Description", width: 20 },
-        { header: "Liters", key: "Liters", width: 20 },
-        { header: "Assets", key: "Assets", width: 20 },
-        { header: "Unit Cost", key: "Unit Cost", width: 20 },
-        { header: "Line Amount", key: "Line Amount", width: 20 },
-        { header: "Month", key: "Month", width: 20 },
-        { header: "Requestor", key: "Requestor", width: 20 },
-        { header: "Remarks", key: "Remarks", width: 20 },
-        { header: "Account Title Code", key: "Account Title Code", width: 20 },
-        { header: "Account Title", key: "Account Title", width: 20 },
-        { header: "Employee ID", key: "Employee ID", width: 20 },
-        { header: "Fullname", key: "Fullname", width: 20 },
-        { header: "Company Code", key: "Company Code", width: 20 },
-        { header: "Company", key: "Company", width: 20 },
-        { header: "Department Code", key: "Department Code", width: 20 },
-        { header: "Department", key: "Department", width: 20 },
-        { header: "Location Code", key: "Location Code", width: 20 },
-        { header: "Location", key: "Location", width: 20 },
-        { header: "Diesel PO#", key: "Diesel PO#", width: 20 },
-        { header: "Odometer", key: "Odometer", width: 20 },
-      ];
-
-      worksheet.getRow(1).eachCell((cell, colNumber) => {
-        console.log("Column Number: ", colNumber);
-
-        cell.fill = {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: "BFBFBF" },
-        };
-        cell.font = { bold: true };
-        cell.alignment = { vertical: "middle", horizontal: "center" };
-      });
-
-      sheetData.forEach((item) => {
-        worksheet.addRow({
-          Source: item.Source,
-          "Issuance Date": item["Issuance Date"],
-          "Item Code": item["Item Code"],
-          "Item Description": item["Item Description"],
-          Liters: item.Liters,
-          Assets: item.Assets,
-          "Unit Cost": item["Unit Cost"],
-          "Line Amount": item["Line Amount"],
-          Month: item.Month,
-          Requestor: item.Requestor,
-          Remarks: item.Remarks,
-          "Account Title Code": item["Account Title Code"],
-          "Account Title": item["Account Title"],
-          "Employee ID": item["Employee ID"],
-          Fullname: item.Fullname,
-          "Company Code": item["Company Code"],
-          Company: item.Company,
-          "Department Code": item["Department Code"],
-          Department: item.Department,
-          "Location Code": item["Location Code"],
-          Location: item.Location,
-          "Diesel PO#": item["Diesel PO#"],
-          Odometer: item.Odometer,
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "BFBFBF" },
+          };
+          cell.font = { bold: true };
+          cell.alignment = { vertical: "middle", horizontal: "center" };
         });
-      });
 
-      const buffer = await workbook.xlsx.writeBuffer();
-      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-      saveAs(blob, "Elixir_ETD_Fuel_Report.xlsx");
+        sheetData.forEach((item) => {
+          worksheet.addRow({
+            Source: item.Source,
+            "Issuance Date": item["Issuance Date"],
+            "Item Code": item["Item Code"],
+            "Item Description": item["Item Description"],
+            Liters: item.Liters,
+            Assets: item.Assets,
+            "Unit Cost": item["Unit Cost"],
+            "Line Amount": item["Line Amount"],
+            Month: item.Month,
+            Requestor: item.Requestor,
+            Remarks: item.Remarks,
+            "Account Title Code": item["Account Title Code"],
+            "Account Title": item["Account Title"],
+            "Employee ID": item["Employee ID"],
+            Fullname: item.Fullname,
+            "Company Code": item["Company Code"],
+            Company: item.Company,
+            "Department Code": item["Department Code"],
+            Department: item.Department,
+            "Location Code": item["Location Code"],
+            Location: item.Location,
+            "Diesel PO#": item["Diesel PO#"],
+            Odometer: item.Odometer,
+          });
+        });
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        saveAs(blob, "Elixir_ETD_Fuel_Report.xlsx");
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Error", error);
+      }
     } else {
       var workbook = XLSX.utils.book_new(),
         worksheet = XLSX.utils.json_to_sheet(sheetData);

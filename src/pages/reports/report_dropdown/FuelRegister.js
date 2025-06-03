@@ -100,6 +100,10 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                     ITEM INFORMATION
                   </Th>
 
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
+                    ISSUANCE DATE
+                  </Th>
+
                   {buttonChanger ? (
                     <>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
@@ -112,7 +116,7 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                         UNIT COST
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
-                        LINE ACCOUNT
+                        LINE AMOUNT
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         MONTH
@@ -197,6 +201,8 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                         </Flex>
                       </Flex>
                     </Td>
+
+                    <Td fontSize="xs">{item?.issuanceDate ? item?.issuanceDate : "-"}</Td>
 
                     {buttonChanger ? (
                       <>

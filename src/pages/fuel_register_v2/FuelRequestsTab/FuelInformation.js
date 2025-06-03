@@ -29,7 +29,20 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { AddConfirmation } from "./ActionModal";
 import request from "../../../services/ApiClient";
 
-export const FuelInformation = ({ fuelInfo, setFuelInfo, barcode, fetchActiveFuelRequests, fetchBarcode, register, setValue, errors, control, watch, requestorInformation }) => {
+export const FuelInformation = ({
+  fuelInfo,
+  setFuelInfo,
+  barcode,
+  fetchActiveFuelRequests,
+  fetchBarcode,
+  register,
+  setValue,
+  errors,
+  control,
+  watch,
+  reset,
+  requestorInformation,
+}) => {
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -698,6 +711,7 @@ export const FuelInformation = ({ fuelInfo, setFuelInfo, barcode, fetchActiveFue
           requestorRegister={register}
           requestorWatch={watch}
           requestorInformation={requestorInformation}
+          reset={reset}
         />
       )}
     </Flex>
@@ -715,8 +729,8 @@ export const FuelInformationModal = ({
   requestorRegister,
   requestorWatch,
   requestorInformation,
+  reset,
 }) => {
-  const [readOnly, setReadOnly] = useState(true);
   const { isOpen: isAdd, onClose: closeAdd, onOpen: openAdd } = useDisclosure();
 
   const schema = yup.object().shape({
@@ -855,6 +869,7 @@ export const FuelInformationModal = ({
 
                   <Input
                     {...requestorRegister("formData.fuelPump")}
+                    type="number"
                     fontSize="14px"
                     size="md"
                     placeholder="Enter Fuel Pump"
@@ -862,6 +877,8 @@ export const FuelInformationModal = ({
                     borderColor="gray.400"
                     borderRadius="none"
                     autoComplete="off"
+                    onWheel={(e) => e.target.blur()}
+                    onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                   />
                 </HStack>
 
@@ -920,6 +937,7 @@ export const FuelInformationModal = ({
           fuelInformation={watch("formData")}
           fetchActiveFuelRequests={fetchActiveFuelRequests}
           fetchBarcode={fetchBarcode}
+          reset={reset}
         />
       )}
     </>
