@@ -243,6 +243,7 @@ export const SaveConfirmation = ({
   fetchBarcode,
   requestorInformation,
   reset,
+  setShowChargingData,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -257,12 +258,10 @@ export const SaveConfirmation = ({
       assetId: requestorInformation?.asset?.value?.id,
       odometer: requestorInformation?.odometer ? requestorInformation?.odometer : "",
       remarks: requestorInformation?.remarks,
-      company_Code: requestorInformation?.companyId?.value?.code,
-      company_Name: requestorInformation?.companyId?.value?.name,
-      department_Code: requestorInformation?.departmentId?.value?.code,
-      department_Name: requestorInformation?.departmentId?.value?.name,
-      location_Code: requestorInformation?.locationId?.value?.code,
-      location_Name: requestorInformation?.locationId?.value?.name,
+
+      // One Charging Code
+      oneChargingCode: requestorInformation?.oneChargingCode?.value?.code,
+
       account_Title_Code: requestorInformation?.accountId?.value?.code,
       account_Title_Name: requestorInformation?.accountId?.value?.name,
       account_Title_Name: requestorInformation?.accountId?.value?.name,
@@ -294,6 +293,7 @@ export const SaveConfirmation = ({
           fetchBarcode();
           reset();
           setSelectorId("");
+          setShowChargingData(null);
           setHideButton(false);
           setIsLoading(false);
           onClose();

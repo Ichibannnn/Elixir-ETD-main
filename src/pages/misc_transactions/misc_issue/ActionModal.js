@@ -1,28 +1,6 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  FormLabel,
-  HStack,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Select,
-  Stack,
-  Text,
-  toast,
-  useDisclosure,
-  useToast,
-  VStack,
-} from "@chakra-ui/react";
-import { FcAbout, FcInfo } from "react-icons/fc";
+import { useEffect, useState } from "react";
+import { Button, ButtonGroup, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useToast } from "@chakra-ui/react";
+import { FcInfo } from "react-icons/fc";
 import request from "../../../services/ApiClient";
 import { decodeUser } from "../../../services/decode-user";
 import { ToastComponent } from "../../../components/Toast";
@@ -30,9 +8,7 @@ import { BsPatchQuestionFill } from "react-icons/bs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
-import { Controller, useForm } from "react-hook-form";
-import Swal from "sweetalert2";
-import { Select as AutoComplete } from "chakra-react-select";
+import { useForm } from "react-hook-form";
 import { FaExclamationTriangle } from "react-icons/fa";
 
 const currentUser = decodeUser();
@@ -78,19 +54,14 @@ export const AddConfirmation = ({
         transactionDate: transactionDate,
         preparedBy: currentUser.fullName,
 
+        //One Charging Code
+        oneChargingCode: chargingCoa?.oneChargingCode?.value?.code,
+
         // Account Title
         accountCode: chargingAccountTitle?.accountId?.value?.code,
         accountTitles: chargingAccountTitle?.accountId?.value?.name,
         empId: chargingAccountTitle?.empId?.value?.full_id_number,
         fullName: chargingAccountTitle?.empId?.value?.full_name,
-
-        //Charging Company, department, location
-        companyCode: chargingCoa?.companyId?.value?.code,
-        companyName: chargingCoa?.companyId?.value?.name,
-        departmentCode: chargingCoa?.departmentId?.value?.code,
-        departmentName: chargingCoa?.departmentId?.value?.name,
-        locationCode: chargingCoa?.locationId?.value?.code,
-        locationName: chargingCoa?.locationId?.value?.name,
       };
       setCoaData((current) => [...current, addSubmit]);
       const res = request
@@ -251,16 +222,11 @@ export const SaveConfirmation = ({
   fetchActiveMiscIssues,
   fetchRawMats,
   coaData,
+  setShowChargingData,
 }) => {
   const toast = useToast();
-  const [company, setCompany] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [location, setLocation] = useState([]);
   const [account, setAccount] = useState([]);
-
   const [selectedAccount, setSelectedAccount] = useState("");
-
-  // SEDAR
   const [pickerItems, setPickerItems] = useState([]);
 
   const fetchEmployees = async () => {
@@ -278,43 +244,7 @@ export const SaveConfirmation = ({
     fetchEmployees();
   }, []);
 
-  // FETCH COMPANY API
-  const fetchCompanyApi = async () => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setCompany(res.data.result.companies);
-    } catch (error) {}
-  };
-
-  // FETCH DEPT API
-  const fetchDepartmentApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setDepartment(res.data.result.departments);
-    } catch (error) {}
-  };
-
-  // FETCH Loc API
-  const fetchLocationApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setLocation(res.data.result.locations);
-    } catch (error) {}
-  };
-
-  // FETCH ACcount API
+  // FETCH ACcount API```````
   const fetchAccountApi = async (id = "") => {
     try {
       const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
@@ -327,7 +257,6 @@ export const SaveConfirmation = ({
   };
 
   useEffect(() => {
-    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
     fetchAccountApi();
   }, []);
 
@@ -339,9 +268,6 @@ export const SaveConfirmation = ({
     mode: "onChange",
     defaultValues: {
       formData: {
-        companyId: "",
-        departmentId: "",
-        locationId: "",
         accountId: "",
         empId: "",
         fullName: "",
@@ -366,12 +292,7 @@ export const SaveConfirmation = ({
             remarks: remarks,
             details: details,
             transactionDate: transactionDate,
-            companyCode: coaData[0]?.companyCode,
-            companyName: coaData[0]?.companyName,
-            departmentCode: coaData[0]?.departmentCode,
-            departmentName: coaData[0]?.departmentName,
-            locationCode: coaData[0]?.locationCode,
-            locationName: coaData[0]?.locationName,
+            oneChargingCode: coaData[0]?.oneChargingCode,
             addedBy: currentUser.fullName,
           })
           .then((res) => {
@@ -398,6 +319,7 @@ export const SaveConfirmation = ({
                   });
                   setTotalQuantity("");
                   setTransactionDate("");
+                  setShowChargingData(null);
                   remarksRef.current.value = "";
                   setDetails("");
                   setRawMatsInfo({
@@ -455,225 +377,7 @@ export const SaveConfirmation = ({
     return () => {};
   }, [idNumber]);
 
-  console.log("totalQuantity: ", totalQuantity);
-
   return (
-    //OLD MODAL ~~~~
-    // <Modal isOpen={isOpen} onClose={() => {}} isCentered size="2xl">
-    //   <ModalOverlay />
-    //   <form onSubmit={handleSubmit(saveSubmitHandler)}>
-    //     <ModalContent>
-    //       <ModalHeader textAlign="center">Charge Of Accounts</ModalHeader>
-    //       <ModalCloseButton onClick={closeHandler} />
-    //       <ModalBody>
-    //         <Stack spacing={2} p={6}>
-    //           <Box>
-    //             <FormLabel fontSize="sm">Company</FormLabel>
-    //             <Controller
-    //               control={control}
-    //               name="formData.companyId"
-    //               render={({ field }) => (
-
-    //                 <AutoComplete
-    //                   ref={field.ref}
-    //                   value={field.value}
-    //                   size="sm"
-    //                   placeholder="Select Company"
-    //                   onChange={(e) => {
-    //                     field.onChange(e);
-    //                     setValue("formData.departmentId", "");
-    //                     setValue("formData.locationId", "");
-    //                     fetchDepartmentApi(e?.value?.id || "");
-    //                   }}
-    //                   options={company?.map((item) => {
-    //                     return {
-    //                       label: `${item.code} - ${item.name}`,
-    //                       value: item,
-    //                     };
-    //                   })}
-    //                 />
-    //               )}
-    //             />
-    //             <Text color="red" fontSize="xs">
-    //               {errors.formData?.companyId?.message}
-    //             </Text>
-    //           </Box>
-
-    //           <Box>
-    //             <FormLabel fontSize="sm">Department</FormLabel>
-    //             <Controller
-    //               control={control}
-    //               name="formData.departmentId"
-    //               render={({ field }) => (
-
-    //                 <AutoComplete
-    //                   size="sm"
-    //                   ref={field.ref}
-    //                   value={field.value}
-    //                   placeholder="Select Department"
-    //                   onChange={(e) => {
-    //                     field.onChange(e);
-    //                     setValue("formData.locationId", "");
-    //                     fetchLocationApi(e?.value?.id);
-    //                   }}
-    //                   options={department?.map((item) => {
-    //                     return {
-    //                       label: `${item.code} - ${item.name}`,
-    //                       value: item,
-    //                     };
-    //                   })}
-    //                 />
-    //               )}
-    //             />
-
-    //             <Text color="red" fontSize="xs">
-    //               {errors.formData?.departmentId?.message}
-    //             </Text>
-    //           </Box>
-
-    //           <Box>
-    //             <FormLabel fontSize="sm">Location</FormLabel>
-    //             <Controller
-    //               control={control}
-    //               name="formData.locationId"
-    //               render={({ field }) => (
-
-    //                 <AutoComplete
-    //                   size="sm"
-    //                   ref={field.ref}
-    //                   value={field.value}
-    //                   placeholder="Select Location"
-    //                   onChange={(e) => {
-    //                     field.onChange(e);
-    //                   }}
-    //                   options={location?.map((item) => {
-    //                     return {
-    //                       label: `${item.code} - ${item.name}`,
-    //                       value: item,
-    //                     };
-    //                   })}
-    //                 />
-    //               )}
-    //             />
-
-    //             <Text color="red" fontSize="xs">
-    //               {errors.formData?.locationId?.message}
-    //             </Text>
-    //           </Box>
-    //           <Box>
-    //             <FormLabel fontSize="sm">Account Title</FormLabel>
-    //             <Controller
-    //               control={control}
-    //               name="formData.accountId"
-    //               render={({ field }) => (
-    //                 <AutoComplete
-    //                   size="sm"
-    //                   ref={field.ref}
-    //                   value={field.value}
-    //                   placeholder="Select Account"
-    //                   onChange={(e) => {
-    //                     field.onChange(e);
-    //                     triggerPointHandler(e?.value.id);
-    //                   }}
-    //                   options={account?.map((item) => {
-    //                     return {
-    //                       label: `${item.code} - ${item.name}`,
-    //                       value: item,
-    //                     };
-    //                   })}
-    //                 />
-    //               )}
-    //             />
-    //             <Text color="red" fontSize="xs">
-    //               {errors.formData?.accountId?.message}
-    //             </Text>
-    //           </Box>
-    //           {!!selectedAccount.match(/Advances to Employees/gi) && (
-    //             <>
-    //               <Box>
-    //                 <FormLabel fontSize="sm">Employee ID</FormLabel>
-    //                 <Controller
-    //                   control={control}
-    //                   name="formData.empId"
-    //                   render={({ field }) => (
-    //                     <AutoComplete
-    //                       size="sm"
-    //                       ref={field.ref}
-    //                       value={field.value}
-    //                       placeholder="Enter Employee ID"
-    //                       onChange={(e) => {
-    //                         field.onChange(e);
-    //                         setValue("formData.fullName", e.value.full_name);
-    //                       }}
-    //                       options={pickerItems?.map((item) => {
-    //                         return {
-    //                           label: item.general_info?.full_id_number,
-    //                           value: {
-    //                             full_id_number:
-    //                               item.general_info?.full_id_number,
-    //                             full_name: item.general_info?.full_name,
-    //                           },
-    //                         };
-    //                       })}
-    //                     />
-    //                   )}
-    //                 />
-    //                 <Text color="red" fontSize="xs">
-    //                   {errors.formData?.empId?.message}
-    //                 </Text>
-    //               </Box>
-    //               <Box>
-    //                 <FormLabel fontSize="sm">Full Name:</FormLabel>
-    //                 <Input
-    //                   fontSize="sm"
-    //                   {...register("formData.fullName")}
-    //                   disabled={disableFullName}
-    //                   readOnly={disableFullName}
-    //                   _disabled={{ color: "black" }}
-    //                   bgColor={disableFullName && "gray.300"}
-    //                   autoFocus
-    //                   autoComplete="off"
-    //                 />
-    //                 <Text color="red" fontSize="xs">
-    //                   {errors.formData?.fullName?.message}
-    //                 </Text>
-    //               </Box>
-    //             </>
-    //           )}
-    //         </Stack>
-    //       </ModalBody>
-    //       <ModalFooter gap={2}>
-    //         <Button
-    //           size="sm"
-    //           colorScheme="blue"
-    //           type="submit"
-    //           isLoading={isLoading}
-    //           isDisabled={
-    //             isLoading ||
-    //             !isValid ||
-    //             // !watch("formData.accountTitles") ||
-    //             !watch("formData.companyId") ||
-    //             !watch("formData.departmentId") ||
-    //             !watch("formData.locationId") ||
-    //             !watch("formData.accountId")
-    //           }
-    //         >
-    //           Submit
-    //         </Button>
-    //         <Button
-    //           size="sm"
-    //           // colorScheme="red"
-    //           onClick={closeHandler}
-    //           isLoading={isLoading}
-    //           disabled={isLoading}
-    //         >
-    //           Close
-    //         </Button>
-    //       </ModalFooter>
-    //     </ModalContent>
-    //   </form>
-    // </Modal>
-
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
       <ModalOverlay />
       <ModalContent pt={10} pb={5}>

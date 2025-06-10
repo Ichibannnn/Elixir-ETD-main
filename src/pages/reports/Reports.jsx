@@ -177,8 +177,14 @@ const Reports = () => {
           { header: "Fullname", key: "Fullname", width: 20 },
           { header: "Company Code", key: "Company Code", width: 20 },
           { header: "Company", key: "Company", width: 20 },
+          { header: "Business Unit Code", key: "Business Unit Code", width: 20 },
+          { header: "Business Unit", key: "Business Unit", width: 20 },
           { header: "Department Code", key: "Department Code", width: 20 },
           { header: "Department", key: "Department", width: 20 },
+          { header: "Unit Code", key: "Unit Code", width: 20 },
+          { header: "Unit", key: "Unit", width: 20 },
+          { header: "Sub Unit Code", key: "Sub Unit Code", width: 20 },
+          { header: "Sub Unit", key: "Sub Unit", width: 20 },
           { header: "Location Code", key: "Location Code", width: 20 },
           { header: "Location", key: "Location", width: 20 },
           { header: "Diesel PO#", key: "Diesel PO#", width: 20 },
@@ -216,8 +222,14 @@ const Reports = () => {
             Fullname: item.Fullname,
             "Company Code": item["Company Code"],
             Company: item.Company,
+            "Business Unit Code": item["Business Unit Code"],
+            "Business Unit": item["Business Unit"],
             "Department Code": item["Department Code"],
             Department: item.Department,
+            "Unit Code": item["Unit Code"],
+            Unit: item.Unit,
+            "Sub Unit Code": item["Sub Unit Code"],
+            "Sub Unit": item["Sub Unit"],
             "Location Code": item["Location Code"],
             Location: item.Location,
             "Diesel PO#": item["Diesel PO#"],
@@ -452,7 +464,7 @@ const PrintMiscReceiptModal = ({ isOpen, onClose, printData, setPrintData, dateF
               <Table size="sm" variant="striped" ref={componentRef}>
                 <Thead bgColor="primary" position="sticky" top={0} zIndex={1} h="40px">
                   <Tr>
-                    <Th color="white" colSpan={17} textAlign="center">{`Miscellaneous Receipt History from ${moment(dateFrom).format("l")} - ${moment(dateTo).format("l")}`}</Th>
+                    <Th color="white" colSpan={20} textAlign="center">{`Miscellaneous Receipt History from ${moment(dateFrom).format("l")} - ${moment(dateTo).format("l")}`}</Th>
                   </Tr>
                 </Thead>
 
@@ -471,7 +483,10 @@ const PrintMiscReceiptModal = ({ isOpen, onClose, printData, setPrintData, dateF
                     <Th color="white">Transacted by</Th>
                     <Th color="white">Transaction Date</Th>
                     <Th color="white">Company</Th>
+                    <Th color="white">Business Unit</Th>
                     <Th color="white">Department</Th>
+                    <Th color="white">Unit</Th>
+                    <Th color="white">Sub Unit</Th>
                     <Th color="white">Location</Th>
                     <Th color="white">Account Title</Th>
                     <Th color="white">Employee</Th>
@@ -494,7 +509,10 @@ const PrintMiscReceiptModal = ({ isOpen, onClose, printData, setPrintData, dateF
                       <Td>{item["Transacted By"]}</Td>
                       <Td>{item["Transaction Date"]}</Td>
                       <Td>{item["Company"]}</Td>
+                      <Td>{item["Business Unit"]}</Td>
                       <Td>{item["Department"]}</Td>
+                      <Td>{item["Unit"]}</Td>
+                      <Td>{item["Sub Unit"]}</Td>
                       <Td>{item["Location"]}</Td>
                       <Td>{item["Account Title"]}</Td>
                       <Td>{item["Employee"]}</Td>
@@ -522,7 +540,7 @@ const PrintMiscReceiptModal = ({ isOpen, onClose, printData, setPrintData, dateF
               <Table size="sm" variant="simple" ref={componentRef}>
                 <Thead bgColor="primary" position="sticky" top={0} zIndex={2} h="40px">
                   <Tr>
-                    <Th color="white" fontSize="10px" colSpan={17} textAlign="center">{`Miscellaneous Receipt History from ${moment(dateFrom).format("l")} - ${moment(
+                    <Th color="white" fontSize="10px" colSpan={20} textAlign="center">{`Miscellaneous Receipt History from ${moment(dateFrom).format("l")} - ${moment(
                       dateTo
                     ).format("l")}`}</Th>
                   </Tr>
@@ -570,7 +588,16 @@ const PrintMiscReceiptModal = ({ isOpen, onClose, printData, setPrintData, dateF
                       Company
                     </Th>
                     <Th color="white" fontSize="8px">
+                      Business Unit
+                    </Th>
+                    <Th color="white" fontSize="8px">
                       Department
+                    </Th>
+                    <Th color="white" fontSize="8px">
+                      Unit
+                    </Th>
+                    <Th color="white" fontSize="8px">
+                      Sub Unit
                     </Th>
                     <Th color="white" fontSize="8px">
                       Location
@@ -600,7 +627,10 @@ const PrintMiscReceiptModal = ({ isOpen, onClose, printData, setPrintData, dateF
                       <Td fontSize="10px">{item["Transacted By"]}</Td>
                       <Td fontSize="10px">{item["Transaction Date"]}</Td>
                       <Td fontSize="10px">{item["Company"]}</Td>
+                      <Td fontSize="10px">{item["Business Unit"]}</Td>
                       <Td fontSize="10px">{item["Department"]}</Td>
+                      <Td fontSize="10px">{item["Unit"]}</Td>
+                      <Td fontSize="10px">{item["Sub Unit"]}</Td>
                       <Td fontSize="10px">{item["Location"]}</Td>
                       <Td fontSize="10px">{item["Account Title"]}</Td>
                       <Td fontSize="10px">{item["Employee"]}</Td>
@@ -678,7 +708,7 @@ const PrintMiscIssueModal = ({ isOpen, onClose, printData, setPrintData, dateFro
               <Table size="sm" variant="striped" ref={componentRef}>
                 <Thead bgColor="primary" position="sticky" top={0} zIndex={1} h="40px">
                   <Tr>
-                    <Th color="white" colSpan={17} textAlign="center">{`Miscellaneous Issue History from ${moment(dateFrom).format("l")} - ${moment(dateTo).format("l")}`}</Th>
+                    <Th color="white" colSpan={20} textAlign="center">{`Miscellaneous Issue History from ${moment(dateFrom).format("l")} - ${moment(dateTo).format("l")}`}</Th>
                   </Tr>
                 </Thead>
 
@@ -696,7 +726,10 @@ const PrintMiscIssueModal = ({ isOpen, onClose, printData, setPrintData, dateFro
                     <Th color="white">Transacted by</Th>
                     <Th color="white">Transaction Date</Th>
                     <Th color="white">Company</Th>
+                    <Th color="white">Business Unit</Th>
                     <Th color="white">Department</Th>
+                    <Th color="white">Unit</Th>
+                    <Th color="white">Sub Unit</Th>
                     <Th color="white">Location</Th>
                     <Th color="white">Account Title</Th>
                     <Th color="white">Employee</Th>
@@ -718,7 +751,10 @@ const PrintMiscIssueModal = ({ isOpen, onClose, printData, setPrintData, dateFro
                       <Td>{item["Transacted By"]}</Td>
                       <Td>{item["Transaction Date"]}</Td>
                       <Td>{item["Company"]}</Td>
+                      <Td>{item["Business Unit"]}</Td>
                       <Td>{item["Department"]}</Td>
+                      <Td>{item["Unit"]}</Td>
+                      <Td>{item["Sub Unit"]}</Td>
                       <Td>{item["Location"]}</Td>
                       <Td>{item["Account Title"]}</Td>
                       <Td>{item["Employee"]}</Td>
@@ -746,7 +782,7 @@ const PrintMiscIssueModal = ({ isOpen, onClose, printData, setPrintData, dateFro
               <Table size="sm" variant="simple" ref={componentRef}>
                 <Thead bgColor="primary" position="sticky" top={0} zIndex={2} h="40px">
                   <Tr>
-                    <Th color="white" fontSize="10px" colSpan={17} textAlign="center">{`Miscellaneous Issue History from ${moment(dateFrom).format("l")} - ${moment(dateTo).format(
+                    <Th color="white" fontSize="10px" colSpan={20} textAlign="center">{`Miscellaneous Issue History from ${moment(dateFrom).format("l")} - ${moment(dateTo).format(
                       "l"
                     )}`}</Th>
                   </Tr>
@@ -791,7 +827,16 @@ const PrintMiscIssueModal = ({ isOpen, onClose, printData, setPrintData, dateFro
                       Company
                     </Th>
                     <Th color="white" fontSize="8px">
+                      Business Unit
+                    </Th>
+                    <Th color="white" fontSize="8px">
                       Department
+                    </Th>
+                    <Th color="white" fontSize="8px">
+                      Unit
+                    </Th>
+                    <Th color="white" fontSize="8px">
+                      Sub Unit
                     </Th>
                     <Th color="white" fontSize="8px">
                       Location
@@ -820,7 +865,10 @@ const PrintMiscIssueModal = ({ isOpen, onClose, printData, setPrintData, dateFro
                       <Td fontSize="10px">{item["Transacted By"]}</Td>
                       <Td fontSize="10px">{item["Transaction Date"]}</Td>
                       <Td fontSize="10px">{item["Company"]}</Td>
+                      <Td fontSize="10px">{item["Business Unit"]}</Td>
                       <Td fontSize="10px">{item["Department"]}</Td>
+                      <Td fontSize="10px">{item["Unit"]}</Td>
+                      <Td fontSize="10px">{item["Sub Unit"]}</Td>
                       <Td fontSize="10px">{item["Location"]}</Td>
                       <Td fontSize="10px">{item["Account Title"]}</Td>
                       <Td fontSize="10px">{item["Employee"]}</Td>

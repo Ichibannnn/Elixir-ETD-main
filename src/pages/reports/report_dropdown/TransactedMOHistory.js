@@ -41,8 +41,14 @@ export const TransactedMOHistory = ({ dateFrom, dateTo, setSheetData, search }) 
             "Account Title": item.accountTitles,
             "Company Code": item.companyCode,
             "Company Name": item.companyName,
+            "Business Unit Code": item.businessUnitCode,
+            "Business Unit Name": item.businessUnitName,
             "Department Code": item.departmentCode,
             "Department Name": item.departmentName,
+            "Unit Code": item.departmentUnitCode,
+            "Unit Name": item.departmentUnitName,
+            "Sub Unit Code": item.subUnitCode,
+            "Sub Unit Name": item.subUnitName,
             "Location Code": item.locationCode,
             "Location Name": item.locationName,
             "Item Code": item.itemCode,
@@ -158,10 +164,28 @@ export const TransactedMOHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                         Company Name
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Business Unit Code
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Business Unit Name
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         Department Code
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Department Name
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Unit Code
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Unit Name
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Sub Unit Code
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Sub Unit Name
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Location Code
@@ -231,8 +255,14 @@ export const TransactedMOHistory = ({ dateFrom, dateTo, setSheetData, search }) 
                       <>
                         <Td fontSize="xs">{item?.companyCode}</Td>
                         <Td fontSize="xs">{item?.companyName}</Td>
+                        <Td fontSize="xs">{item?.businessUnitCode}</Td>
+                        <Td fontSize="xs">{item?.businessUnitName}</Td>
                         <Td fontSize="xs">{item?.departmentCode}</Td>
                         <Td fontSize="xs">{item?.departmentName}</Td>
+                        <Td fontSize="xs">{item?.departmentUnitCode}</Td>
+                        <Td fontSize="xs">{item?.departmentUnitName}</Td>
+                        <Td fontSize="xs">{item?.subUnitCode}</Td>
+                        <Td fontSize="xs">{item?.subUnitName}</Td>
                         <Td fontSize="xs">{item?.locationCode}</Td>
                         <Td fontSize="xs">{item?.locationName}</Td>
                         <Td fontSize="xs">{item?.accountCode}</Td>

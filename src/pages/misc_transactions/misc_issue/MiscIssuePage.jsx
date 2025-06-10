@@ -34,6 +34,7 @@ const fetchBarcodeNoApi = async (itemCode) => {
 
 const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigation, setNavigation }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showOneChargingData, setShowChargingData] = useState(null);
 
   const customerRef = useRef();
   const remarksRef = useRef();
@@ -212,6 +213,8 @@ const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigatio
               setTransactionDate={setTransactionDate}
               unitCost={unitCost}
               setUnitCost={setUnitCost}
+              showOneChargingData={showOneChargingData}
+              setShowChargingData={setShowChargingData}
             />
             {miscData?.length > 0 ? (
               <>
@@ -247,6 +250,7 @@ const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigatio
                   setTransactionDate={setTransactionDate}
                   fetchActiveMiscIssues={fetchActiveMiscIssues}
                   fetchRawMats={fetchRawMats}
+                  setShowChargingData={setShowChargingData}
                 />
               </>
             ) : (

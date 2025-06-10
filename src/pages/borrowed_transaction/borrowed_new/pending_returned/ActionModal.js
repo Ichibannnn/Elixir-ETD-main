@@ -35,13 +35,7 @@ import { GrView } from "react-icons/gr";
 
 const currentUser = decodeUser();
 
-export const ViewModal = ({
-  isOpen,
-  onClose,
-  statusBody,
-  fetchBorrowed,
-  setIsLoading,
-}) => {
+export const ViewModal = ({ isOpen, onClose, statusBody, fetchBorrowed, setIsLoading }) => {
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
   const [coaId, setCoaId] = useState("");
   const [editData, setEditData] = useState({
@@ -53,19 +47,13 @@ export const ViewModal = ({
     borrowedQuantity: "",
   });
 
-  const {
-    isOpen: isEdit,
-    onOpen: openEdit,
-    onClose: closeEdit,
-  } = useDisclosure();
+  const { isOpen: isEdit, onOpen: openEdit, onClose: closeEdit } = useDisclosure();
 
   const { isOpen: isCoa, onOpen: openCoa, onClose: closeCoa } = useDisclosure();
 
   const id = statusBody.id;
   const fetchBorrowedDetailsApi = async (id) => {
-    const res = await request.get(
-      `Borrowed/ViewBorrowedReturnDetails?id=${id}`
-    );
+    const res = await request.get(`Borrowed/ViewBorrowedReturnDetails?id=${id}`);
     return res.data;
   };
 
@@ -79,14 +67,7 @@ export const ViewModal = ({
     fetchBorrowedDetails();
   }, [id]);
 
-  const editHandler = ({
-    id,
-    itemCode,
-    itemDescription,
-    returnQuantity,
-    consume,
-    borrowedQuantity,
-  }) => {
+  const editHandler = ({ id, itemCode, itemDescription, returnQuantity, consume, borrowedQuantity }) => {
     if (
       id &&
       itemCode &&
@@ -151,21 +132,14 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Borrowed Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.preparedDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.preparedDate).format("MM/DD/yyyy")}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
@@ -186,31 +160,21 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.empId
-                    ? borrowedDetailsData[0]?.empId
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.empId ? borrowedDetailsData[0]?.empId : "-"}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee Name:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.fullName
-                    ? borrowedDetailsData[0]?.fullName
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.fullName ? borrowedDetailsData[0]?.fullName : "-"}</Text>
               </HStack>
             </VStack>
           </Flex>
@@ -250,13 +214,10 @@ export const ViewModal = ({
                       <Td fontSize="xs">{borrowdetails.itemCode}</Td>
                       <Td fontSize="xs">{borrowdetails.itemDescription}</Td>
                       <Td fontSize="xs">
-                        {borrowdetails.borrowedQuantity.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.borrowedQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                       <Td fontSize="xs">
                         {borrowdetails.consume.toLocaleString(undefined, {
@@ -265,28 +226,18 @@ export const ViewModal = ({
                         })}
                       </Td>
                       <Td fontSize="xs">
-                        {borrowdetails.returnQuantity.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.returnQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                       <Td>
                         {borrowdetails.consume === 0 ? (
                           <Button isDisabled size="xs" bg="none">
-                            <GrView
-                              fontSize="18px"
-                              onClick={() => coaIdHandler(borrowdetails.id)}
-                            />
+                            <GrView fontSize="18px" onClick={() => coaIdHandler(borrowdetails.id)} />
                           </Button>
                         ) : (
-                          <Button
-                            size="xs"
-                            bg="none"
-                            onClick={() => coaIdHandler(borrowdetails.id)}
-                          >
+                          <Button size="xs" bg="none" onClick={() => coaIdHandler(borrowdetails.id)}>
                             <GrView fontSize="18px" />
                           </Button>
                         )}
@@ -304,8 +255,7 @@ export const ViewModal = ({
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>
@@ -323,26 +273,14 @@ export const ViewModal = ({
         </ModalFooter>
       </ModalContent>
 
-      {isEdit && (
-        <EditModal
-          isOpen={isEdit}
-          onClose={closeEdit}
-          editData={editData}
-          fetchBorrowedDetails={fetchBorrowedDetails}
-        />
-      )}
+      {isEdit && <EditModal isOpen={isEdit} onClose={closeEdit} editData={editData} fetchBorrowedDetails={fetchBorrowedDetails} />}
 
       {isCoa && <ViewCOA isOpen={isCoa} onClose={closeCoa} coaId={coaId} />}
     </Modal>
   );
 };
 
-export const EditModal = ({
-  isOpen,
-  onClose,
-  editData,
-  fetchBorrowedDetails,
-}) => {
+export const EditModal = ({ isOpen, onClose, editData, fetchBorrowedDetails }) => {
   const [quantitySubmit, setQuantitySubmit] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -404,15 +342,7 @@ export const EditModal = ({
               </VStack>
               <VStack spacing={3.5}>
                 {autofilled.map((items) => (
-                  <Text
-                    w="70%"
-                    pl={2}
-                    bgColor="gray.200"
-                    border="1px"
-                    key={items}
-                    color="fontColor"
-                    fontSize="xs"
-                  >
+                  <Text w="70%" pl={2} bgColor="gray.200" border="1px" key={items} color="fontColor" fontSize="xs">
                     {items}
                   </Text>
                 ))}
@@ -424,9 +354,7 @@ export const EditModal = ({
                   value={quantitySubmit}
                   type="number"
                   onWheel={(e) => e.target.blur()}
-                  onKeyDown={(e) =>
-                    ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
-                  }
+                  onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                   onPaste={(e) => e.preventDefault()}
                   w="72%"
                   pl={2}
@@ -445,22 +373,13 @@ export const EditModal = ({
                 px={4}
                 onClick={submitHandler}
                 isLoading={isLoading}
-                disabled={
-                  !quantitySubmit ||
-                  isLoading ||
-                  quantitySubmit > editData?.borrowedQuantity
-                }
+                disabled={!quantitySubmit || isLoading || quantitySubmit > editData?.borrowedQuantity}
                 // disabled={!quantitySubmit || isLoading || quantitySubmit > editData?.consumes}
                 colorScheme="blue"
               >
                 Save
               </Button>
-              <Button
-                onClick={onClose}
-                isLoading={isLoading}
-                disabled={isLoading}
-                colorScheme="gray"
-              >
+              <Button onClick={onClose} isLoading={isLoading} disabled={isLoading} colorScheme="gray">
                 Cancel
               </Button>
             </ButtonGroup>
@@ -471,15 +390,7 @@ export const EditModal = ({
   );
 };
 
-export const PendingCancelModal = ({
-  isOpen,
-  onClose,
-  fetchBorrowed,
-  statusBody,
-  setIsLoading,
-  isLoading,
-  fetchNotificationWithParams,
-}) => {
+export const PendingCancelModal = ({ isOpen, onClose, fetchBorrowed, statusBody, setIsLoading, isLoading, fetchNotificationWithParams }) => {
   const [reasonSubmit, setReasonSubmit] = useState("");
   const [reasons, setReasons] = useState([]);
   const toast = useToast();
@@ -517,24 +428,14 @@ export const PendingCancelModal = ({
           },
         ])
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Returned Materials has been rejected",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Returned Materials has been rejected", "success", toast);
           fetchNotificationWithParams();
           fetchBorrowed();
           setIsLoading(false);
           onClose();
         })
         .catch((err) => {
-          ToastComponent(
-            "Error",
-            "Returned materials was not rejected",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Returned materials was not rejected", "error", toast);
           setIsLoading(false);
         });
     } catch (error) {}
@@ -553,17 +454,9 @@ export const PendingCancelModal = ({
 
         <ModalBody>
           <VStack justifyContent="center">
-            <Text>
-              Are you sure you want to cancel this returned materials?
-            </Text>
+            <Text>Are you sure you want to cancel this returned materials?</Text>
             {reasons?.length > 0 ? (
-              <Select
-                fontSize="md"
-                onChange={(e) => setReasonSubmit(e.target.value)}
-                w="70%"
-                placeholder="Please select a reason"
-                bg="#fff8dc"
-              >
+              <Select fontSize="md" onChange={(e) => setReasonSubmit(e.target.value)} w="70%" placeholder="Please select a reason" bg="#fff8dc">
                 {reasons?.map((reason, i) => (
                   <option key={i} value={reason.reasonName}>
                     {reason.reasonName}
@@ -578,21 +471,10 @@ export const PendingCancelModal = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup size="sm" mt={7}>
-            <Button
-              onClick={submitHandler}
-              isDisabled={!reasonSubmit || isLoading}
-              isLoading={isLoading}
-              colorScheme="blue"
-            >
+            <Button onClick={submitHandler} isDisabled={!reasonSubmit || isLoading} isLoading={isLoading} colorScheme="blue">
               Yes
             </Button>
-            <Button
-              onClick={onClose}
-              disabled={isLoading}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-            >
+            <Button onClick={onClose} disabled={isLoading} isLoading={isLoading} color="black" variant="outline">
               No
             </Button>
           </ButtonGroup>
@@ -728,10 +610,37 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
 
                             <HStack fontSize="xs" spacing="5px">
                               <Text fontWeight="semibold" color="gray.500">
+                                Business Unit:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.businessUnitCode} - {item.businessUnitName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
                                 Department:
                               </Text>
                               <Text color="gray.700" fontWeight="bold">
                                 {item.departmentCode} - {item.departmentName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Unit:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.departmentUnitCode} - {item.departmentUnitName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Sub Unit:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.subUnitCode} - {item.subUnitName}
                               </Text>
                             </HStack>
 

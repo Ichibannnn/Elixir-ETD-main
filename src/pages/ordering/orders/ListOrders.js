@@ -39,7 +39,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const dateVar = new Date();
-  const minDate = moment(dateVar.setDate(dateVar.getDate() - 5)).format("yyyy-MM-DD");
+  const minDate = moment(dateVar.setDate(dateVar.getDate() - 7)).format("yyyy-MM-DD");
 
   // ARRAY FOR THE LIST DATA
   const resultArray = genusOrders?.result?.map((item) =>
@@ -53,9 +53,9 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
         orderDate: item?.date_ordered,
         dateNeeded: item?.date_needed,
         department: item?.charge_department_name,
-        customerCode: item?.customer_code,
-        customerName: item?.customer_name,
-        customerType: item?.order_type,
+        customerCode: item?.charging_code,
+        customerName: item?.charging_name,
+        customerType: "online",
         itemCode: itemsub?.material_code,
         itemdDescription: itemsub?.material_name,
         category: itemsub?.category_name,
@@ -71,14 +71,17 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
         itemRemarks: itemsub?.remarks,
         accountCode: itemsub?.account_title_code,
         accountTitles: itemsub?.account_title_name,
-        assetTag: itemsub?.plate_no,
+        assetTag: itemsub?.asset_name,
+        // assetTag: itemsub?.plate_no,
         helpdeskNo: item?.helpdesk_no,
         dateApproved: item?.date_approved,
 
-        oneChargingCode: 10,
+        oneChargingCode: item?.charging_code,
       };
     })
   );
+
+  console.log("Result Array: ", resultArray);
 
   // SYNC ORDER BUTTON
   const syncHandler = () => {
@@ -130,7 +133,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
           itemRemarks: submit?.itemRemarks,
           accountCode: submit?.accountCode,
           accountTitles: submit?.accountTitles,
-          assetTag: submit?.assetTag,
+          assetTag: submit?.asset_tag,
           helpdeskNo: submit?.helpdeskNo ? submit?.helpdeskNo : null,
           dateApproved: moment(submit?.dateApproved).format("yyyy-MM-DD"),
 
@@ -333,7 +336,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
                           ?.filter((val) => {
                             const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
 
-                            return val?.customer_name?.toLowerCase().match(newKeyword, "*");
+                            return val?.customer_charging_name?.toLowerCase().match(newKeyword, "*");
                           })
                           ?.map((order, i) =>
                             order.orders?.map((sub, i) => (
@@ -341,9 +344,9 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
                                 <Td fontSize="12px">{sub.transaction_id}</Td>
                                 <Td fontSize="12px">{moment(order.date_ordered).format("yyyy-MM-DD")}</Td>
                                 <Td fontSize="12px">{moment(order.date_needed).format("yyyy-MM-DD")}</Td>
-                                <Td fontSize="12px">{order.customer_code}</Td>
-                                <Td fontSize="12px">{order.customer_name}</Td>
-                                <Td fontSize="12px">{order.order_type}</Td>
+                                <Td fontSize="12px">{order.charging_code}</Td>
+                                <Td fontSize="12px">{order.charging_name}</Td>
+                                <Td fontSize="12px">{`online`}</Td>
                                 <Td fontSize="12px">{order.charge_department_name}</Td>
                                 <Td fontSize="12px">{order.charge_location_name}</Td>
                                 <Td fontSize="12px">{sub.material_code}</Td>
@@ -357,7 +360,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
                                   })}
                                 </Td>
                                 {sub.remarks ? <Td fontSize="12px">{sub.remarks}</Td> : <Td fontSize="12px">-</Td>}
-                                {sub.plate_no ? <Td fontSize="12px">{sub.plate_no}</Td> : <Td fontSize="12px">-</Td>}
+                                {sub.asset_tag ? <Td fontSize="12px">{sub.asset_tag}</Td> : <Td fontSize="12px">-</Td>}
                               </Tr>
                             ))
                           )}

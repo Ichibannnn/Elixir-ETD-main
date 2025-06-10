@@ -32,15 +32,14 @@ import * as yup from "yup";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
+import request from "../../../services/ApiClient";
 
 const currentUser = decodeUser();
 
 const schema = yup.object().shape({
   formData: yup.object().shape({
     suppliers: yup.object(),
-    companyId: yup.object().required().typeError("Company Name is required"),
-    departmentId: yup.object().required().typeError("Department Category is required"),
-    locationId: yup.object().required().typeError("Location Name is required"),
+    oneChargingCode: yup.object().required().typeError("Charging Code is required"),
   }),
 });
 
@@ -61,52 +60,30 @@ export const MaterialsInformation = ({
   transactionType,
   transactionDate,
   setTransactionDate,
+  showOneChargingData,
+  setShowChargingData,
 }) => {
-  // COA
-  const [company, setCompany] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [location, setLocation] = useState([]);
+  // ONE CHARGING CODE
+  const [oneChargingCode, setOneChargingCode] = useState([]);
 
-  // FETCH COMPANY API
-  const fetchCompanyApi = async () => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setCompany(res.data.result.companies);
-      // console.log(res.data.result.companies);
-    } catch (error) {}
+  //  FETCH ONE CHARGING CODE
+  const fetchOneChargingApi = async () => {
+    const res = await request.get(`OneCharging/GetOneCharging`);
+    return res.data;
   };
 
-  // FETCH DEPT API
-  const fetchDepartmentApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setDepartment(res.data.result.departments);
-      // console.log(res.data.result.departments);
-    } catch (error) {}
-  };
-
-  // FETCH Loc API
-  const fetchLocationApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setLocation(res.data.result.locations);
-    } catch (error) {}
+  const fetchOneCharging = () => {
+    fetchOneChargingApi().then((res) => {
+      setOneChargingCode(res);
+    });
   };
 
   useEffect(() => {
-    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
+    fetchOneCharging();
+
+    return () => {
+      setOneChargingCode([]);
+    };
   }, []);
 
   const {
@@ -121,12 +98,7 @@ export const MaterialsInformation = ({
     defaultValues: {
       formData: {
         suppliers: "",
-        companyId: "",
-        departmentId: "",
-        locationId: "",
-        // accountId: "",
-        // empId: "",
-        // fullName: "",
+        oneChargingCode: "",
         addedBy: currentUser.fullName,
       },
     },
@@ -177,6 +149,13 @@ export const MaterialsInformation = ({
       reset();
     }
   }, [supplierData]);
+
+  const cutOff = 7;
+  const today = moment();
+  const isSeventhDay = today.date() < cutOff;
+  const minDate = isSeventhDay
+    ? today.clone().subtract(1, "month").format("YYYY-MM-DD") // If today is before the 7th, set minDate to one month ago
+    : today.startOf("month").format("YYYY-MM-DD"); // If today is on or after the 7th, set minDate to the start of the current month
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
@@ -287,152 +266,138 @@ export const MaterialsInformation = ({
                 w="full"
                 onChange={(e) => setTransactionDate(e.target.value)}
                 value={transactionDate}
+                min={minDate}
                 max={moment(new Date()).format("yyyy-MM-DD")}
                 // bgColor="#fff8dc"
                 py={1.5}
                 border="1px"
                 borderRadius="none"
                 borderColor="gray.400"
+                onKeyDown={(e) => e.preventDefault()}
+              />
+            </HStack>
+
+            {/* Details */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={5} py={2.5} fontSize="xs">
+                Details:{" "}
+              </Text>
+              <Input
+                fontSize="sm"
+                onChange={(e) => detailHandler(e.target.value)}
+                value={details}
+                w="full"
+                // bgColor="#ffffe0"
+                border="1px"
+                borderColor="gray.400"
+                borderRadius="none"
               />
             </HStack>
           </VStack>
 
           <VStack alignItems="start" w="40%" mx={5}>
-            {/* Company */}
-            <HStack w="100%">
+            {/* One Charging Code */}
+            <HStack w="full">
               <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
+                Charging Code:
+              </Text>
+
+              {oneChargingCode?.oneChargingList?.length > 0 ? (
+                <Controller
+                  control={control}
+                  name="formData.oneChargingCode"
+                  render={({ field }) => (
+                    <AutoComplete
+                      className="react-select-layout"
+                      ref={field.ref}
+                      value={field.value}
+                      size="sm"
+                      placeholder="Select Code"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        setShowChargingData(e?.value);
+                      }}
+                      options={oneChargingCode?.oneChargingList?.map((item) => {
+                        return {
+                          label: `${item.code} - ${item.name}`,
+                          value: item,
+                        };
+                      })}
+                    />
+                  )}
+                />
+              ) : (
+                <Spinner thickness="4px" emptyColor="gray.200" color="blue.500" size="md" />
+              )}
+            </HStack>
+
+            {/* Company */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                 Company:{" "}
               </Text>
-              <Controller
-                control={control}
-                name="formData.companyId"
-                render={({ field }) => (
-                  <AutoComplete
-                    className="react-select-layout"
-                    ref={field.ref}
-                    value={field.value}
-                    size="sm"
-                    placeholder="Select Company"
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setValue("formData.departmentId", "");
-                      setValue("formData.locationId", "");
-                      fetchDepartmentApi(e?.value?.id || "");
-                    }}
-                    options={company?.map((item) => {
-                      return {
-                        label: `${item.code} - ${item.name}`,
-                        value: item,
-                      };
-                    })}
-                  />
-                )}
-              />
-              <Text color="red" fontSize="xs">
-                {errors.formData?.companyId?.message}
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.company_code} - ${showOneChargingData?.company_name}` : "Select Charging Code"}
+              </Text>
+            </HStack>
+
+            {/* Business Unit */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
+                Business Unit:{" "}
+              </Text>
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.business_unit_code} - ${showOneChargingData?.business_unit_name}` : "Select Charging Code"}
               </Text>
             </HStack>
 
             {/* Department */}
             <HStack w="full">
-              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                 Department:{" "}
               </Text>
-              <Controller
-                control={control}
-                name="formData.departmentId"
-                render={({ field }) => (
-                  <AutoComplete
-                    className="react-select-layout"
-                    size="sm"
-                    ref={field.ref}
-                    value={field.value}
-                    placeholder="Select Department"
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setValue("formData.locationId", "");
-                      fetchLocationApi(e?.value?.id);
-                    }}
-                    options={department?.map((item) => {
-                      return {
-                        label: `${item.code} - ${item.name}`,
-                        value: item,
-                      };
-                    })}
-                  />
-                )}
-              />
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.department_code} - ${showOneChargingData?.department_name}` : "Select Charging Code"}
+              </Text>
+            </HStack>
 
-              <Text color="red" fontSize="xs">
-                {errors.formData?.departmentId?.message}
+            {/* Unit */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
+                Unit:{" "}
+              </Text>
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.department_unit_code} - ${showOneChargingData?.department_unit_name}` : "Select Charging Code"}
+              </Text>
+            </HStack>
+
+            {/* Sub Unit */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
+                Sub Unit:{" "}
+              </Text>
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.sub_unit_code} - ${showOneChargingData?.sub_unit_name}` : "Select Charging Code"}
               </Text>
             </HStack>
 
             {/* Location */}
             <HStack w="full">
-              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                 Location:{" "}
               </Text>
-              <Controller
-                control={control}
-                name="formData.locationId"
-                render={({ field }) => (
-                  <AutoComplete
-                    className="react-select-layout"
-                    size="sm"
-                    ref={field.ref}
-                    value={field.value}
-                    placeholder="Select Location"
-                    onChange={(e) => {
-                      field.onChange(e);
-                    }}
-                    options={location?.map((item) => {
-                      return {
-                        label: `${item.code} - ${item.name}`,
-                        value: item,
-                      };
-                    })}
-                  />
-                )}
-              />
-              <Text color="red" fontSize="xs">
-                {errors.formData?.locationId?.message}
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.location_code} - ${showOneChargingData?.location_name}` : "Select Charging Code"}
               </Text>
             </HStack>
           </VStack>
         </Flex>
 
-        <VStack alignItems="start" w="full">
-          {/* Details */}
-          <HStack w="full">
-            <Text w="auto" bgColor="primary" color="white" pl={2} pr={5} py={2.5} fontSize="xs">
-              Details:{" "}
-            </Text>
-            <Input
-              fontSize="sm"
-              onChange={(e) => detailHandler(e.target.value)}
-              value={details}
-              w="full"
-              // bgColor="#ffffe0"
-              border="1px"
-              borderColor="gray.400"
-              borderRadius="none"
-            />
-          </HStack>
-        </VStack>
+        <VStack alignItems="start" w="full"></VStack>
         <Flex w="full" justifyContent="end">
           <Button
             onClick={() => openModal()}
-            isDisabled={
-              !isValid ||
-              !supplierData.supplierName ||
-              !details ||
-              !remarks ||
-              !transactionDate ||
-              !watch("formData.companyId") ||
-              !watch("formData.departmentId") ||
-              !watch("formData.locationId")
-            }
+            isDisabled={!supplierData.supplierName || !details || !remarks || !transactionDate || !watch("formData.oneChargingCode")}
             size="sm"
             width="100px"
             colorScheme="blue"

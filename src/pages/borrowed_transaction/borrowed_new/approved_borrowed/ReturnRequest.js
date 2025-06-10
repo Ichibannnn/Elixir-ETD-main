@@ -30,12 +30,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import {
-  MdDeleteOutline,
-  MdOutlineCheckBox,
-  MdOutlineMoreHoriz,
-  MdOutlinePendingActions,
-} from "react-icons/md";
+import { MdDeleteOutline, MdOutlineCheckBox, MdOutlineMoreHoriz, MdOutlinePendingActions } from "react-icons/md";
 import { GoArrowSmallRight } from "react-icons/go";
 import PageScroll from "../../../../utils/PageScroll";
 import moment from "moment";
@@ -45,28 +40,14 @@ import { EditQuantityModal } from "./ActionModal";
 import Swal from "sweetalert2";
 import { ToastComponent } from "../../../../components/Toast";
 
-export const ReturnRequest = ({
-  isOpen,
-  onClose,
-  materialListId,
-  borrowedId,
-  borrowedHandler,
-  consumedHandler,
-  setIsLoading,
-  fetchMaterialsList,
-  serviceReportNo,
-}) => {
+export const ReturnRequest = ({ isOpen, onClose, materialListId, borrowedId, borrowedHandler, consumedHandler, setIsLoading, fetchMaterialsList, serviceReportNo }) => {
   const [returnRequest, setReturnRequest] = useState([]);
   const [editData, setEditData] = useState([]);
   const [availableConsume, setAvailableConsume] = useState("");
 
   const toast = useToast();
 
-  const {
-    isOpen: isEditQuantity,
-    onOpen: openEditQuantity,
-    onClose: closeEditQuantity,
-  } = useDisclosure();
+  const { isOpen: isEditQuantity, onOpen: openEditQuantity, onClose: closeEditQuantity } = useDisclosure();
 
   //RETURN REQUEST
   const id = materialListId;
@@ -134,12 +115,7 @@ export const ReturnRequest = ({
               },
             ])
             .then((response) => {
-              ToastComponent(
-                "Success",
-                `Reset consumed quantity was saved`,
-                "success",
-                toast
-              );
+              ToastComponent("Success", `Reset consumed quantity was saved`, "success", toast);
               sessionStorage.removeItem("Borrowed ID");
               sessionStorage.removeItem("Navigation");
               fetchReturnRequest();
@@ -153,6 +129,8 @@ export const ReturnRequest = ({
       }
     });
   };
+
+  // console.log("GetTable", returnRequest);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="6xl" isCentered>
@@ -226,13 +204,10 @@ export const ReturnRequest = ({
                                 Consumed Quantity:
                               </Text>
                               <Text color="blue.400" fontWeight="bold">
-                                {item.consumedQuantity.toLocaleString(
-                                  undefined,
-                                  {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  }
-                                )}
+                                {item.consumedQuantity.toLocaleString(undefined, {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                })}
                               </Text>
                             </HStack>
                           </Flex>
@@ -267,11 +242,50 @@ export const ReturnRequest = ({
 
                             <HStack fontSize="xs" spacing="5px">
                               <Text fontWeight="semibold" color="gray.500">
+                                Business Unit :
+                              </Text>
+                              {item?.businessUnitCode ? (
+                                <Text color="gray.700" fontWeight="bold">
+                                  {item.businessUnitCode} -{item.businessUnitName}
+                                </Text>
+                              ) : (
+                                <Text>-</Text>
+                              )}
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
                                 Department:
                               </Text>
                               <Text color="gray.700" fontWeight="bold">
                                 {item.departmentCode} - {item.departmentName}
                               </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Unit:
+                              </Text>
+                              {item?.departmentUnitCode ? (
+                                <Text color="gray.700" fontWeight="bold">
+                                  {item.departmentUnitCode} -{item.departmentUnitName}
+                                </Text>
+                              ) : (
+                                <Text>-</Text>
+                              )}
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Sub Unit:
+                              </Text>
+                              {item?.subUnitCode ? (
+                                <Text color="gray.700" fontWeight="bold">
+                                  {item.subUnitCode} -{item.subUnitName}
+                                </Text>
+                              ) : (
+                                <Text>-</Text>
+                              )}
                             </HStack>
 
                             <HStack fontSize="xs" spacing="5px">
@@ -311,48 +325,25 @@ export const ReturnRequest = ({
                         <Flex pl={2}>
                           <Box>
                             <Menu>
-                              <MenuButton
-                                alignItems="center"
-                                justifyContent="center"
-                                bg="none"
-                              >
+                              <MenuButton alignItems="center" justifyContent="center" bg="none">
                                 <MdOutlineMoreHoriz fontSize="20px" />
                               </MenuButton>
                               <MenuList>
-                                {item.borrowedQuantity ===
-                                item.itemConsumedQuantity ? (
-                                  <MenuItem
-                                    isDisabled
-                                    icon={<AiOutlineEdit fontSize="17px" />}
-                                  >
-                                    <Text
-                                      fontSize="15px"
-                                      _hover={{ color: "red" }}
-                                    >
+                                {item.borrowedQuantity === item.itemConsumedQuantity ? (
+                                  <MenuItem isDisabled icon={<AiOutlineEdit fontSize="17px" />}>
+                                    <Text fontSize="15px" _hover={{ color: "red" }}>
                                       Edit
                                     </Text>
                                   </MenuItem>
                                 ) : (
-                                  <MenuItem
-                                    onClick={() => editQuantityHandler(item)}
-                                    icon={<AiOutlineEdit fontSize="17px" />}
-                                  >
-                                    <Text
-                                      fontSize="15px"
-                                      _hover={{ color: "red" }}
-                                    >
+                                  <MenuItem onClick={() => editQuantityHandler(item)} icon={<AiOutlineEdit fontSize="17px" />}>
+                                    <Text fontSize="15px" _hover={{ color: "red" }}>
                                       Edit
                                     </Text>
                                   </MenuItem>
                                 )}
-                                <MenuItem
-                                  onClick={() => resetConsumedQty(item)}
-                                  icon={<MdDeleteOutline fontSize="17px" />}
-                                >
-                                  <Text
-                                    fontSize="15px"
-                                    _hover={{ color: "red" }}
-                                  >
+                                <MenuItem onClick={() => resetConsumedQty(item)} icon={<MdDeleteOutline fontSize="17px" />}>
+                                  <Text fontSize="15px" _hover={{ color: "red" }}>
                                     Delete
                                   </Text>
                                 </MenuItem>

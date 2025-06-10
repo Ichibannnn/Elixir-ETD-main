@@ -31,13 +31,7 @@ import moment from "moment";
 import { GrView } from "react-icons/gr";
 import { useReactToPrint } from "react-to-print";
 
-export const ViewModal = ({
-  isOpen,
-  onClose,
-  statusBody,
-  fetchBorrowed,
-  setIsLoading,
-}) => {
+export const ViewModal = ({ isOpen, onClose, statusBody, fetchBorrowed, setIsLoading }) => {
   const { isOpen: isCoa, onOpen: openCoa, onClose: closeCoa } = useDisclosure();
 
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
@@ -47,9 +41,7 @@ export const ViewModal = ({
 
   const id = statusBody.id;
   const fetchBorrowedDetailsApi = async (id) => {
-    const res = await request.get(
-      `Borrowed/ViewBorrowedReturnDetails?id=${id}`
-    );
+    const res = await request.get(`Borrowed/ViewBorrowedReturnDetails?id=${id}`);
     return res.data;
   };
 
@@ -92,9 +84,7 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
@@ -112,23 +102,13 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Borrowed Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.transactionDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.transactionDate).format("MM/DD/yyyy")}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Returned Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.returnedDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.returnedDate).format("MM/DD/yyyy")}</Text>
               </HStack>
             </VStack>
 
@@ -137,31 +117,21 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.empId
-                    ? borrowedDetailsData[0]?.empId
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.empId ? borrowedDetailsData[0]?.empId : "-"}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee Name:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.fullName
-                    ? borrowedDetailsData[0]?.fullName
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.fullName ? borrowedDetailsData[0]?.fullName : "-"}</Text>
               </HStack>
             </VStack>
           </Flex>
@@ -201,13 +171,10 @@ export const ViewModal = ({
                       <Td fontSize="xs">{borrowdetails.itemCode}</Td>
                       <Td fontSize="xs">{borrowdetails.itemDescription}</Td>
                       <Td fontSize="xs">
-                        {borrowdetails.borrowedQuantity.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.borrowedQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                       <Td fontSize="xs">
                         {borrowdetails.consume.toLocaleString(undefined, {
@@ -216,28 +183,18 @@ export const ViewModal = ({
                         })}
                       </Td>
                       <Td fontSize="xs">
-                        {borrowdetails.returnQuantity.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.returnQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                       <Td>
                         {borrowdetails.consume === 0 ? (
                           <Button isDisabled size="xs" bg="none">
-                            <GrView
-                              fontSize="18px"
-                              onClick={() => coaIdHandler(borrowdetails.id)}
-                            />
+                            <GrView fontSize="18px" onClick={() => coaIdHandler(borrowdetails.id)} />
                           </Button>
                         ) : (
-                          <Button
-                            size="xs"
-                            bg="none"
-                            onClick={() => coaIdHandler(borrowdetails.id)}
-                          >
+                          <Button size="xs" bg="none" onClick={() => coaIdHandler(borrowdetails.id)}>
                             <GrView fontSize="18px" />
                           </Button>
                         )}
@@ -255,8 +212,7 @@ export const ViewModal = ({
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>
@@ -276,13 +232,7 @@ export const ViewModal = ({
   );
 };
 
-export const PrintModal = ({
-  isOpen,
-  onClose,
-  statusBody,
-  fetchBorrowed,
-  setIsLoading,
-}) => {
+export const PrintModal = ({ isOpen, onClose, statusBody, fetchBorrowed, setIsLoading }) => {
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -295,9 +245,7 @@ export const PrintModal = ({
 
   const id = statusBody.id;
   const fetchBorrowedDetailsApi = async (id) => {
-    const res = await request.get(
-      `Borrowed/ViewBorrowedReturnDetails?id=${id}`
-    );
+    const res = await request.get(`Borrowed/ViewBorrowedReturnDetails?id=${id}`);
     return res.data;
   };
 
@@ -338,17 +286,13 @@ export const PrintModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
@@ -369,23 +313,13 @@ export const PrintModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Borrowed Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.transactionDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.transactionDate).format("MM/DD/yyyy")}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Returned Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.returnedDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.returnedDate).format("MM/DD/yyyy")}</Text>
               </HStack>
             </VStack>
           </Flex>
@@ -422,13 +356,10 @@ export const PrintModal = ({
                       <Td fontSize="xs">{borrowdetails.itemCode}</Td>
                       <Td fontSize="xs">{borrowdetails.itemDescription}</Td>
                       <Td fontSize="xs">
-                        {borrowdetails.borrowedQuantity.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.borrowedQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                       <Td fontSize="xs">
                         {borrowdetails.consume.toLocaleString(undefined, {
@@ -437,13 +368,10 @@ export const PrintModal = ({
                         })}
                       </Td>
                       <Td fontSize="xs">
-                        {borrowdetails.returnQuantity.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.returnQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                     </Tr>
                   ))}
@@ -458,8 +386,7 @@ export const PrintModal = ({
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>
@@ -612,10 +539,37 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
 
                             <HStack fontSize="xs" spacing="5px">
                               <Text fontWeight="semibold" color="gray.500">
+                                Business Unit:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.businessUnitCode} - {item.businessUnitName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
                                 Department:
                               </Text>
                               <Text color="gray.700" fontWeight="bold">
                                 {item.departmentCode} - {item.departmentName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Unit:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.departmentUnitCode} - {item.departmentUnitName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Sub Unit:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.subUnitCode} - {item.subUnitName}
                               </Text>
                             </HStack>
 

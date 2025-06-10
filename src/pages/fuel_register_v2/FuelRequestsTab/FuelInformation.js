@@ -42,22 +42,43 @@ export const FuelInformation = ({
   watch,
   reset,
   requestorInformation,
+  showOneChargingData,
+  setShowChargingData,
 }) => {
+  // ONE CHARGING CODE
+  const [oneChargingCode, setOneChargingCode] = useState([]);
+
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [idNumber, setIdNumber] = useState();
   const [info, setInfo] = useState();
 
   const [assets, setAssets] = useState([]);
-  const [company, setCompany] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [location, setLocation] = useState([]);
   const [account, setAccount] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
   const [disableFullName, setDisableFullName] = useState(true);
 
   const { isOpen: isMaterial, onClose: closeMaterial, onOpen: openMaterial } = useDisclosure();
+
+  //  FETCH ONE CHARGING CODE
+  const fetchOneChargingApi = async () => {
+    const res = await request.get(`OneCharging/GetOneCharging`);
+    return res.data;
+  };
+
+  const fetchOneCharging = () => {
+    fetchOneChargingApi().then((res) => {
+      setOneChargingCode(res);
+    });
+  };
+
+  useEffect(() => {
+    fetchOneCharging();
+
+    return () => {
+      setOneChargingCode([]);
+    };
+  }, []);
 
   // SEDAR
   const [pickerItems, setPickerItems] = useState([]);
@@ -99,44 +120,6 @@ export const FuelInformation = ({
     fetchEmployees();
   }, []);
 
-  // FETCH COMPANY API
-  const fetchCompanyApi = async () => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setCompany(res.data.result.companies);
-      // console.log(res.data.result.companies);
-    } catch (error) {}
-  };
-
-  // FETCH DEPT API
-  const fetchDepartmentApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setDepartment(res.data.result.departments);
-      // console.log(res.data.result.departments);
-    } catch (error) {}
-  };
-
-  // FETCH Loc API
-  const fetchLocationApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setLocation(res.data.result.locations);
-    } catch (error) {}
-  };
-
   // FETCH ACcount API
   const fetchAccountApi = async (id = "") => {
     try {
@@ -150,7 +133,6 @@ export const FuelInformation = ({
   };
 
   useEffect(() => {
-    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
     fetchAccountApi();
   }, []);
 
@@ -183,7 +165,7 @@ export const FuelInformation = ({
     openMaterial();
   };
 
-  // console.log("Watch: ", watch("formData"));
+  console.log("Requestor Information: ", requestorInformation);
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
@@ -394,32 +376,28 @@ export const FuelInformation = ({
           </VStack>
 
           <VStack alignItems="start" w="40%" mx={5}>
-            {/* Company */}
-            <HStack w="100%">
+            {/* One Charging Code */}
+            <HStack w="full">
               <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
-                Company:
+                Charging Code:{" "}
               </Text>
 
-              {company?.length ? (
+              {oneChargingCode?.oneChargingList?.length > 0 ? (
                 <Controller
                   control={control}
-                  name="formData.companyId"
+                  name="formData.oneChargingCode"
                   render={({ field }) => (
                     <AutoComplete
+                      className="react-select-layout"
                       ref={field.ref}
                       value={field.value}
-                      placeholder="Select Company"
+                      placeholder="Select Charging Code"
                       onChange={(e) => {
-                        // console.log("E: ", e);
-
+                        console.log("Event: ", e);
                         field.onChange(e);
-                        setValue("formData.departmentId", "");
-                        setValue("formData.locationId", "");
-                        if (e?.value?.id) {
-                          fetchDepartmentApi(e.value.id);
-                        }
+                        setShowChargingData(e?.value);
                       }}
-                      options={company?.map((item) => {
+                      options={oneChargingCode?.oneChargingList?.map((item) => {
                         return {
                           label: `${item.code} - ${item.name}`,
                           value: item,
@@ -442,104 +420,65 @@ export const FuelInformation = ({
               ) : (
                 <Spinner thickness="4px" emptyColor="gray.200" color="blue.500" size="md" />
               )}
-              <Text color="red" fontSize="xs">
-                {errors.formData?.companyId?.message}
+            </HStack>
+
+            {/* Company */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
+                Company:{" "}
+              </Text>
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.company_code} - ${showOneChargingData?.company_name}` : "Select Charging Code"}
+              </Text>
+            </HStack>
+
+            {/* Business Unit */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
+                Business Unit:{" "}
+              </Text>
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.business_unit_code} - ${showOneChargingData?.business_unit_name}` : "Select Charging Code"}
               </Text>
             </HStack>
 
             {/* Department */}
             <HStack w="full">
-              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
-                Department:
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
+                Department:{" "}
               </Text>
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.department_code} - ${showOneChargingData?.department_name}` : "Select Charging Code"}
+              </Text>
+            </HStack>
 
-              {department?.length ? (
-                <Controller
-                  control={control}
-                  name="formData.departmentId"
-                  render={({ field }) => (
-                    <AutoComplete
-                      ref={field.ref}
-                      value={field.value}
-                      placeholder="Select Department"
-                      onChange={(e) => {
-                        field.onChange(e);
-                        setValue("formData.locationId", "");
-                        fetchLocationApi(e?.value?.id);
-                      }}
-                      options={department?.map((item) => {
-                        return {
-                          label: `${item.code} - ${item.name}`,
-                          value: item,
-                        };
-                      })}
-                      chakraStyles={{
-                        container: (provided) => ({
-                          ...provided,
-                          width: "100%",
-                        }),
-                        control: (provided) => ({
-                          ...provided,
-                          fontSize: "15px",
-                          textAlign: "left",
-                        }),
-                      }}
-                    />
-                  )}
-                />
-              ) : (
-                <Spinner thickness="4px" emptyColor="gray.200" color="blue.500" size="md" />
-              )}
+            {/* Unit */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
+                Unit:{" "}
+              </Text>
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.department_unit_code} - ${showOneChargingData?.department_unit_name}` : "Select Charging Code"}
+              </Text>
+            </HStack>
 
-              <Text color="red" fontSize="xs">
-                {errors.formData?.departmentId?.message}
+            {/* Sub Unit */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
+                Sub Unit:{" "}
+              </Text>
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.sub_unit_code} - ${showOneChargingData?.sub_unit_name}` : "Select Charging Code"}
               </Text>
             </HStack>
 
             {/* Location */}
             <HStack w="full">
-              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
                 Location:{" "}
               </Text>
-
-              {location?.length ? (
-                <Controller
-                  control={control}
-                  name="formData.locationId"
-                  render={({ field }) => (
-                    <AutoComplete
-                      ref={field.ref}
-                      value={field.value}
-                      placeholder="Select Location"
-                      onChange={(e) => {
-                        field.onChange(e);
-                      }}
-                      options={location?.map((item) => {
-                        return {
-                          label: `${item.code} - ${item.name}`,
-                          value: item,
-                        };
-                      })}
-                      chakraStyles={{
-                        container: (provided) => ({
-                          ...provided,
-                          width: "100%",
-                        }),
-                        control: (provided) => ({
-                          ...provided,
-                          fontSize: "15px",
-                          textAlign: "left",
-                        }),
-                      }}
-                    />
-                  )}
-                />
-              ) : (
-                <Spinner thickness="4px" emptyColor="gray.200" color="blue.500" size="md" />
-              )}
-
-              <Text color="red" fontSize="xs">
-                {errors.formData?.locationId?.message}
+              <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                {showOneChargingData ? `${showOneChargingData?.location_code} - ${showOneChargingData?.location_name}` : "Select Charging Code"}
               </Text>
             </HStack>
 
@@ -682,9 +621,7 @@ export const FuelInformation = ({
               !watch("formData.asset") ||
               !watch("formData.requestorId") ||
               !watch("formData.requestorFullName") ||
-              !watch("formData.companyId") ||
-              !watch("formData.departmentId") ||
-              !watch("formData.locationId") ||
+              !watch("formData.oneChargingCode") ||
               !watch("formData.accountId") ||
               (!!selectedAccount.match(/Advances to Employees/gi) && !watch("formData.empId"))
             }
@@ -740,12 +677,8 @@ export const FuelInformationModal = ({
   });
 
   const {
-    register,
-    handleSubmit,
     formState: { errors, isValid },
-    setValue,
     watch,
-    control,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -773,8 +706,6 @@ export const FuelInformationModal = ({
       });
     }
   }, [barcode]);
-
-  console.log("Requestor: ", requestorWatch("formData"));
 
   return (
     <>

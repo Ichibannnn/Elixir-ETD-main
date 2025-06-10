@@ -26,6 +26,7 @@ export const ActionButton = ({
   setTransactionDate,
   fetchActiveMiscIssues,
   fetchRawMats,
+  setShowChargingData,
 }) => {
   const [hideButton, setHideButton] = useState(false);
 
@@ -78,6 +79,7 @@ export const ActionButton = ({
           fetchActiveMiscIssues={fetchActiveMiscIssues}
           fetchRawMats={fetchRawMats}
           coaData={coaData}
+          setShowChargingData={setShowChargingData}
         />
       )}
 

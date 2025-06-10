@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Button,
   ButtonGroup,
   Flex,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -41,7 +40,6 @@ import { decodeUser } from "../../../../services/decode-user";
 import { useReactToPrint } from "react-to-print";
 import { Select as AutoComplete } from "chakra-react-select";
 import { AiOutlineControl } from "react-icons/ai";
-import { NumericFormat } from "react-number-format";
 
 const currentUser = decodeUser();
 
@@ -266,27 +264,42 @@ export const ConsumeModal = ({
       borrowedItemPKey: yup.string(),
       consume: yup.number().required("Consume quantity is required").typeError("Must be a number"),
       serviceReportNo: yup.number().required("Service report number is required").typeError("Must be a number"),
-      companyId: yup.object().required().typeError("Company Name is required"),
-      departmentId: yup.object().required().typeError("Department Category is required"),
-      locationId: yup.object().required().typeError("Location Name is required"),
+      oneChargingCode: yup.object().required().typeError("Charging Code is required"),
       accountId: yup.object().required("Account Name is required"),
       empId: yup.object().nullable(),
       fullName: yup.string(),
     }),
   });
 
-  const toast = useToast();
-
-  const [company, setCompany] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [location, setLocation] = useState([]);
+  const [oneChargingCode, setOneChargingCode] = useState([]);
+  const [showOneChargingData, setShowChargingData] = useState(null);
   const [account, setAccount] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState("");
   const [disableFullName, setDisableFullName] = useState(true);
+  const toast = useToast();
+
+  //  FETCH ONE CHARGING CODE
+  const fetchOneChargingApi = async () => {
+    const res = await request.get(`OneCharging/GetOneCharging`);
+    return res.data;
+  };
+
+  const fetchOneCharging = () => {
+    fetchOneChargingApi().then((res) => {
+      setOneChargingCode(res);
+    });
+  };
+
+  useEffect(() => {
+    fetchOneCharging();
+
+    return () => {
+      setOneChargingCode([]);
+    };
+  }, []);
 
   // SEDAR
   const [pickerItems, setPickerItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
 
   const fetchEmployees = async () => {
     try {
@@ -303,44 +316,6 @@ export const ConsumeModal = ({
     fetchEmployees();
   }, []);
 
-  // FETCH COMPANY API
-  const fetchCompanyApi = async () => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setCompany(res.data.result.companies);
-      // console.log(res.data.result.companies);
-    } catch (error) {}
-  };
-
-  // FETCH DEPT API
-  const fetchDepartmentApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setDepartment(res.data.result.departments);
-      // console.log(res.data.result.departments);
-    } catch (error) {}
-  };
-
-  // FETCH Loc API
-  const fetchLocationApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setLocation(res.data.result.locations);
-    } catch (error) {}
-  };
-
   // FETCH ACcount API
   const fetchAccountApi = async (id = "") => {
     try {
@@ -354,7 +329,6 @@ export const ConsumeModal = ({
   };
 
   useEffect(() => {
-    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
     fetchAccountApi();
   }, []);
 
@@ -370,9 +344,7 @@ export const ConsumeModal = ({
     mode: "onChange",
     defaultValues: {
       formData: {
-        companyId: "",
-        departmentId: "",
-        locationId: "",
+        oneChargingCode: "",
         accountId: "",
         consume: "",
         serviceReportNo: "",
@@ -398,7 +370,6 @@ export const ConsumeModal = ({
 
   const [idNumber, setIdNumber] = useState();
   const [info, setInfo] = useState();
-  const [showLoading, setShowLoading] = useState(false);
 
   useEffect(() => {
     setInfo(
@@ -412,11 +383,7 @@ export const ConsumeModal = ({
     return () => {};
   }, [idNumber]);
 
-  // console.log(isValid);
-  // console.log(isLoading);
-  console.log("Service Report No:", serviceReportNo);
-  // console.log(returnQuantity);
-  // console.log(watch("formData"));
+  // console.log("oneChargingCode", watch("formData.oneChargingCode"));
 
   const submitConsumeHandler = async (data) => {
     Swal.fire({
@@ -448,12 +415,7 @@ export const ConsumeModal = ({
               uom: uom,
               consume: consumedQuantity,
               reportNumber: serviceReportNo,
-              companyCode: data.formData.companyId.value.code,
-              companyName: data.formData.companyId.value.name,
-              departmentCode: data.formData.departmentId.value.code,
-              departmentName: data.formData.departmentId.value.name,
-              locationCode: data.formData.locationId.value.code,
-              locationName: data.formData.locationId.value.name,
+              oneChargingCode: data.formData.oneChargingCode.value.code,
               accountCode: data.formData.accountId.value.code,
               accountTitles: data.formData.accountId.value.name,
               empId: data.formData.empId?.value.full_id_number,
@@ -511,7 +473,6 @@ export const ConsumeModal = ({
       <form onSubmit={handleSubmit(submitConsumeHandler)}>
         <ModalContent>
           <ModalHeader textAlign="center"></ModalHeader>
-          {/* <ModalCloseButton onClick={clearConsumedQty} /> */}
           <ModalBody>
             <HStack>
               <Stack spacing={2} p={4} border="2px" borderRadius="5%" borderColor="gray.200" w="50%" h="full">
@@ -524,22 +485,8 @@ export const ConsumeModal = ({
 
                 <Box>
                   <Text fontSize="xs" fontWeight="semibold">
-                    Consume Quantity
+                    Consume Quantity:
                   </Text>
-
-                  {/* <NumericFormat
-                    {...register("formData.consume")}
-                    customInput={Input}
-                    fontSize="sm"
-                    onValueChange={(e) => setQuantityValidate(e.value)}
-                    // type="number"
-                    min="1"
-                    w="full"
-                    border="1px"
-                    borderColor="gray.400"
-                    borderRadius="none"
-                    thousandSeparator=","
-                  /> */}
                   <Input
                     {...register("formData.consume")}
                     fontSize="xs"
@@ -558,7 +505,7 @@ export const ConsumeModal = ({
 
                 <Box>
                   <Text fontSize="xs" fontWeight="semibold">
-                    Service Report #
+                    Service Report #:
                   </Text>
                   <Input
                     {...register("formData.serviceReportNo")}
@@ -578,42 +525,23 @@ export const ConsumeModal = ({
               </Stack>
               <Stack spacing={2} p={4} border="2px" borderRadius="5%" borderColor="gray.200" w="50%">
                 <Text fontWeight="semibold">Charge Of Accounts</Text>
+
                 <Box>
-                  <FormLabel fontSize="xs">Company</FormLabel>
+                  <FormLabel fontSize="xs">Charging Code:</FormLabel>
                   <Controller
                     control={control}
-                    name="formData.companyId"
+                    name="formData.oneChargingCode"
                     render={({ field }) => (
-                      // <Select
-                      //   {...field}
-                      //   value={field.value || ""}
-                      //   placeholder="Select Company"
-                      //   fontSize="xs"
-                      //   onChange={(e) => {
-                      //     field.onChange(e);
-                      //     setValue("formData.departmentId", "");
-                      //     setValue("formData.locationId", "");
-                      //     fetchDepartmentApi(e.target.value);
-                      //   }}
-                      // >
-                      //   {company?.map((item) => (
-                      //     <option key={item.id} value={item.id}>
-                      //       {item.code} - {item.name}
-                      //     </option>
-                      //   ))}
-                      // </Select>
                       <AutoComplete
                         ref={field.ref}
                         value={field.value}
                         size="sm"
-                        placeholder="Select Company"
+                        placeholder="Select Charging Code"
                         onChange={(e) => {
                           field.onChange(e);
-                          setValue("formData.departmentId", "");
-                          setValue("formData.locationId", "");
-                          fetchDepartmentApi(e?.value?.id || "");
+                          setShowChargingData(e?.value);
                         }}
-                        options={company?.map((item) => {
+                        options={oneChargingCode?.oneChargingList?.map((item) => {
                           return {
                             label: `${item.code} - ${item.name}`,
                             value: item,
@@ -623,122 +551,58 @@ export const ConsumeModal = ({
                     )}
                   />
                   <Text color="red" fontSize="xs">
-                    {errors.formData?.companyId?.message}
+                    {errors.formData?.oneChargingCode?.message}
                   </Text>
                 </Box>
 
                 <Box>
-                  <FormLabel fontSize="xs">Department</FormLabel>
-                  <Controller
-                    control={control}
-                    name="formData.departmentId"
-                    render={({ field }) => (
-                      // <Select
-                      //   {...field}
-                      //   value={field.value || ""}
-                      //   placeholder="Select Department"
-                      //   fontSize="xs"
-                      //   onChange={(e) => {
-                      //     field.onChange(e);
-                      //     setValue("formData.locationId", "");
-                      //     fetchLocationApi(e.target.value);
-                      //   }}
-                      // >
-                      //   {department?.map((dept) => (
-                      //     <option key={dept.id} value={dept.id}>
-                      //       {dept.code} - {dept.name}
-                      //     </option>
-                      //   ))}
-                      // </Select>
-                      <AutoComplete
-                        size="sm"
-                        ref={field.ref}
-                        value={field.value}
-                        placeholder="Select Department"
-                        onChange={(e) => {
-                          field.onChange(e);
-                          setValue("formData.locationId", "");
-                          fetchLocationApi(e?.value?.id);
-                        }}
-                        options={department?.map((item) => {
-                          return {
-                            label: `${item.code} - ${item.name}`,
-                            value: item,
-                          };
-                        })}
-                      />
-                    )}
-                  />
-                  <Text color="red" fontSize="xs">
-                    {errors.formData?.departmentId?.message}
+                  <FormLabel fontSize="xs">Company:</FormLabel>
+                  <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                    {showOneChargingData ? `${showOneChargingData?.company_code} - ${showOneChargingData?.company_name}` : "Select Charging Code"}
                   </Text>
                 </Box>
 
                 <Box>
-                  <FormLabel fontSize="xs">Location</FormLabel>
-                  <Controller
-                    control={control}
-                    name="formData.locationId"
-                    render={({ field }) => (
-                      // <Select
-                      //   {...field}
-                      //   value={field.value || ""}
-                      //   placeholder="Select Location"
-                      //   fontSize="xs"
-                      // >
-                      //   {location?.map((item) => (
-                      //     <option key={item.id} value={item.id}>
-                      //       {item.code} - {item.name}
-                      //     </option>
-                      //   ))}
-                      // </Select>
-                      <AutoComplete
-                        size="sm"
-                        ref={field.ref}
-                        value={field.value}
-                        placeholder="Select Location"
-                        onChange={(e) => {
-                          field.onChange(e);
-                        }}
-                        options={location?.map((item) => {
-                          return {
-                            label: `${item.code} - ${item.name}`,
-                            value: item,
-                          };
-                        })}
-                      />
-                    )}
-                  />
-
-                  <Text color="red" fontSize="xs">
-                    {errors.formData?.locationId?.message}
+                  <FormLabel fontSize="xs">Business Unit:</FormLabel>
+                  <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                    {showOneChargingData ? `${showOneChargingData?.business_unit_code} - ${showOneChargingData?.business_unit_name}` : "Select Charging Code"}
                   </Text>
                 </Box>
 
                 <Box>
-                  <FormLabel fontSize="xs">Account Title</FormLabel>
+                  <FormLabel fontSize="xs">Department:</FormLabel>
+                  <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                    {showOneChargingData ? `${showOneChargingData?.department_code} - ${showOneChargingData?.department_name}` : "Select Charging Code"}
+                  </Text>
+                </Box>
+
+                <Box>
+                  <FormLabel fontSize="xs">Unit:</FormLabel>
+                  <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                    {showOneChargingData ? `${showOneChargingData?.department_unit_code} - ${showOneChargingData?.department_unit_name}` : "Select Charging Code"}
+                  </Text>
+                </Box>
+
+                <Box>
+                  <FormLabel fontSize="xs">Sub Unit:</FormLabel>
+                  <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                    {showOneChargingData ? `${showOneChargingData?.sub_unit_code} - ${showOneChargingData?.sub_unit_name}` : "Select Charging Code"}
+                  </Text>
+                </Box>
+
+                <Box>
+                  <FormLabel fontSize="xs">Location:</FormLabel>
+                  <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                    {showOneChargingData ? `${showOneChargingData?.location_code} - ${showOneChargingData?.location_name}` : "Select a Charging Code"}
+                  </Text>
+                </Box>
+
+                <Box>
+                  <FormLabel fontSize="xs">Account Title:</FormLabel>
                   <Controller
-                    // className="chakra-select-autocomplete"
                     control={control}
                     name="formData.accountId"
                     render={({ field }) => (
-                      // <Select
-                      //   {...field}
-                      //   value={field.value || ""}
-                      //   placeholder="Select Account"
-                      //   fontSize="xs"
-                      //   bgColor="#fff8dc"
-                      //   onChange={(e) => {
-                      //     field.onChange(e);
-                      //     triggerPointHandler(e);
-                      //   }}
-                      // >
-                      //   {account?.map((item) => (
-                      //     <option key={item.id} value={item.id}>
-                      //       {item.code} - {item.name}
-                      //     </option>
-                      //   ))}
-                      // </Select>
                       <AutoComplete
                         size="sm"
                         ref={field.ref}
@@ -814,12 +678,7 @@ export const ConsumeModal = ({
                 )}
               </Stack>
             </HStack>
-            <HStack>
-              {/* <Text
-                fontSize="xs"
-                fontWeight="semibold"
-              >{`Remaining Return Qty: ${returnQuantity}`}</Text> */}
-            </HStack>
+            <HStack></HStack>
           </ModalBody>
           <ModalFooter gap={2}>
             <Button size="sm" onClick={clearConsumedQty} isLoading={isLoading} disabled={isLoading} variant="outline">
@@ -831,18 +690,11 @@ export const ConsumeModal = ({
               type="submit"
               isLoading={isLoading}
               isDisabled={
-                // !isLoading ||
-                // !isValid ||
-                !watch("formData.companyId") ||
-                !watch("formData.departmentId") ||
-                !watch("formData.locationId") ||
-                !watch("formData.accountId") ||
+                !watch("formData.oneChargingCode") ||
                 !watch("formData.consume") ||
                 !watch("formData.serviceReportNo") ||
-                // !watch("formData.empId")
-                // !watch("formData.fullName")
-                // !consumedQuantity ||
-                consumedQuantity > returnQuantity
+                consumedQuantity > returnQuantity ||
+                !watch("formData.accountId")
               }
             >
               Save
@@ -861,9 +713,7 @@ export const EditQuantityModal = (props) => {
     formData: yup.object().shape({
       editId: yup.string(),
       consumedQty: yup.number().required().typeError("Consumed quantity is required"),
-      companyId: yup.object().required().typeError("Company Name is required"),
-      departmentId: yup.object().required().typeError("Department Category is required"),
-      locationId: yup.object().required().typeError("Location Name is required"),
+      oneChargingCode: yup.object().required().typeError("Charging Code is required"),
       accountTitleId: yup.object().required("Account Name is required"),
       empId: yup.object().nullable(),
       fullName: yup.string(),
@@ -871,9 +721,8 @@ export const EditQuantityModal = (props) => {
   });
 
   const toast = useToast();
-  const [company, setCompany] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [location, setLocation] = useState([]);
+  const [oneChargingCode, setOneChargingCode] = useState([]);
+  const [showOneChargingData, setShowChargingData] = useState(null);
   const [account, setAccount] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState("");
@@ -882,6 +731,26 @@ export const EditQuantityModal = (props) => {
   // SEDAR
   const [pickerItems, setPickerItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+
+  //  FETCH ONE CHARGING CODE
+  const fetchOneChargingApi = async () => {
+    const res = await request.get(`OneCharging/GetOneCharging`);
+    return res.data;
+  };
+
+  const fetchOneCharging = () => {
+    fetchOneChargingApi().then((res) => {
+      setOneChargingCode(res);
+    });
+  };
+
+  useEffect(() => {
+    fetchOneCharging();
+
+    return () => {
+      setOneChargingCode([]);
+    };
+  }, []);
 
   const fetchEmployees = async () => {
     try {
@@ -906,42 +775,6 @@ export const EditQuantityModal = (props) => {
     fetchEmployees();
   }, []);
 
-  // FETCH COMPANY API
-  const fetchCompanyApi = async () => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setCompany(res.data.result.companies);
-    } catch (error) {}
-  };
-
-  // FETCH DEPT API
-  const fetchDepartmentApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setDepartment(res.data.result.departments);
-    } catch (error) {}
-  };
-
-  // FETCH Loc API
-  const fetchLocationApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setLocation(res.data.result.locations);
-    } catch (error) {}
-  };
-
   // FETCH ACcount API
   const fetchAccountApi = async () => {
     try {
@@ -955,14 +788,13 @@ export const EditQuantityModal = (props) => {
   };
 
   useEffect(() => {
-    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
     fetchAccountApi();
   }, []);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     setValue,
     watch,
     control,
@@ -1013,39 +845,6 @@ export const EditQuantityModal = (props) => {
   }, [idNumber]);
 
   useEffect(() => {
-    const returnEdit = returnRequest?.find((item) => item.id === editData.id);
-
-    if (location.length && !watch("formData.locationId") && !watch("formData.departmentId")) {
-      setValue("formData.locationId", {
-        label: `${returnEdit.locationCode} - ${returnEdit.locationName}`,
-        value: location?.find((item) => item.code === returnEdit.locationCode),
-      });
-    }
-  }, [editData.id, location]);
-
-  useEffect(() => {
-    const returnEdit = returnRequest?.find((item) => item.id === editData.id);
-
-    if (department.length && !watch("formData.departmentId") && !watch("formData.companyId")) {
-      setValue("formData.departmentId", {
-        label: `${returnEdit.departmentCode} - ${returnEdit.departmentName}`,
-        value: department?.find((item) => item.code === returnEdit.departmentCode),
-      });
-    }
-  }, [editData.id, department]);
-
-  useEffect(() => {
-    const returnEdit = returnRequest?.find((item) => item.id === editData.id);
-
-    if (company.length && !watch("formData.companyId")) {
-      setValue("formData.companyId", {
-        label: `${returnEdit.companyCode} - ${returnEdit.companyName}`,
-        value: company?.find((item) => item.code === returnEdit.companyCode),
-      });
-    }
-  }, [editData.id, company]);
-
-  useEffect(() => {
     if (account.length && !watch("formData.accountTitleId")) {
       const returnEdit = returnRequest?.find((item) => item.id === editData.id);
       setValue("formData.accountTitleId", {
@@ -1069,6 +868,11 @@ export const EditQuantityModal = (props) => {
           full_name: editData.fullName,
         },
       });
+
+      setValue("formData.oneChargingCode", {
+        label: `${editData?.oneChargingCode} - ${editData?.oneChargingName}`,
+        value: editData,
+      });
     }
   }, [editData]);
 
@@ -1090,19 +894,14 @@ export const EditQuantityModal = (props) => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("Edit Data: ", editData);
+        console.log("Data: ", data);
 
         setIsLoading(true);
         try {
           const response = request
             .put(`Borrowed/EditConsumeQuantity`, {
               id: editData.id,
-              companyCode: data.formData.companyId.value.code,
-              companyName: data.formData.companyId.value.name,
-              departmentCode: data.formData.departmentId.value.code,
-              departmentName: data.formData.departmentId.value.name,
-              locationCode: data.formData.locationId.value.code,
-              locationName: data.formData.locationId.value.name,
+              oneChargingCode: data.formData.oneChargingCode.value.code,
               accountTitles: data.formData.accountTitleId.value.name,
               accountCode: data.formData.accountTitleId.value.code,
               empId: data.formData.empId?.value.full_id_number,
@@ -1131,6 +930,12 @@ export const EditQuantityModal = (props) => {
       }
     });
   };
+
+  // console.log("Watch Charging: ", watch("formData.oneChargingCode"));
+  console.log("fetchChargingCode: ", oneChargingCode);
+  console.log("EditData: ", editData);
+  // console.log("OneCharging State: ", showOneChargingData);
+  // console.log("GetTable: ", returnRequest);
 
   return (
     <>
@@ -1175,8 +980,6 @@ export const EditQuantityModal = (props) => {
                       onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                       onPaste={(e) => e.preventDefault()}
                       min="1"
-                      // onChange={(e) => consumedQtyHandler(e.target.value)}
-                      // ref={consumeQtyRef}
                     />
                     <Text color="red" fontSize="xs">
                       {errors.formData?.consumedQty?.message}
@@ -1186,7 +989,6 @@ export const EditQuantityModal = (props) => {
 
                 <Flex justifyContent="left" p={2} mt={4}>
                   <HStack>
-                    {/* <AiOutlineInfoCircle colorScheme="blue" /> */}
                     <Icon as={AiOutlineControl} boxSize={6} />
                     <Text fontSize="sm" color="black" fontWeight="semibold">
                       Charging of Accounts
@@ -1195,121 +997,32 @@ export const EditQuantityModal = (props) => {
                 </Flex>
 
                 <Stack spacing={1}>
-                  <Box p={2} gap={0}>
+                  <Box p={1}>
                     <FormLabel fontSize="xs" fontWeight="semibold">
-                      Company
+                      Charging Code
                     </FormLabel>
                     <Controller
-                      w="full"
                       control={control}
-                      name="formData.companyId"
+                      name="formData.oneChargingCode"
                       render={({ field }) => (
                         <AutoComplete
                           size="sm"
                           ref={field.ref}
                           value={field.value}
-                          placeholder="Select Company"
+                          placeholder="Select Charging Code"
                           onChange={(e) => {
+                            console.log("E: ", e);
                             field.onChange(e);
-                            setValue("formData.departmentId", "");
-                            setValue("formData.locationId", "");
-                            fetchDepartmentApi(e?.value?.id || "");
+
+                            // setShowChargingData(e?.value);
+
+                            // if (watch("formData.oneChargingCode")) {
+                            //   setShowChargingData(editData);
+                            // } else {
+                            //   setShowChargingData(e?.value);
+                            // }
                           }}
-                          options={company?.map((item) => {
-                            return {
-                              label: `${item.code} - ${item.name}`,
-                              value: item,
-                            };
-                          })}
-                        />
-                      )}
-                    />
-
-                    <Text color="red" fontSize="xs">
-                      {errors.formData?.companyId?.message}
-                    </Text>
-                  </Box>
-
-                  <Box p={2}>
-                    <FormLabel fontSize="xs" fontWeight="semibold">
-                      Department
-                    </FormLabel>
-                    {/* <Select
-                      {...register("formData.departmentId")}
-                      placeholder="Select Department"
-                      fontSize="xs"
-                      onChange={(e) => {
-                        setValue("formData.locationId", "");
-                        fetchLocationApi(e.target.value);
-                      }}
-                    >
-                      {department?.map((dept) => {
-                        return (
-                          <option key={dept.id} value={dept.id}>
-                            {dept.code} - {dept.name}
-                          </option>
-                        );
-                      })}
-                    </Select> */}
-                    <Controller
-                      control={control}
-                      name="formData.departmentId"
-                      render={({ field }) => (
-                        <AutoComplete
-                          size="sm"
-                          ref={field.ref}
-                          value={field.value}
-                          placeholder="Select Department"
-                          onChange={(e) => {
-                            field.onChange(e);
-                            setValue("formData.locationId", "");
-                            fetchLocationApi(e?.value?.id || "");
-                          }}
-                          options={department?.map((item) => {
-                            return {
-                              label: `${item.code} - ${item.name}`,
-                              value: item,
-                            };
-                          })}
-                        />
-                      )}
-                    />
-
-                    <Text color="red" fontSize="xs">
-                      {errors.formData?.departmentId?.message}
-                    </Text>
-                  </Box>
-
-                  <Box p={2}>
-                    <FormLabel fontSize="xs" fontWeight="semibold">
-                      Location
-                    </FormLabel>
-                    {/* <Select
-                      {...register("formData.locationId")}
-                      placeholder="Select Location"
-                      fontSize="xs"
-                    >
-                      {location?.map((item) => {
-                        return (
-                          <option key={item.id} value={item.id}>
-                            {item.code} - {item.name}
-                          </option>
-                        );
-                      })}
-                    </Select> */}
-                    <Controller
-                      control={control}
-                      name="formData.locationId"
-                      render={({ field }) => (
-                        <AutoComplete
-                          size="sm"
-                          ref={field.ref}
-                          value={field.value}
-                          placeholder="Select Location"
-                          onChange={(e) => {
-                            field.onChange(e);
-                          }}
-                          options={location?.map((item) => {
+                          options={oneChargingCode?.oneChargingList?.map((item) => {
                             return {
                               label: `${item.code} - ${item.name}`,
                               value: item,
@@ -1319,11 +1032,65 @@ export const EditQuantityModal = (props) => {
                       )}
                     />
                     <Text color="red" fontSize="xs">
-                      {errors.formData?.locationId?.message}
+                      {errors.formData?.oneChargingCode?.message}
                     </Text>
                   </Box>
 
-                  <Box p={2}>
+                  {/* <Box p={0.5}>
+                    <FormLabel fontSize="xs" fontWeight="semibold">
+                      Company:
+                    </FormLabel>
+                    <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                      {showOneChargingData ? `${showOneChargingData?.companyCode} - ${showOneChargingData?.companyName}` : "Select Charging Code"}
+                    </Text>
+                  </Box>
+
+                  <Box p={0.5}>
+                    <FormLabel fontSize="xs" fontWeight="semibold">
+                      Business Unit:
+                    </FormLabel>
+                    <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                      {showOneChargingData ? `${showOneChargingData?.businessUnitCode} - ${showOneChargingData?.businessUnitName}` : "Select Charging Code"}
+                    </Text>
+                  </Box>
+
+                  <Box p={0.5}>
+                    <FormLabel fontSize="xs" fontWeight="semibold">
+                      Department:
+                    </FormLabel>
+                    <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                      {showOneChargingData ? `${showOneChargingData?.departmentCode} - ${showOneChargingData?.departmentName}` : "Select Charging Code"}
+                    </Text>
+                  </Box>
+
+                  <Box p={0.5}>
+                    <FormLabel fontSize="xs" fontWeight="semibold">
+                      Unit:
+                    </FormLabel>
+                    <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                      {showOneChargingData ? `${showOneChargingData?.departmentUnitCode} - ${showOneChargingData?.departmentUnitName}` : "Select Charging Code"}
+                    </Text>
+                  </Box>
+
+                  <Box p={0.5}>
+                    <FormLabel fontSize="xs" fontWeight="semibold">
+                      Sub Unit:
+                    </FormLabel>
+                    <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                      {showOneChargingData ? `${showOneChargingData?.subUnitCode} - ${showOneChargingData?.subUnitName}` : "Select Charging Code"}
+                    </Text>
+                  </Box>
+
+                  <Box p={0.5}>
+                    <FormLabel fontSize="xs" fontWeight="semibold">
+                      Location:
+                    </FormLabel>
+                    <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
+                      {showOneChargingData ? `${showOneChargingData?.locationCode} - ${showOneChargingData?.locationName}` : "Select a Charging Code"}
+                    </Text>
+                  </Box> */}
+
+                  <Box p={0.5}>
                     <FormLabel fontSize="xs" fontWeight="semibold">
                       Account Title
                     </FormLabel>
@@ -1331,23 +1098,6 @@ export const EditQuantityModal = (props) => {
                       control={control}
                       name="formData.accountTitleId"
                       render={({ field }) => (
-                        // <Select
-                        //   {...field}
-                        //   value={field.value || ""}
-                        //   placeholder="Select Account"
-                        //   fontSize="xs"
-                        //   bgColor="#fff8dc"
-                        //   onChange={(e) => {
-                        //     field.onChange(e);
-                        //     triggerPointHandler(e);
-                        //   }}
-                        // >
-                        //   {account?.map((item) => (
-                        //     <option key={item.id} value={item.id}>
-                        //       {item.code} - {item.name}
-                        //     </option>
-                        //   ))}
-                        // </Select>
                         <AutoComplete
                           size="sm"
                           ref={field.ref}
@@ -1372,7 +1122,7 @@ export const EditQuantityModal = (props) => {
                   </Box>
                   {!!selectedAccount.match(/Advances to Employees/gi) && (
                     <>
-                      <Box p={2}>
+                      <Box p={1}>
                         <FormLabel fontSize="xs">Employee ID</FormLabel>
                         <Controller
                           control={control}
@@ -1403,7 +1153,7 @@ export const EditQuantityModal = (props) => {
                           {errors.formData?.empId?.message}
                         </Text>
                       </Box>
-                      <Box p={2}>
+                      <Box p={1}>
                         <FormLabel fontSize="xs">Full Name:</FormLabel>
                         <Input
                           fontSize="sm"

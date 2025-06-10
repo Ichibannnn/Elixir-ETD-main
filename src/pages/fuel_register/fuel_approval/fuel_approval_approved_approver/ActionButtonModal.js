@@ -36,7 +36,7 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
         <ModalHeader bg="primary">
           <Flex justifyContent="left">
             <Text fontSize="xs" color="white">
-              View Fuel RequestSD
+              View Fuel Request
             </Text>
           </Flex>
         </ModalHeader>
@@ -127,9 +127,29 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
 
                 <HStack>
                   <Text fontSize="xs" fontWeight="semibold">
+                    Business Unit:
+                  </Text>
+                  <Text fontSize="xs">{data?.businessUnitCode ? `${data?.businessUnitCode} - ${data?.businessUnitName}` : "-"}</Text>
+                </HStack>
+
+                <HStack>
+                  <Text fontSize="xs" fontWeight="semibold">
                     Department
                   </Text>
                   <Text fontSize="xs">{data?.department_Code ? `${data?.department_Code} - ${data?.department_Name}` : "-"}</Text>
+                </HStack>
+
+                <HStack>
+                  <Text fontSize="xs" fontWeight="semibold">
+                    Unit
+                  </Text>
+                  <Text fontSize="xs">{data?.departmentUnitCode ? `${data?.departmentUnitCode} - ${data?.departmentUnitName}` : "-"}</Text>
+                </HStack>
+                <HStack>
+                  <Text fontSize="xs" fontWeight="semibold">
+                    Sub Unit
+                  </Text>
+                  <Text fontSize="xs">{data?.subUnitCode ? `${data?.subUnitCode} - ${data?.subUnitName}` : "-"}</Text>
                 </HStack>
 
                 <HStack>
@@ -374,9 +394,30 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
+                  Business Unit:
+                </Text>
+                <Text fontSize="xs">{data?.businessUnitCode ? `${data?.businessUnitCode} - ${data?.businessUnitName}` : "-"}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
                   Department
                 </Text>
                 <Text fontSize="xs">{data?.department_Code ? `${data?.department_Code} - ${data?.department_Name}` : "-"}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Unit
+                </Text>
+                <Text fontSize="xs">{data?.departmentUnitCode ? `${data?.departmentUnitCode} - ${data?.departmentUnitName}` : "-"}</Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Sub Unit
+                </Text>
+                <Text fontSize="xs">{data?.subUnitCode ? `${data?.subUnitCode} - ${data?.subUnitName}` : "-"}</Text>
               </HStack>
 
               <HStack>

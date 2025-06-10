@@ -46,6 +46,8 @@ const fetchTransactApi = async () => {
 const MiscReceiptPage = () => {
   const remarksRef = useRef();
 
+  const [showOneChargingData, setShowChargingData] = useState(null);
+
   const [suppliers, setSuppliers] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [uoms, setUoms] = useState([]);
@@ -189,6 +191,8 @@ const MiscReceiptPage = () => {
     }
   }, [navigation]);
 
+  console.log("ListTempo", listDataTempo);
+
   return (
     <Flex px={5} pt={5} pb={0} w="full" flexDirection="column" bg="form">
       <Flex w="full" justifyContent="space-between">
@@ -240,6 +244,8 @@ const MiscReceiptPage = () => {
               transactionType={transactionType}
               transactionDate={transactionDate}
               setTransactionDate={setTransactionDate}
+              showOneChargingData={showOneChargingData}
+              setShowChargingData={setShowChargingData}
               //For resetting the misc receipt section~~~
               navigation={navigation}
             />
@@ -262,6 +268,7 @@ const MiscReceiptPage = () => {
                   selectorId={selectorId}
                   setDetails={setDetails}
                   setRawMatsInfo={setRawMatsInfo}
+                  setShowChargingData={setShowChargingData}
                   //cancel key
                   rowIndex={rowIndex}
                   remarks={remarks}

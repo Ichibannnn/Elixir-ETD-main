@@ -33,13 +33,7 @@ import { GrView } from "react-icons/gr";
 
 const currentUser = decodeUser();
 
-export const ViewModalApproval = ({
-  isOpen,
-  onClose,
-  statusBody,
-  fetchBorrowed,
-  setIsLoading,
-}) => {
+export const ViewModalApproval = ({ isOpen, onClose, statusBody, fetchBorrowed, setIsLoading }) => {
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
   const [coaId, setCoaId] = useState("");
   const toast = useToast();
@@ -48,9 +42,7 @@ export const ViewModalApproval = ({
 
   const idparams = statusBody?.id;
   const fetchBorrowedDetailsApi = async (idparams) => {
-    const res = await request.get(
-      `Borrowed/ViewBorrowedReturnDetails?id=${idparams}`
-    );
+    const res = await request.get(`Borrowed/ViewBorrowedReturnDetails?id=${idparams}`);
     return res.data;
   };
 
@@ -92,9 +84,7 @@ export const ViewModalApproval = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
 
               <HStack>
@@ -115,22 +105,13 @@ export const ViewModalApproval = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Borrowed Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.transactionDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.transactionDate).format("MM/DD/yyyy")}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Returned Date:
                 </Text>
-                <Text fontSize="xs">
-                  {moment(borrowedDetailsData[0]?.returnedDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs">{moment(borrowedDetailsData[0]?.returnedDate).format("MM/DD/yyyy")}</Text>
               </HStack>
             </VStack>
 
@@ -139,31 +120,21 @@ export const ViewModalApproval = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee Id:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.empId
-                    ? borrowedDetailsData[0]?.empId
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.empId ? borrowedDetailsData[0]?.empId : "-"}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee Name:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.fullName
-                    ? borrowedDetailsData[0]?.fullName
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.fullName ? borrowedDetailsData[0]?.fullName : "-"}</Text>
               </HStack>
             </VStack>
           </Flex>
@@ -200,13 +171,10 @@ export const ViewModalApproval = ({
                       <Td fontSize="xs">{borrowdetails.itemCode}</Td>
                       <Td fontSize="xs">{borrowdetails.itemDescription}</Td>
                       <Td fontSize="xs">
-                        {borrowdetails.returnQuantity.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.returnQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                       <Td fontSize="xs">
                         {borrowdetails.consume.toLocaleString(undefined, {
@@ -217,17 +185,10 @@ export const ViewModalApproval = ({
                       <Td>
                         {borrowdetails.consume === 0 ? (
                           <Button isDisabled size="xs" bg="none">
-                            <GrView
-                              fontSize="18px"
-                              onClick={() => coaIdHandler(borrowdetails.id)}
-                            />
+                            <GrView fontSize="18px" onClick={() => coaIdHandler(borrowdetails.id)} />
                           </Button>
                         ) : (
-                          <Button
-                            size="xs"
-                            bg="none"
-                            onClick={() => coaIdHandler(borrowdetails.id)}
-                          >
+                          <Button size="xs" bg="none" onClick={() => coaIdHandler(borrowdetails.id)}>
                             <GrView fontSize="18px" />
                           </Button>
                         )}
@@ -245,8 +206,7 @@ export const ViewModalApproval = ({
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>
@@ -266,15 +226,7 @@ export const ViewModalApproval = ({
   );
 };
 
-export const CancelModalApproval = ({
-  isOpen,
-  onClose,
-  fetchBorrowed,
-  statusBody,
-  setIsLoading,
-  isLoading,
-  fetchNotification,
-}) => {
+export const CancelModalApproval = ({ isOpen, onClose, fetchBorrowed, statusBody, setIsLoading, isLoading, fetchNotification }) => {
   const [reasonSubmit, setReasonSubmit] = useState("");
   const [reasons, setReasons] = useState([]);
   const toast = useToast();
@@ -312,24 +264,14 @@ export const CancelModalApproval = ({
           },
         ])
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Returned Materials has been rejected",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Returned Materials has been rejected", "success", toast);
           fetchNotification();
           fetchBorrowed();
           setIsLoading(false);
           onClose();
         })
         .catch((err) => {
-          ToastComponent(
-            "Error",
-            "Returned materials was not rejected",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Returned materials was not rejected", "error", toast);
           setIsLoading(false);
         });
     } catch (error) {}
@@ -348,17 +290,9 @@ export const CancelModalApproval = ({
 
         <ModalBody>
           <VStack justifyContent="center">
-            <Text>
-              Are you sure you want to cancel this returned materials?
-            </Text>
+            <Text>Are you sure you want to cancel this returned materials?</Text>
             {reasons?.length > 0 ? (
-              <Select
-                fontSize="md"
-                onChange={(e) => setReasonSubmit(e.target.value)}
-                w="70%"
-                placeholder="Please select a reason"
-                bg="#fff8dc"
-              >
+              <Select fontSize="md" onChange={(e) => setReasonSubmit(e.target.value)} w="70%" placeholder="Please select a reason" bg="#fff8dc">
                 {reasons?.map((reason, i) => (
                   <option key={i} value={reason.reasonName}>
                     {reason.reasonName}
@@ -373,21 +307,10 @@ export const CancelModalApproval = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup size="sm" mt={7}>
-            <Button
-              onClick={submitHandler}
-              isDisabled={!reasonSubmit || isLoading}
-              isLoading={isLoading}
-              colorScheme="blue"
-            >
+            <Button onClick={submitHandler} isDisabled={!reasonSubmit || isLoading} isLoading={isLoading} colorScheme="blue">
               Yes
             </Button>
-            <Button
-              onClick={onClose}
-              disabled={isLoading}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-            >
+            <Button onClick={onClose} disabled={isLoading} isLoading={isLoading} color="black" variant="outline">
               No
             </Button>
           </ButtonGroup>
@@ -397,15 +320,7 @@ export const CancelModalApproval = ({
   );
 };
 
-export const ApproveReturnedModal = ({
-  isOpen,
-  onClose,
-  fetchBorrowed,
-  statusBody,
-  isLoading,
-  setIsLoading,
-  fetchNotification,
-}) => {
+export const ApproveReturnedModal = ({ isOpen, onClose, fetchBorrowed, statusBody, isLoading, setIsLoading, fetchNotification }) => {
   const toast = useToast();
   const id = statusBody?.id;
 
@@ -413,28 +328,16 @@ export const ApproveReturnedModal = ({
     setIsLoading(true);
     try {
       const res = request
-        .put(`Borrowed/ApproveForReturned`, [
-          { id: id, approveBy: currentUser?.fullName },
-        ])
+        .put(`Borrowed/ApproveForReturned`, [{ id: id, approveBy: currentUser?.fullName }])
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Returned Materials has been approved",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Returned Materials has been approved", "success", toast);
           fetchNotification();
           fetchBorrowed();
           setIsLoading(false);
           onClose();
         })
         .catch((item) => {
-          ToastComponent(
-            "Error",
-            "Returned materials was not approved",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Returned materials was not approved", "error", toast);
           setIsLoading(false);
         });
     } catch (error) {}
@@ -454,31 +357,16 @@ export const ApproveReturnedModal = ({
 
           <ModalBody>
             <VStack justifyContent="center">
-              <Text>
-                Are you sure you want to approve this returned materials?
-              </Text>
+              <Text>Are you sure you want to approve this returned materials?</Text>
             </VStack>
           </ModalBody>
 
           <ModalFooter justifyContent="center">
             <ButtonGroup size="sm" mt={7}>
-              <Button
-                onClick={submitHandler}
-                isLoading={isLoading}
-                disabled={isLoading}
-                colorScheme="blue"
-                fontSize="13px"
-              >
+              <Button onClick={submitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="blue" fontSize="13px">
                 Yes
               </Button>
-              <Button
-                onClick={onClose}
-                isLoading={isLoading}
-                disabled={isLoading}
-                fontSize="13px"
-                color="black"
-                variant="outline"
-              >
+              <Button onClick={onClose} isLoading={isLoading} disabled={isLoading} fontSize="13px" color="black" variant="outline">
                 No
               </Button>
             </ButtonGroup>
@@ -615,10 +503,37 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
 
                             <HStack fontSize="xs" spacing="5px">
                               <Text fontWeight="semibold" color="gray.500">
+                                Business Unit:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.businessUnitCode} - {item.businessUnitName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
                                 Department:
                               </Text>
                               <Text color="gray.700" fontWeight="bold">
                                 {item.departmentCode} - {item.departmentName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Unit:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.departmentUnitCode} - {item.departmentUnitName}
+                              </Text>
+                            </HStack>
+
+                            <HStack fontSize="xs" spacing="5px">
+                              <Text fontWeight="semibold" color="gray.500">
+                                Sub Unit:
+                              </Text>
+                              <Text color="gray.700" fontWeight="bold">
+                                {item.subUnitCode} - {item.subUnitName}
                               </Text>
                             </HStack>
 

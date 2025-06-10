@@ -41,9 +41,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
 
   const id = statusBody.id;
   const fetchIssuesDetailsApi = async (id) => {
-    const res = await request.get(
-      `Miscellaneous/GetAllDetailsInMiscellaneousIssue?id=${id}`
-    );
+    const res = await request.get(`Miscellaneous/GetAllDetailsInMiscellaneousIssue?id=${id}`);
     return res.data;
   };
 
@@ -84,12 +82,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(issuesDetailsData[0]?.preparedDate).format(
-                    "yyyy-MM-DD"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(issuesDetailsData[0]?.preparedDate).format("yyyy-MM-DD")}</Text>
               </HStack>
 
               <HStack>
@@ -124,8 +117,15 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                   Company:
                 </Text>
                 <Text fontSize="xs">
-                  {issuesDetailsData[0]?.companyCode} -{" "}
-                  {issuesDetailsData[0]?.companyName}
+                  {issuesDetailsData[0]?.companyCode} - {issuesDetailsData[0]?.companyName}
+                </Text>
+              </HStack>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Business Unit:
+                </Text>
+                <Text fontSize="xs">
+                  {issuesDetailsData[0]?.business_unit_code} - {issuesDetailsData[0]?.business_unit_name}
                 </Text>
               </HStack>
               <HStack>
@@ -133,17 +133,32 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                   Department:
                 </Text>
                 <Text fontSize="xs">
-                  {issuesDetailsData[0]?.departmentCode} -{" "}
-                  {issuesDetailsData[0]?.departmentName}
+                  {issuesDetailsData[0]?.departmentCode} - {issuesDetailsData[0]?.departmentName}
                 </Text>
               </HStack>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Unit:
+                </Text>
+                <Text fontSize="xs">
+                  {issuesDetailsData[0]?.department_unit_code} - {issuesDetailsData[0]?.department_unit_name}
+                </Text>
+              </HStack>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Sub Unit:
+                </Text>
+                <Text fontSize="xs">
+                  {issuesDetailsData[0]?.sub_unit_code} - {issuesDetailsData[0]?.sub_unit_name}
+                </Text>
+              </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Location:
                 </Text>
                 <Text fontSize="xs">
-                  {issuesDetailsData[0]?.locationCode} -{" "}
-                  {issuesDetailsData[0]?.locationName}
+                  {issuesDetailsData[0]?.locationCode} - {issuesDetailsData[0]?.locationName}
                 </Text>
               </HStack>
             </VStack>
@@ -212,8 +227,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {issuesDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>

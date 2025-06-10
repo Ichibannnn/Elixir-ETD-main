@@ -18,6 +18,7 @@ const fetchBarcodeApi = async () => {
 };
 
 const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav, setFuelNav }) => {
+  const [showOneChargingData, setShowChargingData] = useState(null);
   const [barcode, setBarcode] = useState([]);
   const [indexBarcodeId, setIndexBarcodeId] = useState("");
   const [selectorId, setSelectorId] = useState("");
@@ -45,9 +46,7 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
       dieselPONumber: yup.string().required().label("Diesel PO #"),
       fuelPump: yup.string().required().label("Fuel Pump"),
 
-      companyId: yup.object().required().typeError("Company Name is required"),
-      departmentId: yup.object().required().typeError("Department Category is required"),
-      locationId: yup.object().required().typeError("Location Name is required"),
+      oneChargingCode: yup.object().required().typeError("Charging Code is required"),
       accountId: yup.object().required("Account Name is required"),
       empId: yup.object().nullable(),
       fullName: yup.string(),
@@ -108,9 +107,7 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
         fuelPump: "",
 
         warehouseId: null,
-        companyId: "",
-        departmentId: "",
-        locationId: "",
+        oneChargingCode: "",
         accountId: "",
         empId: "",
         fullName: "",
@@ -185,6 +182,8 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
               setIndexBarcodeId={setIndexBarcodeId}
               fetchActiveFuelRequests={fetchActiveFuelRequests}
               fetchBarcode={fetchBarcode}
+              showOneChargingData={showOneChargingData}
+              setShowChargingData={setShowChargingData}
               // formData
               register={register}
               setValue={setValue}
@@ -213,6 +212,7 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
                   setFuelInfo={setFuelInfo}
                   fetchActiveFuelRequests={fetchActiveFuelRequests}
                   fetchBarcode={fetchBarcode}
+                  setShowChargingData={setShowChargingData}
                   // WatchFormData
                   requestorInformation={watch("formData")}
                   reset={reset}

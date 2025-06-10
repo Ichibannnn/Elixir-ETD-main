@@ -128,42 +128,6 @@ export const BorrowedInformation = ({
     }
   };
 
-  // For selecting Customer API ~~
-  // const customerHandler = (data) => {
-  //   if (data) {
-  //     const newData = JSON.parse(data);
-  //     const customerCode = newData.customerCode;
-  //     const customerName = newData.customerName;
-  //     setRawMatsInfo({
-  //       itemCode: rawMatsInfo.itemCode,
-  //       itemDescription: rawMatsInfo.itemDescription,
-  //       customerName: customerName,
-  //       uom: rawMatsInfo.uom,
-  //       warehouseId: rawMatsInfo.warehouseId,
-  //       quantity: rawMatsInfo.quantity,
-  //       unitCost: rawMatsInfo.unitCost,
-  //     });
-  //     setCustomerData({
-  //       customerCode: customerCode,
-  //       customerName: customerName,
-  //     });
-  //   } else {
-  //     setRawMatsInfo({
-  //       itemCode: rawMatsInfo.itemCode,
-  //       itemDescription: rawMatsInfo.itemDescription,
-  //       customerName: "",
-  //       uom: rawMatsInfo.uom,
-  //       warehouseId: rawMatsInfo.warehouseId,
-  //       quantity: rawMatsInfo.quantity,
-  //       unitCost: rawMatsInfo.unitCost,
-  //     });
-  //     setCustomerData({
-  //       customerCode: "",
-  //       customerName: "",
-  //     });
-  //   }
-  // };
-
   const newDate = moment();
   const maxDate = newDate.add(14, "days");
 
@@ -286,7 +250,7 @@ export const BorrowedInformation = ({
                       }}
                       options={employees?.map((item) => {
                         return {
-                          label: item.general_info?.full_id_number,
+                          label: `${item.general_info?.full_id_number} - ${item.general_info?.full_name}`,
                           value: {
                             full_id_number: item.general_info?.full_id_number,
                             full_name: item.general_info?.full_name,

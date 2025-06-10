@@ -90,6 +90,8 @@ const OrdersConfirmation = ({ isOpen, onClose, errorData, setErrorData, isLoadin
       assetTag: list?.assetTag,
       helpdeskNo: list?.helpdeskNo,
       dateApproved: list?.dateApproved,
+
+      oneChargingCode: list?.oneChargingCode,
     };
   });
 
@@ -275,6 +277,8 @@ const OrdersConfirmation = ({ isOpen, onClose, errorData, setErrorData, isLoadin
       approver: list?.approver,
       helpdeskNo: list?.helpdeskNo,
       dateApproved: list?.dateApproved,
+
+      oneChargingCode: list?.oneChargingCode,
     };
   });
 
@@ -335,6 +339,8 @@ const OrdersConfirmation = ({ isOpen, onClose, errorData, setErrorData, isLoadin
                   approver: submit?.approver,
                   helpdeskNo: submit?.helpdeskNo,
                   dateApproved: submit?.dateApproved,
+
+                  oneChargingCode: submit?.oneChargingCode,
                 };
               })
             )

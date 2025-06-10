@@ -199,21 +199,16 @@ export const SaveConfirmation = ({
   onClose,
   totalQuantity,
   customerData,
-  setCustomerData,
   setTotalQuantity,
-  rawMatsInfo,
   borrowedData,
   fetchActiveBorrowed,
   isLoading,
   setIsLoading,
-  customerRef,
   details,
   setDetails,
   setRawMatsInfo,
   setHideButton,
   remarks,
-  setRemarks,
-  remarksRef,
   setTransactionDate,
   transactionDate,
   fetchRawMats,
@@ -222,95 +217,7 @@ export const SaveConfirmation = ({
 }) => {
   const toast = useToast();
 
-  const [company, setCompany] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [location, setLocation] = useState([]);
-  const [account, setAccount] = useState([]);
-
-  // FETCH COMPANY API
-  const fetchCompanyApi = async () => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setCompany(res.data.result.companies);
-      // console.log(res.data.result.companies);
-    } catch (error) {}
-  };
-
-  // FETCH DEPT API
-  const fetchDepartmentApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setDepartment(res.data.result.departments);
-      console.log(res.data.result.departments);
-    } catch (error) {}
-  };
-
-  // FETCH Loc API
-  const fetchLocationApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setLocation(res.data.result.locations);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    fetchCompanyApi();
-  }, []);
-
-  // FETCH ACcount API
-  const fetchAccountApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setAccount(res.data.result.account_titles);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    fetchAccountApi();
-  }, []);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-    setValue,
-    reset,
-    watch,
-    control,
-  } = useForm({
-    resolver: yupResolver(schema),
-    mode: "onChange",
-    defaultValues: {
-      formData: {
-        companyId: "",
-        departmentId: "",
-        locationId: "",
-        accountId: "",
-        addedBy: currentUser.userName,
-      },
-    },
-  });
-
   const saveSubmitHandler = () => {
-    // console.log("Employee Data: ", employeeData[0]?.empId);
-    // console.log("Fullname Data: ", employeeData[0]?.fullName);
-
     if (totalQuantity > 0) {
       setIsLoading(true);
       try {
@@ -341,11 +248,10 @@ export const SaveConfirmation = ({
                   customerName: customerData.customerName,
                   empId: employeeData.empId,
                   fullName: employeeData.fullName,
-                  //   isTransact: true
                 };
               });
               try {
-                const res = request.put(`Borrowed/UpdateBorrowedIssuePKey`, arrayofId).then((res) => {
+                const res = request.put(`Borrowed/UpdateBorrowedIssuePKey`, arrayofId).then(() => {
                   fetchActiveBorrowed();
                   ToastComponent("Success", "Information saved", "success", toast);
 
@@ -385,181 +291,6 @@ export const SaveConfirmation = ({
   };
 
   return (
-    // <Modal isOpen={isOpen} onClose={() => {}} isCentered size="2xl">
-    //   <ModalOverlay />
-    //   <form onSubmit={handleSubmit(saveSubmitHandler)}>
-    //     <ModalContent>
-    //       <ModalHeader textAlign="center">Charge Of Accounts</ModalHeader>
-    //       <ModalCloseButton onClick={closeHandler} />
-    //       <ModalBody>
-    //         <Stack spacing={2} p={6}>
-    //           <Box>
-    //             <FormLabel fontSize="sm">Company</FormLabel>
-
-    //             <HStack w="full">
-    //               <Controller
-    //                 control={control}
-    //                 name="formData.companyId"
-    //                 defaultValue={
-    //                   company?.find((x) => x.name === customerData?.companyName)
-    //                     ?.id
-    //                 }
-    //                 render={({ field }) => (
-    //                   <Select
-    //                     {...field}
-    //                     value={field.value || ""}
-    //                     placeholder="Select Company"
-    //                     fontSize="sm"
-    //                     onChange={(e) => {
-    //                       field.onChange(e);
-    //                       setValue("formData.departmentId", "");
-    //                       setValue("formData.locationId", "");
-    //                       fetchDepartmentApi(e.target.value);
-    //                     }}
-    //                   >
-    //                     {company?.map((item) => (
-    //                       <option key={item.id} value={item.id}>
-    //                         {item.code} - {item.name}
-    //                       </option>
-    //                     ))}
-    //                   </Select>
-    //                 )}
-    //               />
-    //             </HStack>
-
-    //             <Text color="red" fontSize="xs">
-    //               {errors.formData?.companyId?.message}
-    //             </Text>
-    //           </Box>
-
-    //           <Box>
-    //             <FormLabel fontSize="sm">Department</FormLabel>
-    //             <Controller
-    //               control={control}
-    //               name="formData.departmentId"
-    //               defaultValue={
-    //                 department?.find(
-    //                   (x) => x.name === customerData?.departmentName
-    //                 )?.id
-    //               }
-    //               render={({ field }) => (
-    //                 <Select
-    //                   {...field}
-    //                   value={field.value || ""}
-    //                   placeholder="Select Department"
-    //                   fontSize="sm"
-    //                   onChange={(e) => {
-    //                     field.onChange(e);
-    //                     setValue("formData.locationId", "");
-    //                     fetchLocationApi(e.target.value);
-    //                   }}
-    //                 >
-    //                   {department?.map((dept) => (
-    //                     <option key={dept.id} value={dept.id}>
-    //                       {dept.code} - {dept.name}
-    //                     </option>
-    //                   ))}
-    //                 </Select>
-    //               )}
-    //             />
-
-    //             <Text color="red" fontSize="xs">
-    //               {errors.formData?.departmentId?.message}
-    //             </Text>
-    //           </Box>
-
-    //           <Box>
-    //             <FormLabel fontSize="sm">Location</FormLabel>
-    //             <Controller
-    //               control={control}
-    //               name="formData.locationId"
-    //               defaultValue={
-    //                 location?.find((x) => x.name === customerData?.locationName)
-    //                   ?.id
-    //               }
-    //               render={({ field }) => (
-    //                 <Select
-    //                   {...field}
-    //                   value={field.value || ""}
-    //                   placeholder="Select Location"
-    //                   fontSize="sm"
-    //                 >
-    //                   {location?.map((item) => (
-    //                     <option key={item.id} value={item.id}>
-    //                       {item.code} - {item.name}
-    //                     </option>
-    //                   ))}
-    //                 </Select>
-    //               )}
-    //             />
-
-    //             <Text color="red" fontSize="xs">
-    //               {errors.formData?.locationId?.message}
-    //             </Text>
-    //           </Box>
-    //           <Box>
-    //             <FormLabel fontSize="sm">Account Title</FormLabel>
-    //             <Controller
-    //               control={control}
-    //               name="formData.accountId"
-    //               defaultValue={
-    //                 account?.find((x) => x.name === customerData?.accountTitles)
-    //                   ?.id
-    //               }
-    //               render={({ field }) => (
-    //                 <Select
-    //                   {...field}
-    //                   value={field.value || ""}
-    //                   placeholder="Select Account"
-    //                   fontSize="sm"
-    //                   bgColor="#fff8dc"
-    //                   isSearchable
-    //                 >
-    //                   {account?.map((item) => (
-    //                     <option key={item.id} value={item.id}>
-    //                       {item.code} - {item.name}
-    //                     </option>
-    //                   ))}
-    //                 </Select>
-    //               )}
-    //             />
-    //             <Text color="red" fontSize="xs">
-    //               {errors.formData?.accountId?.message}
-    //             </Text>
-    //           </Box>
-    //         </Stack>
-    //       </ModalBody>
-    //       <ModalFooter gap={2}>
-    //         <Button
-    //           size="sm"
-    //           colorScheme="blue"
-    //           type="submit"
-    //           isLoading={isLoading}
-    //           disabled={
-    //             isLoading ||
-    //             !isValid ||
-    //             // !watch("formData.accountTitles") ||
-    //             !watch("formData.companyId") ||
-    //             !watch("formData.departmentId") ||
-    //             !watch("formData.locationId") ||
-    //             !watch("formData.accountId")
-    //           }
-    //         >
-    //           Submit
-    //         </Button>
-    //         <Button
-    //           size="sm"
-    //           // colorScheme="red"
-    //           onClick={closeHandler}
-    //           isLoading={isLoading}
-    //           disabled={isLoading}
-    //         >
-    //           Close
-    //         </Button>
-    //       </ModalFooter>
-    //     </ModalContent>
-    //   </form>
-    // </Modal>
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
       <ModalOverlay />
       <ModalContent pt={10} pb={5}>

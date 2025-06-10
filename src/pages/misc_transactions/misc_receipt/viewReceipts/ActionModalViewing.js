@@ -116,10 +116,35 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
               </HStack>
               <HStack>
                 <Text fontSize="12px" fontWeight="semibold">
+                  Business Unit:
+                </Text>
+                <Text fontSize="12px">
+                  {receiptDetailsData[0]?.business_unit_code} - {receiptDetailsData[0]?.business_unit_name}
+                </Text>
+              </HStack>
+
+              <HStack>
+                <Text fontSize="12px" fontWeight="semibold">
                   Department:
                 </Text>
                 <Text fontSize="12px">
                   {receiptDetailsData[0]?.departmentCode} - {receiptDetailsData[0]?.departmentName}
+                </Text>
+              </HStack>
+              <HStack>
+                <Text fontSize="12px" fontWeight="semibold">
+                  Unit:
+                </Text>
+                <Text fontSize="12px">
+                  {receiptDetailsData[0]?.department_unit_code} - {receiptDetailsData[0]?.department_unit_name}
+                </Text>
+              </HStack>
+              <HStack>
+                <Text fontSize="12px" fontWeight="semibold">
+                  Sub Unit:
+                </Text>
+                <Text fontSize="12px">
+                  {receiptDetailsData[0]?.sub_unit_code} - {receiptDetailsData[0]?.sub_unit_name}
                 </Text>
               </HStack>
               <HStack>

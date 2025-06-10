@@ -53,8 +53,14 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
             Fullname: item.fullname ? item.fullname : "-",
             "Company Code": item.company_Code ? item.company_Code : "-",
             Company: item.company_Name ? item.company_Name : "-",
+            "Business Unit Code": item.businessUnitCode ? item.businessUnitCode : "-",
+            "Business Unit": item.businessUnitName ? item.businessUnitName : "-",
             "Department Code": item.department_Code ? item.department_Code : "-",
             Department: item.department_Name ? item.department_Name : "-",
+            "Unit Code": item.departmentUnitCode ? item.departmentUnitCode : "-",
+            Unit: item.departmentUnitName ? item.departmentUnitName : "-",
+            "Sub Unit Code": item.subUnitCode ? item.subUnitCode : "-",
+            "Sub Unit": item.subUnitName ? item.subUnitName : "-",
             "Location Code": item.location_Code ? item.location_Code : "-",
             Location: item.location_Name ? item.location_Name : "-",
             "Diesel PO#": item.dieselPONumber,
@@ -149,10 +155,28 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                         COMPANY
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
+                        BUSINESS UNIT CODE
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        BUSINESS UNIT
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         DEPARTMENT CODE
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         DEPARTMENT
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        UNIT CODE
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        UNIT
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        SUB UNIT CODE
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        SUB UNIT
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         LOCATION CODE
@@ -239,8 +263,14 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                         <Td fontSize="xs">{item?.fullname ? item?.fullname : "-"}</Td>
                         <Td fontSize="xs">{item?.company_Code}</Td>
                         <Td fontSize="xs">{item?.company_Name}</Td>
+                        <Td fontSize="xs">{item?.businessUnitCode}</Td>
+                        <Td fontSize="xs">{item?.businessUnitName}</Td>
                         <Td fontSize="xs">{item?.department_Code}</Td>
                         <Td fontSize="xs">{item?.department_Name}</Td>
+                        <Td fontSize="xs">{item?.departmentUnitCode}</Td>
+                        <Td fontSize="xs">{item?.departmentUnitName}</Td>
+                        <Td fontSize="xs">{item?.subUnitCode}</Td>
+                        <Td fontSize="xs">{item?.subUnitName}</Td>
                         <Td fontSize="xs">{item?.location_Code}</Td>
                         <Td fontSize="xs">{item?.location_Name}</Td>
                         <Td fontSize="xs">{item?.dieselPONumber ? item?.dieselPONumber : "-"}</Td>

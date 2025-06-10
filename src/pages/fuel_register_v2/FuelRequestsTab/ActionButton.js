@@ -2,7 +2,19 @@ import React, { useState } from "react";
 import { Button, ButtonGroup, Flex, useDisclosure } from "@chakra-ui/react";
 import { AllCancelConfirmation, SaveConfirmation } from "./ActionModal";
 
-export const ActionButton = ({ isLoading, setIsLoading, setSelectorId, fuelData, fuelInfo, setFuelInfo, fetchActiveFuelRequests, fetchBarcode, requestorInformation, reset }) => {
+export const ActionButton = ({
+  isLoading,
+  setIsLoading,
+  setSelectorId,
+  fuelData,
+  fuelInfo,
+  setFuelInfo,
+  fetchActiveFuelRequests,
+  fetchBarcode,
+  requestorInformation,
+  reset,
+  setShowChargingData,
+}) => {
   const [hideButton, setHideButton] = useState(false);
 
   const { isOpen: isSave, onClose: closeSave, onOpen: openSave } = useDisclosure();
@@ -45,6 +57,7 @@ export const ActionButton = ({ isLoading, setIsLoading, setSelectorId, fuelData,
           fetchBarcode={fetchBarcode}
           requestorInformation={requestorInformation}
           reset={reset}
+          setShowChargingData={setShowChargingData}
         />
       )}
 

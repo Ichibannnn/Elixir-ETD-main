@@ -65,8 +65,14 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
             "Employee Name": item.fullNameByIssue,
             "Company Code": item.companyCode ? item.companyCode : "-",
             "Company Name": item.companyName ? item.companyName : "-",
+            "Business Unit Code": item.businessUnitCode ? item.businessUnitCode : "-",
+            "Business Unit Name": item.businessUnitName ? item.businessUnitName : "-",
             "Department Code": item.departmentCode ? item.departmentCode : "-",
             "Department Name": item.departmentName ? item.departmentName : "-",
+            "Unit Code": item.departmentUnitCode ? item.departmentUnitCode : "-",
+            "Unit Name": item.departmentUnitName ? item.departmentUnitName : "-",
+            "Sub Unit Code": item.subUnitCode ? item.subUnitCode : "-",
+            "Sub Unit Name": item.subUnitName ? item.subUnitName : "-",
             "Location Code": item.locationCode ? item.locationCode : "-",
             "Location Name": item.locationName ? item.locationName : "-",
             "Account Code": item.accountCode ? item.accountCode : "-",
@@ -153,23 +159,30 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Company
                       </Th>
-
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Business Unit
+                      </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Deparment
                       </Th>
-
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Unit
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Sub Unit
+                      </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Location
                       </Th>
-
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Account Title
                       </Th>
-
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Employee
+                      </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Status
                       </Th>
-
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Requested By
                       </Th>
@@ -337,9 +350,33 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                           <Td fontSize="xs">-</Td>
                         )}
 
+                        {item?.businessUnitCode && item?.businessUnitName ? (
+                          <Td fontSize="xs">
+                            {item?.businessUnitCode} - {item?.businessUnitName}
+                          </Td>
+                        ) : (
+                          <Td fontSize="xs">-</Td>
+                        )}
+
                         {item?.departmentCode && item?.departmentName ? (
                           <Td fontSize="xs">
                             {item?.departmentCode} - {item?.departmentName}
+                          </Td>
+                        ) : (
+                          <Td fontSize="xs">-</Td>
+                        )}
+
+                        {item?.departmentUnitCode && item?.departmentUnitName ? (
+                          <Td fontSize="xs">
+                            {item?.departmentUnitCode} - {item?.departmentUnitName}
+                          </Td>
+                        ) : (
+                          <Td fontSize="xs">-</Td>
+                        )}
+
+                        {item?.subUnitCode && item?.subUnitName ? (
+                          <Td fontSize="xs">
+                            {item?.subUnitCode} - {item?.subUnitName}
                           </Td>
                         ) : (
                           <Td fontSize="xs">-</Td>
@@ -361,10 +398,17 @@ export const ReturnedQuantityTransaction = ({ dateFrom, dateTo, setSheetData, se
                           <Td fontSize="xs">-</Td>
                         )}
 
+                        {item?.empId && item?.fullName !== "" ? (
+                          <Td fontSize="xs">
+                            {item?.empId} - {item?.empId}
+                          </Td>
+                        ) : (
+                          <Td fontSize="xs">-</Td>
+                        )}
+
                         <Td fontSize="xs">{item?.status}</Td>
 
                         <Td fontSize="xs">{item?.transactedBy}</Td>
-                        {/* <Td fontSize="xs">{item.isApproveBy}</Td> */}
                       </>
                     )}
                   </Tr>

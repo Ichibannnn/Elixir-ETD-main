@@ -6,6 +6,7 @@ import {
   Flex,
   FormLabel,
   HStack,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -32,6 +33,7 @@ import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import { set } from "lodash";
 
 const currentUser = decodeUser();
 
@@ -153,7 +155,10 @@ const schema = yup.object().shape({
   formData: yup.object().shape({
     orderId: yup.string(),
     companyId: yup.object().required().typeError("Company Name is required"),
+    businessUnit: yup.object().required().typeError("Business Unit is required"),
     departmentId: yup.object().required().typeError("Department Category is required"),
+    unit: yup.object().required().typeError("Business Unit is required"),
+    subUnit: yup.object().required().typeError("Business Unit is required"),
     locationId: yup.object().required().typeError("Location Name is required"),
   }),
 });
@@ -177,9 +182,7 @@ export const AccountTitleModal = ({
 }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [company, setCompany] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [location, setLocation] = useState([]);
+  const [oneChargingData, setOneChargingData] = useState("");
 
   // FETCH SEDAR EMPLOYEE ID
   const [pickerItems, setPickerItems] = useState([]);
@@ -199,45 +202,30 @@ export const AccountTitleModal = ({
     fetchEmployees();
   }, []);
 
-  // FETCH COMPANY API
-  const fetchCompanyApi = async () => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0", {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setCompany(res.data.result.companies);
-    } catch (error) {}
-  };
-
-  // FETCH DEPT API
-  const fetchDepartmentApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&api_for=vladimir&company_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setDepartment(res.data.result.departments);
-    } catch (error) {}
-  };
-
-  // FETCH Loc API
-  const fetchLocationApi = async (id = "") => {
-    try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&api_for=vladimir&department_id=" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setLocation(res.data.result.locations);
-    } catch (error) {}
-  };
+  const userToken = decodeUser();
 
   useEffect(() => {
-    fetchLocationApi().then(() => fetchDepartmentApi().then(() => fetchCompanyApi()));
+    fecthOneCharging();
   }, []);
+
+  //one charging
+  const fecthOneCharging = async () => {
+    try {
+      const res = await axios.get("https://10.10.10.14:7001/api/OneCharging/GetOneCharging?UsePagination=false", {
+        headers: {
+          Authorization: "Bearer " + userToken?.token,
+        },
+      });
+      // setCompany(res.data.result.companies);
+
+      const charging = moveData?.orders?.find((item) => item?.id === orderId);
+      setOneChargingData(res.data.oneChargingList?.find((item) => item.code === charging?.oneChargingCode));
+
+      // console.log(res.data.oneChargingList?.find((item) => item.code === charging?.oneChargingCode));
+    } catch (error) {}
+  };
+
+  console.log("oneChargingData: ", oneChargingData);
 
   const {
     handleSubmit,
@@ -259,43 +247,9 @@ export const AccountTitleModal = ({
     },
   });
 
-  // location
-  useEffect(() => {
-    const order = moveData?.orders?.find((item) => item.id === orderId);
+  const submitHandler = async () => {
+    console.log("Triggered submitHandler");
 
-    if (location.length && !watch("formData.locationId") && !watch("formData.departmentId")) {
-      setValue("formData.locationId", {
-        label: `${order.locationCode} - ${order.locationName}`,
-        value: location?.find((item) => item.code === order.locationCode),
-      });
-    }
-  }, [orderId, location]);
-
-  // department
-  useEffect(() => {
-    const order = moveData?.orders?.find((item) => item.id === orderId);
-
-    if (department.length && !watch("formData.departmentId") && !watch("formData.companyId")) {
-      setValue("formData.departmentId", {
-        label: `${order.departmentCode} - ${order.department}`,
-        value: department?.find((item) => item.code === order.departmentCode),
-      });
-    }
-  }, [orderId, department]);
-
-  // company
-  useEffect(() => {
-    const order = moveData?.orders?.find((item) => item.id === orderId);
-
-    if (company.length && !watch("formData.companyId")) {
-      setValue("formData.companyId", {
-        label: `${order.companyCode} - ${order.companyName}`,
-        value: company?.find((item) => item.code === order.companyCode),
-      });
-    }
-  }, [orderId, company]);
-
-  const submitHandler = async (data) => {
     Swal.fire({
       title: "Confirmation!",
       text: "Are you sure you want to save this move order list?",
@@ -315,28 +269,34 @@ export const AccountTitleModal = ({
       const submitArrayBody = moveData?.orders?.map((item) => {
         return {
           orderNo: orderId,
-          companyCode: data.formData.companyId.value.code,
-          companyName: data.formData.companyId.value.name,
-          departmentCode: data.formData.departmentId.value.code,
-          departmentName: data.formData.departmentId.value.name,
-          locationCode: data.formData.locationId.value.code,
-          locationName: data.formData.locationId.value.name,
+          companyCode: oneChargingData?.company_code,
+          companyName: oneChargingData?.company_name,
+          business_unit_code: oneChargingData?.business_unit_code,
+          business_unit_name: oneChargingData?.business_unit_name,
+          departmentCode: oneChargingData?.department_code,
+          departmentName: oneChargingData?.department_name,
+          department_unit_code: oneChargingData?.department_unit_code,
+          department_unit_name: oneChargingData?.department_unit_name,
+          sub_unit_code: oneChargingData?.sub_unit_code,
+          sub_unit_name: oneChargingData?.sub_unit_name,
+          locationCode: oneChargingData?.location_code,
+          locationName: oneChargingData?.location_name,
           preparedBy: currentUser?.fullName,
         };
       });
 
-      // console.log("submitArrayBody: ", submitArrayBody);
+      console.log("submitArrayBody: ", submitArrayBody);
 
-      const genusStatus = moveData?.orders?.map((item) => {
-        return {
-          mir_id: item.id,
-          status: "Ready to Pick-up",
-          orders: orderListData.map((item) => ({
-            order_id: item.orderNo,
-            quantity_serve: item.preparedQuantity,
-          })),
-        };
-      });
+      // const genusStatus = moveData?.orders?.map((item) => {
+      //   return {
+      //     mir_id: item.id,
+      //     status: "Ready to Pick-up",
+      //     orders: orderListData.map((item) => ({
+      //       order_id: item.orderNo,
+      //       quantity_serve: item.preparedQuantity,
+      //     })),
+      //   };
+      // });
 
       if (result.isConfirmed) {
         setIsLoading(true);
@@ -365,217 +325,139 @@ export const AccountTitleModal = ({
         }
 
         // GENUS STATUS
-        try {
-          axios.patch(`http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`, genusStatus, {
-            headers: {
-              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-            },
-          });
-        } catch (error) {
-          console.log(error);
-          ToastComponent("Error", "Genus ETD update status failed", "error", toast);
-        }
+        // try {
+        //   axios.patch(`http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`, genusStatus, {
+        //     headers: {
+        //       Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+        //     },
+        //   });
+        // } catch (error) {
+        //   console.log(error);
+        //   ToastComponent("Error", "Genus ETD update status failed", "error", toast);
+        // }
       }
     });
   };
-
-  console.log("Watch Company: ", watch("formData.companyId"));
-  console.log("Company: ", company);
 
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
         <ModalOverlay />
-        <form onSubmit={handleSubmit(submitHandler)}>
-          <ModalContent>
-            <ModalHeader>
-              <Flex justifyContent="center">
-                <Text>Charge of Accounts</Text>
-              </Flex>
-            </ModalHeader>
+        <ModalContent>
+          <ModalHeader>
+            <Flex justifyContent="center">
+              <Text>Charge of Accounts</Text>
+            </Flex>
+          </ModalHeader>
 
-            <ModalCloseButton onClick={onClose} />
+          <ModalCloseButton onClick={onClose} />
 
-            <ModalBody>
-              <Stack spacing={2} p={6}>
-                <Box>
-                  <HStack gap={0.5}>
-                    {company.length === 0 && <Spinner size="sm" color="blue.500" emptyColor="gray.200" />}
-                    <FormLabel fontSize="sm">Company</FormLabel>
-                  </HStack>
+          <ModalBody>
+            <Stack spacing={2} p={6}>
+              <Box>
+                <HStack gap={0.5}>
+                  <FormLabel fontSize="sm">Company</FormLabel>
+                </HStack>
 
-                  <Controller
-                    control={control}
-                    name="formData.companyId"
-                    render={({ field }) => (
-                      <AutoComplete
-                        ref={field.ref}
-                        value={field.value}
-                        size="sm"
-                        placeholder="Select Company"
-                        isDisabled
-                        onChange={(e) => {
-                          field.onChange(e);
-                          setValue("formData.departmentId", "");
-                          setValue("formData.locationId", "");
-                          fetchDepartmentApi(e?.value?.id || "");
-                        }}
-                        options={company?.map((item) => {
-                          return {
-                            label: `${item.code} - ${item.name}`,
-                            value: item,
-                          };
-                        })}
-                        chakraStyles={{
-                          control: (provided, state) => ({
-                            ...provided,
-                            backgroundColor: state.isDisabled ? "gray.400" : "black",
-                            color: state.isDisabled ? "blackAlpha.900" : "black",
-                            opacity: state.isDisabled ? 0.5 : 1,
-                          }),
-                          singleValue: (provided, state) => ({
-                            ...provided,
-                            color: state.isDisabled ? "black" : "black",
-                            fontWeight: state.isDisabled ? "semibold" : "normal",
-                          }),
-                          placeholder: (provided, state) => ({
-                            ...provided,
-                            color: state.isDisabled ? "blackAlpha.900" : "#888", // Placeholder color when disabled
-                          }),
-                        }}
-                      />
-                    )}
-                  />
+                <Input
+                  value={`${oneChargingData?.company_code} - ${oneChargingData?.company_name}`}
+                  disabled={true}
+                  readOnly={true}
+                  _disabled={{ color: "black" }}
+                  fontSize="13px"
+                  size="sm"
+                  bg="gray.300"
+                />
+              </Box>
 
-                  <Text color="red" fontSize="xs">
-                    {errors.formData?.companyId?.message}
-                  </Text>
-                </Box>
+              <Box>
+                <HStack gap={0.5}>
+                  <FormLabel fontSize="sm">Business Unit</FormLabel>
+                </HStack>
 
-                <Box>
-                  <HStack gap={0.5}>
-                    {department.length === 0 && <Spinner size="sm" color="blue.500" emptyColor="gray.200" />}
-                    <FormLabel fontSize="sm">Department</FormLabel>
-                  </HStack>
+                <Input
+                  value={`${oneChargingData?.business_unit_code} - ${oneChargingData?.business_unit_name}`}
+                  disabled={true}
+                  readOnly={true}
+                  _disabled={{ color: "black" }}
+                  fontSize="13px"
+                  size="sm"
+                  bg="gray.300"
+                />
+              </Box>
 
-                  <Controller
-                    control={control}
-                    name="formData.departmentId"
-                    render={({ field }) => (
-                      <AutoComplete
-                        size="sm"
-                        ref={field.ref}
-                        value={field.value}
-                        placeholder="Select Department"
-                        onChange={(e) => {
-                          field.onChange(e);
-                          setValue("formData.locationId", "");
-                          fetchLocationApi(e?.value?.id || "");
-                        }}
-                        options={department?.map((item) => {
-                          return {
-                            label: `${item.code} - ${item.name}`,
-                            value: item,
-                          };
-                        })}
-                        isDisabled
-                        chakraStyles={{
-                          control: (provided, state) => ({
-                            ...provided,
-                            backgroundColor: state.isDisabled ? "gray.400" : "black",
-                            color: state.isDisabled ? "blackAlpha.900" : "black",
-                            opacity: state.isDisabled ? 1 : 1,
-                          }),
-                          singleValue: (provided, state) => ({
-                            ...provided,
-                            color: state.isDisabled ? "blackAlpha.900" : "black",
-                            fontWeight: state.isDisabled ? "semibold" : "normal",
-                          }),
-                          placeholder: (provided, state) => ({
-                            ...provided,
-                            color: state.isDisabled ? "blackAlpha.900" : "#888", // Placeholder color when disabled
-                          }),
-                        }}
-                      />
-                    )}
-                  />
+              <Box>
+                <HStack gap={0.5}>
+                  <FormLabel fontSize="sm">Department</FormLabel>
+                </HStack>
 
-                  <Text color="red" fontSize="xs">
-                    {errors.formData?.departmentId?.message}
-                  </Text>
-                </Box>
+                <Input
+                  value={`${oneChargingData?.department_code} - ${oneChargingData?.department_name}`}
+                  disabled={true}
+                  readOnly={true}
+                  _disabled={{ color: "black" }}
+                  fontSize="13px"
+                  size="sm"
+                  bg="gray.300"
+                />
+              </Box>
 
-                <Box>
-                  <HStack gap={0.5}>
-                    {location.length === 0 && <Spinner size="sm" color="blue.500" emptyColor="gray.200" />}
-                    <FormLabel fontSize="sm">Location</FormLabel>
-                  </HStack>
-                  <Controller
-                    control={control}
-                    name="formData.locationId"
-                    render={({ field }) => (
-                      <AutoComplete
-                        size="sm"
-                        ref={field.ref}
-                        value={field.value}
-                        placeholder="Select Location"
-                        onChange={(e) => {
-                          field.onChange(e);
-                        }}
-                        options={location?.map((item) => {
-                          return {
-                            label: `${item.code} - ${item.name}`,
-                            value: item,
-                          };
-                        })}
-                        isDisabled
-                        chakraStyles={{
-                          control: (provided, state) => ({
-                            ...provided,
-                            backgroundColor: state.isDisabled ? "gray.400" : "black",
-                            color: state.isDisabled ? "blackAlpha.900" : "black",
-                            opacity: state.isDisabled ? 1 : 1,
-                          }),
-                          singleValue: (provided, state) => ({
-                            ...provided,
-                            color: state.isDisabled ? "blackAlpha.900" : "black",
-                            fontWeight: state.isDisabled ? "semibold" : "normal",
-                          }),
-                          placeholder: (provided, state) => ({
-                            ...provided,
-                            color: state.isDisabled ? "blackAlpha.900" : "#888", // Placeholder color when disabled
-                          }),
-                        }}
-                      />
-                    )}
-                  />
-                  <Text color="red" fontSize="xs">
-                    {errors.formData?.locationId?.message}
-                  </Text>
-                </Box>
-              </Stack>
-            </ModalBody>
+              <Box>
+                <HStack gap={0.5}>
+                  <FormLabel fontSize="sm">Unit</FormLabel>
+                </HStack>
 
-            <ModalFooter>
-              <Button
-                type="submit"
-                isLoading={isLoading}
-                isDisabled={
-                  !watch("formData.companyId") ||
-                  !watch("formData.departmentId") ||
-                  !watch("formData.locationId") ||
-                  company.length === 0 ||
-                  department.length === 0 ||
-                  location.length === 0
-                }
-                colorScheme="blue"
-                px={4}
-              >
-                Submit
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </form>
+                <Input
+                  value={`${oneChargingData?.department_unit_code} - ${oneChargingData?.department_unit_name}`}
+                  disabled={true}
+                  readOnly={true}
+                  _disabled={{ color: "black" }}
+                  fontSize="13px"
+                  size="sm"
+                  bg="gray.300"
+                />
+              </Box>
+
+              <Box>
+                <HStack gap={0.5}>
+                  <FormLabel fontSize="sm">Sub Unit</FormLabel>
+                </HStack>
+
+                <Input
+                  value={`${oneChargingData?.sub_unit_code} - ${oneChargingData?.sub_unit_name}`}
+                  disabled={true}
+                  readOnly={true}
+                  _disabled={{ color: "black" }}
+                  fontSize="13px"
+                  size="sm"
+                  bg="gray.300"
+                />
+              </Box>
+
+              <Box>
+                <HStack gap={0.5}>
+                  <FormLabel fontSize="sm">Location</FormLabel>
+                </HStack>
+
+                <Input
+                  value={`${oneChargingData?.location_code} - ${oneChargingData?.location_name}`}
+                  disabled={true}
+                  readOnly={true}
+                  _disabled={{ color: "black" }}
+                  fontSize="13px"
+                  size="sm"
+                  bg="gray.300"
+                />
+              </Box>
+            </Stack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button onClick={() => submitHandler()} isLoading={isLoading} isDisabled={!oneChargingData} colorScheme="blue" px={4}>
+              Confirm
+            </Button>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     </>
   );

@@ -111,10 +111,28 @@ export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, setSheetData, sea
                         Company Name
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Business Unit Code
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Business Unit Name
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         Department Code
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Department Name
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Unit Code
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Unit Name
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Sub Unit Code
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Sub Unit Name
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Location Code
@@ -192,8 +210,14 @@ export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, setSheetData, sea
                       <>
                         <Td fontSize="xs">{item?.companyCode}</Td>
                         <Td fontSize="xs">{item?.companyName}</Td>
+                        <Td fontSize="xs">{item?.businessUnitCode ? item?.businessUnitCode : "-"}</Td>
+                        <Td fontSize="xs">{item?.businessUnitName ? item?.businessUnitName : "-"}</Td>
                         <Td fontSize="xs">{item?.departmentCode}</Td>
                         <Td fontSize="xs">{item?.departmentName}</Td>
+                        <Td fontSize="xs">{item?.departmentUnitCode ? item?.departmentUnitCode : "-"}</Td>
+                        <Td fontSize="xs">{item?.departmentUnitName ? item?.departmentUnitName : "-"}</Td>
+                        <Td fontSize="xs">{item?.subUnitCode ? item?.subUnitCode : "-"}</Td>
+                        <Td fontSize="xs">{item?.subUnitName ? item?.subUnitName : "-"}</Td>
                         <Td fontSize="xs">{item?.locationCode}</Td>
                         <Td fontSize="xs">{item?.locationName}</Td>
                         <Td fontSize="xs">{item?.accountTitleCode ? item?.accountTitleCode : "-"}</Td>
