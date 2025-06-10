@@ -10,12 +10,12 @@ const fetchGenusApi = async (fromDate, toDate) => {
   const toDateFormatted = moment(toDate).format("yyyy-MM-DD");
   const res = await axios.get(
     // `http://genus-aio.rdfmis.ph/etd/backend/public/api/elixir_order?paginate=0&page=1&row=10&status=all&from=${fromDateFormatted}&to=${toDateFormatted}`, // GENUS V1
-    // `http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_order?status=active&per_page=10&pagination=none`, // GENUS V2
-    `http://10.10.12.14:8000/api/elixir_order?status=approved_elixir&per_page=10&pagination=none`,
+    `http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_order?status=active&per_page=10&pagination=none&from=${fromDateFormatted}&to=${toDateFormatted}`,
+    // `http://10.10.12.14:8000/api/elixir_order?status=approved_elixir&per_page=10&pagination=none`, // localhost
     {
       headers: {
         Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-        API_KEY: `hello world!`,
+        "api-key": process.env.REACT_GENUSV2_API_KEY,
       },
     }
   );
