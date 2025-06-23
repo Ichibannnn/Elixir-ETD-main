@@ -157,6 +157,7 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
               </HStack>
             </VStack>
           </Flex>
+
           <VStack justifyContent="center" mt={3}>
             <PageScroll minHeight="320px" maxHeight="321px">
               <Table size="sm" bg="gray.100">

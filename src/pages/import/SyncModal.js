@@ -190,7 +190,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                   <Badge fontSize="xs" colorScheme="blue" variant="solid">
                     From:
                   </Badge>
-                  <Input onChange={(date) => setFromDate(date.target.value)} min={minDate} defaultValue={fromDate} type="date" fontSize="11px" fontWeight="semibold" />
+                  <Input onChange={(date) => setFromDate(date.target.value)} defaultValue={fromDate} type="date" fontSize="11px" fontWeight="semibold" />
                   <Badge fontSize="xs" colorScheme="blue" variant="solid">
                     To:
                   </Badge>

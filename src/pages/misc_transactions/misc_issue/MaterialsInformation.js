@@ -489,7 +489,7 @@ export const RawMatsInfoModal = ({
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get("http://rdfsedar.com/api/data/employees", {
+      const res = await axios.get("https://rdfsedar.com/api/data/employee/filter/active", {
         headers: {
           Authorization: "Bearer " + process.env.REACT_APP_SEDAR_TOKEN,
         },

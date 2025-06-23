@@ -44,6 +44,7 @@ const EditModalSave = ({
   formData2,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+
   const toast = useToast();
 
   const { setReceivingId } = useContext(ReceivingContext);
@@ -89,6 +90,7 @@ const EditModalSave = ({
         colorScheme="blue"
         onClick={onOpen}
         isDisabled={isSubmitDisabled || !unitPrice || !actualDelivered || actualDelivered > Number(editData.actualRemaining) || !siNumber || !receivingDate || !lotSection}
+        isLoading={isLoading}
       >
         Receive
       </Button>

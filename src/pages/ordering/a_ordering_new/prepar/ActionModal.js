@@ -66,7 +66,7 @@ export const EditModal = ({ isOpen, onClose, editData, fetchOrderList, fetchCust
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get("http://rdfsedar.com/api/data/employees", {
+      const res = await axios.get("https://rdfsedar.com/api/data/employee/filter/active", {
         headers: {
           Authorization: "Bearer " + process.env.REACT_APP_SEDAR_TOKEN,
         },
@@ -636,11 +636,16 @@ export const ScheduleModal = ({
 
         // GENUS STATUS
         try {
-          axios.patch(`http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`, genusStatus, {
-            headers: {
-              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-            },
-          });
+          axios.patch(
+            // `http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`,
+            `http://10.10.12.14:8000/api/elixir_order?status=approved_elixir&per_page=10&pagination=none`,
+            genusStatus,
+            {
+              headers: {
+                Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+              },
+            }
+          );
         } catch (error) {
           console.log(error);
           ToastComponent("Error", "Genus ETD update status failed", "error", toast);

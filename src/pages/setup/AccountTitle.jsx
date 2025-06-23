@@ -3,16 +3,18 @@ import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPr
 import { useState } from "react";
 import { useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
-import request from "../../services/ApiClient";
 import PageScroll from "../../utils/PageScroll";
+import request from "../../services/ApiClient";
 
-const OneCharging = () => {
-  const [oneCharging, setOneCharging] = useState([]);
+const AccountTitle = () => {
+  const [accountTitle, setAccountTitle] = useState([]);
   const [search, setSearch] = useState("");
+  const toast = useToast();
+
   const [isLoading, setIsLoading] = useState(true);
   const [pageTotal, setPageTotal] = useState(undefined);
 
-  const fetchOneChargingApi = async (pageNumber, pageSize, search) => {
+  const fetchAccountTitleApi = async (pageNumber, pageSize, search) => {
     const response = await request.get(`OneCharging/GetOneCharging?PageNumber=${pageNumber}&PageSize=${pageSize}&UsePagination=true&status=true&search${search}`);
 
     return response.data;
@@ -38,20 +40,20 @@ const OneCharging = () => {
     setPageSize(pageSize);
   };
 
-  const getOneChargingHandler = () => {
+  const getAccountTitleHandler = () => {
     setIsLoading(true);
-    fetchOneChargingApi(currentPage, pageSize, search).then((res) => {
+    fetchAccountTitleApi(currentPage, pageSize, search).then((res) => {
       setIsLoading(false);
-      setOneCharging(res);
+      setAccountTitle(res);
       setPageTotal(res.totalCount);
     });
   };
 
   useEffect(() => {
-    getOneChargingHandler();
+    getAccountTitleHandler();
 
     return () => {
-      setOneCharging([]);
+      setAccountTitle([]);
     };
   }, [currentPage, pageSize, search]);
 
@@ -92,7 +94,7 @@ const OneCharging = () => {
 
           <Flex w="full" flexDirection="column">
             <Text textAlign="center" bgColor="primary" color="white" fontSize="14px">
-              One Charging List
+              Account Title List
             </Text>
             <PageScroll maxHeight="750px">
               {isLoading ? (
@@ -135,7 +137,7 @@ const OneCharging = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {oneCharging.oneChargingList?.map((item, i) => (
+                    {accountTitle.oneChargingList?.map((item, i) => (
                       <Tr key={i}>
                         <Td fontSize="xs">{item.code}</Td>
                         <Td fontSize="xs">{item.name}</Td>
@@ -208,4 +210,4 @@ const OneCharging = () => {
   );
 };
 
-export default OneCharging;
+export default AccountTitle;
