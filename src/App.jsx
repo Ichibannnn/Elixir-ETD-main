@@ -134,6 +134,7 @@ import FuelRequest from "./pages/fuel_register/fuel_request/FuelRequest";
 import FuelApproval from "./pages/fuel_register/fuel_approval/FuelApproval";
 import FuelTransaction from "./pages/fuel_register/fuel_transaction/FuelTransaction";
 import FuelRequestV2 from "./pages/fuel_register_v2/FuelRequestsTab/FuelRequestV2";
+import AccountTitle from "./pages/setup/AccountTitle";
 
 const currentUser = decodeUser();
 const employeeId = currentUser?.id;
@@ -334,6 +335,7 @@ const App = () => {
               <Route path="/setup/account_title-account" element={<AccTAccount />} />
               <Route path="/setup/assets" element={<Assets />} />
               <Route path="/setup/one-charging" element={<OneCharging />} />
+              <Route path="/setup/account-title" element={<AccountTitle />} />
             </Route>
 
             {/* USER */}

@@ -58,8 +58,8 @@ export const AddConfirmation = ({
         oneChargingCode: chargingCoa?.oneChargingCode?.value?.code,
 
         // Account Title
-        accountCode: chargingAccountTitle?.accountId?.value?.code,
-        accountTitles: chargingAccountTitle?.accountId?.value?.name,
+        accountCode: chargingAccountTitle?.accountId?.value?.accountCode,
+        accountTitles: chargingAccountTitle?.accountId?.value?.accountDescription,
         empId: chargingAccountTitle?.empId?.value?.full_id_number,
         fullName: chargingAccountTitle?.empId?.value?.full_name,
       };

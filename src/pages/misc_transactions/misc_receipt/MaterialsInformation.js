@@ -479,17 +479,26 @@ export const RawMatsInfoModal = ({
     fetchEmployees();
   }, []);
 
-  // FETCH ACcount API
-  const fetchAccountApi = async (id = "") => {
+  const fetchAccountApi = async () => {
     try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setAccount(res.data.result.account_titles);
+      const res = await request.get("OneCharging/GetAccountTitle?PageNumber=1&PageSize=10&UsePagination=true&status=true");
+
+      console.log("Res: ", res);
+      setAccount(res.data.oneChargingList);
     } catch (error) {}
   };
+
+  // Fisto Account Title ~~~~~
+  // const fetchAccountApi = async (id = "") => {
+  //   try {
+  //     const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
+  //       headers: {
+  //         Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
+  //       },
+  //     });
+  //     setAccount(res.data.result.account_titles);
+  //   } catch (error) {}
+  // };
 
   useEffect(() => {
     fetchAccountApi();
@@ -519,15 +528,15 @@ export const RawMatsInfoModal = ({
 
   const triggerPointHandler = (event) => {
     const selectAccountTitle = account?.find((item) => {
-      return item.id === parseInt(event);
+      return item.syncId === parseInt(event);
     });
 
-    if (!selectedAccount?.name?.match(/Advances to Employees/gi) || !selectedAccount?.name?.match(/Advances from Employees/gi)) {
+    if (!selectedAccount?.accountDescription?.match(/Advances to Employees/gi) || !selectedAccount?.accountDescription?.match(/Advances from Employees/gi)) {
       setIdNumber("");
       setValue("formData.empId", "");
       setValue("formData.fullName", "");
     }
-    setSelectedAccount(selectAccountTitle?.name);
+    setSelectedAccount(selectAccountTitle?.accountDescription);
   };
 
   const [idNumber, setIdNumber] = useState();
@@ -740,11 +749,11 @@ export const RawMatsInfoModal = ({
                             placeholder="Select Account"
                             onChange={(e) => {
                               field.onChange(e);
-                              triggerPointHandler(e?.value.id);
+                              triggerPointHandler(e?.value.syncId);
                             }}
                             options={account?.map((item) => {
                               return {
-                                label: `${item.code} - ${item.name}`,
+                                label: `${item.accountCode} - ${item.accountDescription}`,
                                 value: item,
                               };
                             })}

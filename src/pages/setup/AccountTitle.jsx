@@ -1,21 +1,24 @@
-import { Box, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Skeleton, Stack, Table, Tbody, Td, Text, Th, useToast, Thead, Tr } from "@chakra-ui/react";
+import { Box, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Skeleton, Stack, Table, Tbody, Td, Text, Th, useToast, Thead, Tr, Button } from "@chakra-ui/react";
 import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import { useState } from "react";
 import { useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import PageScroll from "../../utils/PageScroll";
 import request from "../../services/ApiClient";
+import { ToastComponent } from "../../components/Toast";
+import { MdOutlineSync } from "react-icons/md";
 
 const AccountTitle = () => {
   const [accountTitle, setAccountTitle] = useState([]);
   const [search, setSearch] = useState("");
-  const toast = useToast();
-
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingSync, setIsLoadingSync] = useState(false);
   const [pageTotal, setPageTotal] = useState(undefined);
 
+  const toast = useToast();
+
   const fetchAccountTitleApi = async (pageNumber, pageSize, search) => {
-    const response = await request.get(`OneCharging/GetOneCharging?PageNumber=${pageNumber}&PageSize=${pageSize}&UsePagination=true&status=true&search${search}`);
+    const response = await request.get(`OneCharging/GetAccountTitle?PageNumber=${pageNumber}&PageSize=${pageSize}&UsePagination=true&status=true&search${search}`);
 
     return response.data;
   };
@@ -67,6 +70,19 @@ const AccountTitle = () => {
     }
   }, [search]);
 
+  const onSyncHandler = async () => {
+    setIsLoadingSync(true);
+    try {
+      const res = await request.post("accountTitle/sync").then((res) => {
+        ToastComponent("Success", "Account title synced sucessfully!", "success", toast);
+        getAccountTitleHandler();
+        setIsLoadingSync(false);
+      });
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
   return (
     <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} w="full">
@@ -89,7 +105,11 @@ const AccountTitle = () => {
               </InputGroup>
             </HStack>
 
-            <HStack flexDirection="row"></HStack>
+            <HStack flexDirection="row">
+              <Button size="sm" leftIcon={<MdOutlineSync />} colorScheme="blue" fontSize="13px" isLoading={isLoadingSync} loadingText="Syncing...." onClick={onSyncHandler}>
+                Sync
+              </Button>
+            </HStack>
           </Flex>
 
           <Flex w="full" flexDirection="column">
@@ -111,54 +131,23 @@ const AccountTitle = () => {
                   <Thead bg="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
                       <Th h="40px" color="white" fontSize="10px">
-                        Code
+                        Sync ID
+                      </Th>
+
+                      <Th h="40px" color="white" fontSize="10px">
+                        Account Code
                       </Th>
                       <Th h="40px" color="white" fontSize="10px">
-                        Name
-                      </Th>
-                      <Th h="40px" color="white" fontSize="10px">
-                        Company
-                      </Th>
-                      <Th h="40px" color="white" fontSize="10px">
-                        Business Unit
-                      </Th>
-                      <Th h="40px" color="white" fontSize="10px">
-                        Department
-                      </Th>
-                      <Th h="40px" color="white" fontSize="10px">
-                        Unit
-                      </Th>
-                      <Th h="40px" color="white" fontSize="10px">
-                        Sub Unit
-                      </Th>
-                      <Th h="40px" color="white" fontSize="10px">
-                        Location
+                        Account Title
                       </Th>
                     </Tr>
                   </Thead>
                   <Tbody>
                     {accountTitle.oneChargingList?.map((item, i) => (
                       <Tr key={i}>
-                        <Td fontSize="xs">{item.code}</Td>
-                        <Td fontSize="xs">{item.name}</Td>
-                        <Td fontSize="xs">
-                          {item.company_code} - {item.company_name}
-                        </Td>
-                        <Td fontSize="xs">
-                          {item.business_unit_code} - {item.business_unit_code}
-                        </Td>
-                        <Td fontSize="xs">
-                          {item.department_code} - {item.department_name}
-                        </Td>
-                        <Td fontSize="xs">
-                          {item.department_unit_code} - {item.department_unit_name}
-                        </Td>
-                        <Td fontSize="xs">
-                          {item.sub_unit_code} - {item.sub_unit_name}
-                        </Td>
-                        <Td fontSize="xs">
-                          {item.location_code} - {item.location_name}
-                        </Td>
+                        <Td fontSize="xs">{item.syncId}</Td>
+                        <Td fontSize="xs">{item.accountCode}</Td>
+                        <Td fontSize="xs">{item.accountDescription}</Td>
                       </Tr>
                     ))}
                   </Tbody>

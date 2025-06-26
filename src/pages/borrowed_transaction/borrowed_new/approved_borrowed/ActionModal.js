@@ -316,17 +316,26 @@ export const ConsumeModal = ({
     fetchEmployees();
   }, []);
 
-  // FETCH ACcount API
-  const fetchAccountApi = async (id = "") => {
+  const fetchAccountApi = async () => {
     try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setAccount(res.data.result.account_titles);
+      const res = await request.get("OneCharging/GetAccountTitle?PageNumber=1&PageSize=10&UsePagination=true&status=true");
+
+      console.log("Res: ", res);
+      setAccount(res.data.oneChargingList);
     } catch (error) {}
   };
+
+  // Fisto Account Title ~~~~~
+  // const fetchAccountApi = async (id = "") => {
+  //   try {
+  //     const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
+  //       headers: {
+  //         Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
+  //       },
+  //     });
+  //     setAccount(res.data.result.account_titles);
+  //   } catch (error) {}
+  // };
 
   useEffect(() => {
     fetchAccountApi();
@@ -357,15 +366,15 @@ export const ConsumeModal = ({
 
   const triggerPointHandler = (event) => {
     const selectAccountTitle = account?.find((item) => {
-      return item.id === parseInt(event);
+      return item.syncId === parseInt(event);
     });
 
-    if (!selectedAccount?.name?.match(/Advances to Employees/gi)) {
+    if (!selectedAccount?.accountDescription?.match(/Advances to Employees/gi)) {
       setIdNumber("");
       setValue("formData.empId", "");
       setValue("formData.fullName", "");
     }
-    setSelectedAccount(selectAccountTitle?.name);
+    setSelectedAccount(selectAccountTitle?.accountDescription);
   };
 
   const [idNumber, setIdNumber] = useState();
@@ -416,8 +425,8 @@ export const ConsumeModal = ({
               consume: consumedQuantity,
               reportNumber: serviceReportNo,
               oneChargingCode: data.formData.oneChargingCode.value.code,
-              accountCode: data.formData.accountId.value.code,
-              accountTitles: data.formData.accountId.value.name,
+              accountCode: data.formData.accountId.value.accountCode,
+              accountTitles: data.formData.accountId.value.accountDescription,
               empId: data.formData.empId?.value.full_id_number,
               fullName: data.formData.fullName,
               addedBy: currentUser.fullName,
@@ -610,11 +619,11 @@ export const ConsumeModal = ({
                         placeholder="Select Account"
                         onChange={(e) => {
                           field.onChange(e);
-                          triggerPointHandler(e?.value.id);
+                          triggerPointHandler(e?.value.syncId);
                         }}
                         options={account?.map((item) => {
                           return {
-                            label: `${item.code} - ${item.name}`,
+                            label: `${item.accountCode} - ${item.accountDescription}`,
                             value: item,
                           };
                         })}
@@ -775,17 +784,26 @@ export const EditQuantityModal = (props) => {
     fetchEmployees();
   }, []);
 
-  // FETCH ACcount API
   const fetchAccountApi = async () => {
     try {
-      const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0", {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-        },
-      });
-      setAccount(res.data.result.account_titles);
+      const res = await request.get("OneCharging/GetAccountTitle?PageNumber=1&PageSize=10&UsePagination=true&status=true");
+
+      console.log("Res: ", res);
+      setAccount(res.data.oneChargingList);
     } catch (error) {}
   };
+
+  // Fisto Account Title ~~~~~~~~~
+  // const fetchAccountApi = async () => {
+  //   try {
+  //     const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0", {
+  //       headers: {
+  //         Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
+  //       },
+  //     });
+  //     setAccount(res.data.result.account_titles);
+  //   } catch (error) {}
+  // };
 
   useEffect(() => {
     fetchAccountApi();
@@ -817,15 +835,15 @@ export const EditQuantityModal = (props) => {
 
   const triggerPointHandler = (event) => {
     const selectAccountTitle = account?.find((item) => {
-      return item.id === parseInt(event);
+      return item.syncId === parseInt(event);
     });
 
-    if (!selectedAccount?.name?.match(/Advances to Employees/gi)) {
+    if (!selectedAccount?.accountDescription?.match(/Advances to Employees/gi)) {
       setIdNumber("");
       // setValue("formData.empId", "");
       // setValue("formData.fullName", "");
     }
-    setSelectedAccount(selectAccountTitle?.name);
+    setSelectedAccount(selectAccountTitle?.accountDescription);
   };
 
   const [idNumber, setIdNumber] = useState();
@@ -849,7 +867,7 @@ export const EditQuantityModal = (props) => {
       const returnEdit = returnRequest?.find((item) => item.id === editData.id);
       setValue("formData.accountTitleId", {
         label: `${returnEdit.accountCode} - ${returnEdit.accountTitles}`,
-        value: account?.find((item) => item.code === returnEdit.accountCode),
+        value: account?.find((item) => item.accountCode === returnEdit.accountCode),
       });
       setSelectedAccount(returnEdit.accountTitles);
     }
@@ -901,9 +919,9 @@ export const EditQuantityModal = (props) => {
           const response = request
             .put(`Borrowed/EditConsumeQuantity`, {
               id: editData.id,
-              oneChargingCode: data.formData.oneChargingCode.value.code,
-              accountTitles: data.formData.accountTitleId.value.name,
-              accountCode: data.formData.accountTitleId.value.code,
+              oneChargingCode: data.formData.oneChargingCode.value.oneChargingCode,
+              accountCode: data.formData.accountTitleId.value.accountCode,
+              accountTitles: data.formData.accountTitleId.value.accountDescription,
               empId: data.formData.empId?.value.full_id_number,
               fullName: data.formData.fullName,
               consume: data.formData.consumedQty,
@@ -932,10 +950,12 @@ export const EditQuantityModal = (props) => {
   };
 
   // console.log("Watch Charging: ", watch("formData.oneChargingCode"));
-  console.log("fetchChargingCode: ", oneChargingCode);
-  console.log("EditData: ", editData);
+  // console.log("fetchChargingCode: ", oneChargingCode);
+  // console.log("EditData: ", editData);
   // console.log("OneCharging State: ", showOneChargingData);
   // console.log("GetTable: ", returnRequest);
+
+  console.log("Error: ", errors);
 
   return (
     <>
@@ -1105,11 +1125,11 @@ export const EditQuantityModal = (props) => {
                           placeholder="Select Account"
                           onChange={(e) => {
                             field.onChange(e);
-                            triggerPointHandler(e?.value.id);
+                            triggerPointHandler(e?.value.syncId);
                           }}
                           options={account?.map((item) => {
                             return {
-                              label: `${item.code} - ${item.name}`,
+                              label: `${item.accountCode} - ${item.accountDescription}`,
                               value: item,
                             };
                           })}

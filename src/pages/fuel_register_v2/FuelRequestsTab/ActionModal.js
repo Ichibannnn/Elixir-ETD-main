@@ -262,9 +262,8 @@ export const SaveConfirmation = ({
       // One Charging Code
       oneChargingCode: requestorInformation?.oneChargingCode?.value?.code,
 
-      account_Title_Code: requestorInformation?.accountId?.value?.code,
-      account_Title_Name: requestorInformation?.accountId?.value?.name,
-      account_Title_Name: requestorInformation?.accountId?.value?.name,
+      account_Title_Code: requestorInformation?.accountId?.value?.accountCode,
+      account_Title_Name: requestorInformation?.accountId?.value?.accountDescription,
       empId: requestorInformation?.empId ? requestorInformation?.empId?.value?.full_id_number : "",
       fullname: requestorInformation?.fullName ? requestorInformation?.fullName : "",
 

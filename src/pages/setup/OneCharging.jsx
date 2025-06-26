@@ -1,19 +1,24 @@
-import { Box, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Skeleton, Stack, Table, Tbody, Td, Text, Th, useToast, Thead, Tr } from "@chakra-ui/react";
+import { Box, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Skeleton, Stack, Table, Tbody, Td, Text, Th, useToast, Thead, Tr, Button } from "@chakra-ui/react";
 import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import { useState } from "react";
 import { useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import request from "../../services/ApiClient";
 import PageScroll from "../../utils/PageScroll";
+import { ToastComponent } from "../../components/Toast";
+import { MdOutlineSync } from "react-icons/md";
 
 const OneCharging = () => {
   const [oneCharging, setOneCharging] = useState([]);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingSync, setIsLoadingSync] = useState(false);
   const [pageTotal, setPageTotal] = useState(undefined);
 
+  const toast = useToast();
+
   const fetchOneChargingApi = async (pageNumber, pageSize, search) => {
-    const response = await request.get(`OneCharging/GetOneCharging?PageNumber=${pageNumber}&PageSize=${pageSize}&UsePagination=true&status=true&search${search}`);
+    const response = await request.get(`OneCharging/GetOneCharging?PageNumber=${pageNumber}&PageSize=${pageSize}&UsePagination=true&status=true&search=${search}`);
 
     return response.data;
   };
@@ -65,6 +70,19 @@ const OneCharging = () => {
     }
   }, [search]);
 
+  const onSyncHandler = async () => {
+    setIsLoadingSync(true);
+    try {
+      const res = await request.post("charging/sync").then((res) => {
+        ToastComponent("Success", "One charging synced sucessfully!", "success", toast);
+        getOneChargingHandler();
+        setIsLoadingSync(false);
+      });
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
   return (
     <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} w="full">
@@ -87,7 +105,11 @@ const OneCharging = () => {
               </InputGroup>
             </HStack>
 
-            <HStack flexDirection="row"></HStack>
+            <HStack flexDirection="row">
+              <Button size="sm" leftIcon={<MdOutlineSync />} colorScheme="blue" fontSize="13px" isLoading={isLoadingSync} loadingText="Syncing...." onClick={onSyncHandler}>
+                Sync
+              </Button>
+            </HStack>
           </Flex>
 
           <Flex w="full" flexDirection="column">
@@ -108,6 +130,9 @@ const OneCharging = () => {
                 <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped" className="inputUpperCase">
                   <Thead bg="primary" position="sticky" top={0} zIndex={1}>
                     <Tr>
+                      <Th h="40px" color="white" fontSize="10px">
+                        Sync ID
+                      </Th>
                       <Th h="40px" color="white" fontSize="10px">
                         Code
                       </Th>
@@ -132,11 +157,13 @@ const OneCharging = () => {
                       <Th h="40px" color="white" fontSize="10px">
                         Location
                       </Th>
+                      1
                     </Tr>
                   </Thead>
                   <Tbody>
                     {oneCharging.oneChargingList?.map((item, i) => (
                       <Tr key={i}>
+                        <Td fontSize="xs">{item.sync_id}</Td>
                         <Td fontSize="xs">{item.code}</Td>
                         <Td fontSize="xs">{item.name}</Td>
                         <Td fontSize="xs">

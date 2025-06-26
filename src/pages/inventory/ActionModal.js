@@ -216,12 +216,11 @@ export const AccountTitleModal = ({
           Authorization: "Bearer " + userToken?.token,
         },
       });
-      // setCompany(res.data.result.companies);
+
+      console.log("Res: ", res.data.oneChargingList);
 
       const charging = moveData?.orders?.find((item) => item?.id === orderId);
       setOneChargingData(res.data.oneChargingList?.find((item) => item.code === charging?.oneChargingCode));
-
-      // console.log(res.data.oneChargingList?.find((item) => item.code === charging?.oneChargingCode));
     } catch (error) {}
   };
 
