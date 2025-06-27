@@ -211,7 +211,7 @@ export const AccountTitleModal = ({
   //one charging
   const fecthOneCharging = async () => {
     try {
-      const res = await axios.get("https://10.10.10.14:7001/api/OneCharging/GetOneCharging?UsePagination=false", {
+      const res = await request.get("OneCharging/GetOneCharging?UsePagination=false", {
         headers: {
           Authorization: "Bearer " + userToken?.token,
         },
@@ -286,16 +286,16 @@ export const AccountTitleModal = ({
 
       console.log("submitArrayBody: ", submitArrayBody);
 
-      // const genusStatus = moveData?.orders?.map((item) => {
-      //   return {
-      //     mir_id: item.id,
-      //     status: "Ready to Pick-up",
-      //     orders: orderListData.map((item) => ({
-      //       order_id: item.orderNo,
-      //       quantity_serve: item.preparedQuantity,
-      //     })),
-      //   };
-      // });
+      const genusStatus = moveData?.orders?.map((item) => {
+        return {
+          mir_id: item.id,
+          status: "Ready to Pick-up",
+          orders: orderListData.map((item) => ({
+            order_id: item.orderNo,
+            quantity_serve: item.preparedQuantity,
+          })),
+        };
+      });
 
       if (result.isConfirmed) {
         setIsLoading(true);
@@ -324,16 +324,17 @@ export const AccountTitleModal = ({
         }
 
         // GENUS STATUS
-        // try {
-        //   axios.patch(`http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`, genusStatus, {
-        //     headers: {
-        //       Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-        //     },
-        //   });
-        // } catch (error) {
-        //   console.log(error);
-        //   ToastComponent("Error", "Genus ETD update status failed", "error", toast);
-        // }
+        try {
+          axios.patch(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`, genusStatus, {
+            headers: {
+              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+              "api-key": "hello world!",
+            },
+          });
+        } catch (error) {
+          console.log(error);
+          ToastComponent("Error", "Genus ETD update status failed", "error", toast);
+        }
       }
     });
   };

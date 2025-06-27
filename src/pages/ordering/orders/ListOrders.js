@@ -178,7 +178,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
   useEffect(() => {
     if (keyword) {
       genusOrders.result?.map((orders) => {
-        if (orders?.customer_name.toString().toLowerCase().includes(keyword)) {
+        if (orders?.charging_name.toString().toLowerCase().includes(keyword)) {
           setFilteredCount((prevState) => prevState + orders.orders.length);
         }
       });
@@ -334,9 +334,11 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
                       <Tbody>
                         {genusOrders?.result
                           ?.filter((val) => {
+                            console.log("Val", val);
+
                             const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
 
-                            return val?.customer_charging_name?.toLowerCase().match(newKeyword, "*");
+                            return val?.charging_name?.toLowerCase().match(newKeyword, "*");
                           })
                           ?.map((order, i) =>
                             order.orders?.map((sub, i) => (

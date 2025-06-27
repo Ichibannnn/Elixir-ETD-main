@@ -636,16 +636,12 @@ export const ScheduleModal = ({
 
         // GENUS STATUS
         try {
-          axios.patch(
-            // `http://genus-aio.rdfmis.ph/etd/backend/public/api/order/elixir_update`,
-            `http://10.10.12.14:8000/api/elixir_order?status=approved_elixir&per_page=10&pagination=none`,
-            genusStatus,
-            {
-              headers: {
-                Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-              },
-            }
-          );
+          axios.patch(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`, genusStatus, {
+            headers: {
+              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+              "api-key": "hello world!",
+            },
+          });
         } catch (error) {
           console.log(error);
           ToastComponent("Error", "Genus ETD update status failed", "error", toast);

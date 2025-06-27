@@ -5,9 +5,10 @@ import { ListOfMaterials } from "./materials_sync/ListOfMaterials";
 import { usePagination } from "@ajna/pagination";
 
 const fetchGenusApi = async () => {
-  const res = await axios.get(`http://genus-aio.rdfmis.ph/etd/backend/public/api/material?status=active&paginate=0`, {
+  const res = await axios.get(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_material?pagination=none`, {
     headers: {
       Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+      "api-key": "hello world!",
     },
   });
   return res.data;

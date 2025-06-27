@@ -4,9 +4,10 @@ import axios from "axios";
 import { ListOfItemCategory } from "./itemcategory_new/ListOfItemCategory";
 
 const fetchGenusApi = async () => {
-  const res = await axios.get(`http://genus-aio.rdfmis.ph/etd/backend/public/api/category?status=active&paginate=0`, {
+  const res = await axios.get(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_category?pagination=none`, {
     headers: {
       Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+      "api-key": "hello world!",
     },
   });
   return res.data;
