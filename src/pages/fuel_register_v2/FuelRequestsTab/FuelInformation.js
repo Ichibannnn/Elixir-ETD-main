@@ -122,7 +122,7 @@ export const FuelInformation = ({
 
   const fetchAccountApi = async () => {
     try {
-      const res = await request.get("OneCharging/GetAccountTitle?PageNumber=1&PageSize=10&UsePagination=true&status=true");
+      const res = await request.get("OneCharging/GetAccountTitle?UsePagination=true&status=true");
 
       console.log("Res: ", res);
       setAccount(res.data.oneChargingList);
@@ -388,7 +388,7 @@ export const FuelInformation = ({
             {/* One Charging Code */}
             <HStack w="full">
               <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} py={2.5} fontSize="xs">
-                Charging Code:{" "}
+                Charging:
               </Text>
 
               {oneChargingCode?.oneChargingList?.length > 0 ? (

@@ -116,17 +116,23 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                 <Text fontSize="xs">MIR ID: {orderId && orderId}</Text>
                 <Text fontSize="xs">Unit: {`WAREHOUSE`}</Text>
                 <Text fontSize="xs">Customer: {printData[0]?.customerName}</Text>
+
                 <Text fontSize="xs">
-                  Charging Department: {printData[0]?.departmentCode} - {printData[0]?.departmentName}
+                  Charging Customer: {printData[0]?.oneChargingCode} - {printData[0]?.oneChargingName}
                 </Text>
                 <Text fontSize="xs">
-                  Charging Location: {printData[0]?.locationCode} - {printData[0]?.locationName}
+                  Charging: {printData[0]?.oneChargingCode} - {printData[0]?.oneChargingName}
+                </Text>
+                <Text fontSize="xs">
+                  Sub Unit: {printData[0]?.subUnitCode} - {printData[0]?.subUnitName}
                 </Text>
               </Flex>
 
               <Flex flexDirection="column">
                 <Barcode width={3} height={40} value={Number(orderId)} />
                 <Text fontSize="xs">Date: {moment(printData[0]?.approvedDate).format("MM/DD/yyyy")}</Text>
+                <Text fontSize="xs">Helpdesk #: {printData[0]?.helpdeskNo ? "-" : printData[0]?.helpdeskNo}</Text>
+                <Text fontSize="xs">CIP #: {printData[0]?.cip_No === null ? "-" : printData[0]?.cip_No}</Text>
               </Flex>
             </Flex>
 
@@ -766,16 +772,21 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                       <Text fontSize="xs">Unit: {`WAREHOUSE`}</Text>
                       <Text fontSize="xs">Customer: {printData[0]?.customerName}</Text>
                       <Text fontSize="xs">
-                        Charging Department: {printData[0]?.departmentCode} - {printData[0]?.departmentName}
+                        Charging Customer: {printData[0]?.oneChargingCode} - {printData[0]?.oneChargingName}
                       </Text>
                       <Text fontSize="xs">
-                        Charging Location: {printData[0]?.locationCode} - {printData[0]?.locationName}
+                        Charging: {printData[0]?.oneChargingCode} - {printData[0]?.oneChargingName}
+                      </Text>
+                      <Text fontSize="xs">
+                        Sub Unit: {printData[0]?.subUnitCode} - {printData[0]?.subUnitName}
                       </Text>
                     </Flex>
 
                     <Flex flexDirection="column">
                       <Barcode width={3} height={40} value={Number(orderId)} />
                       <Text fontSize="xs">Date: {moment(printData[0]?.approvedDate).format("MM/DD/yyyy")}</Text>
+                      <Text fontSize="xs">Helpdesk #: {printData[0]?.helpdeskNo ? "-" : printData[0]?.helpdeskNo}</Text>
+                      <Text fontSize="xs">CIP #: {printData[0]?.cip_No === null ? "-" : printData[0]?.cip_No}</Text>
                     </Flex>
                   </Flex>
 

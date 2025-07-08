@@ -164,7 +164,7 @@ export const TransactConfirmation = ({
     const genusStatus = checkedItems?.map((item) => {
       return {
         mir_id: item.orderNo,
-        status: "Transacted",
+        status: "Served",
         orders: moveOrderViewTable?.map((item) => ({
           order_id: item.orderNoGenus,
           quantity_serve: item.quantity,

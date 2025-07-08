@@ -98,7 +98,7 @@ const NewPrepSched = ({ notification, fetchNotification }) => {
           fetchNotification={fetchNotification}
         />
 
-        <ListOfOrders
+      <ListOfOrders
           setCurrentPage={setCurrentPage}
           setSearchValue={setSearchValue}
           selectedMIRIds={selectedMIRIds}

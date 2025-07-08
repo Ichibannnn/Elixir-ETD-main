@@ -318,7 +318,7 @@ export const ConsumeModal = ({
 
   const fetchAccountApi = async () => {
     try {
-      const res = await request.get("OneCharging/GetAccountTitle?PageNumber=1&PageSize=10&UsePagination=true&status=true");
+      const res = await request.get("OneCharging/GetAccountTitle?UsePagination=true&status=true");
 
       console.log("Res: ", res);
       setAccount(res.data.oneChargingList);
@@ -786,7 +786,7 @@ export const EditQuantityModal = (props) => {
 
   const fetchAccountApi = async () => {
     try {
-      const res = await request.get("OneCharging/GetAccountTitle?PageNumber=1&PageSize=10&UsePagination=true&status=true");
+      const res = await request.get("OneCharging/GetAccountTitle?UsePagination=true&status=true");
 
       console.log("Res: ", res);
       setAccount(res.data.oneChargingList);

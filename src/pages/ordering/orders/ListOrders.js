@@ -53,8 +53,10 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
         orderDate: item?.date_ordered,
         dateNeeded: item?.date_needed,
         department: item?.charge_department_name,
-        customerCode: item?.charging_code,
-        customerName: item?.charging_name,
+        customerCode: item?.customer_charging_code,
+        customerName: item?.customer_charging_name,
+        // customerCode: item?.charging_code,
+        // customerName: item?.charging_name,
         customerType: "online",
         itemCode: itemsub?.material_code,
         itemdDescription: itemsub?.material_name,
@@ -80,8 +82,6 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
       };
     })
   );
-
-  console.log("Result Array: ", resultArray);
 
   // SYNC ORDER BUTTON
   const syncHandler = () => {
@@ -141,7 +141,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
         };
       });
       if (result.isConfirmed) {
-        console.log("Result without errors: ", submitBody);
+        console.log("submitBody: ", submitBody);
         try {
           setIsLoading(true);
           const res = request
@@ -334,7 +334,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
                       <Tbody>
                         {genusOrders?.result
                           ?.filter((val) => {
-                            console.log("Val", val);
+                            // console.log("Val", val);
 
                             const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
 

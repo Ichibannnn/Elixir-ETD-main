@@ -25,6 +25,7 @@ export const ListOfOrders = ({
 
   const [editData, setEditData] = useState([]);
   const [cancelId, setCancelId] = useState("");
+  const [cancelData, setCancelData] = useState("");
 
   const { isOpen: isEdit, onOpen: openEdit, onClose: closeEdit } = useDisclosure();
   const { isOpen: isCancel, onOpen: openCancel, onClose: closeCancel } = useDisclosure();
@@ -62,13 +63,16 @@ export const ListOfOrders = ({
     }
   };
 
-  const cancelHandler = ({ id }) => {
-    if (id) {
-      setCancelId(id);
-      console.log(cancelId);
+  const cancelHandler = (data) => {
+    console.log("Data: ", data);
+
+    if (data) {
+      setCancelId(data.id);
+      setCancelData(data);
       openCancel();
     } else {
       setCancelId("");
+      setCancelData("");
     }
   };
 
@@ -225,6 +229,7 @@ export const ListOfOrders = ({
           isAllChecked={isAllChecked}
           setIsAllChecked={setIsAllChecked}
           fetchNotification={fetchNotification}
+          cancelData={cancelData}
         />
       )}
 

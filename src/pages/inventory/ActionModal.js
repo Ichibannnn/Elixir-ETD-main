@@ -217,10 +217,12 @@ export const AccountTitleModal = ({
         },
       });
 
-      console.log("Res: ", res.data.oneChargingList);
-
       const charging = moveData?.orders?.find((item) => item?.id === orderId);
       setOneChargingData(res.data.oneChargingList?.find((item) => item.code === charging?.oneChargingCode));
+
+      console.log("Approved Orders: ", charging);
+      console.log("Res: ", res.data.oneChargingList);
+      console.log("Order Id: ", orderId);
     } catch (error) {}
   };
 
@@ -354,6 +356,22 @@ export const AccountTitleModal = ({
 
           <ModalBody>
             <Stack spacing={2} p={6}>
+              <Box>
+                <HStack gap={0.5}>
+                  <FormLabel fontSize="sm">Charging</FormLabel>
+                </HStack>
+
+                <Input
+                  value={`${oneChargingData?.code} - ${oneChargingData?.name}`}
+                  disabled={true}
+                  readOnly={true}
+                  _disabled={{ color: "black" }}
+                  fontSize="13px"
+                  size="sm"
+                  bg="gray.300"
+                />
+              </Box>
+
               <Box>
                 <HStack gap={0.5}>
                   <FormLabel fontSize="sm">Company</FormLabel>

@@ -440,7 +440,7 @@ export const EditRemarksModalConfirmation = ({ isEditRemarks, closeEditRemarks, 
   );
 };
 
-export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderList, fetchMirList, fetchCustomerList, setCustomerName, fetchNotification, setIsAllChecked }) => {
+export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderList, fetchMirList, fetchNotification, cancelData }) => {
   const [cancelRemarks, setCancelRemarks] = useState("");
   const [reasons, setReasons] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -475,10 +475,23 @@ export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderL
   };
 
   const cancelHandler = () => {
-    console.log("Cancel Remarks: ", cancelRemarks);
+    const dateToday = moment().format("YYYY-MM-DD");
+    const genusStatus = [
+      {
+        mir_id: cancelData?.mirId,
+        status: "Cancelled",
+        orders: [
+          {
+            order_id: cancelData?.orderNo,
+            quantity_serve: 0,
+            deleted_at: dateToday,
+          },
+        ],
+      },
+    ];
 
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const res = request
         .put(`Ordering/CancelOrders`, {
           id: cancelId,
@@ -498,6 +511,25 @@ export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderL
           ToastComponent("Error", "Cancel failed!", "error", toast);
           setIsLoading(false);
         });
+
+      // GENUS STATUS
+      try {
+        axios.patch(
+          // `http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`,
+          `http://10.10.12.14:8000/etd_v2/backend/public/api/elixir_update`,
+
+          genusStatus,
+          {
+            headers: {
+              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+              "api-key": "hello world!",
+            },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+        ToastComponent("Error", "Genus ETD update status failed", "error", toast);
+      }
     } catch (error) {}
   };
 
