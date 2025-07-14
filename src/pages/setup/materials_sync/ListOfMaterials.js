@@ -102,8 +102,6 @@ export const ListOfMaterials = ({
     };
   });
 
-  console.log("resultArray: ", resultArray);
-
   // SYNC ORDER BUTTON
   const syncHandler = () => {
     Swal.fire({

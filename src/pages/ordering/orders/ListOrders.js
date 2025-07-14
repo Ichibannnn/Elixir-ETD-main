@@ -18,6 +18,7 @@ import {
   Tbody,
   Td,
   useToast,
+  Image,
 } from "@chakra-ui/react";
 import { TiArrowSync } from "react-icons/ti";
 import { FiSearch } from "react-icons/fi";
@@ -29,9 +30,12 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import { ToastComponent } from "../../../components/Toast";
 
+import noRecordsFound from "../../../../src/assets/svg/noRecordsFound.svg";
+import somethingWentWrong from "../../../../src/assets/svg/SomethingWentWrong2.svg";
+
 import OrdersConfirmation from "./OrdersConfirmation";
 
-export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, fromDate, toDate, fetchNotification }) => {
+export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, fromDate, toDate, fetchNotification, error, noRecords }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [errorData, setErrorData] = useState([]);
@@ -196,6 +200,9 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
     }
   }, [genusOrders]);
 
+  console.log("NoRecords: ", noRecords);
+  console.log("Error: ", error);
+
   return (
     <Flex color="fontColor" h="100vh" w="full" flexDirection="column" p={2} bg="form">
       <Flex p={2} flexDirection="column">
@@ -265,21 +272,30 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
             <Flex p={4}>
               <VStack alignItems="center" w="100%" mt={-8}>
                 <PageScroll minHeight="640px" maxHeight="720px" maxWidth="full">
-                  {fetchingData ? (
+                  {fetchingData === true ? (
                     <Stack width="full">
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
-                      <Skeleton height="20px" />
+                      {[...Array(11)].map((_, i) => {
+                        <Skeleton height="20px" key={i} />;
+                      })}
                     </Stack>
+                  ) : error ? (
+                    <Flex width="100%" justifyContent="center" alignItems="center" height="600px" backgroundColor="#F4F4F5">
+                      <VStack>
+                        <Image src={somethingWentWrong} alt="No Orders Found" height="150px" />
+                        <Text color="black" marginLeft={2}>
+                          {error}
+                        </Text>
+                      </VStack>
+                    </Flex>
+                  ) : noRecords ? (
+                    <Flex width="100%" justifyContent="center" alignItems="center" height="600px" backgroundColor="#F4F4F5">
+                      <VStack>
+                        <Image src={noRecordsFound} alt="No Orders Found" height="150px" />
+                        <Text color="black" marginLeft={2}>
+                          No orders found.
+                        </Text>
+                      </VStack>
+                    </Flex>
                   ) : (
                     <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                       <Thead bg="secondary" position="sticky" top={0} zIndex={1}>
@@ -334,10 +350,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
                       <Tbody>
                         {genusOrders?.result
                           ?.filter((val) => {
-                            // console.log("Val", val);
-
                             const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
-
                             return val?.charging_name?.toLowerCase().match(newKeyword, "*");
                           })
                           ?.map((order, i) =>
