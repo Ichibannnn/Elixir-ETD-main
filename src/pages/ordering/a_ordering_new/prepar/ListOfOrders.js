@@ -168,31 +168,22 @@ export const ListOfOrders = ({
                   <Td fontSize="xs">
                     {order.accountCode} - {order.accountTitles}{" "}
                   </Td>
-                  {/* {order.empId && order.fullName ? (
-                    <Td fontSize="xs">
-                      {order.empId} - {order.fullName}{" "}
-                    </Td>
-                  ) : (
-                    <Td fontSize="xs">-</Td>
-                  )} */}
 
                   <Td fontSize="xs">
                     <Flex pl={2}>
                       <Box>
                         <Menu>
-                          <MenuButton
-                            alignItems="center"
-                            justifyContent="center"
-                            // variant="outline"
-                          >
+                          <MenuButton alignItems="center" justifyContent="center">
                             <MdOutlineMoreHoriz fontSize="20px" />
                           </MenuButton>
+
                           <MenuList>
                             <MenuItem onClick={() => editHandler(order)} icon={<AiOutlineEdit fontSize="17px" />}>
                               <Text fontSize="15px" _hover={{ color: "red" }}>
                                 Edit
                               </Text>
                             </MenuItem>
+
                             <MenuItem onClick={() => cancelHandler(order)} icon={<MdOutlineCancel fontSize="17px" color="red" />}>
                               <Text fontSize="15px" color="red">
                                 Cancel
@@ -252,87 +243,3 @@ export const ListOfOrders = ({
     </Flex>
   );
 };
-
-// NEWEST CODE =--------------------------------------------------------------------------------------
-// import React, { useEffect } from "react";
-// import {
-//   Badge,
-//   Flex,
-//   HStack,
-//   Select,
-//   Table,
-//   Tbody,
-//   Td,
-//   Text,
-//   Th,
-//   Thead,
-//   Tr,
-// } from "@chakra-ui/react";
-// import moment from "moment";
-// import PageScroll from "../../../../utils/PageScroll";
-
-// export const ListOfOrders = ({ mirOrderList, customers, selectedMirIds }) => {
-//   const filteredOrders = mirOrderList.filter(
-//     (item) => selectedMirIds[item.mirId]
-//   );
-
-//   return (
-//     <Flex w="95%" h="250px" flexDirection="column">
-//       <Flex flexDirection="column">
-//         <Text
-//           textAlign="center"
-//           bgColor="secondary"
-//           color="white"
-//           fontSize="13px"
-//         >
-//           List of Orders
-//         </Text>
-//         <PageScroll minHeight="260px" maxHeight="270px">
-//           <Table size="sm" variant="simple">
-//             <Thead bgColor="secondary">
-//               <Tr h="30px">
-//                 <Th color="white" fontSize="10px">
-//                   Line
-//                 </Th>
-//                 {/* <Th color="white" fontSize="10px">
-//                   MIR ID
-//                 </Th> */}
-//                 <Th color="white" fontSize="10px">
-//                   Item Code
-//                 </Th>
-//                 <Th color="white" fontSize="10px">
-//                   Item Description
-//                 </Th>
-//                 <Th color="white" fontSize="10px">
-//                   UOM
-//                 </Th>
-//                 <Th color="white" fontSize="10px">
-//                   Reserve
-//                 </Th>
-//                 <Th color="white" fontSize="10px">
-//                   Remarks
-//                 </Th>
-//               </Tr>
-//             </Thead>
-//             {customers ? (
-//               <Tbody>
-//                 {mirOrderList?.map((item, i) => (
-//                   <Tr key={i}>
-//                     <Td fontSize="11px">{i + 1}</Td>
-//                     {/* <Td fontSize="11px">{item.mirId}</Td> */}
-//                     <Td fontSize="11px">{item.itemCode}</Td>
-//                     <Td fontSize="11px">{item.itemDescription}</Td>
-//                     <Td fontSize="11px">{item.uom}</Td>
-//                     <Td fontSize="11px">{item.quantityOrder}</Td>
-//                     <Td fontSize="11px">{item.stockOnHand}</Td>
-//                     {/* <Td fontSize="11px">{item.orderDate}</Td> */}
-//                   </Tr>
-//                 ))}
-//               </Tbody>
-//             ) : null}
-//           </Table>
-//         </PageScroll>
-//       </Flex>
-//     </Flex>
-//   );
-// };

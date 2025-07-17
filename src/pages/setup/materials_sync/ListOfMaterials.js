@@ -28,6 +28,20 @@ import {
   DrawerContent,
   Select,
   Spinner,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ButtonGroup,
+  Tag,
+  FormControl,
+  TagLabel,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
@@ -46,6 +60,8 @@ import { Controller, useForm } from "react-hook-form";
 import { Pagination, PaginationContainer, PaginationNext, PaginationPage, PaginationPageGroup, PaginationPrevious } from "@ajna/pagination";
 import { Select as AutoComplete } from "chakra-react-select";
 import { FaTools } from "react-icons/fa";
+import { MdOutlineCancel, MdOutlineMoreHoriz } from "react-icons/md";
+import { GrNetwork } from "react-icons/gr";
 
 export const ListOfMaterials = ({
   genusMaterials,
@@ -64,12 +80,14 @@ export const ListOfMaterials = ({
   const [keyword, setKeyword] = useState("");
   const [errorData, setErrorData] = useState([]);
   const [editData, setEditData] = useState([]);
+  const [viewAccTitleData, setViewAccTitleData] = useState([]);
 
   const toast = useToast();
   const currentUser = decodeUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { isOpen: isEdit, onClose: closeEdit, onOpen: openEdit } = useDisclosure();
+  const { isOpen: isAccountTitle, onClose: closeAccountTitle, onOpen: openAccountTitle } = useDisclosure();
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -87,6 +105,16 @@ export const ListOfMaterials = ({
 
   // ARRAY FOR THE LIST DATA OF SUPPLIERS
   const resultArray = genusMaterials?.result?.map((item) => {
+    const uniqueAccountTitlesMap = new Map();
+
+    item?.account_title?.forEach((acc) => {
+      const id = acc.account_title?.id;
+
+      if (id && !uniqueAccountTitlesMap.has(id)) {
+        uniqueAccountTitlesMap.set(id, { accountTitleId: id });
+      }
+    });
+
     return {
       material_No: item?.id,
       itemCode: item?.code,
@@ -99,6 +127,7 @@ export const ListOfMaterials = ({
       modifyDate: moment(new Date()).format("yyyy-MM-DD"),
       modifyBy: currentUser.fullName,
       syncDate: moment(new Date()).format("yyyy-MM-DD"),
+      accountTitles: Array.from(uniqueAccountTitlesMap.values()),
     };
   });
 
@@ -120,8 +149,9 @@ export const ListOfMaterials = ({
         container: "my-swal",
       },
     }).then((result) => {
+      console.log("Orders Payload: ", resultArray);
+
       if (result.isConfirmed) {
-        console.log("Submittinggggggggg.....");
         try {
           setIsLoading(true);
           const res = request
@@ -165,11 +195,18 @@ export const ListOfMaterials = ({
     openEdit();
   };
 
+  const viewAccTitleHandler = (data) => {
+    setViewAccTitleData(data);
+    openAccountTitle();
+  };
+
   useEffect(() => {
     if (search) {
       setCurrentPage(1);
     }
   }, [search]);
+
+  // console.log("materials: ", elixirMaterials);
 
   return (
     <Flex color="fontColor" h="auto" w="full" flexDirection="column" p={2} bg="form">
@@ -275,7 +312,7 @@ export const ListOfMaterials = ({
                         Sync Status
                       </Th>
                       <Th color="#D6D6D6" fontSize="10px">
-                        Edit
+                        Action
                       </Th>
                     </Tr>
                   </Thead>
@@ -304,11 +341,27 @@ export const ListOfMaterials = ({
                           <Td fontSize="12px">{mats.addedBy}</Td>
                           <Td fontSize="12px">{mats.syncStatus}</Td>
                           <Td fontSize="xs">
-                            <HStack spacing={3} justifyContent="center">
-                              <Button onClick={() => editBufferHandler(mats)} bg="none" size="xs">
-                                <AiTwotoneEdit fontSize="17px" />
-                              </Button>
-                            </HStack>
+                            <Flex pl={2}>
+                              <Box>
+                                <Menu>
+                                  <MenuButton alignItems="center" justifyContent="center">
+                                    <MdOutlineMoreHoriz fontSize="20px" />
+                                  </MenuButton>
+
+                                  <MenuList>
+                                    <MenuItem onClick={() => editBufferHandler(mats)} icon={<AiTwotoneEdit fontSize="17px" />}>
+                                      <Text fontSize="15px" _hover={{ color: "red" }}>
+                                        Edit
+                                      </Text>
+                                    </MenuItem>
+
+                                    <MenuItem onClick={() => viewAccTitleHandler(mats)} icon={<GrNetwork fontSize="17px" />}>
+                                      <Text fontSize="15px">Account Titles</Text>
+                                    </MenuItem>
+                                  </MenuList>
+                                </Menu>
+                              </Box>
+                            </Flex>
                           </Td>
                         </Tr>
                       ))}
@@ -381,6 +434,7 @@ export const ListOfMaterials = ({
         )}
 
         {isEdit && <EditModal isEdit={isEdit} closeEdit={closeEdit} editData={editData} fetchElixirMaterials={fetchElixirMaterials} />}
+        {isAccountTitle && <ViewAccountTitles isAccountTitle={isAccountTitle} onClose={closeAccountTitle} data={viewAccTitleData} />}
       </Flex>
     </Flex>
   );
@@ -564,5 +618,62 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
         </form>
       </Drawer>
     </>
+  );
+};
+
+export const ViewAccountTitles = ({ isAccountTitle, onClose, data }) => {
+  const accountTitlesToDisplay = data?.accountTitles || [];
+
+  console.log("Data: ", data);
+
+  return (
+    <Modal isOpen={isAccountTitle} onClose={() => {}} isCentered size="lg">
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader color="black">View Account Titles</ModalHeader>
+
+        <ModalBody>
+          <Stack spacing={4}>
+            <Stack direction="row" gap={1} mb={2}>
+              <FaTools fontSize="22px" />
+              <Text fontSize="16px" fontWeight="semibold">
+                {`${data?.itemCode} - ${data?.itemDescription}`}
+              </Text>
+            </Stack>
+
+            <Box>
+              <FormControl>
+                <Text fontSize="13px" fontWeight="semibold">
+                  Account Titles:
+                </Text>
+
+                <Flex wrap="wrap" gap={2} p={2} borderWidth="1px" borderRadius="md" borderColor="blackAlpha.500" minH="40px" alignItems="center">
+                  {accountTitlesToDisplay.length > 0 ? (
+                    accountTitlesToDisplay.map((item, index) => (
+                      <Tag key={index} size="md" variant="solid" colorScheme="blue">
+                        <TagLabel>
+                          {item.accountCode} - {item.accountDescription}
+                        </TagLabel>
+                      </Tag>
+                    ))
+                  ) : (
+                    <Box color="gray.500" fontSize="sm">
+                      No account titles to display.
+                    </Box>
+                  )}
+                </Flex>
+              </FormControl>
+            </Box>
+          </Stack>
+        </ModalBody>
+        <ModalFooter justifyItems="right">
+          <ButtonGroup size="sm" mt={5}>
+            <Button onClick={onClose} variant="outline" color="black">
+              Close
+            </Button>
+          </ButtonGroup>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };

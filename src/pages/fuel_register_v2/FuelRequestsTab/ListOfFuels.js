@@ -30,7 +30,7 @@ export const ListOfFuels = ({ fuelData, fetchBarcode, selectorId, setSelectorId,
         <Flex justifyContent="center" w="full">
           <PageScroll minHeight="350px" maxHeight="351px">
             <Table size="sm">
-              <Thead bgColor="secondary" position="sticky" top={0} zIndex={1}>
+              <Thead bgColor="secondary" position="sticky" top={0}>
                 <Tr>
                   {TableHead?.map((item, i) => (
                     <Th color="white" fontSize="11px" key={i}>

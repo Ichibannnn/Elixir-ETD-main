@@ -120,6 +120,13 @@ export const ViewModal = ({ isOpen, onClose, data }) => {
               <VStack alignItems="start" spacing={1} mt={4}>
                 <HStack>
                   <Text fontSize="xs" fontWeight="semibold">
+                    Charging:
+                  </Text>
+                  <Text fontSize="xs">{data?.oneChargingCode ? `${data?.oneChargingCode} - ${data?.oneChargingName}` : "-"}</Text>
+                </HStack>
+
+                <HStack>
+                  <Text fontSize="xs" fontWeight="semibold">
                     Company:
                   </Text>
                   <Text fontSize="xs">{data?.company_Code ? `${data?.company_Code} - ${data?.company_Name}` : "-"}</Text>
@@ -385,6 +392,13 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
             </VStack>
 
             <VStack alignItems="start" spacing={-1}>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Charging:
+                </Text>
+                <Text fontSize="xs">{data?.oneChargingCode ? `${data?.oneChargingCode} - ${data?.oneChargingName}` : "-"}</Text>
+              </HStack>
+
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Company:

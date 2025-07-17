@@ -511,6 +511,10 @@ export const RawMatsInfoModal = ({
     } catch (error) {}
   };
 
+  useEffect(() => {
+    fetchAccountApi();
+  }, []);
+
   // Fisto Account Title ~~~~~~
   // const fetchAccountApi = async (id = "") => {
   //   try {
@@ -522,10 +526,6 @@ export const RawMatsInfoModal = ({
   //     setAccount(res.data.result.account_titles);
   //   } catch (error) {}
   // };
-
-  useEffect(() => {
-    fetchAccountApi();
-  }, []);
 
   const {
     register,

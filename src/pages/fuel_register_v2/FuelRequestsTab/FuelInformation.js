@@ -122,12 +122,15 @@ export const FuelInformation = ({
 
   const fetchAccountApi = async () => {
     try {
-      const res = await request.get("OneCharging/GetAccountTitle?UsePagination=true&status=true");
+      const res = await request.get("Material/GetAllMaterialWithPaginationOrig/true?PageNumber=1&PageSize=10&search=DIESEL");
 
-      console.log("Res: ", res);
-      setAccount(res.data.oneChargingList);
+      const filterDiesel = res.data?.materials?.filter((item) => item.itemCode === "DIESEL");
+
+      setAccount(filterDiesel?.[0]?.accountTitles);
     } catch (error) {}
   };
+
+  console.log("AccTitle: ", account);
 
   // Fisto Account Title ~~~~~~~~~~
   // const fetchAccountApi = async (id = "") => {
