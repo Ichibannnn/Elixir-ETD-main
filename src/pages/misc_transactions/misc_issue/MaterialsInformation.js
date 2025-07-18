@@ -465,6 +465,7 @@ export const RawMatsInfoModal = ({
 }) => {
   const [availableStock, setAvailableStock] = useState("");
   const [reserve, setReserve] = useState("");
+  const [barcode, setBarcode] = useState("");
 
   const { isOpen: isAdd, onClose: closeAdd, onOpen: openAdd } = useDisclosure();
   const openAddConfirmation = () => {
@@ -575,6 +576,26 @@ export const RawMatsInfoModal = ({
     return () => {};
   }, [idNumber]);
 
+  console.log("Barcode No: ", barcodeNo);
+
+  // useEffect(() => {
+  //   if (barcodeNo?.length) {
+  //     const barcodeData = barcodeNo[0];
+  //     setBarcode(JSON.stringify(barcodeData));
+  //     setAvailableStock(barcodeData.remainingStocks);
+  //     setUnitCost(barcodeData.unitCost);
+  //     setWarehouseId(barcodeData.warehouseId);
+  //     setRawMatsInfo({
+  //       itemCode: rawMatsInfo.itemCode,
+  //       itemDescription: rawMatsInfo.itemDescription,
+  //       customerName: rawMatsInfo.customerName,
+  //       uom: rawMatsInfo.uom,
+  //       warehouseId: barcodeData.warehouseId,
+  //       quantity: rawMatsInfo.quantity,
+  //     });
+  //   }
+  // }, [barcodeNo]);
+
   const itemCodeHandler = (data) => {
     console.log("material data: ", data);
 
@@ -582,6 +603,7 @@ export const RawMatsInfoModal = ({
       const itemCode = data.value.itemCode;
       const itemDescription = data.value.itemDescription;
       const uom = data.value.uom;
+
       setReserve(data.value.remainingStocks);
       setRawMatsInfo({
         itemCode: itemCode,
@@ -607,6 +629,7 @@ export const RawMatsInfoModal = ({
     if (data) {
       const newData = JSON.parse(data);
       const warehouseId = newData.warehouseId;
+
       setAvailableStock(newData.remainingStocks);
       setUnitCost(newData.unitCost);
       setWarehouseId(warehouseId);
@@ -715,6 +738,7 @@ export const RawMatsInfoModal = ({
                     border="1px"
                     borderColor="gray.400"
                     borderRadius="none"
+                    // value={barcode}
                     // bgColor="#fff8dc"
                   >
                     {barcodeNo?.map((item, i) => (

@@ -120,6 +120,8 @@ const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigatio
   //Barcode (Warehouse ID)
   const fetchBarcodeNo = () => {
     fetchBarcodeNoApi(itemCode).then((res) => {
+      console.log("Barcode: ", res);
+
       setBarcodeNo(res);
     });
   };
