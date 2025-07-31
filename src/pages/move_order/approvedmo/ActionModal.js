@@ -131,7 +131,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
               <Flex flexDirection="column">
                 <Barcode width={3} height={40} value={Number(orderId)} />
                 <Text fontSize="xs">Date: {moment(printData[0]?.approvedDate).format("MM/DD/yyyy")}</Text>
-                <Text fontSize="xs">Helpdesk #: {printData[0]?.helpdeskNo ? "-" : printData[0]?.helpdeskNo}</Text>
+                <Text fontSize="xs">Helpdesk #: {printData[0]?.helpdeskNo === "0" ? "-" : printData[0]?.helpdeskNo}</Text>
                 <Text fontSize="xs">CIP #: {printData[0]?.cip_No === null ? "-" : printData[0]?.cip_No}</Text>
               </Flex>
             </Flex>
@@ -785,7 +785,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                     <Flex flexDirection="column">
                       <Barcode width={3} height={40} value={Number(orderId)} />
                       <Text fontSize="xs">Date: {moment(printData[0]?.approvedDate).format("MM/DD/yyyy")}</Text>
-                      <Text fontSize="xs">Helpdesk #: {printData[0]?.helpdeskNo ? "-" : printData[0]?.helpdeskNo}</Text>
+                      <Text fontSize="xs">Helpdesk #: {printData[0]?.helpdeskNo === "0" ? "-" : printData[0]?.helpdeskNo}</Text>
                       <Text fontSize="xs">CIP #: {printData[0]?.cip_No === null ? "-" : printData[0]?.cip_No}</Text>
                     </Flex>
                   </Flex>
