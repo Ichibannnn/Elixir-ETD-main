@@ -200,6 +200,7 @@ export const TransactConfirmation = ({
         },
       });
     } catch (error) {
+      console.log("Genus statusError:", error);
       ToastComponent("Error", "Genus ETD update status failed", "error", toast);
     }
   };

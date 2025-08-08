@@ -675,7 +675,7 @@ export const ScheduleModal = ({
             },
           });
         } catch (error) {
-          console.log(error);
+          console.log("Genus statusError:", error);
           ToastComponent("Error", "Genus ETD update status failed", "error", toast);
         }
       }

@@ -57,10 +57,10 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
         orderDate: item?.date_ordered,
         dateNeeded: item?.date_needed,
         department: item?.charge_department_name,
-        customerCode: item?.charging_code, // modified last jul312025 by sir vince => B&C concern
-        customerName: item?.charging_name, // modified last jul312025 by sir vince => B&C concern
-        // customerCode: item?.customer_charging_code,
-        // customerName: item?.customer_charging_name,
+        // customerCode: item?.charging_code, // modified last jul312025 by sir vince => B&C concern
+        // customerName: item?.charging_name, // modified last jul312025 by sir vince => B&C concern
+        customerCode: item?.customer_charging_code, // finalized by boss rannie
+        customerName: item?.customer_charging_name, // finalized by boss rannie
         customerType: "online",
         itemCode: itemsub?.material_code,
         itemdDescription: itemsub?.material_name,

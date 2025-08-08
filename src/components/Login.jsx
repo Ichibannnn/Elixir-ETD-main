@@ -28,7 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastComponent } from "./Toast";
 import { saltKey } from "../saltkey";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import request from "../services/ApiClient";
 import CryptoJS from "crypto-js";
 
@@ -56,8 +56,12 @@ const Login = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(false);
 
+  const [getToken, setGetToken] = useState("");
+
   var navigate = useNavigate();
   const toast = useToast();
+  const usernameRef = useRef();
+  const passwordRef = useRef();
 
   const [modalUsername, setModalUsername] = useState("");
 
@@ -87,19 +91,18 @@ const Login = () => {
       var response = await request
         .post("Login/authenticate", login)
         .then((response) => {
-          console.log("Response: ", response);
-
           if (response?.data?.userName === response?.data?.password) {
+            setGetToken(response?.data?.token);
+            var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(response?.data), saltKey).toString();
+            sessionStorage.setItem("userToken", ciphertext);
             setShowChangePasswordModal(true);
-            setModalUsername(username);
           } else {
             var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(response?.data), saltKey).toString();
-            console.log("ciphertext: ", ciphertext);
             sessionStorage.setItem("userToken", ciphertext);
             setLoader(false);
             navigate("/");
             window.location.reload(false);
-            ToastComponent("Login Success", `Welcome to Elixir ETD! ${response?.data.fullName}`, "success", toast);
+            setTimeout(() => ToastComponent("Login Success", `Welcome to Elixir ETD! ${response?.data.fullName}`, "success", toast), 500);
           }
         })
         .catch((err) => {
@@ -117,13 +120,23 @@ const Login = () => {
         newPassword,
         confirmPassword,
       };
-      const response = await request.post("Login/changepassword", changePasswordData);
-      setUsername("");
-      setPassword("");
-      setShowChangePasswordModal(false);
-      setLoader(false);
-      ToastComponent("Success!", `Password Changed`, "success", toast);
-      setInterval(window.location.reload(false), 1000);
+      const response = await request
+        .post("Login/changepassword", changePasswordData, {
+          headers: {
+            Authorization: "Bearer " + getToken,
+          },
+        })
+        .then((response) => {
+          setUsername("");
+          setPassword("");
+          setGetToken("");
+          usernameRef.current.value = "";
+          passwordRef.current.value = "";
+          setShowChangePasswordModal(false);
+          setLoader(false);
+          navigate("/login");
+          setTimeout(() => ToastComponent("Success!", `Password Changed`, "success", toast), 100);
+        });
     } catch (err) {
       ToastComponent("Error", err.response.data, "error", toast);
     }
@@ -134,6 +147,7 @@ const Login = () => {
     setLoader(false);
     setOldPassword("");
     setNewPassword("");
+    setGetToken("");
     setConfirmPassword("");
   };
 
@@ -165,6 +179,7 @@ const Login = () => {
                 Username
               </Text>
               <Input
+                ref={usernameRef}
                 placeholder="Enter username"
                 rounded="none"
                 variant="outline"
@@ -180,6 +195,7 @@ const Login = () => {
                 Password
               </Text>
               <Input
+                ref={passwordRef}
                 placeholder="Enter password"
                 rounded="none"
                 variant="outline"
