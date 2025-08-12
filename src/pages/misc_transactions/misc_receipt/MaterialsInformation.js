@@ -677,7 +677,7 @@ export const RawMatsInfoModal = ({
                     <NumericFormat
                       customInput={Input}
                       fontSize="sm"
-                      value={rawMatsInfo.unitPrice ? rawMatsInfo.unitPrice : ""}
+                      value={rawMatsInfo.unitPrice ?? ""}
                       onValueChange={(e) =>
                         setRawMatsInfo({
                           itemCode: rawMatsInfo.itemCode,
@@ -685,12 +685,12 @@ export const RawMatsInfoModal = ({
                           supplierName: rawMatsInfo.supplierName,
                           uom: rawMatsInfo.uom,
                           quantity: rawMatsInfo.quantity,
-                          unitPrice: Number(e?.value),
+                          unitPrice: e?.value === "" ? "" : Number(e?.value),
                         })
                       }
-                      onWheel={(e) => e.target.blur()}
+                      // onWheel={(e) => e.target.blur()}
                       onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
-                      min="0"
+                      // min="0"
                       w="full"
                       placeholder="Enter Unit Cost"
                       border="1px"
@@ -844,9 +844,10 @@ export const RawMatsInfoModal = ({
                   !rawMatsInfo.supplierName ||
                   !rawMatsInfo.uom ||
                   !rawMatsInfo.quantity ||
-                  !rawMatsInfo.unitPrice ||
+                  !rawMatsInfo.unitPrice === "" ||
                   !details ||
-                  !watch("formData.accountId")
+                  !watch("formData.accountId") ||
+                  (selectedAccount.match(/Advances to Employees/gi) && !watch("formData.empId"))
                 }
                 colorScheme="blue"
                 px={4}

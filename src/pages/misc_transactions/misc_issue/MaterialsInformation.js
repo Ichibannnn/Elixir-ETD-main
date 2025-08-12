@@ -983,6 +983,7 @@ export const RawMatsInfoModal = ({
                   !rawMatsInfo.quantity ||
                   !details ||
                   !watch("formData.accountId") ||
+                  (selectedAccount.match(/Advances to Employees/gi) && !watch("formData.empId")) ||
                   // !transactionDate ||
                   rawMatsInfo.quantity > availableStock ||
                   rawMatsInfo.quantity > reserve ||

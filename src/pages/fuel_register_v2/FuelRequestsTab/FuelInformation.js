@@ -122,7 +122,7 @@ export const FuelInformation = ({
 
   const fetchAccountApi = async () => {
     try {
-      const res = await request.get("Material/GetAllMaterialWithPaginationOrig/true?PageNumber=1&PageSize=10&search=DIESEL");
+      const res = await request.get("Material/GetAllMaterialWithPaginationOrig/true?search=DIESEL");
 
       const filterDiesel = res.data?.materials?.filter((item) => item.itemCode === "DIESEL");
 
