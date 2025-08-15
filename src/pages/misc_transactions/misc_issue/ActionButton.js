@@ -16,6 +16,7 @@ export const ActionButton = ({
   setSelectorId,
   miscData,
   customerRef,
+  rawMatsInfo,
   setRawMatsInfo,
   warehouseId,
   fetchBarcodeNo,
@@ -27,6 +28,8 @@ export const ActionButton = ({
   fetchActiveMiscIssues,
   fetchRawMats,
   setShowChargingData,
+  assetTag,
+  setAssetTag,
 }) => {
   const [hideButton, setHideButton] = useState(false);
 
@@ -80,6 +83,8 @@ export const ActionButton = ({
           fetchRawMats={fetchRawMats}
           coaData={coaData}
           setShowChargingData={setShowChargingData}
+          assetTag={assetTag}
+          setAssetTag={setAssetTag}
         />
       )}
 
@@ -96,6 +101,7 @@ export const ActionButton = ({
           setDetails={setDetails}
           setTransactionDate={setTransactionDate}
           setCustomerData={setCustomerData}
+          rawMatsInfo={rawMatsInfo}
           setRawMatsInfo={setRawMatsInfo}
           fetchActiveMiscIssues={fetchActiveMiscIssues}
           fetchBarcodeNo={fetchBarcodeNo}

@@ -52,6 +52,7 @@ const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigatio
   const [remarks, setRemarks] = useState("");
   const [transactionDate, setTransactionDate] = useState("");
   const [unitCost, setUnitCost] = useState("");
+  const [assetTag, setAssetTag] = useState("");
 
   const [customerData, setCustomerData] = useState({
     customerCode: "",
@@ -120,8 +121,6 @@ const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigatio
   //Barcode (Warehouse ID)
   const fetchBarcodeNo = () => {
     fetchBarcodeNoApi(itemCode).then((res) => {
-      console.log("Barcode: ", res);
-
       setBarcodeNo(res);
     });
   };
@@ -217,6 +216,8 @@ const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigatio
               setUnitCost={setUnitCost}
               showOneChargingData={showOneChargingData}
               setShowChargingData={setShowChargingData}
+              assetTag={assetTag}
+              setAssetTag={setAssetTag}
             />
             {miscData?.length > 0 ? (
               <>
@@ -242,6 +243,7 @@ const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigatio
                   setSelectorId={setSelectorId}
                   miscData={miscData}
                   customerRef={customerRef}
+                  rawMatsInfo={rawMatsInfo}
                   setRawMatsInfo={setRawMatsInfo}
                   warehouseId={warehouseId}
                   fetchBarcodeNo={fetchBarcodeNo}
@@ -253,6 +255,8 @@ const MiscIssuePage = ({ miscData, setMiscData, fetchActiveMiscIssues, navigatio
                   fetchActiveMiscIssues={fetchActiveMiscIssues}
                   fetchRawMats={fetchRawMats}
                   setShowChargingData={setShowChargingData}
+                  assetTag={assetTag}
+                  setAssetTag={setAssetTag}
                 />
               </>
             ) : (

@@ -113,6 +113,8 @@ export const SaveConfirmation = ({
   transactionDate,
   setTransactionDate,
   setShowChargingData,
+  assetTag,
+  setAssetTag,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -128,6 +130,7 @@ export const SaveConfirmation = ({
       transactionDate: transactionDate,
       oneChargingCode: listDataTempo[0]?.oneChargingCode,
       addedBy: currentUser.fullName,
+      assetTag: assetTag,
     };
 
     if (totalQuantity > 0) {
@@ -180,6 +183,7 @@ export const SaveConfirmation = ({
                   quantity: "",
                   unitPrice: "",
                 });
+                setAssetTag("");
                 setIsLoading(false);
                 onClose();
               } catch (error) {

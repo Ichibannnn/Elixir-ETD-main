@@ -63,6 +63,7 @@ const MiscReceiptPage = () => {
   const [transactionDate, setTransactionDate] = useState("");
   const [details, setDetails] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [assetTag, setAssetTag] = useState("");
 
   const [supplierData, setSupplierData] = useState({
     supplierCode: "",
@@ -246,6 +247,8 @@ const MiscReceiptPage = () => {
               setTransactionDate={setTransactionDate}
               showOneChargingData={showOneChargingData}
               setShowChargingData={setShowChargingData}
+              assetTag={assetTag}
+              setAssetTag={setAssetTag}
               //For resetting the misc receipt section~~~
               navigation={navigation}
             />
@@ -276,6 +279,8 @@ const MiscReceiptPage = () => {
                   remarksRef={remarksRef}
                   transactionDate={transactionDate}
                   setTransactionDate={setTransactionDate}
+                  assetTag={assetTag}
+                  setAssetTag={setAssetTag}
                 />
               </>
             ) : (

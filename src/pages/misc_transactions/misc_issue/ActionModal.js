@@ -223,6 +223,8 @@ export const SaveConfirmation = ({
   fetchRawMats,
   coaData,
   setShowChargingData,
+  assetTag,
+  setAssetTag,
 }) => {
   const toast = useToast();
   const [account, setAccount] = useState([]);
@@ -294,6 +296,7 @@ export const SaveConfirmation = ({
             transactionDate: transactionDate,
             oneChargingCode: coaData[0]?.oneChargingCode,
             addedBy: currentUser.fullName,
+            assetTag: assetTag,
           })
           .then((res) => {
             const issuePKey = res.data.id;
@@ -311,7 +314,6 @@ export const SaveConfirmation = ({
                 const res = request.put(`Miscellaneous/UpdateMiscellaneousIssuePKey`, arrayofId).then((res) => {
                   fetchActiveMiscIssues();
                   ToastComponent("Success", "Information saved", "success", toast);
-                  onClose();
                   fetchRawMats();
                   setCustomerData({
                     customerCode: "",
@@ -329,8 +331,10 @@ export const SaveConfirmation = ({
                     uom: "",
                     quantity: "",
                   });
+                  setAssetTag("");
                   setIsLoading(false);
                   setHideButton(false);
+                  onClose();
                 });
               } catch (error) {}
             }
@@ -419,22 +423,7 @@ export const SaveConfirmation = ({
   );
 };
 
-export const AllCancelConfirmation = ({
-  isOpen,
-  onClose,
-  miscData,
-  setSelectorId,
-  fetchActiveMiscIssues,
-  setHideButton,
-  fetchBarcodeNo,
-  fetchRawMats,
-  customerRef,
-  setDetails,
-  setTransactionDate,
-  setCustomerData,
-  setRawMatsInfo,
-  remarksRef,
-}) => {
+export const AllCancelConfirmation = ({ isOpen, onClose, miscData, setSelectorId, fetchActiveMiscIssues, setHideButton, fetchBarcodeNo, rawMatsInfo, setRawMatsInfo }) => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
@@ -453,20 +442,14 @@ export const AllCancelConfirmation = ({
         .then((res) => {
           ToastComponent("Success", "Items has been cancelled", "success", toast);
           fetchActiveMiscIssues();
-          fetchRawMats();
-          setTransactionDate("");
-          setDetails("");
-          setCustomerData({
-            customerName: "",
-          });
           setRawMatsInfo({
             itemCode: "",
             itemDescription: "",
+            customerName: rawMatsInfo?.customerName,
             supplier: "",
             uom: "",
             quantity: "",
           });
-          remarksRef.current.value = "";
           fetchBarcodeNo();
           setSelectorId("");
           setHideButton(false);

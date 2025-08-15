@@ -109,6 +109,12 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                 </Text>
                 <Text fontSize="xs">{issuesDetailsData[0]?.details}</Text>
               </HStack>
+              <HStack>
+                <Text fontSize="xs" fontWeight="semibold">
+                  Asset Tag:
+                </Text>
+                <Text fontSize="xs">{issuesDetailsData[0]?.assetTag ? issuesDetailsData[0]?.assetTag : "-"}</Text>
+              </HStack>
             </VStack>
 
             <VStack alignItems="start" spacing={1}>

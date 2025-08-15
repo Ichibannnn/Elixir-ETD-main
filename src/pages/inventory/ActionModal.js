@@ -219,10 +219,6 @@ export const AccountTitleModal = ({
 
       const charging = moveData?.orders?.find((item) => item?.id === orderId);
       setOneChargingData(res.data.oneChargingList?.find((item) => item.code === charging?.oneChargingCode));
-
-      console.log("Approved Orders: ", charging);
-      console.log("Res: ", res.data.oneChargingList);
-      console.log("Order Id: ", orderId);
     } catch (error) {}
   };
 
@@ -249,7 +245,7 @@ export const AccountTitleModal = ({
   });
 
   const submitHandler = async () => {
-    console.log("Triggered submitHandler");
+    console.log("MoveData: ", moveData?.orders);
 
     Swal.fire({
       title: "Confirmation!",
@@ -270,6 +266,8 @@ export const AccountTitleModal = ({
       const submitArrayBody = moveData?.orders?.map((item) => {
         return {
           orderNo: orderId,
+          one_Charging: oneChargingData?.code,
+          one_charging_name: oneChargingData?.name,
           companyCode: oneChargingData?.company_code,
           companyName: oneChargingData?.company_name,
           business_unit_code: oneChargingData?.business_unit_code,

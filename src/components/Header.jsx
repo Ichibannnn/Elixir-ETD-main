@@ -1,49 +1,36 @@
-import {
-  Flex,
-  HStack,
-  Text,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-  Box,
-  MenuGroup,
-  Badge,
-} from "@chakra-ui/react";
+import { Flex, HStack, Text, Menu, MenuButton, MenuList, MenuItem, MenuDivider, Box, MenuGroup, Badge, useDisclosure } from "@chakra-ui/react";
 import { RiLogoutBoxLine, RiUser3Fill } from "react-icons/ri";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { decodeUser } from "../services/decode-user";
+import { MdOutlinePassword } from "react-icons/md";
+import { ChangePassword } from "./ChangePassword";
 
 const Header = ({ toggleSidebar }) => {
   const user = decodeUser();
+  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   var navigate = useNavigate();
 
-  // console.log(user);
+  const { isOpen: isChangePassword, onClose: changePasswordOnClose, onOpen: changePasswordOpen } = useDisclosure();
+
+  // console.log(userDetails);
 
   const logoutHandler = () => {
     sessionStorage.removeItem("userData");
     sessionStorage.removeItem("userToken");
+    sessionStorage.removeItem("userDetails");
     navigate("/login");
   };
 
+  const changePassword = () => {
+    changePasswordOpen();
+  };
+
   return (
-    <Flex
-      h="40px"
-      bgColor="primary"
-      alignItems="center"
-      justifyContent="space-between"
-      p={2}
-    >
+    <Flex h="40px" bgColor="primary" alignItems="center" justifyContent="space-between" p={2}>
       <Flex>
-        <GiHamburgerMenu
-          color="#D1D2D5"
-          cursor="pointer"
-          w="40%"
-          onClick={() => toggleSidebar()}
-        />
+        <GiHamburgerMenu color="#D1D2D5" cursor="pointer" w="40%" onClick={() => toggleSidebar()} />
       </Flex>
 
       <Flex>
@@ -64,10 +51,10 @@ const Header = ({ toggleSidebar }) => {
             <MenuItem icon={<RiUser3Fill fontSize="17px" />}>
               <Text fontSize="15px">{`${user && user?.fullName}`}</Text>
             </MenuItem>
-            <MenuItem
-              icon={<RiLogoutBoxLine fontSize="17px" color="red" />}
-              onClick={logoutHandler}
-            >
+            <MenuItem icon={<MdOutlinePassword fontSize="17px" />} onClick={changePassword}>
+              <Text fontSize="15px">Change Password</Text>
+            </MenuItem>
+            <MenuItem icon={<RiLogoutBoxLine fontSize="17px" color="red" />} onClick={logoutHandler}>
               <Text fontSize="15px" color="red">
                 Logout
               </Text>
@@ -93,6 +80,8 @@ const Header = ({ toggleSidebar }) => {
           {/* <Text fontSize="sm">UI Engineer</Text> */}
         </Box>
       </Flex>
+
+      {isChangePassword && <ChangePassword isOpen={isChangePassword} onClose={changePasswordOnClose} />}
     </Flex>
   );
 };

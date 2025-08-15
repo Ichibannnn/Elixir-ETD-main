@@ -19,6 +19,8 @@ export const ActionButtons = ({
   transactionDate,
   setTransactionDate,
   setShowChargingData,
+  assetTag,
+  setAssetTag,
 }) => {
   const { isOpen: isSave, onClose: closeSave, onOpen: openSave } = useDisclosure();
   const saveHandler = () => {
@@ -61,6 +63,8 @@ export const ActionButtons = ({
           transactionDate={transactionDate}
           setTransactionDate={setTransactionDate}
           setShowChargingData={setShowChargingData}
+          assetTag={assetTag}
+          setAssetTag={setAssetTag}
         />
       )}
 

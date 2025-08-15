@@ -62,6 +62,8 @@ export const MaterialsInformation = ({
   setTransactionDate,
   showOneChargingData,
   setShowChargingData,
+  assetTag,
+  setAssetTag,
 }) => {
   // ONE CHARGING CODE
   const [oneChargingCode, setOneChargingCode] = useState([]);
@@ -111,6 +113,14 @@ export const MaterialsInformation = ({
       setDetails(data);
     } else {
       setDetails("");
+    }
+  };
+
+  const assetTagHandler = (data) => {
+    if (data) {
+      setAssetTag(data);
+    } else {
+      setAssetTag("");
     }
   };
 
@@ -293,6 +303,23 @@ export const MaterialsInformation = ({
                 borderRadius="none"
               />
             </HStack>
+
+            {/* Asset Tag */}
+            <HStack w="full">
+              <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={5} py={2.5} fontSize="xs">
+                Asset Tag:
+              </Text>
+              <Input
+                fontSize="sm"
+                onChange={(e) => assetTagHandler(e.target.value)}
+                value={assetTag}
+                w="full"
+                // bgColor="#ffffe0"
+                border="1px"
+                borderColor="gray.400"
+                borderRadius="none"
+              />
+            </HStack>
           </VStack>
 
           <VStack alignItems="start" w="40%" mx={5}>
@@ -397,7 +424,7 @@ export const MaterialsInformation = ({
         <Flex w="full" justifyContent="end">
           <Button
             onClick={() => openModal()}
-            isDisabled={!supplierData.supplierName || !details || !remarks || !transactionDate || !watch("formData.oneChargingCode")}
+            isDisabled={!supplierData.supplierName || !details || !remarks || !transactionDate || !watch("formData.oneChargingCode") || !assetTag}
             size="sm"
             width="100px"
             colorScheme="blue"
@@ -442,6 +469,7 @@ export const RawMatsInfoModal = ({
   transactionDate,
   supplierData,
   chargingCoa,
+  assetTag,
 }) => {
   const { isOpen: isAdd, onClose: closeAdd, onOpen: openAdd } = useDisclosure();
   const openAddConfirmation = () => {

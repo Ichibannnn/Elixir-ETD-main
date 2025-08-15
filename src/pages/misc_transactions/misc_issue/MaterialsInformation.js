@@ -67,6 +67,8 @@ export const MaterialsInformation = ({
   setUnitCost,
   showOneChargingData,
   setShowChargingData,
+  assetTag,
+  setAssetTag,
 }) => {
   // ONE CHARGING CODE
   const [oneChargingCode, setOneChargingCode] = useState([]);
@@ -116,6 +118,14 @@ export const MaterialsInformation = ({
       setDetails(data);
     } else {
       setDetails("");
+    }
+  };
+
+  const assetTagHandler = (data) => {
+    if (data) {
+      setAssetTag(data);
+    } else {
+      setAssetTag("");
     }
   };
 
@@ -301,6 +311,23 @@ export const MaterialsInformation = ({
                 borderRadius="none"
               />
             </HStack>
+
+            {/* Asset Tag */}
+            <HStack w="full">
+              <Text minW="30%" bgColor="primary" color="white" pl={2} pr={5} py={2.5} fontSize="xs">
+                Asset Tag:{" "}
+              </Text>
+              <Input
+                fontSize="sm"
+                onChange={(e) => assetTagHandler(e.target.value)}
+                value={assetTag}
+                w="full"
+                // bgColor="#ffffe0"
+                border="1px"
+                borderColor="gray.400"
+                borderRadius="none"
+              />
+            </HStack>
           </VStack>
 
           <VStack alignItems="start" w="40%" mx={5}>
@@ -405,7 +432,7 @@ export const MaterialsInformation = ({
         <Flex w="full" justifyContent="end" mt={4} p={2}>
           <Button
             onClick={() => openModal()}
-            isDisabled={!rawMatsInfo.customerName || !details || !remarks || !transactionDate || !watch("formData.oneChargingCode")}
+            isDisabled={!rawMatsInfo.customerName || !details || !remarks || !transactionDate || !watch("formData.oneChargingCode") || !assetTag}
             size="sm"
             width="100px"
             colorScheme="blue"
@@ -507,7 +534,6 @@ export const RawMatsInfoModal = ({
     try {
       const res = await request.get("OneCharging/GetAccountTitle?UsePagination=true&status=true");
 
-      console.log("Res: ", res);
       setAccount(res.data.oneChargingList);
     } catch (error) {}
   };
@@ -576,8 +602,6 @@ export const RawMatsInfoModal = ({
     return () => {};
   }, [idNumber]);
 
-  console.log("Barcode No: ", barcodeNo);
-
   // useEffect(() => {
   //   if (barcodeNo?.length) {
   //     const barcodeData = barcodeNo[0];
@@ -597,8 +621,6 @@ export const RawMatsInfoModal = ({
   // }, [barcodeNo]);
 
   const itemCodeHandler = (data) => {
-    console.log("material data: ", data);
-
     if (data) {
       const itemCode = data.value.itemCode;
       const itemDescription = data.value.itemDescription;
