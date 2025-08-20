@@ -511,7 +511,6 @@ export const RawMatsInfoModal = ({
     try {
       const res = await request.get("OneCharging/GetAccountTitle?UsePagination=true&status=true");
 
-      console.log("Res: ", res);
       setAccount(res.data.oneChargingList);
     } catch (error) {}
   };
@@ -624,6 +623,8 @@ export const RawMatsInfoModal = ({
     onClose();
   };
 
+  console.log("UnitCost: ", rawMatsInfo?.unitPrice);
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={() => {}} isCentered size="2xl">
@@ -657,8 +658,6 @@ export const RawMatsInfoModal = ({
                           size="sm"
                           placeholder="Select Item Code"
                           onChange={(e) => {
-                            console.log("E: ", e);
-
                             field.onChange(e);
                             itemCodeHandler(e);
                           }}
@@ -872,10 +871,11 @@ export const RawMatsInfoModal = ({
                   !rawMatsInfo.supplierName ||
                   !rawMatsInfo.uom ||
                   !rawMatsInfo.quantity ||
-                  !rawMatsInfo.unitPrice === "" ||
+                  rawMatsInfo.unitPrice === "" ||
                   !details ||
                   !watch("formData.accountId") ||
-                  (selectedAccount.match(/Advances to Employees/gi) && !watch("formData.empId"))
+                  (selectedAccount.match(/Advances to Employees/gi) && !watch("formData.empId")) ||
+                  (remarks !== "FREEBIE" && rawMatsInfo.unitPrice === 0)
                 }
                 colorScheme="blue"
                 px={4}
