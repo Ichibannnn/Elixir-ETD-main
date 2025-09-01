@@ -73,11 +73,21 @@ const OneCharging = () => {
   const onSyncHandler = async () => {
     setIsLoadingSync(true);
     try {
-      const res = await request.post("charging/sync").then((res) => {
-        ToastComponent("Success", "One charging synced sucessfully!", "success", toast);
-        getOneChargingHandler();
-        setIsLoadingSync(false);
-      });
+      const res = await request
+        .post(
+          "charging/sync",
+          {},
+          {
+            headers: {
+              "Api-Key": "3ADC8B3F712F4745APH!1!P09CF3AEDDC8A8ORI$$44E",
+            },
+          }
+        )
+        .then((res) => {
+          ToastComponent("Success", "One charging synced sucessfully!", "success", toast);
+          getOneChargingHandler();
+          setIsLoadingSync(false);
+        });
     } catch (error) {
       console.log("Error: ", error);
     }
