@@ -83,6 +83,20 @@ const MiscReceiptPage = () => {
   const fetchSuppliers = () => {
     fetchSuppliersApi().then((res) => {
       setSuppliers(res);
+
+      setSupplierData({
+        supplierCode: res?.[0]?.supplierCode,
+        supplierName: res?.[0]?.supplierName,
+      });
+
+      setRawMatsInfo({
+        itemCode: "",
+        itemDescription: "",
+        supplierName: res?.[0]?.supplierCode,
+        uom: "",
+        quantity: "",
+        unitPrice: "",
+      });
     });
   };
 

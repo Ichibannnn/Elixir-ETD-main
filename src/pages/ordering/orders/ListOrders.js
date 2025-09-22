@@ -72,7 +72,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
         itemRemarks: itemsub?.remarks,
         accountCode: itemsub?.account_title_code,
         accountTitles: itemsub?.account_title_name,
-        assetTag: itemsub?.asset_name, // based from genus v2
+        assetTag: itemsub?.asset_tag,
         // assetTag: itemsub?.plate_no, // based from genus v1
         helpdeskNo: item?.helpdesk_no,
         dateApproved: item?.date_approved,

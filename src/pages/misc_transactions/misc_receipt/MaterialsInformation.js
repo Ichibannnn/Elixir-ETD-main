@@ -160,6 +160,15 @@ export const MaterialsInformation = ({
     }
   }, [supplierData]);
 
+  useEffect(() => {
+    if (supplierData) {
+      setValue("formData.suppliers", {
+        label: `${supplierData.supplierCode} - ${supplierData.supplierName}`,
+        value: suppliers?.find((item) => item.supplierCode === supplierData.supplierCode),
+      });
+    }
+  }, [supplierData]);
+
   const cutOff = 7;
   const today = moment();
   const isSeventhDay = today.date() < cutOff;
@@ -469,7 +478,6 @@ export const RawMatsInfoModal = ({
   transactionDate,
   supplierData,
   chargingCoa,
-  assetTag,
 }) => {
   const { isOpen: isAdd, onClose: closeAdd, onOpen: openAdd } = useDisclosure();
   const openAddConfirmation = () => {
@@ -622,8 +630,6 @@ export const RawMatsInfoModal = ({
     });
     onClose();
   };
-
-  console.log("UnitCost: ", rawMatsInfo?.unitPrice);
 
   return (
     <>
@@ -882,6 +888,7 @@ export const RawMatsInfoModal = ({
               >
                 Add
               </Button>
+
               <Button color="black" variant="outline" onClick={closeHandler}>
                 Cancel
               </Button>

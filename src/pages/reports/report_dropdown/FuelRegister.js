@@ -63,8 +63,10 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
             "Sub Unit": item.subUnitName ? item.subUnitName : "-",
             "Location Code": item.location_Code ? item.location_Code : "-",
             Location: item.location_Name ? item.location_Name : "-",
+            "CIP #": item.cipNo !== "" ? item.cipNo : "-",
             "Diesel PO#": item.dieselPONumber,
             Odometer: item.odometer ? item.odometer : "N/A",
+            "Diesel Pump": item.fuelPump !== "" ? item.fuelPump : "-",
           };
         })
       );
@@ -185,10 +187,16 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                         LOCATION
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
+                        CIP #
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         DIESEL PO#
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         ODOMETER
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        DIESEL PUMP
                       </Th>
                     </>
                   )}
@@ -237,20 +245,8 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                           })}
                         </Td>
                         <Td fontSize="xs">{item?.asset ? item?.asset : "-"}</Td>
-                        <Td fontSize="xs">
-                          {item?.unit_Cost.toLocaleString(undefined, {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          })}
-                        </Td>
-                        <Td fontSize="xs">
-                          {item?.lineAmount
-                            ? item?.lineAmount?.toLocaleString(undefined, {
-                                maximumFractionDigits: 2,
-                                minimumFractionDigits: 2,
-                              })
-                            : "-"}
-                        </Td>
+                        <Td fontSize="xs">{parseFloat(item?.unit_Cost).toFixed(2)}</Td>
+                        <Td fontSize="xs">{parseFloat(item?.lineAmount).toFixed(2)}</Td>
                         <Td fontSize="xs">{item?.month ? item?.month : "-"}</Td>
                         <Td fontSize="xs">{item?.requestorName ? item?.requestorName : "-"}</Td>
                         <Td fontSize="xs">{item?.remarks ? item?.remarks : "-"}</Td>
@@ -273,6 +269,7 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                         <Td fontSize="xs">{item?.subUnitName}</Td>
                         <Td fontSize="xs">{item?.location_Code}</Td>
                         <Td fontSize="xs">{item?.location_Name}</Td>
+                        <Td fontSize="xs">{item?.cipNo !== "" ? item?.cipNo : "-"}</Td>
                         <Td fontSize="xs">{item?.dieselPONumber ? item?.dieselPONumber : "-"}</Td>
                         <Td fontSize="xs">
                           {item?.odometer
@@ -281,6 +278,7 @@ export const FuelRegister = ({ dateFrom, dateTo, setSheetData, search }) => {
                               })
                             : "-"}
                         </Td>
+                        <Td fontSize="xs">{item?.fuelPump ? item?.fuelPump : "-"}</Td>
                       </>
                     )}
                   </Tr>

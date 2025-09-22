@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Box, Button, Flex, HStack, Input, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast, VStack } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import { Box, Button, Flex, HStack, Input, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { BiImport } from "react-icons/bi";
 import { MdOutlineError, MdOutlineSync } from "react-icons/md";
 
@@ -21,11 +21,12 @@ const currentUser = decodeUser();
 const fetchYMIRApi = async (fromDate, toDate) => {
   const fromDateFormatted = moment(fromDate).format("yyyy-MM-DD");
   const toDateFormatted = moment(toDate).format("yyyy-MM-DD");
-  const res = await axios.get(`https://rdfymir.com/backend/public/api/etd_api?system_name=Elixir ETD&from=${fromDateFormatted}&to=${toDateFormatted}`, {
-    headers: {
-      Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
-    },
-  });
+  const res = await request.get(
+    `ymir-sync?system_name=Elixir ETD&from=${fromDateFormatted}&to=${toDateFormatted}`
+    // `https://rdfymir.com/backend/public/api/etd_api?system_name=Elixir ETD&from=${fromDateFormatted}&to=${toDateFormatted}`, ~~ FROM YMIR
+  );
+
+  console.log("Res", res);
 
   return res.data;
 };
@@ -49,21 +50,41 @@ const ImportPO = () => {
   const [errorData, setErrorData] = useState([]);
   const toast = useToast();
 
-  const { isOpen: isErrorImportOpen, onOpen: onErrorImportOpen, onClose: onErrorImportClose } = useDisclosure();
+  const [fetchError, setFetchError] = useState(null);
+  const [fetchNoRecord, setFetchNoRecords] = useState(false);
+
   const { isOpen: isErrorOpen, onOpen: onErrorOpen, onClose: onErrorClose } = useDisclosure();
   const { isOpen: isSyncOpen, onOpen: onSyncOpen, onClose: onSyncClose } = useDisclosure();
 
   const clearExcelFile = useRef();
 
   // GET YMIR PO
-  const getYmirPo = () => {
-    fetchYMIRApi(fromDate, toDate).then((res) => {
-      setYmirPo(res);
-      setFetchData(false);
-    });
-  };
+  const getYmirPo = async () => {
+    setIsLoading(true);
+    setFetchError(null);
+    setFetchNoRecords(false);
 
-  console.log("ymirPO: ", ymirPO);
+    try {
+      const response = await fetchYMIRApi(fromDate, toDate);
+
+      console.log("Response: ", response);
+
+      if (response?.length === 0) {
+        setFetchNoRecords(true);
+      } else {
+        setYmirPo(response);
+        setFetchData(false);
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+
+      if (error?.status === 404) {
+        setFetchNoRecords(true);
+      } else {
+        setFetchError("Something went wrong.");
+      }
+    }
+  };
 
   useEffect(() => {
     if (fromDate && toDate) {
@@ -109,8 +130,6 @@ const ImportPO = () => {
     });
 
     fileRender(jsonData);
-
-    // console.log("workbook", workbook);
 
     if (isColumnComplete) {
       setIsDisabled(false);
@@ -205,8 +224,8 @@ const ImportPO = () => {
     onSyncOpen();
   };
 
-  const [bufferError, setBufferError] = useState(false); // Set it to false initially
-  const [toastShown, setToastShown] = useState(false); // Set it to false initially
+  const [bufferError, setBufferError] = useState(false);
+  const [toastShown, setToastShown] = useState(false);
 
   useEffect(() => {
     // Check if any value in resultArray's any is a letter
@@ -250,7 +269,7 @@ const ImportPO = () => {
                 borderRadius="none"
                 fontSize="12px"
                 size="xs"
-                isLoading={isLoading}
+                // isLoading={isLoading}
                 onClick={() => openSyncYMIRModal()}
               >
                 Sync from YMIR
@@ -455,6 +474,9 @@ const ImportPO = () => {
           toDate={toDate}
           setToDate={setToDate}
           getYmirPo={getYmirPo}
+          isLoading={isLoading}
+          fetchError={fetchError}
+          fetchNoRecord={fetchNoRecord}
         />
       )}
 

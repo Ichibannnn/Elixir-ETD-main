@@ -187,8 +187,10 @@ const Reports = () => {
           { header: "Sub Unit", key: "Sub Unit", width: 20 },
           { header: "Location Code", key: "Location Code", width: 20 },
           { header: "Location", key: "Location", width: 20 },
+          { header: "CIP #", key: "CIP #", width: 20 },
           { header: "Diesel PO#", key: "Diesel PO#", width: 20 },
           { header: "Odometer", key: "Odometer", width: 20 },
+          { header: "Diesel Pump", key: "Diesel Pump", width: 20 },
         ];
 
         worksheet.getRow(1).eachCell((cell, colNumber) => {
@@ -231,9 +233,11 @@ const Reports = () => {
             "Sub Unit Code": item["Sub Unit Code"],
             "Sub Unit": item["Sub Unit"],
             "Location Code": item["Location Code"],
+            "CIP #": item["CIP #"],
             Location: item.Location,
             "Diesel PO#": item["Diesel PO#"],
             Odometer: item.Odometer,
+            "Diesel Pump": item["Diesel Pump"],
           });
         });
 

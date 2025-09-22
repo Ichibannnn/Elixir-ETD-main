@@ -30,18 +30,17 @@ import {
   Stack,
   Skeleton,
 } from "@chakra-ui/react";
-import { RiFileList3Fill } from "react-icons/ri";
 
 import moment from "moment";
 import request from "../../services/ApiClient";
 import Swal from "sweetalert2";
-import { ToastComponent } from "../../components/Toast";
 
 import PageScroll from "../../utils/PageScroll";
 import { decodeUser } from "../../services/decode-user";
 import { MdOutlineSync } from "react-icons/md";
 
 import noRecordsFound from "../../../src/assets/svg/noRecordsFound.svg";
+import { ToastComponent } from "../../components/Toast";
 import axios from "axios";
 
 const currentUser = decodeUser();
@@ -66,11 +65,12 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
             itemCode: subData?.order?.item_code?.toString().trim(),
             itemDescription: subData?.order?.item_name?.toString()?.trim(),
 
-            ordered: subData?.order?.quantity?.toString().trim(),
-            delivered: subData?.quantity_receive?.toString().trim(),
-            actualRemaining: subData?.remaining.toString().trim(),
+            ordered: subData?.order?.quantity,
+            delivered: subData?.quantity_receive,
+            actualRemaining: subData?.remaining,
             billed: 0,
-            unitPrice: subData?.order?.price?.toString().trim(),
+            unitPrice: subData?.order?.price,
+            priceWithDecimal: subData?.umPriceToString.toString(),
             siNumber: subData?.shipment_no?.toString().trim(),
             receiveDate: moment(subData?.delivery_Date)?.format("YYYY-MM-DD")?.toString().trim(),
             vendorName: subData?.po_transaction?.supplier_name?.toString().trim(),
@@ -114,7 +114,6 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
 
         if (ymirResultArray.length > 0) {
           const hasZeroUnitCost = ymirResultArray.some((data) => data.unitPrice <= 0);
-
           if (hasZeroUnitCost) {
             ToastComponent("Warning!", "Unit Cost cannot be zero value", "warning", toast);
           } else {
@@ -133,7 +132,6 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                   } catch (error) {
                     console.log(error);
                   }
-
                   ToastComponent("Success!", "Sync purchase orders successfully", "success", toast);
                   getYmirPo();
                   setFetchData(false);

@@ -164,18 +164,8 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
                             minimumFractionDigits: 2,
                           })}
                         </Td>
-                        <Td fontSize="xs">
-                          {item?.unitPrice.toLocaleString(undefined, {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          })}
-                        </Td>
-                        <Td fontSize="xs">
-                          {item?.amount.toLocaleString(undefined, {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          })}
-                        </Td>
+                        <Td fontSize="xs">{parseFloat(item?.unitPrice).toFixed(2)}</Td>
+                        <Td fontSize="xs">{parseFloat(item?.amount).toFixed(2)}</Td>
                       </>
                     ) : (
                       <>

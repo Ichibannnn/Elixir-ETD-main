@@ -99,6 +99,9 @@ export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, setSheetData, sea
                         Reference
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Diesel PO#
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         Encoded By
                       </Th>
                     </>
@@ -204,6 +207,7 @@ export const ConsolidatedReportsFinance = ({ dateFrom, dateTo, setSheetData, sea
                         <Td fontSize="xs">{item?.transactionType ? item?.transactionType : "-"}</Td>
                         <Td fontSize="xs">{item?.reason ? item?.reason : "-"}</Td>
                         <Td fontSize="xs">{item?.reference ? item?.reference : "-"}</Td>
+                        <Td fontSize="xs">{item?.dieselPoNumber ? item?.dieselPoNumber : "-"}</Td>
                         <Td fontSize="xs">{item?.encodedBy}</Td>
                       </>
                     ) : (

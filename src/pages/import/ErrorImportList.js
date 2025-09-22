@@ -61,6 +61,7 @@ const ErrorImportList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading
       billed: list?.billed?.toString().trim(),
       uom: list?.uom?.toString().trim(),
       unitPrice: list?.unitPrice?.toString().trim(),
+      priceWithDecimal: list?.priceWithDecimal?.toString().trim(),
       actualRemaining: list?.actualRemaining?.toString().trim(),
       siNumber: list?.siNumber?.toString().trim(),
       receiveDate: list?.receiveDate?.toString().trim(),

@@ -130,8 +130,6 @@ export const FuelInformation = ({
     } catch (error) {}
   };
 
-  console.log("AccTitle: ", account);
-
   // Fisto Account Title ~~~~~~~~~~
   // const fetchAccountApi = async (id = "") => {
   //   try {

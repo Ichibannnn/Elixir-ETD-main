@@ -43,10 +43,7 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             }),
-            "Unit Cost": item.unitCost.toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }),
+            "Unit Cost": item.unitCost,
             "Transacted By": item.transactBy,
             "Transaction Date": moment(item.transactDate).format("MM/DD/YYYY"),
             Company: item.companyCode ? `${item.companyCode} - ${item.companyName}` : "-",
@@ -199,12 +196,7 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
                             maximumFractionDigits: 2,
                           })}
                         </Td>
-                        <Td fontSize="xs">
-                          {item?.unitCost.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
-                        </Td>
+                        <Td fontSize="xs">{parseFloat(item?.unitCost).toFixed(2)}</Td>
                         <Td fontSize="xs">{item?.transactBy}</Td>
                         <Td fontSize="xs">{moment(item?.transactDate).format("yyyy-MM-DD")}</Td>
                       </>

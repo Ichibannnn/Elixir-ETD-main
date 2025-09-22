@@ -101,6 +101,9 @@ export const ConsolidatedReportsAudit = ({ dateFrom, dateTo, setSheetData, searc
                         Reference
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Diesel PO#
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
                         Encoded By
                       </Th>
                     </>
@@ -208,6 +211,7 @@ export const ConsolidatedReportsAudit = ({ dateFrom, dateTo, setSheetData, searc
                         <Td fontSize="xs">{item?.status ? item?.status : "-"}</Td>
                         <Td fontSize="xs">{item?.reason ? item?.reason : "-"}</Td>
                         <Td fontSize="xs">{item?.reference ? item?.reference : "-"}</Td>
+                        <Td fontSize="xs">{item?.dieselPoNumber ? item?.dieselPoNumber : "-"}</Td>
                         <Td fontSize="xs">{item?.encodedBy}</Td>
                       </>
                     ) : (

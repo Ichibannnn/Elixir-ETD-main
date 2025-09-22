@@ -50,7 +50,6 @@ export const EditModal = ({
   const [lotSection, setLotSection] = useState(null);
   const toast = useToast();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
-  const [quantity, setQuantity] = useState(undefined);
 
   const [sumQuantity, setSumQuantity] = useState(0);
   const [submitDataThree, setSubmitDataThree] = useState([]);
@@ -70,13 +69,7 @@ export const EditModal = ({
     fetchLotCategory();
   }, [setLotCategories]);
 
-  const {
-    register,
-    control,
-    setValue,
-    watch,
-    // formState: { errors, isValid },
-  } = useForm({
+  const { register, control, setValue, watch } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
@@ -143,9 +136,6 @@ export const EditModal = ({
       },
     },
   });
-
-  // console.log("Edit Data: ", editData);
-  // console.log("Display Data: ", watch("displayData"));
 
   const expectedDeliveryRef = useRef();
   const actualDeliveredRef = useRef();
@@ -216,11 +206,11 @@ export const EditModal = ({
     rrDate: moment(editData.rrDate).format("MM/DD/YYYY"),
 
     unitPrice: editData.siNumber ? editData.unitPrice : unitPrice,
+    priceWithDecimal: editData.priceWithDecimal,
     siNumber: editData.siNumber ? editData.siNumber : siNumber,
     actualDelivered: editData.siNumber ? editData.quantityDelivered : Number(actualDelivered),
-    // actualReceiving: editData.quantityDelivered,
     receivingDate: editData.receiveDate ? moment(editData.receiveDate).format("MM/DD/YYYY") : receivingDate,
-    actualReceivingDate: editData.receiveDate ? moment(editData.receiveDate).format("MM/DD/YYYY") : receivingDate,
+    actualReceivingDate: moment().format("MM/DD/YYYY"),
 
     totalReject: sumQuantity,
     addedBy: currentUser.fullName,
@@ -230,6 +220,8 @@ export const EditModal = ({
   useEffect(() => {
     setActualGood(editData.actualDelivered - sumQuantity);
   }, [sumQuantity]);
+
+  // console.log("ActualReceivingDate: ", moment().format("MM/DD/YYYY"));
 
   useEffect(() => {
     if (editData) {
@@ -251,8 +243,6 @@ export const EditModal = ({
   const receivingDateProvider = (event) => {
     const data = event.target.value;
 
-    console.log("Data: ", data);
-
     if (data) {
       const newData = moment(data).format("MM/DD/YYYY");
       setReceivingDate(newData);
@@ -260,8 +250,6 @@ export const EditModal = ({
       setReceivingDate(null);
     }
   };
-
-  // console.log("Receiving date: ", receivingDate);
 
   const closeModalHandler = () => {
     setReceivingDate(null);
@@ -509,7 +497,7 @@ export const EditModal = ({
 
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">
-                      Receiving Date
+                      Delivery Date
                       {/* <Input {...register("displayData.receiveDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" /> */}
                       <Input
                         {...register("displayData.receiveDate")}
