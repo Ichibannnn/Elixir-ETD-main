@@ -1,11 +1,4 @@
-import React, { useRef } from "react";
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
   Button,
   Flex,
   Modal,
@@ -55,6 +48,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
     ? ymirPO.flatMap((data) =>
         data?.rr_orders?.map((subData) => {
           return {
+            ymirId: subData?.id,
             rrNo: data?.rr_year_number_id?.toString().trim(),
             rrDate: moment(subData?.rr_date)?.format("YYYY-MM-DD")?.toString().trim(),
             pR_Number: subData?.pr_transaction?.pr_year_number_id?.toString().trim(),
@@ -64,6 +58,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
 
             itemCode: subData?.order?.item_code?.toString().trim(),
             itemDescription: subData?.order?.item_name?.toString()?.trim(),
+            itemRemarks: subData?.order?.remarks ? subData?.order?.remarks?.toString()?.trim() : "",
 
             ordered: subData?.order?.quantity,
             delivered: subData?.quantity_receive,
@@ -124,11 +119,16 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                 .then((res) => {
                   // YMIR Status
                   try {
-                    axios.patch(`https://rdfymir.com/backend/public/api/etd_api/sync`, ymirSyncStatus, {
-                      headers: {
-                        Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
-                      },
-                    });
+                    axios.patch(
+                      `https://rdfymir.com/backend/public/api/etd_api/sync`,
+                      // `https://pretestomega.rdfymir.com/backend/public/api/etd_api/sync`,
+                      ymirSyncStatus,
+                      {
+                        headers: {
+                          Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
+                        },
+                      }
+                    );
                   } catch (error) {
                     console.log(error);
                   }
@@ -262,6 +262,9 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                             Item Description
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
+                            Item Remarks
+                          </Th>
+                          <Th color="#D6D6D6" fontSize="10px">
                             Qty Ordered
                           </Th>
                           <Th color="#D6D6D6" fontSize="10px">
@@ -310,6 +313,9 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                               {d?.itemDescription}
                             </Td>
                             <Td color="gray.600" fontSize="11px">
+                              {d?.itemRemarks ? d?.itemRemarks : "--"}
+                            </Td>
+                            <Td color="gray.600" fontSize="11px">
                               {d?.ordered?.toLocaleString(undefined, {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
@@ -338,7 +344,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
 
                         {!ymirResultArray?.length && (
                           <Tr>
-                            <Td colSpan={14} align="center">
+                            <Td colSpan={15} align="center">
                               <Flex width="100%" justifyContent="center" alignItems="center">
                                 <VStack>
                                   <img src={noRecordsFound} alt="No Records Found" className="norecords-found-table" />

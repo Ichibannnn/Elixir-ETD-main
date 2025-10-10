@@ -244,16 +244,17 @@ const WarehouseReceiving = () => {
                           </Button>
                         </HStack>
                       </Th>
-
                       <Th h="40px" color="white" fontSize="10px">
                         RR Number
                       </Th>
-
                       <Th h="40px" color="white" fontSize="10px">
                         Item Code
                       </Th>
                       <Th h="40px" color="white" fontSize="10px">
                         Description
+                      </Th>{" "}
+                      <Th h="40px" color="white" fontSize="10px">
+                        Item Remarks
                       </Th>
                       <Th h="40px" color="white" fontSize="10px">
                         Supplier
@@ -266,6 +267,9 @@ const WarehouseReceiving = () => {
                       </Th>
                       <Th h="40px" color="white" fontSize="10px">
                         Actual Delivered
+                      </Th>
+                      <Th h="40px" color="white" fontSize="10px">
+                        Actual Good
                       </Th>
                       <Th h="40px" color="white" fontSize="10px">
                         Actual Remaining
@@ -282,32 +286,39 @@ const WarehouseReceiving = () => {
                     {pO?.posummary?.sort(getComparator(poSort)).map((pos) => (
                       <Tr key={pos.id}>
                         {/* <Td fontSize="xs">{pos.rrNumber}</Td> */}
-                        <Td fontSize="xs">{pos.poNumber}</Td>
-                        <Td fontSize="xs">{pos.rrNumber ? pos.rrNumber : "-"}</Td>
-                        <Td fontSize="xs">{pos.itemCode}</Td>
-                        <Td fontSize="xs">{pos.itemDescription}</Td>
-                        <Td fontSize="xs">{pos.supplier}</Td>
-                        <Td fontSize="xs">{pos.uom}</Td>
+                        <Td fontSize="xs">{pos?.poNumber}</Td>
+                        <Td fontSize="xs">{pos?.rrNumber ? pos.rrNumber : "-"}</Td>
+                        <Td fontSize="xs">{pos?.itemCode}</Td>
+                        <Td fontSize="xs">{pos?.itemDescription}</Td>
+                        <Td fontSize="xs">{pos?.itemRemarks ? pos.itemRemarks : "--"}</Td>
+                        <Td fontSize="xs">{pos?.supplier}</Td>
+                        <Td fontSize="xs">{pos?.uom}</Td>
                         <Td fontSize="xs">
-                          {pos.quantityOrdered.toLocaleString(undefined, {
+                          {pos?.quantityOrdered?.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {pos.quantityDelivered.toLocaleString(undefined, {
+                          {pos?.quantityDelivered?.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {pos.actualRemaining?.toLocaleString(undefined, {
+                          {pos?.actualGood?.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}
                         </Td>
                         <Td fontSize="xs">
-                          {pos.unitPrice.toLocaleString(undefined, {
+                          {pos?.actualRemaining?.toLocaleString(undefined, {
+                            maximumFractionDigits: 2,
+                            minimumFractionDigits: 2,
+                          })}
+                        </Td>
+                        <Td fontSize="xs">
+                          {pos?.unitPrice?.toLocaleString(undefined, {
                             maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
                           })}

@@ -58,6 +58,7 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       pO_Date: moment(list.pO_Date)?.format("YYYY-MM-DD")?.toString().trim(),
       itemCode: list?.itemCode?.toString().trim(),
       itemDescription: list?.itemDescription?.toString().trim(),
+      itemRemarks: list?.itemRemarks?.toString().trim(),
       ordered: list?.ordered?.toString().trim(),
       delivered: list?.delivered?.toString().trim(),
       billed: list?.billed?.toString().trim(),
@@ -82,6 +83,7 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
       item_Code: list.itemCode,
       item_Description: list.itemDescription,
+      itemRemarks: list?.itemRemarks?.toString().trim(),
       ordered: list.ordered,
       delivered: list.delivered,
       billed: list.billed,
@@ -101,6 +103,7 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
       item_Code: list.itemCode,
       item_Description: list.itemDescription,
+      itemRemarks: list?.itemRemarks?.toString().trim(),
       ordered: list.ordered,
       delivered: list.delivered,
       billed: list.billed,
@@ -120,6 +123,7 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
       item_Code: list.itemCode,
       item_Description: list.itemDescription,
+      itemRemarks: list?.itemRemarks?.toString().trim(),
       ordered: list.ordered,
       delivered: list.delivered,
       billed: list.billed,
@@ -139,6 +143,7 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
       item_Code: list.itemCode,
       item_Description: list.itemDescription,
+      itemRemarks: list?.itemRemarks?.toString().trim(),
       ordered: list.ordered,
       delivered: list.delivered,
       billed: list.billed,
@@ -158,6 +163,7 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
       item_Code: list.itemCode,
       item_Description: list.itemDescription,
+      itemRemarks: list?.itemRemarks?.toString().trim(),
       ordered: list.ordered,
       delivered: list.delivered,
       billed: list.billed,
@@ -177,6 +183,7 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       pO_Date: moment(list.pO_Date).format("YYYY-MM-DD"),
       item_Code: list.itemCode,
       item_Description: list.itemDescription,
+      itemRemarks: list?.itemRemarks?.toString().trim(),
       ordered: list.ordered,
       delivered: list.delivered,
       billed: list.billed,
@@ -193,25 +200,6 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
   const supplier = supplierNotExistData;
   const uom = uomCodeNotExistData;
   const materialInfo = materialInformationData;
-
-  // const ymirPO_Numbers = new Set(ymirPO?.flatMap((data) => data?.rr_orders?.map((subData) => subData?.po_transaction?.po_year_number_id?.toString().trim()) ?? []));
-  // const filteredItems = availableImportData?.filter((list) => ymirPO_Numbers.has(list.pO_Number));
-
-  // const finalPayload = [
-  //   {
-  //     item_id: ymirPO?.flatMap((data) =>
-  //       data?.rr_orders
-  //         ?.filter((subData) => filteredItems.some((item) => item?.pO_Number === subData?.po_transaction?.po_year_number_id?.toString().trim()))
-  //         ?.map((subData) => ({
-  //           id: subData?.id,
-  //         }))
-  //     ),
-  //   },
-  // ];
-
-  // console.log("ymirPO:", ymirPO);
-  // console.log("filteredItems:", filteredItems);
-  // console.log("Final Payload:", finalPayload);
 
   const submitAvailablePOHandler = () => {
     Swal.fire({
@@ -231,6 +219,14 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
       },
     }).then((result) => {
       if (result.isConfirmed) {
+        const errorDataId = [
+          {
+            item_id: errorData?.availableImport?.map((item) => ({
+              id: item?.ymirId,
+            })),
+          },
+        ];
+
         if (available?.length > 0) {
           try {
             setIsLoading(true);
@@ -238,15 +234,20 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
               .post("Import/AddNewPOSummary", available)
               .then((res) => {
                 // YMIR Status
-                // try {
-                //   axios.patch(`https://rdfymir.com/backend/public/api/etd_api/sync`, finalPayload, {
-                //     headers: {
-                //       Authorization: "Token " + process.env.REACT_APP_YMIR_PROD_TOKEN,
-                //     },
-                //   });
-                // } catch (error) {
-                //   console.log(error);
-                // }
+                try {
+                  axios.patch(
+                    `https://rdfymir.com/backend/public/api/etd_api/sync`,
+                    // `https://pretestomega.rdfymir.com/backend/public/api/etd_api/sync`,
+                    errorDataId,
+                    {
+                      headers: {
+                        Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
+                      },
+                    }
+                  );
+                } catch (error) {
+                  console.log(error);
+                }
 
                 getYmirPo();
                 ToastComponent("Success!", "PO Imported", "success", toast);
@@ -333,6 +334,9 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                                 Item Description
                               </Th>
                               <Th color="white" fontSize="9px">
+                                Item Remarks
+                              </Th>
+                              <Th color="white" fontSize="9px">
                                 Qty Ordered
                               </Th>
                               <Th color="white" fontSize="9px">
@@ -379,6 +383,9 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.itemDescription}
+                                </Td>
+                                <Td color="gray.600" fontSize="11px">
+                                  {d?.itemRemarks ? d?.itemRemarks : "--"}
                                 </Td>
                                 <Td color="gray.600" fontSize="11px">
                                   {d?.ordered}

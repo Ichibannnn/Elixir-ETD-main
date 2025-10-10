@@ -59,31 +59,11 @@ const ImportPO = () => {
   const clearExcelFile = useRef();
 
   // GET YMIR PO
-  const getYmirPo = async () => {
-    setIsLoading(true);
-    setFetchError(null);
-    setFetchNoRecords(false);
-
-    try {
-      const response = await fetchYMIRApi(fromDate, toDate);
-
-      console.log("Response: ", response);
-
-      if (response?.length === 0) {
-        setFetchNoRecords(true);
-      } else {
-        setYmirPo(response);
-        setFetchData(false);
-      }
-    } catch (error) {
-      console.log("Error: ", error);
-
-      if (error?.status === 404) {
-        setFetchNoRecords(true);
-      } else {
-        setFetchError("Something went wrong.");
-      }
-    }
+  const getYmirPo = () => {
+    fetchYMIRApi(fromDate, toDate).then((res) => {
+      setYmirPo(res);
+      setFetchData(false);
+    });
   };
 
   useEffect(() => {

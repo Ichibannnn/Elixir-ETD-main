@@ -32,6 +32,7 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
             "Line Number": i + 1,
             ID: item.warehouseId,
             "Received Date": item.receiveDate,
+            "Delivery Date": item.deliveryDate,
             "Item Code": item.itemCode,
             "Item Description": item.itemDescrption,
             "PO. #": item.poNumber,
@@ -93,6 +94,9 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
                     Received Date
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
+                    Delivery Date
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
                     PO Number
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
@@ -136,6 +140,7 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
                   <Tr key={i}>
                     <Td fontSize="xs">{item?.warehouseId}</Td>
                     <Td fontSize="xs">{item?.receiveDate}</Td>
+                    <Td fontSize="xs">{item?.deliveryDate}</Td>
                     <Td fontSize="xs">{item?.poNumber ? item?.poNumber : "-"}</Td>
                     <Td fontSize="xs">{item?.siNumber ? item?.siNumber : "-"}</Td>
                     {buttonChanger ? (
