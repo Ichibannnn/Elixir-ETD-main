@@ -49,13 +49,7 @@ const ApproverBorrowedApproval = ({ notification, fetchNotification }) => {
             {notification?.borrowedApproval?.forborrowedApprovalcount === 0 ? (
               ""
             ) : (
-              <Badge
-                ml={2}
-                fontSize="10px"
-                variant="solid"
-                colorScheme="red"
-                mb={1}
-              >
+              <Badge ml={2} fontSize="10px" variant="solid" colorScheme="red" mb={1}>
                 {notification?.borrowedApproval?.forborrowedApprovalcount}
               </Badge>
             )}
@@ -90,13 +84,7 @@ const ApproverBorrowedApproval = ({ notification, fetchNotification }) => {
             {notification?.rejectlist?.rejectlistscount === 0 ? (
               ""
             ) : (
-              <Badge
-                ml={2}
-                fontSize="10px"
-                variant="solid"
-                colorScheme="red"
-                mb={1}
-              >
+              <Badge ml={2} fontSize="10px" variant="solid" colorScheme="red" mb={1}>
                 {notification?.rejectlist?.rejectlistscount}
               </Badge>
             )}
@@ -117,10 +105,7 @@ const ApproverBorrowedApproval = ({ notification, fetchNotification }) => {
       >
         {navigation === 1 ? (
           <>
-            <ForApprovalBorrowedMaterials
-              navigation={navigation}
-              fetchNotification={fetchNotification}
-            />
+            <ForApprovalBorrowedMaterials navigation={navigation} fetchNotification={fetchNotification} />
           </>
         ) : navigation === 2 ? (
           <>

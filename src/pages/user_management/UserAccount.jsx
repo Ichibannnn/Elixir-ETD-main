@@ -554,6 +554,8 @@ const DrawerComponent = (props) => {
     if (editData.id) {
       const employeeDetails = pickerItems?.find((item) => item.general_info.full_id_number === editData.empId);
 
+      console.log("employeeDetails", employeeDetails);
+
       if (employeeDetails) {
         setValue("formData", {
           fullName: employeeDetails?.general_info?.full_name,
@@ -568,6 +570,8 @@ const DrawerComponent = (props) => {
       }
     }
   }, [pickerItems]);
+
+  console.log("PickerData: ", pickerItems);
 
   return (
     <>
@@ -608,6 +612,7 @@ const DrawerComponent = (props) => {
                               <Text
                                 key={i}
                                 onClick={() => {
+                                  console.log("item", item);
                                   handleAutoFill(item);
                                 }}
                                 style={{ cursor: "pointer", zIndex: 999 }}
@@ -645,6 +650,7 @@ const DrawerComponent = (props) => {
                     <Text fontSize="sm" fontWeight="semibold">
                       Department:
                     </Text>
+
                     <Input
                       fontSize="xs"
                       {...register("formData.department")}

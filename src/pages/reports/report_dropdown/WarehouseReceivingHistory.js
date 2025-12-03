@@ -3,6 +3,7 @@ import { Flex, Table, Tbody, Td, Th, Thead, Tr, Button, HStack, Text } from "@ch
 import request from "../../../services/ApiClient";
 import PageScroll from "../../../utils/PageScroll";
 import InfiniteScroll from "react-infinite-scroll-component";
+import moment from "moment";
 
 export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, search }) => {
   const [warehouseData, setWarehouseData] = useState([]);
@@ -31,11 +32,13 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
           return {
             "Line Number": i + 1,
             ID: item.warehouseId,
-            "Received Date": item.receiveDate,
+            "Received Date": moment(item?.receiveDate).format("YYYY-MM-DD"),
             "Delivery Date": item.deliveryDate,
             "Item Code": item.itemCode,
             "Item Description": item.itemDescrption,
+            "Item Remarks": item.itemRemarks ? item.itemRemarks : "--",
             "PO. #": item.poNumber,
+            "RR. #": item.rrNumber,
             "SI #": item.siNumber,
             Supplier: item.supplierName,
             Quantity: item.quantity,
@@ -100,12 +103,18 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
                     PO Number
                   </Th>
                   <Th color="white" fontSize="10px" fontWeight="semibold">
+                    RR Number
+                  </Th>
+                  <Th color="white" fontSize="10px" fontWeight="semibold">
                     SI Number
                   </Th>
                   {buttonChanger ? (
                     <>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         Item Information
+                      </Th>
+                      <Th color="white" fontSize="10px" fontWeight="semibold">
+                        Item Remarks
                       </Th>
                       <Th color="white" fontSize="10px" fontWeight="semibold">
                         UOM
@@ -139,9 +148,10 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
                 {displayedData?.map((item, i) => (
                   <Tr key={i}>
                     <Td fontSize="xs">{item?.warehouseId}</Td>
-                    <Td fontSize="xs">{item?.receiveDate}</Td>
+                    <Td fontSize="xs">{moment(item?.receiveDate).format("YYYY-MM-DD")}</Td>
                     <Td fontSize="xs">{item?.deliveryDate}</Td>
                     <Td fontSize="xs">{item?.poNumber ? item?.poNumber : "-"}</Td>
+                    <Td fontSize="xs">{item?.rrNumber ? item?.rrNumber : "-"}</Td>
                     <Td fontSize="xs">{item?.siNumber ? item?.siNumber : "-"}</Td>
                     {buttonChanger ? (
                       <>
@@ -161,7 +171,7 @@ export const WarehouseReceivingHistory = ({ dateFrom, dateTo, setSheetData, sear
                             </Flex>
                           </Flex>
                         </Td>
-
+                        <Td fontSize="xs">{item?.itemRemarks ? item?.itemRemarks : "--"}</Td>
                         <Td fontSize="xs">{item?.uom}</Td>
                         <Td fontSize="xs">
                           {item?.quantity.toLocaleString(undefined, {

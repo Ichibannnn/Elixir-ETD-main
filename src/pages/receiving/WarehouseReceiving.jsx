@@ -269,7 +269,7 @@ const WarehouseReceiving = () => {
                         Actual Delivered
                       </Th>
                       <Th h="40px" color="white" fontSize="10px">
-                        Actual Good
+                        Actual Received
                       </Th>
                       <Th h="40px" color="white" fontSize="10px">
                         Actual Remaining

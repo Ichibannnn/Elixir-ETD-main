@@ -103,33 +103,35 @@ export const ListOfMaterials = ({
     setSearch(inputValue);
   };
 
-  // ARRAY FOR THE LIST DATA OF SUPPLIERS
-  const resultArray = genusMaterials?.result?.map((item) => {
-    const uniqueAccountTitlesMap = new Map();
+  // ARRAY FOR THE LIST DATA OF MATERIALS
+  const resultArray = genusMaterials?.result
+    ?.filter((item) => item?.deleted_at === null)
+    .map((item) => {
+      const uniqueAccountTitlesMap = new Map();
 
-    item?.account_title?.forEach((acc) => {
-      const id = acc.account_title?.id;
+      item?.account_title?.forEach((acc) => {
+        const id = acc.account_title?.id;
 
-      if (id && !uniqueAccountTitlesMap.has(id)) {
-        uniqueAccountTitlesMap.set(id, { accountTitleId: id });
-      }
+        if (id && !uniqueAccountTitlesMap.has(id)) {
+          uniqueAccountTitlesMap.set(id, { accountTitleId: id });
+        }
+      });
+
+      return {
+        material_No: item?.id,
+        itemCode: item?.code,
+        itemDescription: item?.name,
+        itemCategoryName: item?.category?.name,
+        uomCode: item?.uom?.code,
+        bufferLevel: 0,
+        dateAdded: moment(new Date()).format("yyyy-MM-DD"),
+        addedBy: currentUser.fullName,
+        modifyDate: moment(new Date()).format("yyyy-MM-DD"),
+        modifyBy: currentUser.fullName,
+        syncDate: moment(new Date()).format("yyyy-MM-DD"),
+        accountTitles: Array.from(uniqueAccountTitlesMap.values()),
+      };
     });
-
-    return {
-      material_No: item?.id,
-      itemCode: item?.code,
-      itemDescription: item?.name,
-      itemCategoryName: item?.category?.name,
-      uomCode: item?.uom?.code,
-      bufferLevel: 0,
-      dateAdded: moment(new Date()).format("yyyy-MM-DD"),
-      addedBy: currentUser.fullName,
-      modifyDate: moment(new Date()).format("yyyy-MM-DD"),
-      modifyBy: currentUser.fullName,
-      syncDate: moment(new Date()).format("yyyy-MM-DD"),
-      accountTitles: Array.from(uniqueAccountTitlesMap.values()),
-    };
-  });
 
   // SYNC ORDER BUTTON
   const syncHandler = () => {

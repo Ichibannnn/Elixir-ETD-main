@@ -716,10 +716,10 @@ export const ScheduleModal = ({
 
         <ModalFooter justifyContent="end">
           <ButtonGroup size="xs" mt={8}>
-            <Button variant="outline" onClick={onClose}>
+            <Button variant="outline" onClick={onClose} isLoading={isLoading}>
               Cancel
             </Button>
-            <Button px={5} colorScheme="blue" isDisabled={!preparationDate} onClick={submitValidate}>
+            <Button px={5} colorScheme="blue" isDisabled={!preparationDate} onClick={submitValidate} isLoading={isLoading}>
               Submit
             </Button>
           </ButtonGroup>

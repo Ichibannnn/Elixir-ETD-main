@@ -67,7 +67,7 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
             unitPrice: subData?.order?.price,
             priceWithDecimal: subData?.umPriceToString.toString(),
             siNumber: subData?.shipment_no?.toString().trim(),
-            receiveDate: moment(subData?.delivery_Date)?.format("YYYY-MM-DD")?.toString().trim(),
+            receiveDate: moment(subData?.delivery_date)?.format("YYYY-MM-DD")?.toString().trim(),
             vendorName: subData?.po_transaction?.supplier_name?.toString().trim(),
             addedBy: currentUser?.fullName?.toString().trim(),
 

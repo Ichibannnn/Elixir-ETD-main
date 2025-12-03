@@ -1,4 +1,3 @@
-import React, { useRef } from "react";
 import {
   Accordion,
   AccordionButton,
@@ -42,11 +41,8 @@ import axios from "axios";
 
 const currentUser = decodeUser();
 
-const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData, ymirPO, getYmirPo, onCloseSyncModal }) => {
+const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setIsLoading, setIsDisabled, getYmirPo, onCloseSyncModal }) => {
   const toast = useToast();
-  const clearExcelFile = useRef();
-
-  // console.log("Error Data: ", errorData);
 
   const availableImportData = errorData?.availableImport?.map((list) => {
     return {
@@ -230,42 +226,36 @@ const ErrorList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading, setI
         if (available?.length > 0) {
           try {
             setIsLoading(true);
-            const res = request
-              .post("Import/AddNewPOSummary", available)
-              .then((res) => {
-                // YMIR Status
-                try {
-                  axios.patch(
-                    `https://rdfymir.com/backend/public/api/etd_api/sync`,
-                    // `https://pretestomega.rdfymir.com/backend/public/api/etd_api/sync`,
-                    errorDataId,
-                    {
-                      headers: {
-                        Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
-                      },
-                    }
-                  );
-                } catch (error) {
-                  console.log(error);
-                }
-
-                getYmirPo();
-                ToastComponent("Success!", "PO Imported", "success", toast);
-                setIsLoading(false);
-                setIsDisabled(false);
-                clearExcelFile.current.value = "";
-                setExcelData([]);
-                setErrorOpener(false);
-                onClose();
-                onCloseSyncModal();
-              })
-              .catch((err) => {
-                setIsLoading(false);
-                setErrorOpener(false);
-                clearExcelFile.current.value = "";
-              });
+            const res = request.post("Import/AddNewPOSummary", available).then(() => {
+              ToastComponent("Success!", "PO Imported", "success", toast);
+              getYmirPo();
+              setIsLoading(false);
+              setIsDisabled(false);
+              setErrorOpener(false);
+              onCloseSyncModal();
+              onClose();
+              onCloseSyncModal();
+            });
           } catch (err) {
             ToastComponent("Error!", "Wrong excel format imported for PO", "error", toast);
+            setIsLoading(false);
+            setErrorOpener(false);
+          }
+
+          // YMIR Status
+          try {
+            axios.patch(
+              `https://rdfymir.com/backend/public/api/etd_api/sync`,
+              // `https://pretestomega.rdfymir.com/backend/public/api/etd_api/sync`,
+              errorDataId,
+              {
+                headers: {
+                  Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
+                },
+              }
+            );
+          } catch (error) {
+            console.log(error);
           }
         } else {
           ToastComponent("Error!", "No data provided, please check your import", "error", toast);

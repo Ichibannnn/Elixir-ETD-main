@@ -436,6 +436,9 @@ const OrdersConfirmation = ({ isOpen, onClose, errorData, setErrorData, isLoadin
                                 Item Remarks
                               </Th>
                               <Th color="white" fontSize="9px">
+                                Asset Tag
+                              </Th>
+                              <Th color="white" fontSize="9px">
                                 Quantity Order
                               </Th>
                             </Tr>
@@ -480,6 +483,16 @@ const OrdersConfirmation = ({ isOpen, onClose, errorData, setErrorData, isLoadin
                                 {d?.itemRemarks ? (
                                   <Td color="gray.600" fontSize="11px">
                                     {d?.itemRemarks}
+                                  </Td>
+                                ) : (
+                                  <Td color="gray.600" fontSize="11px">
+                                    -
+                                  </Td>
+                                )}
+
+                                {d?.assetTag ? (
+                                  <Td color="gray.600" fontSize="11px">
+                                    {d?.assetTag}
                                   </Td>
                                 ) : (
                                   <Td color="gray.600" fontSize="11px">

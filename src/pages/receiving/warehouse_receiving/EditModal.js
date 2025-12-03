@@ -199,6 +199,7 @@ export const EditModal = ({
     poNumber: editData.poNumber,
     itemCode: editData.itemCode,
     itemDescription: editData.itemDescription,
+    itemRemarks: editData.itemRemarks,
     uom: editData.uom,
     supplier: editData.supplier,
 
@@ -316,17 +317,6 @@ export const EditModal = ({
                       RECEIVING INFORMATION
                     </Text>
                   </Flex>
-
-                  {/* <Flex justifyContent="space-between" p={1}>
-                    <FormLabel w="50%" fontSize="12px">
-                      RR Number
-                      <Input {...register("displayData.rrNumber")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
-                    </FormLabel>
-                    <FormLabel w="50%" fontSize="12px">
-                      RR Date
-                      <Input {...register("displayData.rrDate")} disabled={true} readOnly={true} _disabled={{ color: "black" }} fontSize="13px" size="sm" bg="gray.300" />
-                    </FormLabel>
-                  </Flex> */}
 
                   <Flex justifyContent="space-between" p={1}>
                     <FormLabel w="50%" fontSize="12px">

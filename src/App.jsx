@@ -135,6 +135,8 @@ import FuelApproval from "./pages/fuel_register/fuel_approval/FuelApproval";
 import FuelTransaction from "./pages/fuel_register/fuel_transaction/FuelTransaction";
 import FuelRequestV2 from "./pages/fuel_register_v2/FuelRequestsTab/FuelRequestV2";
 import AccountTitle from "./pages/setup/AccountTitle";
+import Redirect from "./pages/Redirect";
+import UserAccountParentPage from "./pages/user_management/UserAccountParentPage";
 
 const currentUser = decodeUser();
 const employeeId = currentUser?.id;
@@ -303,6 +305,7 @@ const App = () => {
     <Context.Provider value={{ menu, setMenu }}>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/redirect" element={<Redirect />} />
 
         <Route element={<ProtectedRoutes />} notification={notification} fetchNotification={fetchNotification}>
           <Route
@@ -340,7 +343,7 @@ const App = () => {
 
             {/* USER */}
             <Route path="/user" element={<UserManagementPage notification={notification} fetchNotification={fetchNotification} />}>
-              <Route path="/user/user-account" element={<UserAccount />} />
+              <Route path="/user/user-account" element={<UserAccountParentPage />} />
               <Route path="/user/user-role" element={<UserRole />} />
               <Route path="/user/module-management" element={<ModuleManagement />} />
               <Route path="/user/menu-management" element={<MenuManagement />} />

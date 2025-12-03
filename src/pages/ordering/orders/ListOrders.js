@@ -72,7 +72,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
         itemRemarks: itemsub?.remarks,
         accountCode: itemsub?.account_title_code,
         accountTitles: itemsub?.account_title_name,
-        assetTag: itemsub?.asset_name,
+        assetTag: itemsub?.asset_tag,
         // assetTag: itemsub?.plate_no, // based from genus v1
         helpdeskNo: item?.helpdesk_no,
         dateApproved: item?.date_approved,
@@ -132,7 +132,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
           itemRemarks: submit?.itemRemarks,
           accountCode: submit?.accountCode,
           accountTitles: submit?.accountTitles,
-          assetTag: submit?.asset_tag,
+          assetTag: submit?.assetTag,
           helpdeskNo: submit?.helpdeskNo ? submit?.helpdeskNo : null,
           dateApproved: moment(submit?.dateApproved).format("yyyy-MM-DD"),
 
@@ -194,9 +194,6 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
       });
     }
   }, [genusOrders]);
-
-  console.log("NoRecords: ", noRecords);
-  console.log("Error: ", error);
 
   return (
     <Flex color="fontColor" h="100vh" w="full" flexDirection="column" p={2} bg="form">
