@@ -171,9 +171,9 @@ export const MaterialsInformation = ({
 
   const cutOff = 7;
   const today = moment();
-  const isSeventhDay = today.date() < cutOff;
+  const isSeventhDay = today.date() <= cutOff;
   const minDate = isSeventhDay
-    ? today.clone().subtract(1, "month").format("YYYY-MM-DD") // If today is before the 7th, set minDate to one month ago
+    ? today.clone().subtract(1, "month").startOf("month").format("YYYY-MM-DD") // If today is before the 7th, set minDate to one month ago
     : today.startOf("month").format("YYYY-MM-DD"); // If today is on or after the 7th, set minDate to the start of the current month
 
   return (

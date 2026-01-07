@@ -117,8 +117,12 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
 
   const cutOff = 7;
   const today = moment();
-  const isSeventhDay = today.date() < cutOff;
-  const minDate = isSeventhDay ? today.clone().subtract(1, "month").format("YYYY-MM-DDTHH:mm") : today.startOf("month").format("YYYY-MM-DDTHH:mm");
+
+  const isWithinCutOff = today.date() <= cutOff; // 7th day is true
+
+  const minDate = isWithinCutOff ? today.clone().subtract(1, "month").startOf("month").format("YYYY-MM-DDTHH:mm") : today.clone().startOf("month").format("YYYY-MM-DDTHH:mm");
+
+  const maxDate = today.clone().format("YYYY-MM-DDTHH:mm");
 
   return (
     <Flex px={5} pt={5} pb={0} w="full" flexDirection="column" bg="form">
@@ -170,7 +174,7 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
                 borderRadius="none"
                 autoComplete="off"
                 min={minDate}
-                max={moment(new Date()).format("YYYY-MM-DDTHH:mm")}
+                max={maxDate}
               />
             </HStack>
           </HStack>
