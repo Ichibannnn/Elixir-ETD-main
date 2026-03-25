@@ -1,26 +1,34 @@
-import { Flex, HStack, Text, Menu, MenuButton, MenuList, MenuItem, MenuDivider, Box, MenuGroup, Badge, useDisclosure } from "@chakra-ui/react";
+import { Flex, Text, Menu, MenuButton, MenuList, MenuItem, MenuDivider, Box, MenuGroup, Badge, useDisclosure } from "@chakra-ui/react";
 import { RiLogoutBoxLine, RiUser3Fill } from "react-icons/ri";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaUserCircle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { decodeUser } from "../services/decode-user";
 import { MdOutlinePassword } from "react-icons/md";
 import { ChangePassword } from "./ChangePassword";
 
 const Header = ({ toggleSidebar }) => {
   const user = decodeUser();
-  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
-  var navigate = useNavigate();
 
   const { isOpen: isChangePassword, onClose: changePasswordOnClose, onOpen: changePasswordOpen } = useDisclosure();
 
-  // console.log(userDetails);
-
   const logoutHandler = () => {
+    // One Login redirect when logging out
+    const oneRdfWindow = window.open("", "OneRDF_Portal");
+    try {
+      if (oneRdfWindow.location.href === "about:blank" || oneRdfWindow.location.href === "") {
+        oneRdfWindow.close();
+        window.location.href = "https://one.rdfmis.com/login";
+      } else {
+        window.close();
+      }
+    } catch (error) {
+      window.close();
+    }
+
     sessionStorage.removeItem("userData");
     sessionStorage.removeItem("userToken");
     sessionStorage.removeItem("userDetails");
-    navigate("/login");
+    // navigate("/login");
   };
 
   const changePassword = () => {
@@ -36,13 +44,6 @@ const Header = ({ toggleSidebar }) => {
       <Flex>
         <Menu>
           <MenuButton mr={2} mt={1} alignItems="center" justifyContent="center">
-            {/* <Image
-              mt={1.5}
-              boxSize="33px"
-              objectFit="cover"
-              src="/images/user.png"
-              alt="lot"
-            /> */}
             <FaUserCircle color="#D1D2D5" fontSize="25px" />
           </MenuButton>
           <MenuList zIndex={2}>
@@ -62,22 +63,12 @@ const Header = ({ toggleSidebar }) => {
           </MenuList>
         </Menu>
         <Box mt={2}>
-          {/* <Text fontSize="9px" fontWeight="semibold" color="white">
-            Fresh Morning!,
-          </Text> */}
           <Text fontSize="9px" fontWeight="semibold" color="white">
             {`${user && user?.fullName}`}
           </Text>
-          <Badge
-            mb={3}
-            textAlign="left"
-            fontSize="9px"
-            colorScheme="green"
-            // className="inputLowerCase"
-          >
+          <Badge mb={3} textAlign="left" fontSize="9px" colorScheme="green">
             {`${user && user?.roleName}`}
           </Badge>
-          {/* <Text fontSize="sm">UI Engineer</Text> */}
         </Box>
       </Flex>
 

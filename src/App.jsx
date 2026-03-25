@@ -304,7 +304,7 @@ const App = () => {
   return (
     <Context.Provider value={{ menu, setMenu }}>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        {/* <Route path="/login" element={<Login />} /> */}
         <Route path="/redirect" element={<Redirect />} />
 
         <Route element={<ProtectedRoutes />} notification={notification} fetchNotification={fetchNotification}>
