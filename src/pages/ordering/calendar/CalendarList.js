@@ -125,7 +125,7 @@ const ModalOfSchedules = ({ isOpen, onClose, forMOData, dateStr }) => {
                           })}
                         </Td>
                       </Tr>
-                    ) : null
+                    ) : null,
                   )}
                 </Tbody>
               </Table>

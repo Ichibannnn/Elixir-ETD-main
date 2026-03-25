@@ -222,8 +222,6 @@ export const AccountTitleModal = ({
     } catch (error) {}
   };
 
-  console.log("oneChargingData: ", oneChargingData);
-
   const {
     handleSubmit,
     formState: { errors },
@@ -245,8 +243,6 @@ export const AccountTitleModal = ({
   });
 
   const submitHandler = async () => {
-    console.log("MoveData: ", moveData?.orders);
-
     Swal.fire({
       title: "Confirmation!",
       text: "Are you sure you want to save this move order list?",
@@ -284,18 +280,16 @@ export const AccountTitleModal = ({
         };
       });
 
-      console.log("submitArrayBody: ", submitArrayBody);
-
-      const genusStatus = moveData?.orders?.map((item) => {
-        return {
-          mir_id: item.id,
-          status: "Ready to Pick-up",
-          orders: orderListData.map((item) => ({
-            order_id: item.orderNo,
-            quantity_serve: item.preparedQuantity,
-          })),
-        };
-      });
+      // const genusStatus = moveData?.orders?.map((item) => {
+      //   return {
+      //     mir_id: item.id,
+      //     status: "Ready to Pick-up",
+      //     orders: orderListData.map((item) => ({
+      //       order_id: item.orderNo,
+      //       quantity_serve: item.preparedQuantity,
+      //     })),
+      //   };
+      // });
 
       if (result.isConfirmed) {
         setIsLoading(true);
@@ -324,17 +318,17 @@ export const AccountTitleModal = ({
         }
 
         // GENUS STATUS
-        try {
-          axios.patch(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`, genusStatus, {
-            headers: {
-              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-              "api-key": "hello world!",
-            },
-          });
-        } catch (error) {
-          console.log("Genus statusError:", error);
-          ToastComponent("Error", "Genus ETD update status failed", "error", toast);
-        }
+        // try {
+        //   axios.patch(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`, genusStatus, {
+        //     headers: {
+        //       Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+        //       "api-key": "hello world!",
+        //     },
+        //   });
+        // } catch (error) {
+        //   console.log("Genus statusError:", error);
+        //   ToastComponent("Error", "Genus ETD update status failed", "error", toast);
+        // }
       }
     });
   };

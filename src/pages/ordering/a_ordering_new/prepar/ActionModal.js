@@ -15,7 +15,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
-  Stack,
   Table,
   Tbody,
   Td,
@@ -27,19 +26,20 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import request from "../../../../services/ApiClient";
-import { ToastComponent } from "../../../../components/Toast";
-import { decodeUser } from "../../../../services/decode-user";
-import Swal from "sweetalert2";
-import moment from "moment";
-import PageScroll from "../../../../utils/PageScroll";
 import { MdGridView } from "react-icons/md";
+
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import { Controller, useForm } from "react-hook-form";
-import { Select as AutoComplete } from "chakra-react-select";
+import moment from "moment";
+import Swal from "sweetalert2";
+import request from "../../../../services/ApiClient";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { decodeUser } from "../../../../services/decode-user";
+import { ToastComponent } from "../../../../components/Toast";
+
+import { useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
+import PageScroll from "../../../../utils/PageScroll";
 
 const currentUser = decodeUser();
 
@@ -138,7 +138,7 @@ export const EditModal = ({ isOpen, onClose, editData, fetchOrderList, fetchCust
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 50)
+        .splice(0, 50),
     );
 
     return () => {};
@@ -524,7 +524,7 @@ export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderL
               Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
               "api-key": "hello world!",
             },
-          }
+          },
         );
       } catch (error) {
         console.log(error);
