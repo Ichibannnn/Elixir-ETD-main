@@ -501,7 +501,7 @@ const DrawerComponent = (props) => {
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 10)
+        .splice(0, 10),
     );
 
     return () => {};
@@ -517,7 +517,7 @@ const DrawerComponent = (props) => {
         .split(" ")
         .map((i) => i.charAt(0))
         .join("")
-        .toLowerCase() + data?.general_info.last_name.split(" ").join("").toLowerCase()
+        .toLowerCase() + data?.general_info.last_name.split(" ").join("").toLowerCase(),
     );
     setValue(
       "formData.password",
@@ -525,7 +525,7 @@ const DrawerComponent = (props) => {
         .split(" ")
         .map((i) => i.charAt(0))
         .join("")
-        .toLowerCase() + data?.general_info.last_name.split(" ").join("").toLowerCase()
+        .toLowerCase() + data?.general_info.last_name.split(" ").join("").toLowerCase(),
       // + "1234"
     );
     setShowLoading(false);
@@ -545,7 +545,7 @@ const DrawerComponent = (props) => {
           department: editData?.department,
           modifiedBy: currentUser.fullName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);
@@ -570,8 +570,6 @@ const DrawerComponent = (props) => {
       }
     }
   }, [pickerItems]);
-
-  console.log("PickerData: ", pickerItems);
 
   return (
     <>

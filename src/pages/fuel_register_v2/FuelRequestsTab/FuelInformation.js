@@ -130,18 +130,6 @@ export const FuelInformation = ({
     } catch (error) {}
   };
 
-  // Fisto Account Title ~~~~~~~~~~
-  // const fetchAccountApi = async (id = "") => {
-  //   try {
-  //     const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
-  //       headers: {
-  //         Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-  //       },
-  //     });
-  //     setAccount(res.data.result.account_titles);
-  //   } catch (error) {}
-  // };
-
   useEffect(() => {
     fetchAccountApi();
   }, []);
@@ -165,7 +153,7 @@ export const FuelInformation = ({
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 50)
+        .splice(0, 50),
     );
 
     return () => {};

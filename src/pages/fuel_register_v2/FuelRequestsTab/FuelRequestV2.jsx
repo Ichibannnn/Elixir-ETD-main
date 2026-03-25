@@ -118,10 +118,9 @@ const FuelRequestV2 = ({ fuelData, setFuelData, fetchActiveFuelRequests, fuelNav
   const cutOff = 7;
   const today = moment();
 
-  const isWithinCutOff = today.date() <= cutOff; // 7th day is true
+  const isWithinCutOff = today.date() <= cutOff;
 
   const minDate = isWithinCutOff ? today.clone().subtract(1, "month").startOf("month").format("YYYY-MM-DDTHH:mm") : today.clone().startOf("month").format("YYYY-MM-DDTHH:mm");
-
   const maxDate = today.clone().format("YYYY-MM-DDTHH:mm");
 
   return (

@@ -29,6 +29,7 @@ const MainContainer = ({ notification, fetchNotification, notificationWithParams
           fetchNotificationWithParams={fetchNotificationWithParams}
         />
       )}
+
       <AppScroll>
         <Flex flexDirection="column" width="full">
           <Header toggleSidebar={toggleSidebar} />

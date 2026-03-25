@@ -116,7 +116,7 @@ const MrpPage = () => {
             // "Average Issuance": item.averageIssuance,
             // "Days Level": item.daysLevel,
           };
-        })
+        }),
       );
       setPrintMrpData(res.inventory);
     });

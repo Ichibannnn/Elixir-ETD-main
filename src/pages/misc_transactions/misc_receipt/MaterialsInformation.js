@@ -192,6 +192,7 @@ export const MaterialsInformation = ({
             <Text color="white" textAlign="center" fontSize="sm">
               Supplier Information
             </Text>
+
             <Text color="white" textAlign="center" fontSize="sm">
               Charging of Accounts
             </Text>
@@ -370,7 +371,7 @@ export const MaterialsInformation = ({
             {/* Company */}
             <HStack w="full">
               <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
-                Company:{" "}
+                Company:
               </Text>
               <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
                 {showOneChargingData ? `${showOneChargingData?.company_code} - ${showOneChargingData?.company_name}` : "Select Charging Code"}
@@ -380,7 +381,7 @@ export const MaterialsInformation = ({
             {/* Business Unit */}
             <HStack w="full">
               <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
-                Business Unit:{" "}
+                Business Unit:
               </Text>
               <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
                 {showOneChargingData ? `${showOneChargingData?.business_unit_code} - ${showOneChargingData?.business_unit_name}` : "Select Charging Code"}
@@ -390,7 +391,7 @@ export const MaterialsInformation = ({
             {/* Department */}
             <HStack w="full">
               <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
-                Department:{" "}
+                Department:
               </Text>
               <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
                 {showOneChargingData ? `${showOneChargingData?.department_code} - ${showOneChargingData?.department_name}` : "Select Charging Code"}
@@ -400,7 +401,7 @@ export const MaterialsInformation = ({
             {/* Unit */}
             <HStack w="full">
               <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
-                Unit:{" "}
+                Unit:
               </Text>
               <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
                 {showOneChargingData ? `${showOneChargingData?.department_unit_code} - ${showOneChargingData?.department_unit_name}` : "Select Charging Code"}
@@ -410,7 +411,7 @@ export const MaterialsInformation = ({
             {/* Sub Unit */}
             <HStack w="full">
               <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
-                Sub Unit:{" "}
+                Sub Unit:
               </Text>
               <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
                 {showOneChargingData ? `${showOneChargingData?.sub_unit_code} - ${showOneChargingData?.sub_unit_name}` : "Select Charging Code"}
@@ -420,7 +421,7 @@ export const MaterialsInformation = ({
             {/* Location */}
             <HStack w="full">
               <Text minW="30%" w="auto" bgColor="primary" color="white" pl={2} pr={10} py={2.5} fontSize="xs">
-                Location:{" "}
+                Location:
               </Text>
               <Text fontSize="sm" bgColor="gray.300" w="full" border="1px" borderColor="gray.400" pl={4} py={2.5}>
                 {showOneChargingData ? `${showOneChargingData?.location_code} - ${showOneChargingData?.location_name}` : "Select Charging Code"}
@@ -523,18 +524,6 @@ export const RawMatsInfoModal = ({
     } catch (error) {}
   };
 
-  // Fisto Account Title ~~~~~
-  // const fetchAccountApi = async (id = "") => {
-  //   try {
-  //     const res = await axios.get("http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0" + id, {
-  //       headers: {
-  //         Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
-  //       },
-  //     });
-  //     setAccount(res.data.result.account_titles);
-  //   } catch (error) {}
-  // };
-
   useEffect(() => {
     fetchAccountApi();
   }, []);
@@ -583,7 +572,7 @@ export const RawMatsInfoModal = ({
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 50)
+        .splice(0, 50),
     );
 
     return () => {};

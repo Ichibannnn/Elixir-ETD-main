@@ -343,10 +343,6 @@ const App = () => {
 
             {/* USER */}
             <Route path="/user" element={<UserManagementPage notification={notification} fetchNotification={fetchNotification} />}>
-              <Route path="/user/user-account" element={<UserAccountParentPage />} />
-              <Route path="/user/user-role" element={<UserRole />} />
-              <Route path="/user/module-management" element={<ModuleManagement />} />
-              <Route path="/user/menu-management" element={<MenuManagement />} />
               <Route path="/user/sample" element={<Sample />} />
             </Route>
 

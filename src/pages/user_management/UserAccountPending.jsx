@@ -174,13 +174,7 @@ const UserAccount = () => {
               </InputGroup>
             </HStack>
 
-            <HStack flexDirection="row">
-              {/* <Text fontSize="12px">STATUS:</Text>
-              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
-                <option value={true}>Active</option>
-                <option value={false}>Inactive</option>
-              </Select> */}
-            </HStack>
+            <HStack flexDirection="row"></HStack>
           </Flex>
 
           <Flex w="full" flexDirection="column" gap={2}>
@@ -207,18 +201,6 @@ const UserAccount = () => {
                       <Th h="40px" color="white" fontSize="10px">
                         Username
                       </Th>
-                      {/* <Th h="40px" color="white" fontSize="10px">
-                        Department
-                      </Th>
-                      <Th h="40px" color="white" fontSize="10px">
-                        User Role
-                      </Th>
-                      <Th h="40px" color="white" fontSize="10px">
-                        Added By
-                      </Th>
-                      <Th h="40px" color="white" fontSize="10px">
-                        Date Added
-                      </Th> */}
                       <Th h="40px" color="white" fontSize="10px">
                         Action
                       </Th>
@@ -230,53 +212,12 @@ const UserAccount = () => {
                         <Td fontSize="xs"> {`${user.id_Prefix}-${user.id_No}`}</Td>
                         <Td fontSize="xs"> {`${user.last_Name}, ${user.first_Name} ${user?.suffix ? user.suffix : ""} ${user.middle_Name}`}</Td>
                         <Td fontSize="xs">{user.username}</Td>
-                        {/* <Td fontSize="xs">{user.department}</Td>
-                        <Td fontSize="xs">{user.userRole}</Td>
-                        <Td fontSize="xs">{user.addedBy}</Td>
-                        <Td fontSize="xs">{user.dateAdded}</Td> */}
 
                         <Td pl={0}>
                           <HStack>
                             <Button bg="none" p={0} size="sm" onClick={() => editUserHandler(user)}>
                               <AiTwotoneEdit fontSize="15px" />
                             </Button>
-                            {/* 
-                            <Popover>
-                              {({ isOpen, onClose }) => (
-                                <>
-                                  <PopoverTrigger>
-                                    {user.isActive === true ? (
-                                      <Button bg="none" size="md" p={0}>
-                                        <Image boxSize="20px" src="/images/turnon.png" title="active" />
-                                      </Button>
-                                    ) : (
-                                      <Button bg="none" size="md" p={0}>
-                                        <Image boxSize="20px" src="/images/turnoff.png" title="inactive" />
-                                      </Button>
-                                    )}
-                                  </PopoverTrigger>
-                                  <Portal>
-                                    <PopoverContent bg="primary" color="#fff">
-                                      <PopoverArrow bg="primary" />
-                                      <PopoverCloseButton />
-                                      <PopoverHeader>Confirmation!</PopoverHeader>
-                                      <PopoverBody>
-                                        <VStack onClick={onClose}>
-                                          {user.isActive === true ? (
-                                            <Text>Are you sure you want to set this user account inactive?</Text>
-                                          ) : (
-                                            <Text>Are you sure you want to set this user account active?</Text>
-                                          )}
-                                          <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(user.id, user.isActive)}>
-                                            Yes
-                                          </Button>
-                                        </VStack>
-                                      </PopoverBody>
-                                    </PopoverContent>
-                                  </Portal>
-                                </>
-                              )}
-                            </Popover> */}
                           </HStack>
                         </Td>
                       </Tr>
@@ -482,7 +423,7 @@ const DrawerComponent = (props) => {
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 10)
+        .splice(0, 10),
     );
 
     return () => {};
@@ -498,7 +439,7 @@ const DrawerComponent = (props) => {
         .split(" ")
         .map((i) => i.charAt(0))
         .join("")
-        .toLowerCase() + data?.general_info.last_name.split(" ").join("").toLowerCase()
+        .toLowerCase() + data?.general_info.last_name.split(" ").join("").toLowerCase(),
     );
     setValue(
       "formData.password",
@@ -506,7 +447,7 @@ const DrawerComponent = (props) => {
         .split(" ")
         .map((i) => i.charAt(0))
         .join("")
-        .toLowerCase() + data?.general_info.last_name.split(" ").join("").toLowerCase()
+        .toLowerCase() + data?.general_info.last_name.split(" ").join("").toLowerCase(),
       // + "1234"
     );
     setShowLoading(false);
@@ -526,7 +467,7 @@ const DrawerComponent = (props) => {
           //   department: editData?.department,
           modifiedBy: currentUser.fullName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);

@@ -6,9 +6,9 @@ import { ListOfSuppliers } from "./ListOfSuppliers";
 import { usePagination } from "@ajna/pagination";
 
 const fetchFistoApi = async () => {
-  const res = await axios.get(`http://10.10.2.76:8000/api/dropdown/suppliers?paginate=0&status=1&api_for=vladimir`, {
+  const res = await axios.get(`http://10.10.2.80:88/phase1v2/public/index.php/api/dropdown/suppliers?api_for=vladimir&status=1&paginate=0`, {
     headers: {
-      Authorization: "Bearer " + process.env.REACT_APP_OLD_FISTO_TOKEN,
+      Authorization: "Bearer " + process.env.REACT_APP_NEW_FISTO_TOKEN,
     },
   });
   return res.data;
