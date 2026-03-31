@@ -151,8 +151,6 @@ export const ListOfMaterials = ({
         container: "my-swal",
       },
     }).then((result) => {
-      console.log("Orders Payload: ", resultArray);
-
       if (result.isConfirmed) {
         try {
           setIsLoading(true);
@@ -164,7 +162,6 @@ export const ListOfMaterials = ({
               setIsLoading(false);
             })
             .catch((err) => {
-              console.log("Error: ", err);
               setIsLoading(false);
               setErrorData(err.response.data);
               if (err.response.data) {
@@ -207,8 +204,6 @@ export const ListOfMaterials = ({
       setCurrentPage(1);
     }
   }, [search]);
-
-  // console.log("materials: ", elixirMaterials);
 
   return (
     <Flex color="fontColor" h="auto" w="full" flexDirection="column" p={2} bg="form">
@@ -499,15 +494,11 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
   });
 
   const submitHandler = async (data) => {
-    console.log("data: ", data);
-
     const payload = {
       id: data.formData?.id,
       bufferLevel: data?.formData?.bufferLevel,
       lotSectionId: data?.formData?.lotSectionId?.value?.id,
     };
-
-    console.log("payyllloaddddd: ", payload);
 
     try {
       const res = await request
@@ -532,7 +523,7 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
           id: editData?.id,
           bufferLevel: editData?.bufferLevel,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
 
       setValue("formData.lotSectionId", {
@@ -625,8 +616,6 @@ export const EditModal = ({ isEdit, closeEdit, editData, fetchElixirMaterials })
 
 export const ViewAccountTitles = ({ isAccountTitle, onClose, data }) => {
   const accountTitlesToDisplay = data?.accountTitles || [];
-
-  console.log("Data: ", data);
 
   return (
     <Modal isOpen={isAccountTitle} onClose={() => {}} isCentered size="lg">

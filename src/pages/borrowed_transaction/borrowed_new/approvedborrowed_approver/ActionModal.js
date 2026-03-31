@@ -27,13 +27,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import { useReactToPrint } from "react-to-print";
 
-export const ViewModal = ({
-  isOpen,
-  onClose,
-  statusBody,
-  fetchBorrowed,
-  setIsLoading,
-}) => {
+export const ViewModal = ({ isOpen, onClose, statusBody, fetchBorrowed, setIsLoading }) => {
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
 
   const componentRef = useRef();
@@ -41,13 +35,9 @@ export const ViewModal = ({
     content: () => componentRef.current,
   });
 
-  console.log(statusBody);
-
   const idparams = statusBody?.id;
   const fetchBorrowedDetailsApi = async (idparams) => {
-    const res = await request.get(
-      `Borrowed/ViewAllBorrowedDetails?id=${idparams}`
-    );
+    const res = await request.get(`Borrowed/ViewAllBorrowedDetails?id=${idparams}`);
     return res.data;
   };
 
@@ -56,7 +46,6 @@ export const ViewModal = ({
       setBorrowedDetailsData(res);
     });
   };
-  //   console.log(borrowedDetailsData);
 
   useEffect(() => {
     fetchBorrowedDetails();
@@ -91,9 +80,7 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
 
               <HStack>
@@ -114,12 +101,7 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Borrowed Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.transactionDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.transactionDate).format("MM/DD/yyyy")}</Text>
               </HStack>
             </VStack>
 
@@ -128,31 +110,21 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.empId
-                    ? borrowedDetailsData[0]?.empId
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.empId ? borrowedDetailsData[0]?.empId : "-"}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee Name:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.fullName
-                    ? borrowedDetailsData[0]?.fullName
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.fullName ? borrowedDetailsData[0]?.fullName : "-"}</Text>
               </HStack>
             </VStack>
           </Flex>
@@ -187,13 +159,10 @@ export const ViewModal = ({
                       <Td fontSize="xs">{borrowdetails.itemDescription}</Td>
                       <Td fontSize="xs">{borrowdetails.uom}</Td>
                       <Td fontSize="xs">
-                        {borrowdetails.borrowedQuantity.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.borrowedQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                     </Tr>
                   ))}
@@ -208,8 +177,7 @@ export const ViewModal = ({
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>

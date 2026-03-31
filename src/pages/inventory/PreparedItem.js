@@ -21,8 +21,6 @@ export const PreparedItem = ({ preparedData, fetchPreparedItems, fetchOrderList,
     "Cancel",
   ];
 
-  //   console.log("Prepared Items");
-
   const cancelHandler = (id) => {
     if (id) {
       setCancelId(id);

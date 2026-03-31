@@ -46,8 +46,6 @@ export const ChangePassword = ({ isOpen, onClose }) => {
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const username = userDetails?.userName;
 
-  console.log("UserName: ", username);
-
   const { register } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -69,14 +67,10 @@ export const ChangePassword = ({ isOpen, onClose }) => {
         confirmPassword,
       };
       const response = await request.post("Login/changepassword", changePasswordData).then((res) => {
-        console.log("Response: ", res);
-        console.log("Response");
-
         ToastComponent("Success!", res?.data?.message, "success", toast);
         onClose();
       });
     } catch (err) {
-      console.log("Error: ", err);
       ToastComponent("Error", err.response.data, "error", toast);
     }
   };

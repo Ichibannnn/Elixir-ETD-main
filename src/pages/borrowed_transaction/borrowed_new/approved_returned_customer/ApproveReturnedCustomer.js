@@ -133,7 +133,6 @@ export const ApproveReturnedCustomer = ({ fetchNotificationWithParams }) => {
         id: id,
         status: status,
       });
-      console.log(statusBody?.id);
       openCancel();
     } else {
       setStatusBody({

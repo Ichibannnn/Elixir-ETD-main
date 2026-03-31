@@ -68,7 +68,6 @@ export const ListOfSuppliers = ({
 
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log("Input: ", inputValue);
   };
 
   useEffect(() => {
@@ -90,9 +89,6 @@ export const ListOfSuppliers = ({
     };
   });
 
-  // console.log("Suppliers: ", resultArray);
-  console.log("Fisto Supplier: ", fistoSuppliers);
-
   const syncHandler = () => {
     Swal.fire({
       title: "Confirmation!",
@@ -111,8 +107,6 @@ export const ListOfSuppliers = ({
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("Result Array: ", resultArray);
-
         try {
           setIsLoading(true);
           const res = request
@@ -129,7 +123,7 @@ export const ListOfSuppliers = ({
                   modifyBy: item?.modifyBy,
                   syncDate: item?.syncDate,
                 };
-              })
+              }),
             )
             .then((res) => {
               ToastComponent("Success", "Suppliers Synced!", "success", toast);

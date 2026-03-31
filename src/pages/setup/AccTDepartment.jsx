@@ -129,7 +129,6 @@ const Department = () => {
       .catch((err) => {
         console.log(err);
       });
-    // console.log(routeLabel)
   };
 
   const searchHandler = (inputValue) => {
@@ -410,7 +409,7 @@ const DrawerComponent = (props) => {
           departmentName: editData?.departmentName,
           modifiedBy: currentUser.userName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);

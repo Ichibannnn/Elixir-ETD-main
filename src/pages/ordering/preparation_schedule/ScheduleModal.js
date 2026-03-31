@@ -33,27 +33,15 @@ import moment from "moment";
 const currentUser = decodeUser();
 
 // SCHEDULE OF ORDERS
-export const ScheduleModal = ({
-  isOpen,
-  onClose,
-  checkedItems,
-  setCheckedItems,
-  customerName,
-  fetchOrders,
-  setCurrentPage,
-  currentPage,
-}) => {
+export const ScheduleModal = ({ isOpen, onClose, checkedItems, setCheckedItems, customerName, fetchOrders, setCurrentPage, currentPage }) => {
   const [preparationDate, setPreparationDate] = useState();
   const date = new Date();
-  const maxDate = moment(new Date(date.setMonth(date.getMonth() + 6))).format(
-    "yyyy-MM-DD"
-  );
+  const maxDate = moment(new Date(date.setMonth(date.getMonth() + 6))).format("yyyy-MM-DD");
   const [isLoading, setIsLoading] = useState(false);
   const currentUser = decodeUser();
   const toast = useToast();
 
   const dateProvider = (date) => {
-    console.log(date);
     if (date) {
       setPreparationDate(date);
     } else {
@@ -80,25 +68,18 @@ export const ScheduleModal = ({
     }).then((result) => {
       if (result.isConfirmed) {
         const submitArray = checkedItems?.map((item) => {
-          console.log(item);
           return {
             id: item,
             preparedDate: preparationDate,
             preparedBy: currentUser.userName,
           };
         });
-        console.log(submitArray);
         setIsLoading(true);
         try {
           const res = request
             .put(`Ordering/SchedulePreparedOrderedDate`, submitArray)
             .then((res) => {
-              ToastComponent(
-                "Success",
-                "Orders were successfully scheduled",
-                "success",
-                toast
-              );
+              ToastComponent("Success", "Orders were successfully scheduled", "success", toast);
               // fetchNotification()
               // closeSchedule();
               setCurrentPage(currentPage);
@@ -135,15 +116,7 @@ export const ScheduleModal = ({
               <Text w="38%" pl={2} fontSize="sm">
                 Customer:
               </Text>
-              <Text
-                w="97%"
-                pl={2}
-                py={2}
-                bgColor="gray.200"
-                border="1px"
-                color="fontColor"
-                fontSize="sm"
-              >
+              <Text w="97%" pl={2} py={2} bgColor="gray.200" border="1px" color="fontColor" fontSize="sm">
                 {customerName && customerName}
               </Text>
             </HStack>
@@ -167,13 +140,7 @@ export const ScheduleModal = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup size="xs" mt={8}>
-            <Button
-              borderRadius="none"
-              px={5}
-              colorScheme="blue"
-              disabled={!preparationDate}
-              onClick={submitValidate}
-            >
+            <Button borderRadius="none" px={5} colorScheme="blue" disabled={!preparationDate} onClick={submitValidate}>
               Yes
             </Button>
             <Button colorScheme="red" borderRadius="none" onClick={onClose}>
@@ -186,14 +153,7 @@ export const ScheduleModal = ({
   );
 };
 
-export const EditModal = ({
-  isOpen,
-  onClose,
-  editData,
-  setCurrentPage,
-  currentPage,
-  fetchOrders,
-}) => {
+export const EditModal = ({ isOpen, onClose, editData, setCurrentPage, currentPage, fetchOrders }) => {
   const [quantitySubmit, setQuantitySubmit] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -208,7 +168,6 @@ export const EditModal = ({
       //   "error",
       //   toast
       // );
-      console.log(quantitySubmit);
     } else {
       setQuantitySubmit("");
     }
@@ -235,14 +194,7 @@ export const EditModal = ({
     } catch (error) {}
   };
 
-  const titles = [
-    "Customer",
-    "Item Code",
-    "Item Description",
-    "UOM",
-    "Quantity Order",
-    "Edit Quantity",
-  ];
+  const titles = ["Customer", "Item Code", "Item Description", "UOM", "Quantity Order", "Edit Quantity"];
   const autofilled = [
     editData?.customerName,
     editData?.itemCode,
@@ -251,8 +203,6 @@ export const EditModal = ({
     editData?.quantity,
     // editData?.standardQuantity,
   ];
-
-  // console.log(editData.standardQuantity);
 
   return (
     <>
@@ -280,15 +230,7 @@ export const EditModal = ({
               </VStack>
               <VStack spacing={3.5}>
                 {autofilled.map((items) => (
-                  <Text
-                    w="70%"
-                    pl={2}
-                    bgColor="gray.200"
-                    border="1px"
-                    key={items}
-                    color="fontColor"
-                    fontSize="xs"
-                  >
+                  <Text w="70%" pl={2} bgColor="gray.200" border="1px" key={items} color="fontColor" fontSize="xs">
                     {items}
                   </Text>
                 ))}
@@ -300,9 +242,7 @@ export const EditModal = ({
                   value={quantitySubmit}
                   type="number"
                   onWheel={(e) => e.target.blur()}
-                  onKeyDown={(e) =>
-                    ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
-                  }
+                  onKeyDown={(e) => ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()}
                   onPaste={(e) => e.preventDefault()}
                   w="72%"
                   pl={2}
@@ -317,26 +257,10 @@ export const EditModal = ({
 
           <ModalFooter justifyItems="center">
             <ButtonGroup size="xs" mt={5}>
-              <Button
-                px={4}
-                onClick={submitHandler}
-                isLoading={isLoading}
-                disabled={
-                  !quantitySubmit ||
-                  isLoading ||
-                  quantitySubmit > editData.standardQuantity
-                }
-                colorScheme="blue"
-              >
+              <Button px={4} onClick={submitHandler} isLoading={isLoading} disabled={!quantitySubmit || isLoading || quantitySubmit > editData.standardQuantity} colorScheme="blue">
                 Save
               </Button>
-              <Button
-                onClick={onClose}
-                isLoading={isLoading}
-                disabled={isLoading}
-                variant="outline"
-                color="black"
-              >
+              <Button onClick={onClose} isLoading={isLoading} disabled={isLoading} variant="outline" color="black">
                 Cancel
               </Button>
             </ButtonGroup>
@@ -347,15 +271,7 @@ export const EditModal = ({
   );
 };
 
-export const CancelModalConfirmation = ({
-  isOpen,
-  onClose,
-  cancelId,
-  setCurrentPage,
-  currentPage,
-  fetchOrders,
-  orders,
-}) => {
+export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, setCurrentPage, currentPage, fetchOrders, orders }) => {
   const [cancelRemarks, setCancelRemarks] = useState("");
   const [reasons, setReasons] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -400,12 +316,7 @@ export const CancelModalConfirmation = ({
         })
         .then((res) => {
           setCurrentPage(currentPage);
-          ToastComponent(
-            "Success",
-            "Order has been cancelled!",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Order has been cancelled!", "success", toast);
           // fetchNotification()
           setIsLoading(false);
           onClose();
@@ -451,23 +362,10 @@ export const CancelModalConfirmation = ({
         </ModalBody>
 
         <ModalFooter>
-          <Button
-            onClick={() => cancelHandler()}
-            isDisabled={!cancelRemarks}
-            isLoading={isLoading}
-            colorScheme="blue"
-            mr={3}
-            _hover={{ bgColor: "accent" }}
-          >
+          <Button onClick={() => cancelHandler()} isDisabled={!cancelRemarks} isLoading={isLoading} colorScheme="blue" mr={3} _hover={{ bgColor: "accent" }}>
             Yes
           </Button>
-          <Button
-            variant="outline"
-            color="black"
-            onClick={onClose}
-            disabled={isLoading}
-            isLoading={isLoading}
-          >
+          <Button variant="outline" color="black" onClick={onClose} disabled={isLoading} isLoading={isLoading}>
             No
           </Button>
         </ModalFooter>

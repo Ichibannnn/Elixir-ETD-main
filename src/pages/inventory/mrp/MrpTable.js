@@ -90,12 +90,8 @@ export const MrpTable = ({
       { header: "Reserve Usage", key: "Reserve Usage", width: 20 },
     ];
 
-    console.log("Sheet Data: ", sheetData);
-
     // Style the header row (including the empty header with the warning icon)
     worksheet.getRow(1).eachCell((cell, colNumber) => {
-      console.log("Column Number: ", colNumber);
-
       if (colNumber === 1) {
         cell.value = "⚠️"; // Add warning icon to the first (empty) header
         cell.font = { color: { argb: "FFFF0000", bold: true } }; // Red color for the warning icon

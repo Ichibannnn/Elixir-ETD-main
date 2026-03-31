@@ -185,8 +185,7 @@ export default ItemCategory;
 
 //   const changeStatusHandler = (id, isActive) => {
 //     let routeLabel;
-//     // console.log(id)
-//     console.log(isActive);
+
 //     if (isActive) {
 //       routeLabel = "InActiveItemCategory";
 //     } else {
@@ -224,7 +223,6 @@ export default ItemCategory;
 //   // SEARCH
 //   const searchHandler = (inputValue) => {
 //     setSearch(inputValue);
-//     // console.log(inputValue)
 //   };
 
 //   //ADD ITEM CATEGORY HANDLER---
@@ -245,7 +243,6 @@ export default ItemCategory;
 //     setDisableEdit(true);
 //     setEditData(category);
 //     onOpen();
-//     // console.log(mod.mainMenu)
 //   };
 
 //   //FOR DRAWER (Drawer / Drawer Tagging)
@@ -573,7 +570,6 @@ export default ItemCategory;
 //   });
 
 //   const submitHandler = async (data) => {
-//     console.log(data);
 //     try {
 //       if (data.formData.id === "") {
 //         delete data.formData["id"];
@@ -632,8 +628,6 @@ export default ItemCategory;
 //       );
 //     }
 //   }, [editData]);
-
-//   // console.log(watch('formData'))
 
 //   return (
 //     <>

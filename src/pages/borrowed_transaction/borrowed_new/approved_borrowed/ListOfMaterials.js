@@ -58,20 +58,9 @@ export const ListOfMaterials = ({
   const [consumedHandler, setConsumedHandler] = useState(""); // Consumed qty Handler for validation of list of consumed modal
   const toast = useToast();
 
-  const {
-    isOpen: isReturn,
-    onClose: closeReturn,
-    onOpen: openReturn,
-  } = useDisclosure();
+  const { isOpen: isReturn, onClose: closeReturn, onOpen: openReturn } = useDisclosure();
 
-  const rowHandler = ({
-    id,
-    itemCode,
-    itemDescription,
-    uom,
-    remainingQuantity,
-  }) => {
-    console.log(id);
+  const rowHandler = ({ id, itemCode, itemDescription, uom, remainingQuantity }) => {
     if (id) {
       setHighlighterId(id);
       setMaterialListId(id);
@@ -108,7 +97,6 @@ export const ListOfMaterials = ({
   };
 
   const submitConsumeHandler = (data) => {
-    console.log(data);
     Swal.fire({
       title: "Confirmation!",
       text: "Are you sure you want to save this information?",
@@ -135,12 +123,7 @@ export const ListOfMaterials = ({
               },
             ])
             .then((response) => {
-              ToastComponent(
-                "Success",
-                "Returned materials was saved",
-                "success",
-                toast
-              );
+              ToastComponent("Success", "Returned materials was saved", "success", toast);
               fetchMaterialsList();
               setItemCode("");
               setHighlighterId("");
@@ -167,7 +150,6 @@ export const ListOfMaterials = ({
   };
 
   const cancelAllConsumed = (data) => {
-    // console.log(data);
     Swal.fire({
       // title: "Confirmation!",
       text: "Are you sure you want to cancel this information?",
@@ -189,12 +171,7 @@ export const ListOfMaterials = ({
           const response = request
             .put(`Borrowed/CancelAllConsumeItem`, { borrowedPKey: borrowedId })
             .then((response) => {
-              ToastComponent(
-                "Success",
-                "Returned materials was saved",
-                "success",
-                toast
-              );
+              ToastComponent("Success", "Returned materials was saved", "success", toast);
               sessionStorage.removeItem("Navigation");
               sessionStorage.removeItem("Borrowed ID");
               fetchBorrowed();
@@ -224,22 +201,15 @@ export const ListOfMaterials = ({
   useEffect(() => {
     sessionStorage.setItem("Borrowed ID", borrowedId);
     return () => {
-      const isConsumed = materialList?.some((item) =>
-        Boolean(item.consumedQuantity)
-      );
+      const isConsumed = materialList?.some((item) => Boolean(item.consumedQuantity));
 
       const isReturn = materialList?.every((item) => item.isReturned === null);
-      const isNotReturn = materialList?.some(
-        (item) => item.isReturned === false
-      );
+      const isNotReturn = materialList?.some((item) => item.isReturned === false);
 
       if (isConsumed && sessionStorage.getItem("Borrowed ID") && isReturn) {
         Swal.fire({
           title: "[Warning!]<br>" + "[Borrowed Transaction]",
-          html:
-            "Your consumed list will be cancelled." +
-            "<br>" +
-            "Are you sure you want to leave the page without submitting?",
+          html: "Your consumed list will be cancelled." + "<br>" + "Are you sure you want to leave the page without submitting?",
           icon: "warning",
           color: "black",
           background: "white",
@@ -262,12 +232,7 @@ export const ListOfMaterials = ({
                   borrowedPKey: borrowedId,
                 })
                 .then((response) => {
-                  ToastComponent(
-                    "Success",
-                    "Returned materials was saved",
-                    "success",
-                    toast
-                  );
+                  ToastComponent("Success", "Returned materials was saved", "success", toast);
                   fetchBorrowed();
                   fetchMaterialsList();
                   setBorrowedId("");
@@ -330,9 +295,7 @@ export const ListOfMaterials = ({
               <Text fontSize="sm" fontWeight="semibold">
                 Borrowed Date:{" "}
               </Text>
-              <Text fontSize="sm">
-                {moment(materialList[0]?.borrowedDate).format("MM/DD/yyyy")}
-              </Text>
+              <Text fontSize="sm">{moment(materialList[0]?.borrowedDate).format("MM/DD/yyyy")}</Text>
             </HStack>
           </VStack>
 
@@ -341,18 +304,14 @@ export const ListOfMaterials = ({
               <Text fontSize="sm" fontWeight="semibold">
                 Employee ID:{" "}
               </Text>
-              <Text fontSize="sm">
-                {materialList[0]?.empId ? materialList[0]?.empId : "-"}
-              </Text>
+              <Text fontSize="sm">{materialList[0]?.empId ? materialList[0]?.empId : "-"}</Text>
             </HStack>
 
             <HStack>
               <Text fontSize="sm" fontWeight="semibold">
                 Employee Name
               </Text>
-              <Text fontSize="sm">
-                {materialList[0]?.fullName ? materialList[0]?.fullName : "-"}
-              </Text>
+              <Text fontSize="sm">{materialList[0]?.fullName ? materialList[0]?.fullName : "-"}</Text>
             </HStack>
           </VStack>
         </Flex>
@@ -426,45 +385,28 @@ export const ListOfMaterials = ({
                     <Flex pl={2}>
                       <Box>
                         <Menu>
-                          <MenuButton
-                            alignItems="center"
-                            justifyContent="center"
-                            bg="none"
-                          >
+                          <MenuButton alignItems="center" justifyContent="center" bg="none">
                             <AiOutlineMore fontSize="20px" />
                           </MenuButton>
                           <MenuList>
                             {item.consumedQuantity === 0 ? (
-                              <MenuItem
-                                isDisabled
-                                icon={<GrView fontSize="17px" />}
-                              >
+                              <MenuItem isDisabled icon={<GrView fontSize="17px" />}>
                                 <Text fontSize="15px">View</Text>
                               </MenuItem>
                             ) : (
-                              <MenuItem
-                                icon={<GrView fontSize="17px" />}
-                                onClick={() => materialListIdHandler(item)}
-                              >
+                              <MenuItem icon={<GrView fontSize="17px" />} onClick={() => materialListIdHandler(item)}>
                                 <Text fontSize="15px">View</Text>
                               </MenuItem>
                             )}
 
                             {item.remainingQuantity === 0 ? (
-                              <MenuItem
-                                isDisabled
-                                icon={<BiDownload fontSize="17px" />}
-                                onClick={() => rowHandler(item)}
-                              >
+                              <MenuItem isDisabled icon={<BiDownload fontSize="17px" />} onClick={() => rowHandler(item)}>
                                 <Text fontSize="15px" _hover={{ color: "red" }}>
                                   Consume
                                 </Text>
                               </MenuItem>
                             ) : (
-                              <MenuItem
-                                icon={<BiDownload fontSize="17px" />}
-                                onClick={() => rowHandler(item)}
-                              >
+                              <MenuItem icon={<BiDownload fontSize="17px" />} onClick={() => rowHandler(item)}>
                                 <Text fontSize="15px" _hover={{ color: "red" }}>
                                   Consume
                                 </Text>
@@ -483,23 +425,10 @@ export const ListOfMaterials = ({
       </Flex>
       <Flex justifyContent="end" mb={6} mr={2}>
         <ButtonGroup>
-          <Button
-            colorScheme="blue"
-            isLoading={isLoading}
-            size="sm"
-            fontSize="xs"
-            width="100px"
-            onClick={() => submitConsumeHandler(borrowedId)}
-          >
+          <Button colorScheme="blue" isLoading={isLoading} size="sm" fontSize="xs" width="100px" onClick={() => submitConsumeHandler(borrowedId)}>
             Submit
           </Button>
-          <Button
-            colorScheme="red"
-            size="sm"
-            fontSize="xs"
-            width="100px"
-            onClick={() => cancelAllConsumed(borrowedId)}
-          >
+          <Button colorScheme="red" size="sm" fontSize="xs" width="100px" onClick={() => cancelAllConsumed(borrowedId)}>
             Cancel
           </Button>
         </ButtonGroup>

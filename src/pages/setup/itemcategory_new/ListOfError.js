@@ -36,8 +36,6 @@ import { ToastComponent } from "../../../components/Toast";
 export const ListOfErrorItemCategory = ({ isOpen, onOpen, onClose, errorData, setErrorData, setIsLoading }) => {
   const toast = useToast();
 
-  console.log(errorData);
-
   const duplicateList = errorData?.duplicateList?.map((list) => {
     return {
       itemCategory_No: list?.itemCategory_No,
@@ -107,7 +105,7 @@ export const ListOfErrorItemCategory = ({ isOpen, onOpen, onClose, errorData, se
                   itemCategory_No: item?.itemCategory_No,
                   itemCategoryName: item?.itemCategoryName,
                 };
-              })
+              }),
             )
             .then((res) => {
               ToastComponent("Success", "Item Category Synced!", "success", toast);

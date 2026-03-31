@@ -35,8 +35,6 @@ export const AddConfirmation = ({
 
   const toast = useToast();
 
-  console.log("Employee FormData: ", employeeFormData);
-
   const submitHandler = () => {
     setIsLoading(true);
     try {
@@ -140,8 +138,6 @@ export const CancelConfirmation = ({ isOpen, onClose, selectorId, setSelectorId,
     } catch (error) {}
   };
 
-  //   console.log(selectorId)
-
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
       <ModalOverlay />
@@ -239,7 +235,6 @@ export const SaveConfirmation = ({
 
             //SECOND Update IF MAY ID
             if (borrowedPKey) {
-              // console.log(borrowedPKey)
               const arrayofId = borrowedData?.map((item) => {
                 return {
                   borrowedPKey: borrowedPKey,
@@ -387,7 +382,6 @@ export const AllCancelConfirmation = ({
         .catch((err) => {
           ToastComponent("Error", "Item was not cancelled", "error", toast);
           setIsLoading(false);
-          // console.log(err);
         });
     } catch (error) {}
   };

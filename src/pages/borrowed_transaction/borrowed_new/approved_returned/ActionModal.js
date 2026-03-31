@@ -32,23 +32,13 @@ import { decodeUser } from "../../../../services/decode-user";
 
 const currentUser = decodeUser();
 
-export const ViewModalApproval = ({
-  isOpen,
-  onClose,
-  statusBody,
-  fetchBorrowed,
-  setIsLoading,
-}) => {
+export const ViewModalApproval = ({ isOpen, onClose, statusBody, fetchBorrowed, setIsLoading }) => {
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
   const toast = useToast();
 
-  console.log(statusBody);
-
   const idparams = statusBody?.id;
   const fetchBorrowedDetailsApi = async (idparams) => {
-    const res = await request.get(
-      `Borrowed/ViewBorrowedReturnDetails?id=${idparams}`
-    );
+    const res = await request.get(`Borrowed/ViewBorrowedReturnDetails?id=${idparams}`);
     return res.data;
   };
 
@@ -57,7 +47,6 @@ export const ViewModalApproval = ({
       setBorrowedDetailsData(res);
     });
   };
-  //   console.log(borrowedDetailsData);
 
   useEffect(() => {
     fetchBorrowedDetails();
@@ -71,10 +60,7 @@ export const ViewModalApproval = ({
         <ModalCloseButton onClick={onClose} />
         <ModalBody mb={5}>
           <Flex fontSize="sm" justifyContent="center" mb={5}>
-            <Text fontWeight="semibold">
-              {" "}
-              Returned Borrowed Approval Details
-            </Text>
+            <Text fontWeight="semibold"> Returned Borrowed Approval Details</Text>
           </Flex>
           <Flex justifyContent="space-between">
             <VStack alignItems="start" spacing={-1}>
@@ -82,30 +68,21 @@ export const ViewModalApproval = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.preparedDate).format(
-                    "yyyy-MM-DD"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.preparedDate).format("yyyy-MM-DD")}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer Code:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
@@ -132,25 +109,19 @@ export const ViewModalApproval = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Department:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.departmentName}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.departmentName}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Location:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.locationName}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.locationName}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Account Title:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.accountTitles}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.accountTitles}</Text>
               </HStack>
             </VStack>
           </Flex>
@@ -181,13 +152,10 @@ export const ViewModalApproval = ({
                       <Td fontSize="xs">{borrowdetails.itemCode}</Td>
                       <Td fontSize="xs">{borrowdetails.itemDescription}</Td>
                       <Td fontSize="xs">
-                        {borrowdetails.returnQuantity.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.returnQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                     </Tr>
                   ))}
@@ -202,8 +170,7 @@ export const ViewModalApproval = ({
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>

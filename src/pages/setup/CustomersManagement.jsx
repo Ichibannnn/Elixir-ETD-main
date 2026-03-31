@@ -50,15 +50,7 @@ import { ToastComponent } from "../../components/Toast";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { decodeUser } from "../../services/decode-user";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 
 const CustomersManagement = () => {
   const [customers, setCustomers] = useState([]);
@@ -74,9 +66,7 @@ const CustomersManagement = () => {
 
   // FETCH API CUSTOMER:
   const fetchCustomerApi = async (pageNumber, pageSize, status, search) => {
-    const response = await request.get(
-      `Customer/GetAllCustomerWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
-    );
+    const response = await request.get(`Customer/GetAllCustomerWithPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`);
 
     return response.data;
   };
@@ -84,14 +74,7 @@ const CustomersManagement = () => {
   //PAGINATION
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -116,8 +99,7 @@ const CustomersManagement = () => {
 
   const changeStatusHandler = (id, isActive) => {
     let routeLabel;
-    // console.log(id)
-    // console.log(isActive)
+
     if (isActive) {
       routeLabel = "InActiveCustomer";
     } else {
@@ -155,7 +137,6 @@ const CustomersManagement = () => {
   // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    // console.log(inputValue)
   };
 
   //ADD CUSTOMER---
@@ -180,31 +161,19 @@ const CustomersManagement = () => {
     setDisableEdit(true);
     setEditData(customer);
     onOpen();
-    // console.log(mod.mainMenu)
   };
 
   //FOR DRAWER (Drawer / Drawer Tagging)
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Flex
-      color="fontColor"
-      h="full"
-      w="full"
-      flexDirection="column"
-      p={2}
-      bg="form"
-      boxShadow="md"
-    >
+    <Flex color="fontColor" h="full" w="full" flexDirection="column" p={2} bg="form" boxShadow="md">
       <Flex p={2} w="full">
         <Flex flexDirection="column" gap={1} w="full">
           <Flex justifyContent="space-between" alignItems="center">
             <HStack w="25%" mt={3}>
               <InputGroup size="sm">
-                <InputLeftElement
-                  pointerEvents="none"
-                  children={<FiSearch bg="black" fontSize="18px" />}
-                />
+                <InputLeftElement pointerEvents="none" children={<FiSearch bg="black" fontSize="18px" />} />
                 <Input
                   borderRadius="lg"
                   fontSize="13px"
@@ -221,10 +190,7 @@ const CustomersManagement = () => {
 
             <HStack flexDirection="row">
               <Text fontSize="12px">STATUS:</Text>
-              <Select
-                fontSize="12px"
-                onChange={(e) => statusHandler(e.target.value)}
-              >
+              <Select fontSize="12px" onChange={(e) => statusHandler(e.target.value)}>
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
@@ -243,14 +209,7 @@ const CustomersManagement = () => {
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Table
-                  size="sm"
-                  width="full"
-                  border="none"
-                  boxShadow="md"
-                  bg="gray.200"
-                  variant="striped"
-                >
+                <Table size="sm" width="full" border="none" boxShadow="md" bg="gray.200" variant="striped">
                   <Thead bg="secondary">
                     <Tr fontSize="15px">
                       <Th color="#D6D6D6" fontSize="10px">
@@ -301,13 +260,7 @@ const CustomersManagement = () => {
                         <Td pl={0}>
                           <Flex>
                             <HStack>
-                              <Button
-                                p={0}
-                                size="sm"
-                                onClick={() => editCustomerHandler(cust)}
-                                bg="none"
-                                title="Edit"
-                              >
+                              <Button p={0} size="sm" onClick={() => editCustomerHandler(cust)} bg="none" title="Edit">
                                 <AiTwotoneEdit />
                               </Button>
 
@@ -317,19 +270,11 @@ const CustomersManagement = () => {
                                     <PopoverTrigger>
                                       {cust.isActive === true ? (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnon.png"
-                                            title="active"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnon.png" title="active" />
                                         </Button>
                                       ) : (
                                         <Button bg="none" size="md" p={0}>
-                                          <Image
-                                            boxSize="20px"
-                                            src="/images/turnoff.png"
-                                            title="inactive"
-                                          />
+                                          <Image boxSize="20px" src="/images/turnoff.png" title="inactive" />
                                         </Button>
                                       )}
                                     </PopoverTrigger>
@@ -337,32 +282,15 @@ const CustomersManagement = () => {
                                       <PopoverContent bg="primary" color="#fff">
                                         <PopoverArrow bg="primary" />
                                         <PopoverCloseButton />
-                                        <PopoverHeader>
-                                          Confirmation!
-                                        </PopoverHeader>
+                                        <PopoverHeader>Confirmation!</PopoverHeader>
                                         <PopoverBody>
                                           <VStack onClick={onClose}>
                                             {cust.isActive === true ? (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this Customer inactive?
-                                              </Text>
+                                              <Text>Are you sure you want to set this Customer inactive?</Text>
                                             ) : (
-                                              <Text>
-                                                Are you sure you want to set
-                                                this Customer active?
-                                              </Text>
+                                              <Text>Are you sure you want to set this Customer active?</Text>
                                             )}
-                                            <Button
-                                              colorScheme="green"
-                                              size="sm"
-                                              onClick={() =>
-                                                changeStatusHandler(
-                                                  cust.id,
-                                                  cust.isActive
-                                                )
-                                              }
-                                            >
+                                            <Button colorScheme="green" size="sm" onClick={() => changeStatusHandler(cust.id, cust.isActive)}>
                                               Yes
                                             </Button>
                                           </VStack>
@@ -410,19 +338,9 @@ const CustomersManagement = () => {
               )}
 
               <Stack>
-                <Pagination
-                  pagesCount={pagesCount}
-                  currentPage={currentPage}
-                  onPageChange={handlePageChange}
-                >
+                <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
                   <PaginationContainer>
-                    <PaginationPrevious
-                      bg="primary"
-                      color="white"
-                      p={1}
-                      _hover={{ bg: "btnColor", color: "white" }}
-                      size="sm"
-                    >
+                    <PaginationPrevious bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }} size="sm">
                       {"<<"}
                     </PaginationPrevious>
                     <PaginationPageGroup ml={1} mr={1}>
@@ -440,14 +358,7 @@ const CustomersManagement = () => {
                       ))}
                     </PaginationPageGroup>
                     <HStack>
-                      <PaginationNext
-                        bg="primary"
-                        color="white"
-                        p={1}
-                        _hover={{ bg: "btnColor", color: "white" }}
-                        size="sm"
-                        mb={2}
-                      >
+                      <PaginationNext bg="primary" color="white" p={1} _hover={{ bg: "btnColor", color: "white" }} size="sm" mb={2}>
                         {">>"}
                       </PaginationNext>
                       <Select
@@ -539,12 +450,7 @@ const DrawerComponent = (props) => {
         const res = await request
           .post("Customer/AddNewCustomer", data.formData)
           .then((res) => {
-            ToastComponent(
-              "Success",
-              "Supplier Category created!",
-              "success",
-              toast
-            );
+            ToastComponent("Success", "Supplier Category created!", "success", toast);
             getCustomerHandler();
             onClose();
           })
@@ -561,12 +467,7 @@ const DrawerComponent = (props) => {
             onClose(onClose);
           })
           .catch((error) => {
-            ToastComponent(
-              "Update Failed",
-              error.response.data,
-              "warning",
-              toast
-            );
+            ToastComponent("Update Failed", error.response.data, "warning", toast);
           });
       }
     } catch (err) {}
@@ -586,12 +487,10 @@ const DrawerComponent = (props) => {
           address: editData?.address,
           modifiedBy: currentUser.userName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);
-
-  // console.log(watch('formData'))
 
   return (
     <>
@@ -621,11 +520,7 @@ const DrawerComponent = (props) => {
                 </Box>
                 <Box>
                   <FormLabel>Customer Name:</FormLabel>
-                  <Input
-                    {...register("formData.customerName")}
-                    placeholder="Please enter Customer Name"
-                    autoComplete="off"
-                  />
+                  <Input {...register("formData.customerName")} placeholder="Please enter Customer Name" autoComplete="off" />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.customerName?.message}
                   </Text>

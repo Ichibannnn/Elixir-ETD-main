@@ -66,8 +66,6 @@ export const ActualItemQuantity = ({
 
       const barcodeNumber = res?.filter((items) => items.actualGood > 0);
       setWarehouseId(barcodeNumber?.[0]?.id);
-      console.log("Response: ", res);
-      console.log("barcodeNumber: ", barcodeNumber);
     });
   };
 
@@ -93,7 +91,6 @@ export const ActualItemQuantity = ({
   useEffect(() => {
     if (barcodeData?.orders && qtyOrdered) {
       const stocks = Number(qtyOrdered) - Number(preparedQty);
-      // console.log("Stocks: ", stocks);
       if (barcodeData?.orders.remaining < stocks) {
         setQuantity(barcodeData?.orders.remaining);
       } else {
@@ -143,8 +140,6 @@ export const ActualItemQuantity = ({
       setQuantity(value);
     }
   };
-
-  console.log("barcode data: ", barcodeData);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -257,7 +252,6 @@ export const ActualItemQuantity = ({
 
 const AvailableBarcodeModal = ({ isOpen, onClose, availableBarcode, setWarehouseId, itemCode }) => {
   const selectId = (data) => {
-    // console.log("Warehouse ID: ", data);
     if (data) {
       setWarehouseId(data);
       onClose();
@@ -311,7 +305,7 @@ const AvailableBarcodeModal = ({ isOpen, onClose, availableBarcode, setWarehouse
                           </Button>
                         </Td>
                       </Tr>
-                    )
+                    ),
                   )}
                 </Tbody>
               </Table>

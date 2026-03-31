@@ -43,7 +43,6 @@ const ImportUsers = () => {
       });
     });
     setExcelData(jsonData);
-    console.log(jsonData);
   };
 
   // EXCEL DATA
@@ -67,14 +66,10 @@ const ImportUsers = () => {
     fileRender(jsonData);
     if (isColumnComplete) {
       setIsDisabled(false);
-      console.log(isColumnComplete);
     } else {
       setIsDisabled(true);
       ToastComponent("Error!", "Please check empty fields", "error", toast);
-      console.log(isColumnComplete);
     }
-
-    // console.log(jsonData)
   };
 
   const resultArray = excelData.map((item) => {
@@ -107,7 +102,6 @@ const ImportUsers = () => {
       if (result.isConfirmed) {
         if (result.isConfirmed) {
           if (resultArray.length > 0) {
-            console.log(resultArray);
             try {
               setIsLoading(true);
               const res = request

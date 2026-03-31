@@ -60,8 +60,6 @@ const DrawerTaggingComponent = ({ isOpen, onClose, taggingData, onOpen }) => {
     getMainMenuHandler();
   }, []);
 
-  console.log(tagModules);
-
   const moduleStatusHandler = (data) => {
     if (data) {
       setModuleId(data);
@@ -71,9 +69,7 @@ const DrawerTaggingComponent = ({ isOpen, onClose, taggingData, onOpen }) => {
   //FETCH UNTAGGED MODULES
   const fetchUntaggedApi = async (moduleId) => {
     const roleId = taggingData?.roleId;
-    const res = await request.get(
-      `Role/GetUntagModuleByRoleId/${roleId}/${moduleId}`
-    );
+    const res = await request.get(`Role/GetUntagModuleByRoleId/${roleId}/${moduleId}`);
     return res.data;
   };
 
@@ -90,14 +86,10 @@ const DrawerTaggingComponent = ({ isOpen, onClose, taggingData, onOpen }) => {
     }
   }, [moduleId]);
 
-  console.log(untagModules);
-
   //FETCH TAGGED MODULES
   const fetchTaggedApi = async (moduleId) => {
     const roleId = taggingData?.roleId;
-    const res = await request.get(
-      `Role/GetRoleModulebyId/${roleId}/${moduleId}`
-    );
+    const res = await request.get(`Role/GetRoleModulebyId/${roleId}/${moduleId}`);
     return res.data;
   };
 
@@ -143,19 +135,12 @@ const DrawerTaggingComponent = ({ isOpen, onClose, taggingData, onOpen }) => {
     onOpen();
   };
 
-  const sample = () => {
-    console.log("Popover");
-  };
+  const sample = () => {};
 
   return (
     <>
       <Flex>
-        <Drawer
-          size="xl"
-          isOpen={isOpen}
-          placement="right"
-          onClose={onCloseDrawer}
-        >
+        <Drawer size="xl" isOpen={isOpen} placement="right" onClose={onCloseDrawer}>
           <DrawerOverlay />
 
           <DrawerContent p={7}>
@@ -175,11 +160,7 @@ const DrawerTaggingComponent = ({ isOpen, onClose, taggingData, onOpen }) => {
                     Menu Name:
                   </Text>
                   {mainMenu.length > 0 ? (
-                    <Select
-                      placeholder="Select Main Menu"
-                      onChange={(e) => moduleStatusHandler(e.target.value)}
-                      fontSize="sm"
-                    >
+                    <Select placeholder="Select Main Menu" onChange={(e) => moduleStatusHandler(e.target.value)} fontSize="sm">
                       {mainMenu.map((menu) => (
                         <option key={menu.id} value={menu.id}>
                           {menu.mainMenu}
@@ -213,11 +194,7 @@ const DrawerTaggingComponent = ({ isOpen, onClose, taggingData, onOpen }) => {
                       </Thead>
                       <Tbody>
                         {tagModules?.map((tag, id) => (
-                          <Tr
-                            key={id}
-                            _hover={{ bg: "blue.300", color: "white" }}
-                            cursor="pointer"
-                          >
+                          <Tr key={id} _hover={{ bg: "blue.300", color: "white" }} cursor="pointer">
                             <Td p={4}>{tag.id}</Td>
                             <Td p={4}>{tag.mainMenu}</Td>
                             <Td p={4}>{tag.subMenu}</Td>
@@ -227,33 +204,18 @@ const DrawerTaggingComponent = ({ isOpen, onClose, taggingData, onOpen }) => {
                                   <>
                                     <PopoverTrigger>
                                       <Button p={0} bg="none">
-                                        <BsBookmarkDashFill
-                                          fontSize="25px"
-                                          onClick={sample}
-                                        />
+                                        <BsBookmarkDashFill fontSize="25px" onClick={sample} />
                                       </Button>
                                     </PopoverTrigger>
                                     <PopoverContent bg="primary" color="#fff">
                                       <PopoverArrow bg="primary" />
                                       <PopoverCloseButton />
-                                      <PopoverHeader>
-                                        Confirmation!
-                                      </PopoverHeader>
+                                      <PopoverHeader>Confirmation!</PopoverHeader>
                                       <PopoverBody>
                                         <VStack onClick={onClose}>
-                                          <Text mb={2}>
-                                            Are you sure you want to untag this
-                                            module?
-                                          </Text>
+                                          <Text mb={2}>Are you sure you want to untag this module?</Text>
                                           <Flex justifyContent="right">
-                                            <Button
-                                              p={4}
-                                              colorScheme="blue"
-                                              size="sm"
-                                              onClick={() =>
-                                                untagHandler(tag.id)
-                                              }
-                                            >
+                                            <Button p={4} colorScheme="blue" size="sm" onClick={() => untagHandler(tag.id)}>
                                               Yes
                                             </Button>
                                           </Flex>
@@ -275,9 +237,7 @@ const DrawerTaggingComponent = ({ isOpen, onClose, taggingData, onOpen }) => {
                 <VStack w="50%" mt={4}>
                   <Flex>
                     <VStack>
-                      <Text fontWeight="semibold">
-                        LIST OF UNTAGGED MODULES
-                      </Text>
+                      <Text fontWeight="semibold">LIST OF UNTAGGED MODULES</Text>
                     </VStack>
                   </Flex>
 
@@ -293,11 +253,7 @@ const DrawerTaggingComponent = ({ isOpen, onClose, taggingData, onOpen }) => {
                       </Thead>
                       <Tbody>
                         {untagModules?.map((untag) => (
-                          <Tr
-                            key={untag.moduleId}
-                            _hover={{ bg: "blue.300", color: "white" }}
-                            cursor="pointer"
-                          >
+                          <Tr key={untag.moduleId} _hover={{ bg: "blue.300", color: "white" }} cursor="pointer">
                             <Td p={4}>{untag.moduleId}</Td>
                             <Td p={4}>{untag.mainMenu}</Td>
                             <Td p={4}>{untag.subMenu}</Td>
@@ -307,36 +263,18 @@ const DrawerTaggingComponent = ({ isOpen, onClose, taggingData, onOpen }) => {
                                   <>
                                     <PopoverTrigger>
                                       <Button p={0} bg="none">
-                                        <BsBookmarkPlusFill
-                                          fontSize="25px"
-                                          onClick={sample}
-                                        />
+                                        <BsBookmarkPlusFill fontSize="25px" onClick={sample} />
                                       </Button>
                                     </PopoverTrigger>
                                     <PopoverContent bg="primary" color="#fff">
                                       <PopoverArrow bg="primary" />
                                       <PopoverCloseButton />
-                                      <PopoverHeader>
-                                        Confirmation!
-                                      </PopoverHeader>
+                                      <PopoverHeader>Confirmation!</PopoverHeader>
                                       <PopoverBody>
                                         <VStack onClick={onClose}>
-                                          <Text mb={2}>
-                                            Are you sure you want to tag this
-                                            module?
-                                          </Text>
+                                          <Text mb={2}>Are you sure you want to tag this module?</Text>
                                           <Flex justifyContent="right">
-                                            <Button
-                                              p={4}
-                                              colorScheme="blue"
-                                              size="sm"
-                                              onClick={() =>
-                                                tagHandler(
-                                                  untag.roleId,
-                                                  untag.moduleId
-                                                )
-                                              }
-                                            >
+                                            <Button p={4} colorScheme="blue" size="sm" onClick={() => tagHandler(untag.roleId, untag.moduleId)}>
                                               Yes
                                             </Button>
                                           </Flex>

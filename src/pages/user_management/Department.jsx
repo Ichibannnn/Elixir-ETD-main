@@ -143,14 +143,11 @@
 //         getUserHandler()
 //       })
 //       .catch((err) => {
-//         console.log(err)
 //       })
-//     console.log(routeLabel)
 //   }
 
 //   const searchHandler = (inputValue) => {
 //     setSearch(inputValue)
-//     console.log(inputValue)
 //   }
 
 //   //ADD USER HANDLER---
@@ -174,8 +171,6 @@
 //   }
 //   //FOR DRAWER
 //   const { isOpen, onOpen, onClose } = useDisclosure()
-
-//   // console.log(status);
 
 //   return (
 //     <Flex
@@ -502,8 +497,6 @@
 //     } catch (err) {}
 //   }
 
-//   console.log(editData)
-
 //   useEffect(() => {
 //     if (editData.id) {
 //       setValue(
@@ -518,8 +511,6 @@
 //       )
 //     }
 //   }, [editData])
-
-//   console.log(watch('formData.id'))
 
 //   return (
 //     <>

@@ -43,7 +43,7 @@ const Header = ({ toggleSidebar }) => {
 
       <Flex>
         <Menu>
-          <MenuButton mr={2} mt={1} alignItems="center" justifyContent="center">
+          <MenuButton mr={2} mt={1} alignItems="center" justifyContent="cent er">
             <FaUserCircle color="#D1D2D5" fontSize="25px" />
           </MenuButton>
           <MenuList zIndex={2}>
@@ -52,9 +52,9 @@ const Header = ({ toggleSidebar }) => {
             <MenuItem icon={<RiUser3Fill fontSize="17px" />}>
               <Text fontSize="15px">{`${user && user?.fullName}`}</Text>
             </MenuItem>
-            <MenuItem icon={<MdOutlinePassword fontSize="17px" />} onClick={changePassword}>
+            {/* <MenuItem icon={<MdOutlinePassword fontSize="17px" />} onClick={changePassword}>
               <Text fontSize="15px">Change Password</Text>
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem icon={<RiLogoutBoxLine fontSize="17px" color="red" />} onClick={logoutHandler}>
               <Text fontSize="15px" color="red">
                 Logout

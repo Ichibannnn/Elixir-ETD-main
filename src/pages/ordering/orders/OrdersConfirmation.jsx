@@ -300,7 +300,6 @@ const OrdersConfirmation = ({ isOpen, onClose, errorData, setErrorData, isLoadin
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("Result with errors: ", resultArray);
         try {
           setIsLoading(true);
           const res = request
@@ -342,7 +341,7 @@ const OrdersConfirmation = ({ isOpen, onClose, errorData, setErrorData, isLoadin
 
                   oneChargingCode: submit?.oneChargingCode,
                 };
-              })
+              }),
             )
             .then((res) => {
               ToastComponent("Success", "Orders Synced!", "success", toast);
@@ -351,7 +350,6 @@ const OrdersConfirmation = ({ isOpen, onClose, errorData, setErrorData, isLoadin
               setIsLoading(false);
             })
             .catch((err) => {
-              console.log("Error: ", err);
               setIsLoading(false);
               setErrorData(err.response.data);
               if (err.response.data) {

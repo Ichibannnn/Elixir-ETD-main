@@ -22,11 +22,9 @@ const fetchYMIRApi = async (fromDate, toDate) => {
   const fromDateFormatted = moment(fromDate).format("yyyy-MM-DD");
   const toDateFormatted = moment(toDate).format("yyyy-MM-DD");
   const res = await request.get(
-    `ymir-sync?system_name=Elixir ETD&from=${fromDateFormatted}&to=${toDateFormatted}`
+    `ymir-sync?system_name=Elixir ETD&from=${fromDateFormatted}&to=${toDateFormatted}`,
     // `https://rdfymir.com/backend/public/api/etd_api?system_name=Elixir ETD&from=${fromDateFormatted}&to=${toDateFormatted}`, ~~ FROM YMIR
   );
-
-  console.log("Res", res);
 
   return res.data;
 };
@@ -176,7 +174,6 @@ const ImportPO = () => {
                     setExcelData([]);
                   })
                   .catch((err) => {
-                    // console.log("Error: ", err);
                     setIsLoading(false);
                     setErrorData(err.response.data);
                     if (err.response.data) {

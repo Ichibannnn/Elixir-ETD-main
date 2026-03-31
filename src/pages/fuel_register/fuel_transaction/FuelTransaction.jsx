@@ -90,7 +90,6 @@ const FuelTransaction = () => {
 
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log(inputValue);
   };
 
   useEffect(() => {

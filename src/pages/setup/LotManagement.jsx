@@ -110,7 +110,6 @@ const LotManagement = () => {
         getLotHandler();
       })
       .catch((err) => {
-        // console.log(err);
         ToastComponent("Status Failed", err.response.data, "warning", toast);
       });
   };
@@ -133,7 +132,6 @@ const LotManagement = () => {
 
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log(inputValue);
   };
 
   const addLotHandler = () => {
@@ -432,7 +430,7 @@ const DrawerComponent = (props) => {
           lotName: editData?.lotName,
           modifiedBy: currentUser.fullName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);

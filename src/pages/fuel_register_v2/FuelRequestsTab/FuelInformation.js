@@ -272,8 +272,6 @@ export const FuelInformation = ({
                       value={field.value}
                       placeholder="Select Assets"
                       onChange={(e) => {
-                        // console.log("E: ", e);
-
                         field.onChange(e);
                       }}
                       options={assets?.map((item) => {
@@ -389,7 +387,6 @@ export const FuelInformation = ({
                       value={field.value}
                       placeholder="Select Charging Code"
                       onChange={(e) => {
-                        console.log("Event: ", e);
                         field.onChange(e);
                         setShowChargingData(e?.value);
                       }}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Flex,
   HStack,
@@ -142,11 +142,7 @@ export const TransactConfirmation = ({
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log("User: ", currentUser);
-
   const submitHandler = () => {
-    // console.log("Check Items: ", checkedItems);
-
     const arraySubmit = checkedItems?.map((item) => {
       return {
         orderNo: item.orderNo,
@@ -158,8 +154,6 @@ export const TransactConfirmation = ({
         preparedBy: item.preparedBy,
       };
     });
-
-    console.log("arraySubmit: ", arraySubmit);
 
     const genusStatus = checkedItems?.map((item) => {
       return {
@@ -192,17 +186,16 @@ export const TransactConfirmation = ({
     } catch (error) {}
 
     // GENUS STATUS
-    try {
-      axios.patch(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`, genusStatus, {
-        headers: {
-          Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-          "api-key": "hello world!",
-        },
-      });
-    } catch (error) {
-      console.log("Genus statusError:", error);
-      ToastComponent("Error", "Genus ETD update status failed", "error", toast);
-    }
+    // try {
+    //   axios.patch(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`, genusStatus, {
+    //     headers: {
+    //       Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+    //       "api-key": "hello world!",
+    //     },
+    //   });
+    // } catch (error) {
+    //   ToastComponent("Error", "Genus ETD update status failed", "error", toast);
+    // }
   };
 
   return (

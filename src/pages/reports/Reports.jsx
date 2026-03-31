@@ -90,8 +90,6 @@ const Reports = () => {
           responseType: "blob",
         });
 
-        console.log("Response: ", response);
-
         const url = window.URL.createObjectURL(new Blob([response.data]), { type: response.headers["content-type"] });
         const link = document.createElement("a");
         link.href = url;
@@ -114,8 +112,6 @@ const Reports = () => {
           },
           responseType: "blob",
         });
-
-        console.log("Response: ", response);
 
         const url = window.URL.createObjectURL(new Blob([response.data]), { type: response.headers["content-type"] });
         const link = document.createElement("a");
@@ -157,8 +153,6 @@ const Reports = () => {
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet("Sheet1");
 
-        console.log("SheetData: ", sheetData);
-
         worksheet.columns = [
           { header: "Source", key: "Source", width: 20 },
           { header: "Issuance Date", key: "Issuance Date", width: 20 },
@@ -194,8 +188,6 @@ const Reports = () => {
         ];
 
         worksheet.getRow(1).eachCell((cell, colNumber) => {
-          console.log("Column Number: ", colNumber);
-
           cell.fill = {
             type: "pattern",
             pattern: "solid",
@@ -545,7 +537,7 @@ const PrintMiscReceiptModal = ({ isOpen, onClose, printData, setPrintData, dateF
                 <Thead bgColor="primary" position="sticky" top={0} zIndex={2} h="40px">
                   <Tr>
                     <Th color="white" fontSize="10px" colSpan={20} textAlign="center">{`Miscellaneous Receipt History from ${moment(dateFrom).format("l")} - ${moment(
-                      dateTo
+                      dateTo,
                     ).format("l")}`}</Th>
                   </Tr>
                 </Thead>
@@ -787,7 +779,7 @@ const PrintMiscIssueModal = ({ isOpen, onClose, printData, setPrintData, dateFro
                 <Thead bgColor="primary" position="sticky" top={0} zIndex={2} h="40px">
                   <Tr>
                     <Th color="white" fontSize="10px" colSpan={20} textAlign="center">{`Miscellaneous Issue History from ${moment(dateFrom).format("l")} - ${moment(dateTo).format(
-                      "l"
+                      "l",
                     )}`}</Th>
                   </Tr>
                 </Thead>

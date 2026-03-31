@@ -35,8 +35,6 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
     content: () => componentRef.current,
   });
 
-  // console.log(statusBody)
-
   const [issuesDetailsData, setIssuesDetailsData] = useState([]);
 
   const id = statusBody.id;

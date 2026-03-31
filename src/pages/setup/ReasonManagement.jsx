@@ -110,7 +110,6 @@ const ReasonManagement = () => {
       .catch((err) => {
         console.log(err);
       });
-    console.log(routeLabel);
   };
 
   const getReasonHandler = () => {
@@ -132,7 +131,6 @@ const ReasonManagement = () => {
 
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log(inputValue);
   };
 
   const addReasonHandler = () => {
@@ -444,7 +442,7 @@ const DrawerComponent = (props) => {
           mainMenuId: editData?.mainMenuId,
           reasonName: editData?.reasonName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);

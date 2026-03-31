@@ -79,7 +79,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
 
         oneChargingCode: item?.charging_code,
       };
-    })
+    }),
   );
 
   // SYNC ORDER BUTTON
@@ -140,7 +140,6 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
         };
       });
       if (result.isConfirmed) {
-        console.log("submitBody: ", submitBody);
         try {
           setIsLoading(true);
           const res = request
@@ -369,7 +368,7 @@ export const ListOrders = ({ genusOrders, fetchingData, setFromDate, setToDate, 
                                 {sub.remarks ? <Td fontSize="12px">{sub.remarks}</Td> : <Td fontSize="12px">-</Td>}
                                 {sub.asset_tag ? <Td fontSize="12px">{sub.asset_tag}</Td> : <Td fontSize="12px">-</Td>}
                               </Tr>
-                            ))
+                            )),
                           )}
                       </Tbody>
                     </Table>

@@ -152,8 +152,6 @@
 //   useEffect(() => {
 //     setMirNo(checkedItems);
 
-//     console.log(mirId);
-
 //     return () => {
 //       setMirNo([]);
 //     };

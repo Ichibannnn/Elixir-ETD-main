@@ -26,7 +26,7 @@ const currentUser = decodeUser();
 
 const AddBorrowedMaterials = ({ borrowedData, fetchActiveBorrowed, borrowedNav, setBorrowedNav }) => {
   const [isLoading, setIsLoading] = useState(false);
-   const [showOneChargingData, setShowChargingData] = useState(null);
+  const [showOneChargingData, setShowChargingData] = useState(null);
 
   const customerRef = useRef();
   const remarksRef = useRef();
@@ -81,7 +81,6 @@ const AddBorrowedMaterials = ({ borrowedData, fetchActiveBorrowed, borrowedNav, 
   const fetchBarcodeNo = () => {
     fetchBarcodeNoApi(itemCode).then((res) => {
       setBarcodeNo(res);
-      console.log(res);
     });
   };
 

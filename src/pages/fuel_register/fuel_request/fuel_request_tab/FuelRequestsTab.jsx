@@ -142,8 +142,6 @@ const FuelRequestsTab = () => {
       id: item?.id,
     }));
 
-    console.log("transactPayload: ", transactPayload);
-
     Swal.fire({
       title: "Confirmation!",
       text: "Are you sure you want to transact this request?",
@@ -229,8 +227,6 @@ const FuelRequestsTab = () => {
       }
     });
   };
-
-  console.log("Request Data: ", requestFuelData);
 
   return (
     <Flex w="100%" height="100%" flexDirection="column" p={5} border="2px" borderWidth="5px" borderColor="#1E2227">

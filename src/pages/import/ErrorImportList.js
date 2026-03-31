@@ -207,10 +207,6 @@ const ErrorImportList = ({ isOpen, onClose, errorData, setErrorOpener, isLoading
   //   },
   // ];
 
-  // console.log("ymirPO:", ymirPO);
-  // console.log("filteredItems:", filteredItems);
-  // console.log("Final Payload:", finalPayload);
-
   const submitAvailablePOHandler = () => {
     Swal.fire({
       title: "Confirmation!",

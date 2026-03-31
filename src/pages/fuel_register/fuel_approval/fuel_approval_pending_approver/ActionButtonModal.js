@@ -377,7 +377,6 @@ export const ApproveModal = ({ isOpen, onClose, data, fetchFuelApproval }) => {
         },
       });
       setCompany(res.data.result.companies);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
@@ -390,7 +389,6 @@ export const ApproveModal = ({ isOpen, onClose, data, fetchFuelApproval }) => {
         },
       });
       setDepartment(res.data.result.departments);
-      // console.log(res.data.result.departments);
     } catch (error) {}
   };
 
@@ -468,15 +466,13 @@ export const ApproveModal = ({ isOpen, onClose, data, fetchFuelApproval }) => {
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 50)
+        .splice(0, 50),
     );
 
     return () => {};
   }, [idNumber]);
 
   const onSubmitHandler = (submitData) => {
-    console.log("SubmitData: ", submitData);
-
     const payload = [
       {
         id: data?.id,
@@ -492,8 +488,6 @@ export const ApproveModal = ({ isOpen, onClose, data, fetchFuelApproval }) => {
         fullname: submitData?.formData?.fullName,
       },
     ];
-
-    console.log("payload", payload);
 
     Swal.fire({
       title: "Confirmation!",
@@ -630,8 +624,6 @@ export const ApproveModal = ({ isOpen, onClose, data, fetchFuelApproval }) => {
                           size="sm"
                           placeholder="Select Company"
                           onChange={(e) => {
-                            console.log("E: ", e);
-
                             field.onChange(e);
                             setValue("formData.departmentId", "");
                             setValue("formData.locationId", "");

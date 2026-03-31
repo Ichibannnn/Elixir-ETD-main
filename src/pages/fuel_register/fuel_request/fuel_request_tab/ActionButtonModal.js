@@ -43,8 +43,6 @@ import { IoAdd, IoSaveOutline } from "react-icons/io5";
 import { decodeUser } from "../../../../services/decode-user";
 
 export const ViewModal = ({ isOpen, onClose, data }) => {
-  console.log("Data: ", data);
-
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="5xl" isCentered>
       <ModalOverlay />
@@ -397,7 +395,7 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 50)
+        .splice(0, 50),
     );
 
     return () => {};
@@ -412,7 +410,6 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
         },
       });
       setCompany(res.data.result.companies);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
@@ -425,7 +422,6 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
         },
       });
       setDepartment(res.data.result.departments);
-      // console.log(res.data.result.departments);
     } catch (error) {}
   };
 
@@ -477,7 +473,7 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 50)
+        .splice(0, 50),
     );
 
     return () => {};
@@ -544,8 +540,6 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
   };
 
   const onSubmitHandler = (submitData) => {
-    console.log("submitData: ", submitData);
-
     const createPayload = {
       requestorId: submitData?.formData?.requestorId?.value?.full_id_number,
       requestorName: submitData?.formData?.requestorId?.value?.full_name,
@@ -566,8 +560,6 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
       empId: watch("formData.empId") ? submitData?.formData?.empId?.value?.full_id_number : "",
       fullname: watch("formData.fullName") ? submitData?.formData?.fullName : "",
     };
-
-    console.log("createPayload: ", createPayload);
 
     try {
       setIsLoading(true);
@@ -687,8 +679,6 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
                               value={field.value}
                               placeholder="Select Company"
                               onChange={(e) => {
-                                // console.log("E: ", e);
-
                                 field.onChange(e);
                                 setValue("formData.departmentId", "");
                                 setValue("formData.locationId", "");
@@ -1084,8 +1074,6 @@ export const AddModal = ({ isOpen, onClose, fuelInfo, setFuelInfo, fetchFuelRequ
                             value={field.value}
                             placeholder="Select Barcode"
                             onChange={(e) => {
-                              console.log("E: ", e);
-
                               field.onChange(e);
                               barcodeHandler(e);
                             }}
@@ -1333,7 +1321,7 @@ export const EditModal = ({ isOpen, onClose, data, fuelInfo, setFuelInfo, fetchF
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 50)
+        .splice(0, 50),
     );
 
     return () => {};
@@ -1348,7 +1336,6 @@ export const EditModal = ({ isOpen, onClose, data, fuelInfo, setFuelInfo, fetchF
         },
       });
       setCompany(res.data.result.companies);
-      // console.log(res.data.result.companies);
     } catch (error) {}
   };
 
@@ -1361,7 +1348,6 @@ export const EditModal = ({ isOpen, onClose, data, fuelInfo, setFuelInfo, fetchF
         },
       });
       setDepartment(res.data.result.departments);
-      // console.log(res.data.result.departments);
     } catch (error) {}
   };
 
@@ -1413,7 +1399,7 @@ export const EditModal = ({ isOpen, onClose, data, fuelInfo, setFuelInfo, fetchF
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 50)
+        .splice(0, 50),
     );
 
     return () => {};
@@ -1567,8 +1553,6 @@ export const EditModal = ({ isOpen, onClose, data, fuelInfo, setFuelInfo, fetchF
     }
   }, [data, barcode]);
 
-  console.log("Data: ", data);
-
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="6xl">
       <ModalOverlay />
@@ -1658,8 +1642,6 @@ export const EditModal = ({ isOpen, onClose, data, fuelInfo, setFuelInfo, fetchF
                               value={field.value}
                               placeholder="Select Company"
                               onChange={(e) => {
-                                // console.log("E: ", e);
-
                                 field.onChange(e);
                                 setValue("formData.departmentId", "");
                                 setValue("formData.locationId", "");
@@ -2056,8 +2038,6 @@ export const EditModal = ({ isOpen, onClose, data, fuelInfo, setFuelInfo, fetchF
                             value={field.value}
                             placeholder="Select Barcode"
                             onChange={(e) => {
-                              console.log("E: ", e);
-
                               field.onChange(e);
                               barcodeHandler(e);
                             }}

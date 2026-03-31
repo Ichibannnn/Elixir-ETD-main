@@ -91,8 +91,6 @@ const Login = () => {
       var response = await request
         .post("Login/authenticate", login)
         .then((response) => {
-          // console.log("Response: ", response);
-
           if (response?.data?.userName === response?.data?.password) {
             setGetToken(response?.data?.token);
             var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(response?.data), saltKey).toString();

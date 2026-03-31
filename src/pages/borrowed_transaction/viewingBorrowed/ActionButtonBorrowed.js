@@ -29,19 +29,8 @@ import { EditModal } from "./ActionModalBorrowed";
 import { ToastComponent } from "../../../components/Toast";
 import Swal from "sweetalert2";
 
-export const ViewModal = ({
-  isOpen,
-  onClose,
-  statusBody,
-  fetchBorrowed,
-  setIsLoading,
-}) => {
-  // console.log(statusBody)
-  const {
-    isOpen: isEdit,
-    onOpen: openEdit,
-    onClose: closeEdit,
-  } = useDisclosure();
+export const ViewModal = ({ isOpen, onClose, statusBody, fetchBorrowed, setIsLoading }) => {
+  const { isOpen: isEdit, onOpen: openEdit, onClose: closeEdit } = useDisclosure();
 
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
   const [editData, setEditData] = useState({
@@ -55,13 +44,9 @@ export const ViewModal = ({
 
   const toast = useToast();
 
-  // console.log(statusBody.id);
-
   const id = statusBody.id;
   const fetchBorrowedDetailsApi = async (id) => {
-    const res = await request.get(
-      `Borrowed/GetAllDetailsInBorrowedIssue?id=${id}`
-    );
+    const res = await request.get(`Borrowed/GetAllDetailsInBorrowedIssue?id=${id}`);
     return res.data;
   };
 
@@ -75,22 +60,8 @@ export const ViewModal = ({
     fetchBorrowedDetails();
   }, [id]);
 
-  const editHandler = ({
-    id,
-    itemCode,
-    itemDescription,
-    returnQuantity,
-    consumes,
-    quantity,
-  }) => {
-    if (
-      id &&
-      itemCode &&
-      itemDescription &&
-      returnQuantity >= 0 &&
-      consumes >= 0 &&
-      quantity
-    ) {
+  const editHandler = ({ id, itemCode, itemDescription, returnQuantity, consumes, quantity }) => {
+    if (id && itemCode && itemDescription && returnQuantity >= 0 && consumes >= 0 && quantity) {
       setEditData({
         id: id,
         itemCode: itemCode,
@@ -133,21 +104,11 @@ export const ViewModal = ({
               .put(`Borrowed/SaveReturnedQuantity`, [{ id: statusBody.id }])
               .then((res) => {
                 fetchBorrowed();
-                ToastComponent(
-                  "Success",
-                  "Returned materials was saved",
-                  "success",
-                  toast
-                );
+                ToastComponent("Success", "Returned materials was saved", "success", toast);
                 onClose();
               })
               .catch((err) => {
-                ToastComponent(
-                  "Error",
-                  "Returned materials was not saved",
-                  "error",
-                  toast
-                );
+                ToastComponent("Error", "Returned materials was not saved", "error", toast);
                 setIsLoading(false);
               });
           }
@@ -174,30 +135,21 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.preparedDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.preparedDate).format("MM/DD/yyyy")}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
 
               <HStack>
@@ -220,22 +172,14 @@ export const ViewModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.empId
-                    ? borrowedDetailsData[0]?.empId
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.empId ? borrowedDetailsData[0]?.empId : "-"}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee Name:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.fullName
-                    ? borrowedDetailsData[0]?.fullName
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.fullName ? borrowedDetailsData[0]?.fullName : "-"}</Text>
               </HStack>
             </VStack>
           </Flex>
@@ -284,8 +228,7 @@ export const ViewModal = ({
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>

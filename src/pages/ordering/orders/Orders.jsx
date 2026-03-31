@@ -15,7 +15,7 @@ const fetchGenusApi = async (fromDate, toDate) => {
         Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
         "api-key": "hello world!",
       },
-    }
+    },
   );
   return res.data;
 };
@@ -49,8 +49,6 @@ const Orders = ({ fetchNotification }) => {
         setGenusOrders(response);
       }
     } catch (error) {
-      console.log("Error: ", error);
-
       if (error?.response?.status === 404) {
         setNoRecords(true);
       } else {

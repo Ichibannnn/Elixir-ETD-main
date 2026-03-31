@@ -28,15 +28,7 @@ import Swal from "sweetalert2";
 import moment from "moment";
 import PageScroll from "../../../../utils/PageScroll";
 
-export const PendingCancelModal = ({
-  statusBody,
-  setStatusBody,
-  isOpen,
-  onClose,
-  fetchBorrowed,
-  isLoading,
-  setIsLoading,
-}) => {
+export const PendingCancelModal = ({ statusBody, setStatusBody, isOpen, onClose, fetchBorrowed, isLoading, setIsLoading }) => {
   const toast = useToast();
 
   const cancelSubmitHandler = () => {
@@ -45,12 +37,7 @@ export const PendingCancelModal = ({
       const res = request
         .put(`Borrowed/CancelAllBorrowed`, [{ id: statusBody?.id }])
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Item has been cancelled",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Item has been cancelled", "success", toast);
           fetchBorrowed();
           // fetchBarcodeNo();
           setIsLoading(false);
@@ -64,8 +51,6 @@ export const PendingCancelModal = ({
         });
     } catch (error) {}
   };
-
-  //   console.log(selectorId)
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
@@ -87,13 +72,7 @@ export const PendingCancelModal = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup>
-            <Button
-              size="sm"
-              onClick={cancelSubmitHandler}
-              isLoading={isLoading}
-              disabled={isLoading}
-              colorScheme="blue"
-            >
+            <Button size="sm" onClick={cancelSubmitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="blue">
               Yes
             </Button>
             <Button
@@ -111,13 +90,7 @@ export const PendingCancelModal = ({
   );
 };
 
-export const EditModal = ({
-  isOpen,
-  onClose,
-  statusBody,
-  fetchBorrowed,
-  setIsLoading,
-}) => {
+export const EditModal = ({ isOpen, onClose, statusBody, fetchBorrowed, setIsLoading }) => {
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
   const [editData, setEditData] = useState({
     id: "",
@@ -130,13 +103,9 @@ export const EditModal = ({
 
   const toast = useToast();
 
-  // console.log(statusBody.id);
-
   const id = statusBody.id;
   const fetchBorrowedDetailsApi = async (id) => {
-    const res = await request.get(
-      `Borrowed/GetAllDetailsInBorrowedIssue?id=${id}`
-    );
+    const res = await request.get(`Borrowed/GetAllDetailsInBorrowedIssue?id=${id}`);
     return res.data;
   };
 
@@ -214,21 +183,11 @@ export const EditModal = ({
               .put(`Borrowed/SaveReturnedQuantity`, [{ id: statusBody.id }])
               .then((res) => {
                 fetchBorrowed();
-                ToastComponent(
-                  "Success",
-                  "Returned materials was saved",
-                  "success",
-                  toast
-                );
+                ToastComponent("Success", "Returned materials was saved", "success", toast);
                 onClose();
               })
               .catch((err) => {
-                ToastComponent(
-                  "Error",
-                  "Returned materials was not saved",
-                  "error",
-                  toast
-                );
+                ToastComponent("Error", "Returned materials was not saved", "error", toast);
                 setIsLoading(false);
               });
           }
@@ -252,30 +211,21 @@ export const EditModal = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.preparedDate).format(
-                    "yyyy-MM-DD"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.preparedDate).format("yyyy-MM-DD")}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer Code:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
@@ -298,8 +248,7 @@ export const EditModal = ({
                   Company:
                 </Text>
                 <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.companyCode} -{" "}
-                  {borrowedDetailsData[0]?.companyName}
+                  {borrowedDetailsData[0]?.companyCode} - {borrowedDetailsData[0]?.companyName}
                 </Text>
               </HStack>
               <HStack>
@@ -307,8 +256,7 @@ export const EditModal = ({
                   Department:
                 </Text>
                 <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.departmentCode} -{" "}
-                  {borrowedDetailsData[0]?.departmentName}
+                  {borrowedDetailsData[0]?.departmentCode} - {borrowedDetailsData[0]?.departmentName}
                 </Text>
               </HStack>
               <HStack>
@@ -316,8 +264,7 @@ export const EditModal = ({
                   Location:
                 </Text>
                 <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.locationCode} -{" "}
-                  {borrowedDetailsData[0]?.locationName}
+                  {borrowedDetailsData[0]?.locationCode} - {borrowedDetailsData[0]?.locationName}
                 </Text>
               </HStack>
               <HStack>
@@ -325,8 +272,7 @@ export const EditModal = ({
                   Account Title:
                 </Text>
                 <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.accountCode} -
-                  {borrowedDetailsData[0]?.accountTitles}
+                  {borrowedDetailsData[0]?.accountCode} -{borrowedDetailsData[0]?.accountTitles}
                 </Text>
               </HStack>
             </VStack>
@@ -375,8 +321,7 @@ export const EditModal = ({
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>

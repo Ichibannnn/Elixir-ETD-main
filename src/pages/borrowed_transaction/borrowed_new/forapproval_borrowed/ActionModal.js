@@ -35,13 +35,9 @@ export const ViewModalApproval = ({ isOpen, onClose, statusBody }) => {
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
   const toast = useToast();
 
-  console.log(statusBody);
-
   const idparams = statusBody?.id;
   const fetchBorrowedDetailsApi = async (idparams) => {
-    const res = await request.get(
-      `Borrowed/GetAllForApprovalDetailsInBorrowed?id=${idparams}`
-    );
+    const res = await request.get(`Borrowed/GetAllForApprovalDetailsInBorrowed?id=${idparams}`);
     return res.data;
   };
 
@@ -50,7 +46,6 @@ export const ViewModalApproval = ({ isOpen, onClose, statusBody }) => {
       setBorrowedDetailsData(res);
     });
   };
-  //   console.log(borrowedDetailsData);
 
   useEffect(() => {
     fetchBorrowedDetails();
@@ -75,30 +70,21 @@ export const ViewModalApproval = ({ isOpen, onClose, statusBody }) => {
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.preparedDate).format(
-                    "MM/DD/yyyy"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.preparedDate).format("MM/DD/yyyy")}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
 
               <HStack>
@@ -121,22 +107,14 @@ export const ViewModalApproval = ({ isOpen, onClose, statusBody }) => {
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.empId
-                    ? borrowedDetailsData[0]?.empId
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.empId ? borrowedDetailsData[0]?.empId : "-"}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Employee Name:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.fullName
-                    ? borrowedDetailsData[0]?.fullName
-                    : "-"}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.fullName ? borrowedDetailsData[0]?.fullName : "-"}</Text>
               </HStack>
             </VStack>
           </Flex>
@@ -189,8 +167,7 @@ export const ViewModalApproval = ({ isOpen, onClose, statusBody }) => {
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>
@@ -208,15 +185,7 @@ export const ViewModalApproval = ({ isOpen, onClose, statusBody }) => {
   );
 };
 
-export const RejectModalApproval = ({
-  isOpen,
-  onClose,
-  fetchBorrowed,
-  statusBody,
-  setIsLoading,
-  isLoading,
-  fetchNotification,
-}) => {
+export const RejectModalApproval = ({ isOpen, onClose, fetchBorrowed, statusBody, setIsLoading, isLoading, fetchNotification }) => {
   const [reasonSubmit, setReasonSubmit] = useState("");
   const [reasons, setReasons] = useState([]);
   const toast = useToast();
@@ -254,24 +223,14 @@ export const RejectModalApproval = ({
           },
         ])
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Borrowed Materials has been rejected",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Borrowed Materials has been rejected", "success", toast);
           fetchNotification();
           fetchBorrowed();
           setIsLoading(false);
           onClose();
         })
         .catch((err) => {
-          ToastComponent(
-            "Error",
-            "Borrowed materials was not rejected",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Borrowed materials was not rejected", "error", toast);
           setIsLoading(false);
         });
     } catch (error) {}
@@ -292,13 +251,7 @@ export const RejectModalApproval = ({
           <VStack justifyContent="center">
             <Text>Are you sure you want to reject this request materials?</Text>
             {reasons?.length > 0 ? (
-              <Select
-                fontSize="md"
-                onChange={(e) => setReasonSubmit(e.target.value)}
-                w="70%"
-                placeholder="Please select a reason"
-                bg="#fff8dc"
-              >
+              <Select fontSize="md" onChange={(e) => setReasonSubmit(e.target.value)} w="70%" placeholder="Please select a reason" bg="#fff8dc">
                 {reasons?.map((reason, i) => (
                   <option key={i} value={reason.reasonName}>
                     {reason.reasonName}
@@ -313,21 +266,10 @@ export const RejectModalApproval = ({
 
         <ModalFooter justifyContent="center">
           <ButtonGroup size="sm" mt={7}>
-            <Button
-              onClick={submitHandler}
-              isDisabled={!reasonSubmit || isLoading}
-              isLoading={isLoading}
-              colorScheme="blue"
-            >
+            <Button onClick={submitHandler} isDisabled={!reasonSubmit || isLoading} isLoading={isLoading} colorScheme="blue">
               Yes
             </Button>
-            <Button
-              onClick={onClose}
-              isDisabled={isLoading}
-              isLoading={isLoading}
-              color="black"
-              variant="outline"
-            >
+            <Button onClick={onClose} isDisabled={isLoading} isLoading={isLoading} color="black" variant="outline">
               No
             </Button>
           </ButtonGroup>
@@ -337,15 +279,7 @@ export const RejectModalApproval = ({
   );
 };
 
-export const ApproveModal = ({
-  isOpen,
-  onClose,
-  fetchBorrowed,
-  statusBody,
-  isLoading,
-  setIsLoading,
-  fetchNotification,
-}) => {
+export const ApproveModal = ({ isOpen, onClose, fetchBorrowed, statusBody, isLoading, setIsLoading, fetchNotification }) => {
   const toast = useToast();
   const id = statusBody?.id;
 
@@ -353,28 +287,16 @@ export const ApproveModal = ({
     setIsLoading(true);
     try {
       const res = request
-        .put(`Borrowed/ApprovedForBorrowed`, [
-          { id: id, approveBy: currentUser?.fullName },
-        ])
+        .put(`Borrowed/ApprovedForBorrowed`, [{ id: id, approveBy: currentUser?.fullName }])
         .then((res) => {
-          ToastComponent(
-            "Success",
-            "Borrowed materials has been approved",
-            "success",
-            toast
-          );
+          ToastComponent("Success", "Borrowed materials has been approved", "success", toast);
           fetchNotification();
           fetchBorrowed();
           setIsLoading(false);
           onClose();
         })
         .catch((item) => {
-          ToastComponent(
-            "Error",
-            "Borrowed materials was not approved",
-            "error",
-            toast
-          );
+          ToastComponent("Error", "Borrowed materials was not approved", "error", toast);
           setIsLoading(false);
         });
     } catch (error) {}
@@ -394,31 +316,16 @@ export const ApproveModal = ({
 
           <ModalBody>
             <VStack justifyContent="center">
-              <Text>
-                Are you sure you want to approve this request materials?
-              </Text>
+              <Text>Are you sure you want to approve this request materials?</Text>
             </VStack>
           </ModalBody>
 
           <ModalFooter justifyContent="center">
             <ButtonGroup size="sm" mt={7}>
-              <Button
-                onClick={submitHandler}
-                isLoading={isLoading}
-                disabled={isLoading}
-                colorScheme="blue"
-                fontSize="13px"
-              >
+              <Button onClick={submitHandler} isLoading={isLoading} disabled={isLoading} colorScheme="blue" fontSize="13px">
                 Yes
               </Button>
-              <Button
-                onClick={onClose}
-                isLoading={isLoading}
-                disabled={isLoading}
-                fontSize="13px"
-                color="black"
-                variant="outline"
-              >
+              <Button onClick={onClose} isLoading={isLoading} disabled={isLoading} fontSize="13px" color="black" variant="outline">
                 No
               </Button>
             </ButtonGroup>

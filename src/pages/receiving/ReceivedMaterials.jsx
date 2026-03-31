@@ -356,8 +356,6 @@ const PrintModal = ({ isOpen, onClose, printData }) => {
     content: () => componentRef.current,
   });
 
-  // console.log("PrintData: ", printData);
-
   const displayData = {
     "PO Number": printData.poNumber === "0" || printData.poNumber === null ? "-" : printData?.poNumber,
     Date: moment().format("MM/DD/YYYY, h:mm:ss a"),

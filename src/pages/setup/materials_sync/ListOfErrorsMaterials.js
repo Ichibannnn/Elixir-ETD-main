@@ -146,7 +146,6 @@ export const ListOfErrorsMaterials = ({ isOpen, onOpen, onClose, errorData, setE
     }).then((result) => {
       if (result.isConfirmed) {
         setIsLoading(true);
-        console.log("Result Array: ", resultArray);
         try {
           const res = request
             .put(
@@ -166,7 +165,7 @@ export const ListOfErrorsMaterials = ({ isOpen, onOpen, onClose, errorData, setE
                   syncDate: item?.syncDate,
                   statusSync: item?.statusSync,
                 };
-              })
+              }),
             )
             .then((res) => {
               ToastComponent("Success", "Materials Synced!", "success", toast);

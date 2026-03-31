@@ -183,7 +183,6 @@ export const ErrorList = ({ isOpen, onClose, errorData, setErrorData, setErrorOp
     }).then((result) => {
       if (result.isConfirmed) {
         if (available?.length > 0) {
-          console.log(available);
           try {
             setIsLoading(true);
             const res = request

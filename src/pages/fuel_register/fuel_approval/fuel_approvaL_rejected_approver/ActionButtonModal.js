@@ -23,8 +23,6 @@ import PageScroll from "../../../../utils/PageScroll";
 import moment from "moment";
 
 export const ViewModal = ({ isOpen, onClose, data }) => {
-  console.log("Data: ", data);
-
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="5xl" isCentered>
       <ModalOverlay />

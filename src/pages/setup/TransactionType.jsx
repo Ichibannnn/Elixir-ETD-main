@@ -93,7 +93,6 @@ const TransactionType = () => {
 
   const statusHandler = (data) => {
     setStatus(data);
-    console.log(data);
   };
 
   const changeStatusHandler = (id, isActive) => {
@@ -113,7 +112,6 @@ const TransactionType = () => {
       .catch((err) => {
         console.log(err);
       });
-    console.log(routeLabel);
   };
 
   const fetchTransactionType = () => {
@@ -134,7 +132,6 @@ const TransactionType = () => {
 
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log(inputValue);
   };
 
   const addTransactionTypeHandler = () => {
@@ -415,7 +412,7 @@ const DrawerComponent = (props) => {
           id: editData.id,
           transactionName: editData?.transactionName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);

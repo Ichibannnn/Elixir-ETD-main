@@ -25,15 +25,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import PageScroll from "../../../../utils/PageScroll";
 import request from "../../../../services/ApiClient";
 import moment from "moment/moment";
@@ -48,9 +40,7 @@ const currentUser = decodeUser();
 const userId = currentUser?.id;
 
 const fetchBorrowedApi = async (pageNumber, pageSize, search, status) => {
-  const res = await request.get(
-    `Borrowed/GetAllReturnedItemOrig?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}&status=${status}&empid=${userId}`
-  );
+  const res = await request.get(`Borrowed/GetAllReturnedItemOrig?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}&status=${status}&empid=${userId}`);
   return res.data;
 };
 
@@ -67,34 +57,15 @@ const PendingReturned = ({ fetchNotificationWithParams }) => {
     status: "",
   });
 
-  const {
-    isOpen: isView,
-    onClose: closeView,
-    onOpen: openView,
-  } = useDisclosure();
+  const { isOpen: isView, onClose: closeView, onOpen: openView } = useDisclosure();
 
-  const {
-    isOpen: isEdit,
-    onClose: closeEdit,
-    onOpen: openEdit,
-  } = useDisclosure();
+  const { isOpen: isEdit, onClose: closeEdit, onOpen: openEdit } = useDisclosure();
 
-  const {
-    isOpen: isCancel,
-    onClose: closeCancel,
-    onOpen: openCancel,
-  } = useDisclosure();
+  const { isOpen: isCancel, onClose: closeCancel, onOpen: openCancel } = useDisclosure();
 
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -148,7 +119,6 @@ const PendingReturned = ({ fetchNotificationWithParams }) => {
         id: id,
         status: status,
       });
-      console.log(statusBody?.id);
       openCancel();
     } else {
       setStatusBody({
@@ -159,36 +129,15 @@ const PendingReturned = ({ fetchNotificationWithParams }) => {
   };
 
   return (
-    <Flex
-      justifyContent="center"
-      flexDirection="column"
-      mb="150px"
-      w="full"
-      p={5}
-    >
+    <Flex justifyContent="center" flexDirection="column" mb="150px" w="full" p={5}>
       <Flex justifyContent="space-between">
         <InputGroup w="15%">
-          <InputLeftElement
-            pointerEvents="none"
-            children={<FaSearch color="gray.300" />}
-          />
-          <Input
-            onChange={(e) => searchHandler(e.target.value)}
-            type="text"
-            fontSize="xs"
-            placeholder="Search: ID"
-            focusBorderColor="accent"
-          />
+          <InputLeftElement pointerEvents="none" children={<FaSearch color="gray.300" />} />
+          <Input onChange={(e) => searchHandler(e.target.value)} type="text" fontSize="xs" placeholder="Search: ID" focusBorderColor="accent" />
         </InputGroup>
       </Flex>
       <Box w="full" bgColor="primary" h="22px">
-        <Text
-          fontWeight="normal"
-          fontSize="13px"
-          color="white"
-          textAlign="center"
-          justifyContent="center"
-        >
+        <Text fontWeight="normal" fontSize="13px" color="white" textAlign="center" justifyContent="center">
           Pending Return Materials
         </Text>
       </Box>
@@ -251,40 +200,20 @@ const PendingReturned = ({ fetchNotificationWithParams }) => {
                       minimumFractionDigits: 2,
                     })}
                   </Td>
-                  <Td fontSize="xs">
-                    {moment(borrow.returnedDate).format("MM/DD/yyyy")}
-                  </Td>
+                  <Td fontSize="xs">{moment(borrow.returnedDate).format("MM/DD/yyyy")}</Td>
                   <Td fontSize="xs">
                     <Flex justifyContent="center">
                       <Box>
                         <Menu>
-                          <MenuButton
-                            alignItems="center"
-                            justifyContent="center"
-                            bg="none"
-                          >
+                          <MenuButton alignItems="center" justifyContent="center" bg="none">
                             <AiOutlineMore fontSize="20px" />
                           </MenuButton>
                           <MenuList>
-                            <MenuItem
-                              icon={<GrView fontSize="17px" />}
-                              onClick={() =>
-                                viewHandler(borrow.id, borrow.isActive)
-                              }
-                            >
+                            <MenuItem icon={<GrView fontSize="17px" />} onClick={() => viewHandler(borrow.id, borrow.isActive)}>
                               <Text fontSize="15px">View</Text>
                             </MenuItem>
-                            <MenuItem
-                              icon={<GiCancel color="red" fontSize="17px" />}
-                              onClick={() =>
-                                cancelHandler(borrow.id, borrow.isActive)
-                              }
-                            >
-                              <Text
-                                fontSize="15px"
-                                color="red"
-                                _hover={{ color: "red" }}
-                              >
+                            <MenuItem icon={<GiCancel color="red" fontSize="17px" />} onClick={() => cancelHandler(borrow.id, borrow.isActive)}>
+                              <Text fontSize="15px" color="red" _hover={{ color: "red" }}>
                                 Cancel
                               </Text>
                             </MenuItem>
@@ -302,46 +231,21 @@ const PendingReturned = ({ fetchNotificationWithParams }) => {
 
       <Flex mt={1} justifyContent="end">
         <Stack>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
+          <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
             <PaginationContainer>
-              <PaginationPrevious
-                bg="secondary"
-                color="white"
-                p={1}
-                _hover={{ bg: "accent", color: "white" }}
-              >
+              <PaginationPrevious bg="secondary" color="white" p={1} _hover={{ bg: "accent", color: "white" }}>
                 {"<<"}
               </PaginationPrevious>
               <PaginationPageGroup ml={1} mr={1}>
                 {pages.map((page) => (
-                  <PaginationPage
-                    _hover={{ bg: "accent", color: "white" }}
-                    p={3}
-                    bg="secondary"
-                    color="white"
-                    key={`pagination_page_${page}`}
-                    page={page}
-                  />
+                  <PaginationPage _hover={{ bg: "accent", color: "white" }} p={3} bg="secondary" color="white" key={`pagination_page_${page}`} page={page} />
                 ))}
               </PaginationPageGroup>
               <HStack>
-                <PaginationNext
-                  bg="secondary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "accent", color: "white" }}
-                >
+                <PaginationNext bg="secondary" color="white" p={1} _hover={{ bg: "accent", color: "white" }}>
                   {">>"}
                 </PaginationNext>
-                <Select
-                  onChange={handlePageSizeChange}
-                  variant="filled"
-                  fontSize="md"
-                >
+                <Select onChange={handlePageSizeChange} variant="filled" fontSize="md">
                   <option value={Number(5)}>5</option>
                   <option value={Number(10)}>10</option>
                   <option value={Number(25)}>25</option>
@@ -353,16 +257,7 @@ const PendingReturned = ({ fetchNotificationWithParams }) => {
         </Stack>
       </Flex>
 
-      {isView && (
-        <ViewModal
-          isOpen={isView}
-          onClose={closeView}
-          statusBody={statusBody}
-          fetchBorrowed={fetchBorrowed}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
-      )}
+      {isView && <ViewModal isOpen={isView} onClose={closeView} statusBody={statusBody} fetchBorrowed={fetchBorrowed} isLoading={isLoading} setIsLoading={setIsLoading} />}
 
       {isCancel && (
         <PendingCancelModal

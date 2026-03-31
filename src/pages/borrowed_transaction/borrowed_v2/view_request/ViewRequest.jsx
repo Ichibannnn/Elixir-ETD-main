@@ -24,13 +24,8 @@ import { PendingBorrowedMaterials } from "../../borrowed_new/pending_borrowed/Pe
 import { ApprovedBorrowedMaterials } from "../../borrowed_new/approved_borrowed/ApprovedBorrowedMaterials";
 import RejectBorrowed from "../../borrowed_new/reject_borrowed_customer/RejectBorrowed";
 
-const ViewRequest = ({
-  notificationWithParams,
-  fetchNotificationWithParams,
-}) => {
+const ViewRequest = ({ notificationWithParams, fetchNotificationWithParams }) => {
   const [navigation, setNavigation] = useState(1);
-
-  // console.log(navigation);
 
   const storedNavigation = Number(sessionStorage.getItem("Navigation"));
   useEffect(() => {
@@ -74,17 +69,10 @@ const ViewRequest = ({
             borderRadius="none"
           >
             Approved
-            {notificationWithParams?.borrowedApproved?.borrowedApprovecount ===
-            0 ? (
+            {notificationWithParams?.borrowedApproved?.borrowedApprovecount === 0 ? (
               ""
             ) : (
-              <Badge
-                ml={2}
-                fontSize="10px"
-                variant="solid"
-                colorScheme="red"
-                mb={1}
-              >
+              <Badge ml={2} fontSize="10px" variant="solid" colorScheme="red" mb={1}>
                 {notificationWithParams?.borrowedApproved?.borrowedApprovecount}
               </Badge>
             )}
@@ -102,17 +90,10 @@ const ViewRequest = ({
             borderRadius="none"
           >
             Rejected
-            {notificationWithParams?.rejectNotification?.rejectNotifcount ===
-            0 ? (
+            {notificationWithParams?.rejectNotification?.rejectNotifcount === 0 ? (
               ""
             ) : (
-              <Badge
-                ml={2}
-                fontSize="10px"
-                variant="solid"
-                colorScheme="red"
-                mb={1}
-              >
+              <Badge ml={2} fontSize="10px" variant="solid" colorScheme="red" mb={1}>
                 {notificationWithParams?.rejectNotification?.rejectNotifcount}
               </Badge>
             )}
@@ -127,11 +108,7 @@ const ViewRequest = ({
           </>
         ) : navigation === 2 ? (
           <>
-            <ApprovedBorrowedMaterials
-              navigation={navigation}
-              setNavigation={setNavigation}
-              fetchNotificationWithParams={fetchNotificationWithParams}
-            />
+            <ApprovedBorrowedMaterials navigation={navigation} setNavigation={setNavigation} fetchNotificationWithParams={fetchNotificationWithParams} />
           </>
         ) : navigation === 3 ? (
           <>

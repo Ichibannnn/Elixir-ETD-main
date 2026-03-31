@@ -43,7 +43,6 @@ const ImportMaterials = () => {
       });
     });
     setExcelData(jsonData);
-    console.log(jsonData);
   };
 
   // EXCEL DATA
@@ -84,8 +83,6 @@ const ImportMaterials = () => {
       addedBy: currentUser.fullName,
     };
   });
-
-  // console.log("Current User", currentUser);
 
   const submitExcelHandler = (resultArray) => {
     Swal.fire({

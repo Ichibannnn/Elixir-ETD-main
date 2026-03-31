@@ -55,7 +55,7 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
             "Account Title": item.accountCode ? `${item.accountCode} - ${item.accountTitles}` : "-",
             Employee: item?.empId ? `${item.empId} - ${item.fullName}` : "-",
           };
-        })
+        }),
       );
 
       setDisplayedData(res?.inventory?.slice(0, itemsPerPage));
@@ -79,8 +79,6 @@ export const MiscReceiptHistory = ({ dateFrom, dateTo, setSheetData, search }) =
       setDisplayedData([]);
     };
   }, [dateFrom, dateTo, search]);
-
-  // console.log("Receipt: ", miscReceiptData);
 
   return (
     <Flex w="full" flexDirection="column">

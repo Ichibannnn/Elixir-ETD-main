@@ -63,7 +63,6 @@ export const ReturnRequest = ({ isOpen, onClose, materialListId, borrowedId, bor
   const fetchReturnRequest = () => {
     fetchReturnRequestApi(id).then((res) => {
       setReturnRequest(res);
-      // console.log(res);
     });
   };
 
@@ -77,7 +76,6 @@ export const ReturnRequest = ({ isOpen, onClose, materialListId, borrowedId, bor
   }, [id]);
 
   const editQuantityHandler = (data) => {
-    // console.log(data.returnedQuantity);
     if (data) {
       setEditData(data);
       setAvailableConsume(data.returnedQuantity);
@@ -88,7 +86,6 @@ export const ReturnRequest = ({ isOpen, onClose, materialListId, borrowedId, bor
   };
 
   const resetConsumedQty = (data) => {
-    console.log(data.id);
     Swal.fire({
       title: "Confirmation!",
       text: `Reset consumed quantity for Consumed Id No. ${data.id}?`,
@@ -129,8 +126,6 @@ export const ReturnRequest = ({ isOpen, onClose, materialListId, borrowedId, bor
       }
     });
   };
-
-  // console.log("GetTable", returnRequest);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="6xl" isCentered>

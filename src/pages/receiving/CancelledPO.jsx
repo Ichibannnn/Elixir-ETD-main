@@ -100,7 +100,6 @@ const CancelledPO = () => {
   // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log(inputValue);
   };
 
   const returnModalHandler = (data) => {

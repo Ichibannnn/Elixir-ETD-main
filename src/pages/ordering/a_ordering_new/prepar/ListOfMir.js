@@ -79,7 +79,6 @@ export const ListOfMir = ({
   };
 
   const viewDetailHandler = (mirId) => {
-    console.log(mirId);
     if (mirId) {
       setViewParams(mirId);
       openViewDetails();
@@ -382,8 +381,6 @@ export const ListOfMir = ({
 //     setCustomers(mirList?.customerName);
 //   }, [mirList]);
 
-//   // console.log(mirOrderList);
-
 //   return (
 //     <Flex w="95%" h="250px" flexDirection="column">
 //       <Flex flexDirection="column">
@@ -526,8 +523,6 @@ export const ListOfMir = ({
 //       setMirIds("");
 //       setCustomers("");
 //     }
-//     console.log(mirIds);
-//     console.log(customers);
 //   };
 
 //   // Auto select index 0
@@ -535,8 +530,6 @@ export const ListOfMir = ({
 //     setMirIds(mirList?.mirId);
 //     setCustomers(mirList?.customerName);
 //   }, [mirList]);
-
-//   console.log(mirOrderList);
 
 //   return (
 //     <Flex w="95%" h="250px" flexDirection="column">

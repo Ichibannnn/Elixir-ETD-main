@@ -58,7 +58,6 @@ export const ViewModal = ({ isOpen, onClose, statusBody, fetchBorrowed, setIsLoa
   const coaIdHandler = (data) => {
     if (data) {
       setCoaId(data);
-      console.log(coaId);
       openCoa();
     } else {
       setCoaId("");
@@ -424,7 +423,6 @@ export const ViewCOA = ({ isOpen, onClose, coaId }) => {
   const fetchCOAList = () => {
     fetchCOAListApi(id).then((res) => {
       setCoaList(res);
-      // console.log(res);
     });
   };
 

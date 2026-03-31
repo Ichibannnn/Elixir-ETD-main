@@ -1,36 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  Badge,
-  Button,
-  Checkbox,
-  Flex,
-  HStack,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Badge, Button, Checkbox, Flex, HStack, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import { TiInfo } from "react-icons/ti";
 import PageScroll from "../../../utils/PageScroll";
-import {
-  CancelModalConfirmation,
-  EditModal,
-  ScheduleModal,
-} from "./ScheduleModal";
+import { CancelModalConfirmation, EditModal, ScheduleModal } from "./ScheduleModal";
 
 export const PreparationListOrders = ({
   setCurrentPage,
@@ -66,21 +39,9 @@ export const PreparationListOrders = ({
   const dateToday = new Date();
   const [badgeChanger, setBadgeChanger] = useState(false);
 
-  const {
-    isOpen: isEdit,
-    onOpen: openEdit,
-    onClose: closeEdit,
-  } = useDisclosure();
-  const {
-    isOpen: isCancel,
-    onOpen: openCancel,
-    onClose: closeCancel,
-  } = useDisclosure();
-  const {
-    isOpen: isSchedule,
-    onOpen: openSchedule,
-    onClose: closeSchedule,
-  } = useDisclosure();
+  const { isOpen: isEdit, onOpen: openEdit, onClose: closeEdit } = useDisclosure();
+  const { isOpen: isCancel, onOpen: openCancel, onClose: closeCancel } = useDisclosure();
+  const { isOpen: isSchedule, onOpen: openSchedule, onClose: closeSchedule } = useDisclosure();
 
   const handlePageChange = (nextPage) => {
     setCheckedItems([]);
@@ -117,7 +78,6 @@ export const PreparationListOrders = ({
         // stockOnHand: stockOnHand,
       });
       openEdit();
-      console.log(editData);
     } else {
       setEditData({
         transactId: "",
@@ -153,9 +113,7 @@ export const PreparationListOrders = ({
     }
   }, [lengthIndicator]);
 
-  const stockAvailable = orders?.filter(
-    (item) => item.stockOnHand >= item.quantityOrder
-  );
+  const stockAvailable = orders?.filter((item) => item.stockOnHand >= item.quantityOrder);
   const stockData = stockAvailable?.map((item) => item.id);
   const parentCheckHandler = (e) => {
     if (e.target.checked) {
@@ -172,7 +130,6 @@ export const PreparationListOrders = ({
   const [checkItemsData, setCheckItemsData] = useState([]);
   const childCheckHandler = (e) => {
     const newData = JSON.parse(e.target.value);
-    // console.log(newData)
     const id = newData?.id;
     if (e.target.checked) {
       setCheckedItems([...checkedItems, parseInt(id)]);
@@ -180,21 +137,16 @@ export const PreparationListOrders = ({
     } else {
       const data = checkedItems?.filter((item) => item !== parseInt(id));
       setCheckedItems(data);
-      const revertData = checkItemsData?.filter(
-        (item) => item.id !== parseInt(id)
-      );
+      const revertData = checkItemsData?.filter((item) => item.id !== parseInt(id));
       setCheckItemsData(revertData);
     }
   };
 
   useEffect(() => {
     if (checkItemsData?.length) {
-      let totalQuantity = checkItemsData.map((q) =>
-        parseFloat(q.quantityOrder)
-      );
+      let totalQuantity = checkItemsData.map((q) => parseFloat(q.quantityOrder));
 
       let sum = totalQuantity.reduce((a, b) => a + b);
-      console.log("sum: ", sum);
       checkItemsData?.map((item) => {
         if (item.reserve < sum) {
           setDisableIfStock(true);
@@ -217,40 +169,21 @@ export const PreparationListOrders = ({
           <Text p={0} fontSize="sm">
             {customerName && customerName}
           </Text>
-          <Badge
-            fontSize="9.5px"
-            colorScheme="orange"
-            variant="solid"
-            className="inputCapital"
-          >
+          <Badge fontSize="9.5px" colorScheme="orange" variant="solid" className="inputCapital">
             {rushBadge && "Rush"}
           </Badge>
         </HStack>
 
         <Flex>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
+          <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
             <PaginationContainer>
-              <PaginationPrevious
-                border="1px"
-                fontSize="xs"
-                px={2}
-                _hover={{ bg: "btnColor", color: "white" }}
-              >
+              <PaginationPrevious border="1px" fontSize="xs" px={2} _hover={{ bg: "btnColor", color: "white" }}>
                 {"< Previous"}
               </PaginationPrevious>
               <Text mx={1} bgColor="primary" color="white" px={2} pt={1.5}>
                 {currentPage}
               </Text>
-              <PaginationNext
-                border="1px"
-                fontSize="xs"
-                px={4}
-                _hover={{ bg: "btnColor", color: "white" }}
-              >
+              <PaginationNext border="1px" fontSize="xs" px={4} _hover={{ bg: "btnColor", color: "white" }}>
                 {"Next >"}
               </PaginationNext>
             </PaginationContainer>
@@ -263,14 +196,7 @@ export const PreparationListOrders = ({
       </Text>
 
       <VStack w="full" spacing={0} justifyContent="center" mt={5}>
-        <Text
-          w="full"
-          fontWeight="semibold"
-          fontSize="xs"
-          bgColor="primary"
-          color="white"
-          textAlign="center"
-        >
+        <Text w="full" fontWeight="semibold" fontSize="xs" bgColor="primary" color="white" textAlign="center">
           List of Orders
         </Text>
         <PageScroll minHeight="130px" maxHeight="640px">
@@ -287,13 +213,7 @@ export const PreparationListOrders = ({
             <Thead bg="secondary" position="sticky">
               <Tr h="40px">
                 <Th>
-                  <Checkbox
-                    size="sm"
-                    onChange={parentCheckHandler}
-                    isChecked={stockData?.length === checkedItems?.length}
-                    disabled={!stockData?.length > 0}
-                    color="white"
-                  >
+                  <Checkbox size="sm" onChange={parentCheckHandler} isChecked={stockData?.length === checkedItems?.length} disabled={!stockData?.length > 0} color="white">
                     <Text fontSize="10px">Line</Text>
                   </Checkbox>
                 </Th>
@@ -350,27 +270,14 @@ export const PreparationListOrders = ({
             <Tbody>
               {orders?.map((item, i) => (
                 <Tr
-                  bgColor={
-                    item.stockOnHand < item.quantityOrder ? "gray.200 " : "none"
-                  }
-                  color={
-                    item.stockOnHand < item.quantityOrder ? "black" : "none"
-                  }
-                  _active={
-                    transactId
-                      ? { bgColor: "btnColor", color: "white" }
-                      : { bgColor: "none" }
-                  }
-                  _hover={
-                    transactId
-                      ? { bgColor: "blue.100", color: "white" }
-                      : { bgColor: "none" }
-                  }
+                  bgColor={item.stockOnHand < item.quantityOrder ? "gray.200 " : "none"}
+                  color={item.stockOnHand < item.quantityOrder ? "black" : "none"}
+                  _active={transactId ? { bgColor: "btnColor", color: "white" } : { bgColor: "none" }}
+                  _hover={transactId ? { bgColor: "blue.100", color: "white" } : { bgColor: "none" }}
                   cursor="pointer"
                   key={i}
                 >
-                  {item.stockOnHand >= item.quantityOrder &&
-                  item.standardQuantity ? (
+                  {item.stockOnHand >= item.quantityOrder && item.standardQuantity ? (
                     <Td>
                       <Checkbox
                         // size="sm"
@@ -438,26 +345,13 @@ export const PreparationListOrders = ({
                     )}
                   </Td>
                   <Td fontSize="xs">
-                    <Button
-                      onClick={() => editHandler(item)}
-                      disabled={item.stockOnHand === 0}
-                      size="xs"
-                      colorScheme="blue"
-                      color="white"
-                      px={4}
-                      borderRadius="none"
-                    >
+                    <Button onClick={() => editHandler(item)} disabled={item.stockOnHand === 0} size="xs" colorScheme="blue" color="white" px={4} borderRadius="none">
                       <Text fontSize="xs">Edit</Text>
                     </Button>
                   </Td>
 
                   <Td fontSize="11px">
-                    <Button
-                      onClick={() => cancelHandler(item)}
-                      colorScheme="red"
-                      size="xs"
-                      borderRadius="none"
-                    >
+                    <Button onClick={() => cancelHandler(item)} colorScheme="red" size="xs" borderRadius="none">
                       <Text fontSize="xs">Cancel</Text>
                     </Button>
                   </Td>
@@ -476,8 +370,8 @@ export const PreparationListOrders = ({
                   ? "Stocks must be available"
                   : "Please select an order to schedule"
                 : !checkedItems?.length > 0 || disableIfStock
-                ? "Stocks must be available"
-                : "Schedule order(s)"
+                  ? "Stocks must be available"
+                  : "Schedule order(s)"
             }
             disabled={!checkedItems?.length > 0 || disableIfStock}
             size="sm"
@@ -491,15 +385,7 @@ export const PreparationListOrders = ({
       </VStack>
 
       {isEdit && (
-        <EditModal
-          isOpen={isEdit}
-          onClose={closeEdit}
-          editData={editData}
-          setCurrentPage={setCurrentPage}
-          currentPage={currentPage}
-          fetchOrders={fetchOrders}
-          qty={qty}
-        />
+        <EditModal isOpen={isEdit} onClose={closeEdit} editData={editData} setCurrentPage={setCurrentPage} currentPage={currentPage} fetchOrders={fetchOrders} qty={qty} />
       )}
 
       {isCancel && (

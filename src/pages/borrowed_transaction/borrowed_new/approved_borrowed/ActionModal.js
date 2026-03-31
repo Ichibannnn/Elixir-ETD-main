@@ -320,7 +320,6 @@ export const ConsumeModal = ({
     try {
       const res = await request.get("OneCharging/GetAccountTitle?UsePagination=true&status=true");
 
-      console.log("Res: ", res);
       setAccount(res.data.oneChargingList);
     } catch (error) {}
   };
@@ -380,8 +379,6 @@ export const ConsumeModal = ({
     return () => {};
   }, [idNumber]);
 
-  // console.log("oneChargingCode", watch("formData.oneChargingCode"));
-
   const submitConsumeHandler = async (data) => {
     Swal.fire({
       title: "Confirmation!",
@@ -400,7 +397,6 @@ export const ConsumeModal = ({
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(borrowedId);
         setIsLoading(true);
         try {
           const response = request
@@ -776,7 +772,6 @@ export const EditQuantityModal = (props) => {
     try {
       const res = await request.get("OneCharging/GetAccountTitle?UsePagination=true&status=true");
 
-      console.log("Res: ", res);
       setAccount(res.data.oneChargingList);
     } catch (error) {}
   };
@@ -888,8 +883,6 @@ export const EditQuantityModal = (props) => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("Data: ", data);
-
         setIsLoading(true);
         try {
           const response = request
@@ -924,14 +917,6 @@ export const EditQuantityModal = (props) => {
       }
     });
   };
-
-  // console.log("Watch Charging: ", watch("formData.oneChargingCode"));
-  // console.log("fetchChargingCode: ", oneChargingCode);
-  // console.log("EditData: ", editData);
-  // console.log("OneCharging State: ", showOneChargingData);
-  // console.log("GetTable: ", returnRequest);
-
-  console.log("Error: ", errors);
 
   return (
     <>
@@ -1007,7 +992,6 @@ export const EditQuantityModal = (props) => {
                           value={field.value}
                           placeholder="Select Charging Code"
                           onChange={(e) => {
-                            console.log("E: ", e);
                             field.onChange(e);
 
                             // setShowChargingData(e?.value);

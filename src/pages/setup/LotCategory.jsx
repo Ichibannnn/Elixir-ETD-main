@@ -110,7 +110,6 @@ const LotCategory = () => {
         getLotCategoryHandler();
       })
       .catch((err) => {
-        // console.log(err);
         ToastComponent("Status Failed", err.response.data, "warning", toast);
       });
   };
@@ -454,7 +453,7 @@ const DrawerComponent = (props) => {
           sectionName: editData?.sectionName,
           modifiedBy: currentUser.userName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);

@@ -184,8 +184,6 @@ export const EditModal = ({
 
   const unitPriceRef = useRef();
   const unitPriceProvider = (data) => {
-    console.log("Unit Price: ", data);
-
     if (data === 0) {
       setUnitPrice("");
       unitPriceRef.current.value = "";
@@ -221,8 +219,6 @@ export const EditModal = ({
   useEffect(() => {
     setActualGood(editData.actualDelivered - sumQuantity);
   }, [sumQuantity]);
-
-  // console.log("ActualReceivingDate: ", moment().format("MM/DD/YYYY"));
 
   useEffect(() => {
     if (editData) {

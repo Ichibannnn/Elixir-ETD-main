@@ -26,8 +26,6 @@ import UserAccountPending from "./UserAccountPending";
 const UserAccountParentPage = ({ fetchNotification }) => {
   const [navigation, setNavigation] = useState(1);
 
-  // console.log(notification);
-
   return (
     <Flex px={5} pt={5} pb={0} w="full" flexDirection="column" bg="form">
       <Flex w="full" justifyContent="space-between">

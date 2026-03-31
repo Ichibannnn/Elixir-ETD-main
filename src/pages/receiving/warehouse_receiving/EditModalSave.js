@@ -59,8 +59,6 @@ const EditModalSave = ({
   });
 
   const submitEditedHandler = () => {
-    console.log("submit: ", firstSubmit);
-
     try {
       setIsLoading(true);
       const res = request

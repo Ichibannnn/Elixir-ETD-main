@@ -29,13 +29,9 @@ import moment from "moment";
 export const ViewModal = ({ isOpen, onClose, statusBody }) => {
   const [transactedsDetailsData, setTransactedDetailsData] = useState([]);
 
-  console.log(statusBody);
-  // console.log(transactedsDetailsData);
   const param_id = statusBody?.id;
   const fetchTransactedDetailsApi = async () => {
-    const res = await request.get(
-      `Borrowed/ViewBorrowedReturnDetails?id=${param_id}`
-    );
+    const res = await request.get(`Borrowed/ViewBorrowedReturnDetails?id=${param_id}`);
     return res.data;
   };
 
@@ -59,18 +55,9 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
           </Flex>
           <Flex justifyContent="space-between">
             <VStack alignItems="start" spacing={-1}>
-              <Text fontSize="xs">
-                Transaction ID: {transactedsDetailsData[0]?.id}
-              </Text>
-              <Text fontSize="xs">
-                Returned Date:{" "}
-                {moment(transactedsDetailsData[0]?.borrowedDate).format(
-                  "yyyy-MM-DD"
-                )}
-              </Text>
-              <Text fontSize="xs">
-                Transacted By: {transactedsDetailsData[0]?.preparedBy}
-              </Text>
+              <Text fontSize="xs">Transaction ID: {transactedsDetailsData[0]?.id}</Text>
+              <Text fontSize="xs">Returned Date: {moment(transactedsDetailsData[0]?.borrowedDate).format("yyyy-MM-DD")}</Text>
+              <Text fontSize="xs">Transacted By: {transactedsDetailsData[0]?.preparedBy}</Text>
             </VStack>
           </Flex>
         </ModalHeader>
@@ -119,13 +106,10 @@ export const ViewModal = ({ isOpen, onClose, statusBody }) => {
                         })}
                       </Td>
                       <Td fontSize="xs">
-                        {borrowdetails.returnQuantity?.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.returnQuantity?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                       {/* <Td fontSize="xs">{borrowdetails.itemDescription}</Td> */}
                     </Tr>

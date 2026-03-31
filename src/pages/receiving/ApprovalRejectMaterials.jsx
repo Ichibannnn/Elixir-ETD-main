@@ -105,7 +105,6 @@ const ApprovalRejectMaterials = () => {
   // SEARCH
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log(inputValue);
   };
 
   const viewModalHandler = (poNumber, poDate, prNumber, prDate) => {

@@ -155,6 +155,7 @@ export const SaveConfirmation = ({
                   details: item.description,
                   remarks: item.remarks,
                   transactionDate: item.transactionDate,
+                  actualReceivingDate: item.transactionDate,
                   unitPrice: item.unitPrice,
                   receivedBy: currentUser.userName,
                   accountCode: item.chargingAccountTitleCode,
@@ -189,7 +190,6 @@ export const SaveConfirmation = ({
               } catch (error) {
                 console.log(error);
               }
-              console.log("second submit: ", submitArray);
             }
           })
           .catch((err) => {

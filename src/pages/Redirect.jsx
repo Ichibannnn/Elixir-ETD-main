@@ -19,7 +19,6 @@ const Redirect = () => {
       navigate("/");
       window.location.reload(false);
     } catch (e) {
-      console.log("Redirect Error: ", e);
       window.location.href = `https://one.rdfmis.com/`;
     }
   }, [rawData]);

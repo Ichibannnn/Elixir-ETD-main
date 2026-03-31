@@ -1,33 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Flex,
-  HStack,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Select,
-  Stack,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
+import { Button, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
-import {
-  Pagination,
-  usePagination,
-  PaginationNext,
-  PaginationPage,
-  PaginationPrevious,
-  PaginationContainer,
-  PaginationPageGroup,
-} from "@ajna/pagination";
+import { Pagination, usePagination, PaginationNext, PaginationPage, PaginationPrevious, PaginationContainer, PaginationPageGroup } from "@ajna/pagination";
 import PageScroll from "../../../utils/PageScroll";
 import request from "../../../services/ApiClient";
 import { ViewModal } from "./ActionButtonBorrowed";
@@ -36,9 +10,7 @@ import moment from "moment/moment";
 // import { StatusConfirmation, ViewModal } from './Action-Modals'
 
 const fetchBorrowedApi = async (pageNumber, pageSize, search, status) => {
-  const res = await request.get(
-    `Borrowed/GetAllBorrowedIssueWithPaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}&status=${status}`
-  );
+  const res = await request.get(`Borrowed/GetAllBorrowedIssueWithPaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}&status=${status}`);
   return res.data;
 };
 
@@ -55,29 +27,12 @@ export const ViewListBorrowed = () => {
     status: "",
   });
 
-  // console.log(issueBorrowData )
-
-  const {
-    isOpen: isStatus,
-    onClose: closeStatus,
-    onOpen: openStatus,
-  } = useDisclosure();
-  const {
-    isOpen: isView,
-    onClose: closeView,
-    onOpen: openView,
-  } = useDisclosure();
+  const { isOpen: isStatus, onClose: closeStatus, onOpen: openStatus } = useDisclosure();
+  const { isOpen: isView, onClose: closeView, onOpen: openView } = useDisclosure();
 
   const outerLimit = 2;
   const innerLimit = 2;
-  const {
-    currentPage,
-    setCurrentPage,
-    pagesCount,
-    pages,
-    setPageSize,
-    pageSize,
-  } = usePagination({
+  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
@@ -129,17 +84,8 @@ export const ViewListBorrowed = () => {
     <Flex justifyContent="center" flexDirection="column" w="full">
       <Flex justifyContent="space-between">
         <InputGroup w="15%">
-          <InputLeftElement
-            pointerEvents="none"
-            children={<FaSearch color="gray.300" />}
-          />
-          <Input
-            onChange={(e) => searchHandler(e.target.value)}
-            type="text"
-            fontSize="xs"
-            placeholder="Search: ID"
-            focusBorderColor="accent"
-          />
+          <InputLeftElement pointerEvents="none" children={<FaSearch color="gray.300" />} />
+          <Input onChange={(e) => searchHandler(e.target.value)} type="text" fontSize="xs" placeholder="Search: ID" focusBorderColor="accent" />
         </InputGroup>
       </Flex>
 
@@ -178,18 +124,10 @@ export const ViewListBorrowed = () => {
                   <Td fontSize="xs">{borrow.customerCode}</Td>
                   <Td fontSize="xs">{borrow.customerName}</Td>
                   <Td fontSize="xs">{borrow.totalQuantity}</Td>
-                  <Td fontSize="xs">
-                    {moment(borrow.borrowedDate).format("yyyy-MM-DD")}
-                  </Td>
+                  <Td fontSize="xs">{moment(borrow.borrowedDate).format("yyyy-MM-DD")}</Td>
                   <Td fontSize="xs">{borrow.preparedBy}</Td>
                   <Td fontSize="xs">
-                    <Button
-                      onClick={() =>
-                        viewHandler(borrow.borrowedPKey, borrow.isActive)
-                      }
-                      colorScheme="blue"
-                      size="xs"
-                    >
+                    <Button onClick={() => viewHandler(borrow.borrowedPKey, borrow.isActive)} colorScheme="blue" size="xs">
                       View
                     </Button>
                   </Td>
@@ -202,39 +140,18 @@ export const ViewListBorrowed = () => {
 
       <Flex mt={5} justifyContent="end">
         <Stack>
-          <Pagination
-            pagesCount={pagesCount}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          >
+          <Pagination pagesCount={pagesCount} currentPage={currentPage} onPageChange={handlePageChange}>
             <PaginationContainer>
-              <PaginationPrevious
-                bg="secondary"
-                color="white"
-                p={1}
-                _hover={{ bg: "accent", color: "white" }}
-              >
+              <PaginationPrevious bg="secondary" color="white" p={1} _hover={{ bg: "accent", color: "white" }}>
                 {"<<"}
               </PaginationPrevious>
               <PaginationPageGroup ml={1} mr={1}>
                 {pages.map((page) => (
-                  <PaginationPage
-                    _hover={{ bg: "accent", color: "white" }}
-                    p={3}
-                    bg="secondary"
-                    color="white"
-                    key={`pagination_page_${page}`}
-                    page={page}
-                  />
+                  <PaginationPage _hover={{ bg: "accent", color: "white" }} p={3} bg="secondary" color="white" key={`pagination_page_${page}`} page={page} />
                 ))}
               </PaginationPageGroup>
               <HStack>
-                <PaginationNext
-                  bg="secondary"
-                  color="white"
-                  p={1}
-                  _hover={{ bg: "accent", color: "white" }}
-                >
+                <PaginationNext bg="secondary" color="white" p={1} _hover={{ bg: "accent", color: "white" }}>
                   {">>"}
                 </PaginationNext>
                 <Select onChange={handlePageSizeChange} variant="filled">
@@ -249,16 +166,7 @@ export const ViewListBorrowed = () => {
         </Stack>
       </Flex>
 
-      {isView && (
-        <ViewModal
-          isOpen={isView}
-          onClose={closeView}
-          statusBody={statusBody}
-          fetchBorrowed={fetchBorrowed}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        />
-      )}
+      {isView && <ViewModal isOpen={isView} onClose={closeView} statusBody={statusBody} fetchBorrowed={fetchBorrowed} isLoading={isLoading} setIsLoading={setIsLoading} />}
     </Flex>
   );
 };

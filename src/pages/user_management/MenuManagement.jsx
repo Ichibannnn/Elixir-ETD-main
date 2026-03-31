@@ -114,7 +114,6 @@ const MenuManagement = () => {
         console.log(err);
         ToastComponent("Error", err.response.data, "error", toast);
       });
-    // console.log(routeLabel)
   };
 
   const getMainMenuHandler = () => {
@@ -440,12 +439,10 @@ const DrawerComponent = (props) => {
           menuPath: editData?.menuPath,
           modifiedBy: currentUser.fullName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);
-
-  // console.log(watch('formData'))
 
   return (
     <>

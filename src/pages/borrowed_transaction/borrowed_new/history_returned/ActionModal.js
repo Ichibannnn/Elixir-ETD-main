@@ -32,23 +32,13 @@ import { decodeUser } from "../../../../services/decode-user";
 
 const currentUser = decodeUser();
 
-export const ViewModalHistory = ({
-  isOpen,
-  onClose,
-  statusBody,
-  fetchBorrowed,
-  setIsLoading,
-}) => {
+export const ViewModalHistory = ({ isOpen, onClose, statusBody, fetchBorrowed, setIsLoading }) => {
   const [borrowedDetailsData, setBorrowedDetailsData] = useState([]);
   const toast = useToast();
 
-  console.log(statusBody);
-
   const idparams = statusBody?.id;
   const fetchBorrowedDetailsApi = async (idparams) => {
-    const res = await request.get(
-      `Borrowed/ViewAllBorrowedDetails?id=${idparams}`
-    );
+    const res = await request.get(`Borrowed/ViewAllBorrowedDetails?id=${idparams}`);
     return res.data;
   };
 
@@ -57,7 +47,6 @@ export const ViewModalHistory = ({
       setBorrowedDetailsData(res);
     });
   };
-  //   console.log(borrowedDetailsData);
 
   useEffect(() => {
     fetchBorrowedDetails();
@@ -79,30 +68,21 @@ export const ViewModalHistory = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction ID:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.borrowedPKey}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.borrowedPKey}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Transaction Date:
                 </Text>
-                <Text fontSize="xs">
-                  {" "}
-                  {moment(borrowedDetailsData[0]?.preparedDate).format(
-                    "yyyy-MM-DD"
-                  )}
-                </Text>
+                <Text fontSize="xs"> {moment(borrowedDetailsData[0]?.preparedDate).format("yyyy-MM-DD")}</Text>
               </HStack>
 
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Customer Code:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.customerCode}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.customerCode}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
@@ -129,25 +109,19 @@ export const ViewModalHistory = ({
                 <Text fontSize="xs" fontWeight="semibold">
                   Department:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.departmentName}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.departmentName}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Location:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.locationName}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.locationName}</Text>
               </HStack>
               <HStack>
                 <Text fontSize="xs" fontWeight="semibold">
                   Account Title:
                 </Text>
-                <Text fontSize="xs">
-                  {borrowedDetailsData[0]?.accountTitles}
-                </Text>
+                <Text fontSize="xs">{borrowedDetailsData[0]?.accountTitles}</Text>
               </HStack>
             </VStack>
           </Flex>
@@ -181,13 +155,10 @@ export const ViewModalHistory = ({
                       <Td fontSize="xs">{borrowdetails.itemCode}</Td>
                       <Td fontSize="xs">{borrowdetails.itemDescription}</Td>
                       <Td fontSize="xs">
-                        {borrowdetails.returnQuantity.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                            minimumFractionDigits: 2,
-                          }
-                        )}
+                        {borrowdetails.returnQuantity.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
                       </Td>
                       <Td fontSize="xs">{borrowdetails.returnedDate}</Td>
                     </Tr>
@@ -203,8 +174,7 @@ export const ViewModalHistory = ({
                 <Text textDecoration="underline" fontSize="xs">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   {borrowedDetailsData[0]?.preparedBy}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Text>
               </HStack>
             </Flex>

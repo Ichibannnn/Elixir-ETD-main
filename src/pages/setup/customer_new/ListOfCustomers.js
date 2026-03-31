@@ -57,7 +57,6 @@ export const ListOfCustomers = ({ genusCustomers, fetchingData, elixirCustomers,
   //     []
   //   ) // pagsasamahin nya sa isang array
   //   ?.map((item) => {
-  //     console.log("Genus Data: ", item);
 
   //     return {
   //       customer_No: item.location_id,
@@ -65,7 +64,6 @@ export const ListOfCustomers = ({ genusCustomers, fetchingData, elixirCustomers,
   //       customerName:
   //         item.customer_type === "online"
   //           ? fistoDepartments.result.departments?.find((customer) => {
-  //               // console.log({ customer, item });
   //               return customer.code === item.location_code;
   //             })?.name
   //           : fistoLocations.result.locations?.find((customer) => customer.code === item.location_code)?.name,
@@ -86,9 +84,6 @@ export const ListOfCustomers = ({ genusCustomers, fetchingData, elixirCustomers,
   //     }
   //   }, []); // distinct
 
-  // console.log("genusCustomers: ", genusCustomers);
-  // console.log("Payload: ", resultArrayNew);
-
   const genusArrayResult = genusCustomers?.result
     ?.filter((item) => item?.scope_order?.length) // kukunin nya yung mga customer na my scope for ordering
     ?.reduce(
@@ -101,11 +96,9 @@ export const ListOfCustomers = ({ genusCustomers, fetchingData, elixirCustomers,
           };
         }),
       ],
-      []
+      [],
     ) // pagsasamahin nya sa isang array
     ?.map((item) => {
-      // console.log("item: ", item);
-
       return {
         customer_No: item.location.id,
         customerCode: item.location.code,
@@ -118,8 +111,6 @@ export const ListOfCustomers = ({ genusCustomers, fetchingData, elixirCustomers,
       };
     })
     ?.filter((value, index, self) => index === self.findIndex((a) => a.customer_No === value.customer_No && a.customerCode === value.customerCode));
-
-  console.log("Genus Data: ", genusCustomers);
 
   const syncHandler = () => {
     Swal.fire({
@@ -164,7 +155,7 @@ export const ListOfCustomers = ({ genusCustomers, fetchingData, elixirCustomers,
                   // locationCode: item?.locationCode,
                   // locationName: item?.locationName,
                 };
-              })
+              }),
             )
             .then((res) => {
               ToastComponent("Success", "Customer Synced!", "success", toast);

@@ -111,10 +111,8 @@ const ModuleManagement = () => {
         getModuleHandler();
       })
       .catch((err) => {
-        console.log(err);
         ToastComponent("Error", err.response.data, "error", toast);
       });
-    // console.log(routeLabel)
   };
 
   const getModuleHandler = () => {
@@ -454,7 +452,7 @@ const DrawerComponent = (props) => {
           subMenuName: editData?.subMenuName,
           moduleName: editData?.moduleName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);

@@ -57,15 +57,12 @@ export const ListOfOrders = ({
     if (data) {
       setEditData(data);
       openEdit();
-      console.log("Edit Data: ", editData);
     } else {
       setEditData();
     }
   };
 
   const cancelHandler = (data) => {
-    console.log("Data: ", data);
-
     if (data) {
       setCancelId(data.id);
       setCancelData(data);

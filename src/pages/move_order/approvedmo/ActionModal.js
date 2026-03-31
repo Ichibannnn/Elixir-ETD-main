@@ -78,11 +78,8 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
   const handleCheckboxes = (newSelected) => {
-    console.log(newSelected);
     setSelectedCheckboxes(newSelected);
   };
-
-  // console.log("Print Data: ", printData);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="6xl">
@@ -1011,8 +1008,6 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
 // TRACKING OF ORDERS -------------------------------
 export const TrackModal = ({ isOpen, onClose, trackData, trackList }) => {
   const TableHead = ["Line", "Item Code", "Item Description", "Ordered Qty", "Item Remarks", "Asset Tag", "Remarks"];
-
-  console.log(trackList);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="5xl">

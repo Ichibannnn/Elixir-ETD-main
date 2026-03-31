@@ -117,7 +117,6 @@ const UserRole = () => {
       .catch((err) => {
         ToastComponent("Error", err.response.data, "error", toast);
       });
-    // console.log(routeLabel)
   };
 
   //SHOW ROLES DATA----
@@ -466,12 +465,10 @@ const DrawerComponent = (props) => {
           roleName: editData?.roleName,
           modifiedBy: currentUser.fullName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);
-
-  // console.log(watch('formData'))
 
   return (
     <>

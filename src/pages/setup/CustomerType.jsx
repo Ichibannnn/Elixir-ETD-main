@@ -418,7 +418,7 @@ const DrawerComponent = (props) => {
           customerName: editData?.customerName,
           modifiedBy: currentUser.userName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);

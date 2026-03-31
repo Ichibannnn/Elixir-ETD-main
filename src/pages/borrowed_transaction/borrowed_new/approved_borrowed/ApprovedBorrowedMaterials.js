@@ -167,7 +167,6 @@ export const ApprovedBorrowedMaterials = ({ fetchNotificationWithParams, navigat
 
     if (data) {
       setBorrowedId(data);
-      console.log(data);
     } else {
       setBorrowedId("");
     }
@@ -176,7 +175,6 @@ export const ApprovedBorrowedMaterials = ({ fetchNotificationWithParams, navigat
   const [navConsume, setNavConsume] = useState(4);
 
   const storedId = sessionStorage.getItem("Borrowed ID");
-  // console.log(storedId);
 
   useEffect(() => {
     if (storedId) {

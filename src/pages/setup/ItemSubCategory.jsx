@@ -98,7 +98,6 @@ const ItemSubCategory = () => {
 
   const changeStatusHandler = (id, isActive) => {
     let routeLabel;
-    console.log(isActive);
     if (isActive) {
       routeLabel = "InActiveAccountTitles";
     } else {
@@ -440,10 +439,9 @@ const DrawerComponent = (props) => {
           accountPName: editData?.accountPName,
           modifiedBy: currentUser.fullName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
-    console.log(editData);
   }, [editData]);
 
   return (

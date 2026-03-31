@@ -260,7 +260,6 @@ export const ListOfPreparedOrders = ({ orders, orderNo, setOrderNo, status, setS
 //     } else {
 //       setOrderNo("");
 //     }
-//     console.log(orderNo);
 //   };
 
 //   //Auto select index 0
@@ -272,9 +271,6 @@ export const ListOfPreparedOrders = ({ orders, orderNo, setOrderNo, status, setS
 //     setStatus(newStatus);
 //     setSelectedMIRIds([]); // Reset selected MIR IDs when changing status
 //   };
-
-//   // console.log(customerOrders);
-//   // console.log(orders);
 
 //   // const rushBadge = customerOrders?.some((x) => (x.rush ? true : false));
 

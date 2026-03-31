@@ -62,7 +62,6 @@ export const ListMoveOrder = ({
     } else {
       setCheckedItems([]);
     }
-    console.log("checkedItems: ", checkedItems);
   };
 
   const childCheckHandler = (e) => {
@@ -80,7 +79,6 @@ export const ListMoveOrder = ({
     } else {
       const filterData = checkedItems?.filter((item) => item.orderNo !== valueSubmit.orderNo);
       setCheckedItems(filterData);
-      console.log(checkedItems);
     }
   };
 

@@ -88,7 +88,6 @@ export const EditModal = ({ isOpen, onClose, editData, fetchOrderList, fetchCust
           Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
         },
       });
-      // console.log("Response: ", res.data.result);
       setAccount(res.data.result?.find((items) => items.id === editData.mirId)?.orders?.find((items) => items.id === editData.orderNo)?.account_title);
     } catch (error) {}
   };
@@ -138,7 +137,7 @@ export const EditModal = ({ isOpen, onClose, editData, fetchOrderList, fetchCust
         .filter((item) => {
           return item?.general_info?.full_id_number_full_name.toLowerCase().includes(idNumber);
         })
-        .splice(0, 50)
+        .splice(0, 50),
     );
 
     return () => {};
@@ -155,8 +154,6 @@ export const EditModal = ({ isOpen, onClose, editData, fetchOrderList, fetchCust
       setSelectedAccount(editAccountTitle.accountTitles);
     }
   }, [editData.id, account]);
-
-  // console.log(watch("formData.accountId"));
 
   // Employee id & Fullname && Consumed Quantity (Bind)
   useEffect(() => {
@@ -369,8 +366,6 @@ export const EditRemarksModalConfirmation = ({ isEditRemarks, closeEditRemarks, 
   }, []);
 
   const remarksHandler = (data) => {
-    // console.log("remarks: ", data);
-
     if (data) {
       setEditRemarks(data);
     } else {
@@ -379,8 +374,6 @@ export const EditRemarksModalConfirmation = ({ isEditRemarks, closeEditRemarks, 
   };
 
   const editHandler = () => {
-    console.log("Edit Remarks: ", editRemarks);
-    // console.log("EditData: ", editData);
     setIsLoading(true);
     try {
       const res = request
@@ -476,19 +469,19 @@ export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderL
 
   const cancelHandler = () => {
     const dateToday = moment().format("YYYY-MM-DD");
-    const genusStatus = [
-      {
-        mir_id: cancelData?.mirId,
-        status: "Cancelled",
-        orders: [
-          {
-            order_id: cancelData?.orderNo,
-            quantity_serve: 0,
-            deleted_at: dateToday,
-          },
-        ],
-      },
-    ];
+    // const genusStatus = [
+    //   {
+    //     mir_id: cancelData?.mirId,
+    //     status: "Cancelled",
+    //     orders: [
+    //       {
+    //         order_id: cancelData?.orderNo,
+    //         quantity_serve: 0,
+    //         deleted_at: dateToday,
+    //       },
+    //     ],
+    //   },
+    // ];
 
     try {
       setIsLoading(true);
@@ -513,23 +506,22 @@ export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderL
         });
 
       // GENUS STATUS
-      try {
-        axios.patch(
-          // `http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`,
-          `http://10.10.12.14:8000/etd_v2/backend/public/api/elixir_update`,
+      // try {
+      //   axios.patch(
+      //     // `http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`,
+      //     `http://10.10.12.14:8000/etd_v2/backend/public/api/elixir_update`,
 
-          genusStatus,
-          {
-            headers: {
-              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-              "api-key": "hello world!",
-            },
-          }
-        );
-      } catch (error) {
-        console.log(error);
-        ToastComponent("Error", "Genus ETD update status failed", "error", toast);
-      }
+      //     genusStatus,
+      //     {
+      //       headers: {
+      //         Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+      //         "api-key": "hello world!",
+      //       },
+      //     }
+      //   );
+      // } catch (error) {
+      //   ToastComponent("Error", "Genus ETD update status failed", "error", toast);
+      // }
     } catch (error) {}
   };
 
@@ -595,7 +587,6 @@ export const ScheduleModal = ({
   const toast = useToast();
 
   const dateProvider = (date) => {
-    console.log(date);
     if (date) {
       setPreparationDate(date);
     } else {
@@ -623,7 +614,6 @@ export const ScheduleModal = ({
     }).then((result) => {
       if (result.isConfirmed) {
         const submitArray = selectedMIRIds?.map((item) => {
-          // console.log(item);
           return {
             trasactId: item,
             preparedDate: preparationDate,
@@ -631,16 +621,16 @@ export const ScheduleModal = ({
           };
         });
 
-        const genusStatus = selectedMIRIds?.map((item) => {
-          return {
-            mir_id: item,
-            status: "Ready for Preparation",
-            orders: orderList.map((item) => ({
-              order_id: item.orderNo,
-              quantity_serve: item.quantityOrder,
-            })),
-          };
-        });
+        // const genusStatus = selectedMIRIds?.map((item) => {
+        //   return {
+        //     mir_id: item,
+        //     status: "Ready for Preparation",
+        //     orders: orderList.map((item) => ({
+        //       order_id: item.orderNo,
+        //       quantity_serve: item.quantityOrder,
+        //     })),
+        //   };
+        // });
 
         setIsLoading(true);
         try {
@@ -658,7 +648,6 @@ export const ScheduleModal = ({
               setIsLoading(false);
             })
             .catch((err) => {
-              console.log(err);
               ToastComponent("Error", "Schedule failed", "error", toast);
               setIsLoading(false);
             });
@@ -667,17 +656,16 @@ export const ScheduleModal = ({
         }
 
         // GENUS STATUS
-        try {
-          axios.patch(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`, genusStatus, {
-            headers: {
-              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-              "api-key": "hello world!",
-            },
-          });
-        } catch (error) {
-          console.log("Genus statusError:", error);
-          ToastComponent("Error", "Genus ETD update status failed", "error", toast);
-        }
+        // try {
+        //   axios.patch(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`, genusStatus, {
+        //     headers: {
+        //       Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+        //       "api-key": "hello world!",
+        //     },
+        //   });
+        // } catch (error) {
+        //   ToastComponent("Error", "Genus ETD update status failed", "error", toast);
+        // }
       }
     });
   };
@@ -753,8 +741,6 @@ export const ViewDetailsModal = (props) => {
   useEffect(() => {
     fetchViewDatails();
   }, [id]);
-
-  console.log(viewData);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="6xl" isCentered>

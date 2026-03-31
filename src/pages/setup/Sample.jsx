@@ -6,8 +6,6 @@ const Sample = () => {
 
   const result = names.filter((name) => name.length > 6);
 
-  console.log(result);
-
   return (
     <Flex w="full">
       {/* <Button fontWeight="normal" onClick={resultHandler}>

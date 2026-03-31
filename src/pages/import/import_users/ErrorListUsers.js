@@ -38,19 +38,7 @@ import { decodeUser } from "../../../services/decode-user";
 import PageScrollModalErrorList from "../../../components/PageScrollModalErrorList";
 import PageScrollImportModal from "../../../components/PageScrollImportModal";
 
-export const ErrorListUsers = ({
-  isOpen,
-  onClose,
-  errorData,
-  setErrorData,
-  setErrorOpener,
-  errorOpener,
-  isLoading,
-  setIsLoading,
-  setIsDisabled,
-  setExcelData,
-  excelData,
-}) => {
+export const ErrorListUsers = ({ isOpen, onClose, errorData, setErrorData, setErrorOpener, errorOpener, isLoading, setIsLoading, setIsDisabled, setExcelData, excelData }) => {
   const toast = useToast();
   const clearExcelFile = useRef();
 
@@ -137,7 +125,6 @@ export const ErrorListUsers = ({
     }).then((result) => {
       if (result.isConfirmed) {
         if (available?.length > 0) {
-          console.log(available);
           try {
             setIsLoading(true);
             const res = request
@@ -157,20 +144,10 @@ export const ErrorListUsers = ({
                 clearExcelFile.current.value = "";
               });
           } catch (err) {
-            ToastComponent(
-              "Error!",
-              "Wrong excel format imported for Users",
-              "error",
-              toast
-            );
+            ToastComponent("Error!", "Wrong excel format imported for Users", "error", toast);
           }
         } else {
-          ToastComponent(
-            "Error!",
-            "No data provided, please check your import",
-            "error",
-            toast
-          );
+          ToastComponent("Error!", "No data provided, please check your import", "error", toast);
         }
       }
     });
@@ -182,9 +159,7 @@ export const ErrorListUsers = ({
       <ModalContent color="white" bg="primary">
         <ModalHeader>
           <Flex justifyContent="left">
-            <Text fontSize="11px">
-              Error: File was not imported due to the following reasons:
-            </Text>
+            <Text fontSize="11px">Error: File was not imported due to the following reasons:</Text>
           </Flex>
         </ModalHeader>
         <ModalCloseButton onClick={onClose} />
@@ -197,15 +172,8 @@ export const ErrorListUsers = ({
                 <AccordionItem bgColor="gray.200">
                   <Flex>
                     <AccordionButton fontWeight="semibold" border="1px">
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        fontSize="13px"
-                        fontWeight="semibold"
-                        color="green"
-                      >
-                        Available for syncing{" "}
-                        <Badge color="green">{available?.length}</Badge>
+                      <Box flex="1" textAlign="left" fontSize="13px" fontWeight="semibold" color="green">
+                        Available for syncing <Badge color="green">{available?.length}</Badge>
                       </Box>
                       <AccordionIcon color="secondary" />
                     </AccordionButton>
@@ -261,22 +229,14 @@ export const ErrorListUsers = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
                     </PageScroll>
                     {available ? (
                       <Flex justifyContent="end">
-                        <Button
-                          onClick={() => submitAvailableUsersHandler()}
-                          size="sm"
-                          _hover={{ bgColor: "accent", color: "white" }}
-                          colorScheme="blue"
-                          isLoading={isLoading}
-                        >
+                        <Button onClick={() => submitAvailableUsersHandler()} size="sm" _hover={{ bgColor: "accent", color: "white" }} colorScheme="blue" isLoading={isLoading}>
                           Sync
                         </Button>
                       </Flex>
@@ -293,18 +253,8 @@ export const ErrorListUsers = ({
               {duplicate?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
                         Duplicated Lists
                         <Badge fontSize="10px" color="red">
                           {duplicate?.length}
@@ -364,9 +314,7 @@ export const ErrorListUsers = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no duplicated lists on this file
-                            </Text>
+                            <Text color="white">There are no duplicated lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -381,18 +329,8 @@ export const ErrorListUsers = ({
               {userRoleNotExist?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
                         User Role not Exist
                         <Badge fontSize="10px" color="red">
                           {userRoleNotExist?.length}
@@ -452,9 +390,7 @@ export const ErrorListUsers = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no user role lists on this file
-                            </Text>
+                            <Text color="white">There are no user role lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -469,18 +405,8 @@ export const ErrorListUsers = ({
               {fullNameIncomplete?.length > 0 ? (
                 <AccordionItem bgColor="gray.200">
                   <Flex>
-                    <AccordionButton
-                      color="white"
-                      fontWeight="semibold"
-                      border="1px"
-                    >
-                      <Box
-                        flex="1"
-                        textAlign="left"
-                        color="#dc2f02"
-                        fontWeight="semibold"
-                        fontSize="13px"
-                      >
+                    <AccordionButton color="white" fontWeight="semibold" border="1px">
+                      <Box flex="1" textAlign="left" color="#dc2f02" fontWeight="semibold" fontSize="13px">
                         Full Name is incomplete
                         <Badge fontSize="10px" color="red">
                           {fullNameIncomplete?.length}
@@ -540,9 +466,7 @@ export const ErrorListUsers = ({
                         <Flex justifyContent="center" mt="30px">
                           <VStack>
                             <RiFileList3Fill fontSize="200px" />
-                            <Text color="white">
-                              There are no full name lists on this file
-                            </Text>
+                            <Text color="white">There are no full name lists on this file</Text>
                           </VStack>
                         </Flex>
                       )}
@@ -556,9 +480,7 @@ export const ErrorListUsers = ({
 
             <HStack mt={20} textAlign="center" fontWeight="semibold">
               {/* <TiWarning color='red' /> */}
-              <Text fontSize="9px">
-                Disclaimer: There were no users imported.
-              </Text>
+              <Text fontSize="9px">Disclaimer: There were no users imported.</Text>
             </HStack>
           </ModalBody>
         </PageScrollImportModal>

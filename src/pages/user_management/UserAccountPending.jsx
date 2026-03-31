@@ -95,7 +95,6 @@ const UserAccount = () => {
   //SHOW USER DATA----
   const getUserHandler = () => {
     fetchUserApi(currentPage, pageSize, search).then((res) => {
-      console.log("Response: ", res);
       setIsLoading(false);
       setUsers(res);
       setPageTotal(res.totalCount);
@@ -296,6 +295,7 @@ const DrawerComponent = (props) => {
   const { isOpen, onClose, getUserHandler, editData, disableEdit } = props;
 
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [roles, setRoles] = useState([]);
   const toast = useToast();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -352,8 +352,6 @@ const DrawerComponent = (props) => {
         },
       });
 
-      console.log("Res: ", res);
-
       const sedarEmployees = res.data.data.map((item) => {
         return {
           label: item.general_info.full_id_number,
@@ -370,17 +368,18 @@ const DrawerComponent = (props) => {
   }, []);
 
   const submitHandler = async (data) => {
-    console.log(data);
-
+    setIsLoading(true);
     try {
       const res = await request
         .post(`User/AddNewUser`, data.formData)
         .then((res) => {
           ToastComponent("Success", "User Updated", "success", toast);
           getUserHandler();
+          setIsLoading(false);
           onClose(onClose);
         })
         .catch((error) => {
+          setIsLoading(false);
           ToastComponent("Update Failed", error.response.data, "warning", toast);
         });
 
@@ -487,13 +486,11 @@ const DrawerComponent = (props) => {
           password: editData?.password,
           userRoleId: editData?.userRoleId,
           modifiedBy: currentUser.fullName,
+          addedBy: currentUser.fullName,
         });
       }
     }
   }, [pickerItems]);
-
-  //   console.log(pickerItems);
-  console.log("EditData: ", editData);
 
   return (
     <>
@@ -620,7 +617,7 @@ const DrawerComponent = (props) => {
                   </Box>
 
                   <Flex mt={3}></Flex>
-                  <Box pl={2}>
+                  {/* <Box pl={2}>
                     <Text fontSize="sm" fontWeight="semibold">
                       Password:
                     </Text>
@@ -635,7 +632,7 @@ const DrawerComponent = (props) => {
                     <Text color="red" fontSize="xs">
                       {errors.formData?.password?.message}
                     </Text>
-                  </Box>
+                  </Box> */}
 
                   <Flex mt={3}></Flex>
 
@@ -665,7 +662,7 @@ const DrawerComponent = (props) => {
               <Button variant="outline" mr={3} onClick={onClose}>
                 Cancel
               </Button>
-              <Button type="submit" colorScheme="blue" isDisabled={!isValid}>
+              <Button type="submit" colorScheme="blue" isLoading={isLoading} isDisabled={!isValid}>
                 Submit
               </Button>
             </DrawerFooter>

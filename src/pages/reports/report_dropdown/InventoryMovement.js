@@ -70,7 +70,7 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
               minimumFractionDigits: 2,
             }),
           };
-        })
+        }),
       );
 
       setDisplayedData(res?.inventory?.slice(0, itemsPerPage));
@@ -95,8 +95,6 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
     };
     // }, [dateFrom, dateTo])
   }, [dateTo, search]);
-
-  console.log("displayData", displayedData);
 
   return (
     <Flex w="full" flexDirection="column">

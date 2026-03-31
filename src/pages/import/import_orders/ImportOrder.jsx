@@ -144,7 +144,7 @@ const ImportOrder = ({ fetchNotification }) => {
                   accountTitles: item?.accountTitles,
                   empId: item?.empId,
                   fullName: item?.fullName,
-                }))
+                })),
               )
               .then((res) => {
                 ToastComponent("Success", "Orders Imported!", "success", toast);
@@ -175,10 +175,9 @@ const ImportOrder = ({ fetchNotification }) => {
   useEffect(() => {
     // Check if any value in resultArray's any is a letter
     const hasLetterValue = resultArray.some(
-      (ed) => isNaN(ed.quantityOrdered) || isNaN(ed.trasactId) || isNaN(ed.customercode) || !parseDate(ed.orderDate) || !parseDate(ed.dateNeeded)
+      (ed) => isNaN(ed.quantityOrdered) || isNaN(ed.trasactId) || isNaN(ed.customercode) || !parseDate(ed.orderDate) || !parseDate(ed.dateNeeded),
     );
-    console.log(hasLetterValue);
-    console.log(resultArray);
+
     setBufferError(hasLetterValue);
     setIsDisabled(hasLetterValue || resultArray.length === 0); // Disable if there's any letter value or if resultArray is empty
 

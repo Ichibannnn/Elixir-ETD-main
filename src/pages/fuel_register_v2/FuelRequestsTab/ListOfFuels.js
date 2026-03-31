@@ -19,8 +19,6 @@ export const ListOfFuels = ({ fuelData, fetchBarcode, selectorId, setSelectorId,
     }
   };
 
-  // console.log("FuelData: ", fuelData);
-
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
       <VStack justifyContent="center" w="full" spacing={-1}>

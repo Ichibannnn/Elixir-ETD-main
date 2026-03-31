@@ -33,8 +33,6 @@ export const AddConfirmation = ({
         fuelPump: requestorInformation?.fuelPump,
       };
 
-      console.log("addSubmit: ", addSubmit);
-
       const res = request
         .post(`FuelRegister/create-fuel-details`, addSubmit)
         .then((res) => {
@@ -54,13 +52,10 @@ export const AddConfirmation = ({
           onClose();
         })
         .catch((err) => {
-          console.log("Error: ", err);
           ToastComponent("Error", "Item was not added", "error", toast);
         });
     } catch (error) {}
   };
-
-  console.log("RequestInformation: ", requestorInformation);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="xl">
@@ -249,9 +244,6 @@ export const SaveConfirmation = ({
   const toast = useToast();
 
   const saveSubmitHandler = () => {
-    // console.log("Requestor: ", requestorInformation);
-    // console.log("Fuel Info: ", fuelInfo);
-
     const savePayload = {
       requestorId: requestorInformation?.requestorId?.value?.full_id_number,
       requestorName: requestorInformation?.requestorId?.value?.full_name,
@@ -270,8 +262,6 @@ export const SaveConfirmation = ({
       issuanceDate: moment(requestorInformation?.issuanceDate).format("YYYY-MM-DD h:mmA"),
       cipNo: requestorInformation?.cipNo,
     };
-
-    console.log("Save: ", savePayload);
 
     setIsLoading(true);
     try {
@@ -298,7 +288,6 @@ export const SaveConfirmation = ({
           onClose();
         })
         .catch((err) => {
-          console.log("error: ", err);
           ToastComponent("Error", "Information was not saved", "error", toast);
           setIsLoading(false);
         });

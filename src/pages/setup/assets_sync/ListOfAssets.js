@@ -102,8 +102,6 @@ export const ListOfAssets = ({
     };
   });
 
-  console.log("GenusAsset: ", genusAssets);
-
   // SYNC ORDER BUTTON
   const syncHandler = () => {
     Swal.fire({
@@ -122,7 +120,6 @@ export const ListOfAssets = ({
         container: "my-swal",
       },
     }).then((result) => {
-      // console.log("Payload: ", resultArray);
       if (result.isConfirmed) {
         try {
           setIsLoading(true);
@@ -135,7 +132,7 @@ export const ListOfAssets = ({
                   asset_Code: item?.asset_Code,
                   asset_Name: item?.asset_Name,
                 };
-              })
+              }),
             )
             .then((res) => {
               ToastComponent("Success", "Asset Synced!", "success", toast);
@@ -192,7 +189,6 @@ export const ListOfAssets = ({
         container: "my-swal",
       },
     }).then((result) => {
-      console.log("Payload: ", resultArray);
       if (result.isConfirmed) {
         try {
           setIsLoading(true);
@@ -493,8 +489,6 @@ export const AddModal = ({ isAdd, closeAdd, editData, setEditData, fetchElixirAs
   });
 
   const submitHandler = async (data) => {
-    // console.log("data: ", data);
-
     if (editData.length === 0) {
       const addPayload = {
         asset_Code: data?.formData?.asset_Code,
@@ -543,8 +537,6 @@ export const AddModal = ({ isAdd, closeAdd, editData, setEditData, fetchElixirAs
     }
   };
 
-  console.log("EditData: ", editData);
-
   useEffect(() => {
     if (editData) {
       setValue(
@@ -554,7 +546,7 @@ export const AddModal = ({ isAdd, closeAdd, editData, setEditData, fetchElixirAs
           asset_Code: editData?.assetCode,
           asset_Name: editData?.assetName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);

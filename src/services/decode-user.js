@@ -9,7 +9,5 @@ export const decodeUser = () => {
     userDatadecrypted = JSON.parse(deciphertext.toString(CryptoJS.enc.Utf8));
   }
 
-  // console.log("User: ", userDatadecrypted);
-
   return userDatadecrypted;
 };

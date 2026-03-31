@@ -90,7 +90,7 @@ export const ListOfUom = ({ genusUom, fetchingData, fetchElixirUom, elixirUom })
                   modifyBy: item?.modifyBy,
                   syncDate: item?.syncDate,
                 };
-              })
+              }),
             )
             .then((res) => {
               ToastComponent("Success", "UOM Synced!", "success", toast);
@@ -103,8 +103,6 @@ export const ListOfUom = ({ genusUom, fetchingData, fetchElixirUom, elixirUom })
               setIsLoading(false);
               setErrorData(err.response.data);
               if (err.response.data) {
-                // onClose();
-                // console.log("Validations: ", err.response.data);
                 onOpen();
               }
             });

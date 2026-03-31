@@ -27,8 +27,6 @@ import moment from "moment";
 import { useReactToPrint } from "react-to-print";
 
 export const ViewModal = ({ isOpen, onClose, data }) => {
-  console.log("Data: ", data);
-
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="5xl" isCentered>
       <ModalOverlay />
@@ -293,8 +291,6 @@ export const PrintModal = ({ isOpen, onClose, data }) => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-
-  console.log("Data: ", data);
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} size="5xl" isCentered>

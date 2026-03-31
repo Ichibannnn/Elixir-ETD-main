@@ -52,10 +52,6 @@ const PrintBarcode = ({
     "SI Number": printData?.siNumber ? printData?.siNumber : siNumber,
   };
 
-  // console.log("formData: ", formData);
-  // console.log("formData: ", formData);
-  console.log("print: ", printData);
-
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="sm">
       <ModalOverlay />

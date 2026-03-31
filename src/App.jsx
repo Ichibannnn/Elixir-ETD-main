@@ -343,6 +343,10 @@ const App = () => {
 
             {/* USER */}
             <Route path="/user" element={<UserManagementPage notification={notification} fetchNotification={fetchNotification} />}>
+              <Route path="/user/user-account" element={<UserAccountParentPage />} />
+              <Route path="/user/user-role" element={<UserRole />} />
+              <Route path="/user/module-management" element={<ModuleManagement />} />
+              <Route path="/user/menu-management" element={<MenuManagement />} />
               <Route path="/user/sample" element={<Sample />} />
             </Route>
 
@@ -688,8 +692,6 @@ const CancelFuelArrayModalConfirmation = ({ isOpen, onClose, fuelData, fetchActi
     setIsLoading(true);
     try {
       const cancelArray = fuelData?.map((item) => item.id);
-
-      console.log("Cancel Array: ", cancelArray);
 
       // const res = request
       //   .put(`FuelRegister/cancel`)

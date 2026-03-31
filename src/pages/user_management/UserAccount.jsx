@@ -309,7 +309,8 @@ const UserAccount = () => {
             </PageScroll>
 
             <Flex justifyContent="space-between">
-              <Button
+              <Stack />
+              {/* <Button
                 size="sm"
                 fontSize="13px"
                 fontWeight="normal"
@@ -320,7 +321,7 @@ const UserAccount = () => {
                 onClick={addUserHandler}
               >
                 New
-              </Button>
+              </Button> */}
 
               {/* PROPS */}
               {isOpen && (
@@ -460,7 +461,6 @@ const DrawerComponent = (props) => {
   }, []);
 
   const submitHandler = async (data) => {
-    console.log(data);
     try {
       if (data.formData.id === "") {
         delete data.formData["id"];
@@ -554,8 +554,6 @@ const DrawerComponent = (props) => {
     if (editData.id) {
       const employeeDetails = pickerItems?.find((item) => item.general_info.full_id_number === editData.empId);
 
-      console.log("employeeDetails", employeeDetails);
-
       if (employeeDetails) {
         setValue("formData", {
           fullName: employeeDetails?.general_info?.full_name,
@@ -610,7 +608,6 @@ const DrawerComponent = (props) => {
                               <Text
                                 key={i}
                                 onClick={() => {
-                                  console.log("item", item);
                                   handleAutoFill(item);
                                 }}
                                 style={{ cursor: "pointer", zIndex: 999 }}
@@ -689,7 +686,7 @@ const DrawerComponent = (props) => {
                   </Box>
 
                   <Flex mt={3}></Flex>
-                  <Box pl={2}>
+                  {/* <Box pl={2}>
                     <Text fontSize="sm" fontWeight="semibold">
                       Password:
                     </Text>
@@ -704,7 +701,7 @@ const DrawerComponent = (props) => {
                     <Text color="red" fontSize="xs">
                       {errors.formData?.password?.message}
                     </Text>
-                  </Box>
+                  </Box> */}
 
                   <Flex mt={3}></Flex>
 
@@ -848,7 +845,6 @@ const DrawerComponent = (props) => {
 //   }, []);
 
 //   const submitHandler = async (data) => {
-//     // console.log(first)
 //     try {
 //       if (data.formData.id === "") {
 //         delete data.formData["id"];
@@ -888,9 +884,6 @@ const DrawerComponent = (props) => {
 //   const [showLoading, setShowLoading] = useState(false);
 
 //   useEffect(() => {
-//     // console.log(pickerItems.filter(item=> {
-//     //   return item?.label.toLowerCase().includes(idNumber)
-//     // }).splice(0,10))
 
 //     setInfo(
 //       pickerItems
@@ -902,21 +895,10 @@ const DrawerComponent = (props) => {
 //         .splice(0, 50)
 //     );
 
-//     // console.log(
-//     //   pickerItems
-//     //     .filter((item) => {
-//     //       return item?.general_info?.full_id_number_full_name
-//     //         .toLowerCase()
-//     //         .includes(idNumber);
-//     //     })
-//     //     .splice(0, 50)
-//     // );
-
 //     return () => {};
 //   }, [idNumber]);
 
 //   const handleAutoFill = (data) => {
-//     console.log("handleautofill data:", data);
 //     setValue("formData.empId", data?.general_info?.full_id_number);
 //     setValue("formData.fullName", data?.general_info?.full_name);
 //     setValue("formData.department", data?.unit_info?.department_name);
@@ -960,8 +942,6 @@ const DrawerComponent = (props) => {
 //       );
 //     }
 //   }, [editData]);
-
-//   // console.log(watch('formData.userRoleId'))
 
 //   return (
 //     <>

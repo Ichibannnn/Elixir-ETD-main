@@ -132,7 +132,6 @@ const Department = () => {
 
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
-    console.log(inputValue);
   };
 
   const addAccountHandler = () => {
@@ -409,7 +408,7 @@ const DrawerComponent = (props) => {
           accountName: editData?.accountName,
           modifiedBy: currentUser.userName,
         },
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   }, [editData]);
