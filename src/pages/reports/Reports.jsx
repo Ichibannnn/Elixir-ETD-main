@@ -194,8 +194,6 @@ const Reports = () => {
         ];
 
         worksheet.getRow(1).eachCell((cell, colNumber) => {
-          console.log("Column Number: ", colNumber);
-
           cell.fill = {
             type: "pattern",
             pattern: "solid",
@@ -545,7 +543,7 @@ const PrintMiscReceiptModal = ({ isOpen, onClose, printData, setPrintData, dateF
                 <Thead bgColor="primary" position="sticky" top={0} zIndex={2} h="40px">
                   <Tr>
                     <Th color="white" fontSize="10px" colSpan={20} textAlign="center">{`Miscellaneous Receipt History from ${moment(dateFrom).format("l")} - ${moment(
-                      dateTo
+                      dateTo,
                     ).format("l")}`}</Th>
                   </Tr>
                 </Thead>
@@ -787,7 +785,7 @@ const PrintMiscIssueModal = ({ isOpen, onClose, printData, setPrintData, dateFro
                 <Thead bgColor="primary" position="sticky" top={0} zIndex={2} h="40px">
                   <Tr>
                     <Th color="white" fontSize="10px" colSpan={20} textAlign="center">{`Miscellaneous Issue History from ${moment(dateFrom).format("l")} - ${moment(dateTo).format(
-                      "l"
+                      "l",
                     )}`}</Th>
                   </Tr>
                 </Thead>

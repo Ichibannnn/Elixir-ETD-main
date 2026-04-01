@@ -48,6 +48,10 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
             }),
+            "Fuel Register": item.totalFuelRegister.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            }),
             Borrowed: item.totalBorrowed.toLocaleString(undefined, {
               maximumFractionDigits: 2,
               minimumFractionDigits: 2,
@@ -70,7 +74,7 @@ export const InventoryMovement = ({ dateTo, setSheetData, search }) => {
               minimumFractionDigits: 2,
             }),
           };
-        })
+        }),
       );
 
       setDisplayedData(res?.inventory?.slice(0, itemsPerPage));
