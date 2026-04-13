@@ -469,19 +469,19 @@ export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderL
 
   const cancelHandler = () => {
     const dateToday = moment().format("YYYY-MM-DD");
-    // const genusStatus = [
-    //   {
-    //     mir_id: cancelData?.mirId,
-    //     status: "Cancelled",
-    //     orders: [
-    //       {
-    //         order_id: cancelData?.orderNo,
-    //         quantity_serve: 0,
-    //         deleted_at: dateToday,
-    //       },
-    //     ],
-    //   },
-    // ];
+    const genusStatus = [
+      {
+        mir_id: cancelData?.mirId,
+        status: "Cancelled",
+        orders: [
+          {
+            order_id: cancelData?.orderNo,
+            quantity_serve: 0,
+            deleted_at: dateToday,
+          },
+        ],
+      },
+    ];
 
     try {
       setIsLoading(true);
@@ -506,22 +506,22 @@ export const CancelModalConfirmation = ({ isOpen, onClose, cancelId, fetchOrderL
         });
 
       // GENUS STATUS
-      // try {
-      //   axios.patch(
-      //     // `http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`,
-      //     `http://10.10.12.14:8000/etd_v2/backend/public/api/elixir_update`,
+      try {
+        axios.patch(
+          `http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`,
+          // `http://10.10.12.14:8000/etd_v2/backend/public/api/elixir_update`,
 
-      //     genusStatus,
-      //     {
-      //       headers: {
-      //         Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-      //         "api-key": "hello world!",
-      //       },
-      //     }
-      //   );
-      // } catch (error) {
-      //   ToastComponent("Error", "Genus ETD update status failed", "error", toast);
-      // }
+          genusStatus,
+          {
+            headers: {
+              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+              "api-key": "hello world!",
+            },
+          },
+        );
+      } catch (error) {
+        ToastComponent("Error", "Genus ETD update status failed", "error", toast);
+      }
     } catch (error) {}
   };
 
@@ -621,16 +621,16 @@ export const ScheduleModal = ({
           };
         });
 
-        // const genusStatus = selectedMIRIds?.map((item) => {
-        //   return {
-        //     mir_id: item,
-        //     status: "Ready for Preparation",
-        //     orders: orderList.map((item) => ({
-        //       order_id: item.orderNo,
-        //       quantity_serve: item.quantityOrder,
-        //     })),
-        //   };
-        // });
+        const genusStatus = selectedMIRIds?.map((item) => {
+          return {
+            mir_id: item,
+            status: "Ready for Preparation",
+            orders: orderList.map((item) => ({
+              order_id: item.orderNo,
+              quantity_serve: item.quantityOrder,
+            })),
+          };
+        });
 
         setIsLoading(true);
         try {
@@ -656,16 +656,16 @@ export const ScheduleModal = ({
         }
 
         // GENUS STATUS
-        // try {
-        //   axios.patch(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`, genusStatus, {
-        //     headers: {
-        //       Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
-        //       "api-key": "hello world!",
-        //     },
-        //   });
-        // } catch (error) {
-        //   ToastComponent("Error", "Genus ETD update status failed", "error", toast);
-        // }
+        try {
+          axios.patch(`http://genus-aio.rdfmis.ph/etd_v2/backend/public/api/elixir_update`, genusStatus, {
+            headers: {
+              Authorization: "Bearer " + process.env.REACT_APP_GENUS_PROD_TOKEN,
+              "api-key": "hello world!",
+            },
+          });
+        } catch (error) {
+          ToastComponent("Error", "Genus ETD update status failed", "error", toast);
+        }
       }
     });
   };

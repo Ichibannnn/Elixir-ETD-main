@@ -95,17 +95,17 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        // const ymirSyncStatus = [
-        //   {
-        //     item_id: ymirPO?.flatMap((data) =>
-        //       data?.rr_orders?.map((subData) => {
-        //         return {
-        //           id: subData?.id,
-        //         };
-        //       })
-        //     ),
-        //   },
-        // ];
+        const ymirSyncStatus = [
+          {
+            item_id: ymirPO?.flatMap((data) =>
+              data?.rr_orders?.map((subData) => {
+                return {
+                  id: subData?.id,
+                };
+              }),
+            ),
+          },
+        ];
 
         if (ymirResultArray.length > 0) {
           const hasZeroUnitCost = ymirResultArray.some((data) => data.unitPrice <= 0);
@@ -118,19 +118,18 @@ const SyncModal = ({ isOpen, onClose, ymirPO, fetchData, setFetchData, fromDate,
                 .post("Import/AddNewPOSummary", ymirResultArray)
                 .then((res) => {
                   // YMIR Status
-                  // try {
-                  //   axios.patch(
-                  //     `https://rdfymir.com/backend/public/api/etd_api/sync`,
-                  //     // `https://pretestomega.rdfymir.com/backend/public/api/etd_api/sync`,
-                  //     ymirSyncStatus,
-                  //     {
-                  //       headers: {
-                  //         Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
-                  //       },
-                  //     }
-                  //   );
-                  // } catch (error) {
-                  // }
+                  try {
+                    axios.patch(
+                      `https://rdfymir.com/backend/public/api/etd_api/sync`,
+                      // `https://pretestomega.rdfymir.com/backend/public/api/etd_api/sync`,
+                      ymirSyncStatus,
+                      {
+                        headers: {
+                          Token: "Bearer " + process.env.REACT_APP_YMIR_PROD_TOKEN,
+                        },
+                      },
+                    );
+                  } catch (error) {}
                   ToastComponent("Success!", "Sync purchase orders successfully", "success", toast);
                   getYmirPo();
                   setFetchData(false);
