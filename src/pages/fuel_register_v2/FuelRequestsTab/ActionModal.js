@@ -52,7 +52,9 @@ export const AddConfirmation = ({
           onClose();
         })
         .catch((err) => {
-          ToastComponent("Error", "Item was not added", "error", toast);
+          setIsLoading(false);
+          ToastComponent("Error", err.response?.data || "An error occurred", "error", toast);
+          onClose();
         });
     } catch (error) {}
   };
