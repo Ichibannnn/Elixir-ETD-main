@@ -55,7 +55,9 @@ export const AddConfirmation = ({
         })
         .catch((err) => {
           console.log("Error: ", err);
-          ToastComponent("Error", "Item was not added", "error", toast);
+          setIsLoading(false);
+          ToastComponent("Error", err.response?.data || "An error occurred", "error", toast);
+          onClose();
         });
     } catch (error) {}
   };
